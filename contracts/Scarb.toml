@@ -1,0 +1,51 @@
+[package]
+cairo-version = "2.5.4"
+name = "p_war"
+version = "0.6.0"
+
+[cairo]
+sierra-replace-ids = true
+
+[dependencies]
+pixelaw = { git = "https://github.com/pixelaw/core", tag = "v0.3.0" }
+
+[[target.dojo]]
+build-external-contracts = [
+    "pixelaw::apps::snake::app::snake",
+    "pixelaw::apps::snake::app::snake_segment",
+    "pixelaw::core::models::pixel::pixel",
+    "pixelaw::core::models::pixel::Pixel",
+    "pixelaw::core::models::pixel::PixelUpdate",
+    "pixelaw::core::models::queue::queue_item",
+    "pixelaw::core::models::registry::app",
+    "pixelaw::core::models::registry::app_name",
+    "pixelaw::core::models::registry::app_user",
+    "pixelaw::core::models::registry::app_instruction",
+    "pixelaw::core::models::registry::instruction",
+    "pixelaw::core::models::registry::core_actions_address",
+    "pixelaw::core::models::permissions::permissions",
+    "pixelaw::core::utils::get_core_actions",
+    "pixelaw::core::utils::Direction",
+    "pixelaw::core::utils::Position",
+    "pixelaw::core::utils::DefaultParameters",
+    "pixelaw::core::actions::actions",
+    "pixelaw::core::actions::IActionsDispatcher",
+    "pixelaw::core::actions::IActionsDispatcherTrait"
+]
+
+[tool.dojo]
+initializer_class_hash = "0xbeef"
+
+[tool.dojo.env]
+rpc_url = "http://localhost:5050/"
+# Default account for katana with seed = 0
+account_address = "0xb3ff441a68610b30fd5e2abbf3a1548eb6ba6f3559f2862bf2dc757e5828ca"
+private_key = "0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a"
+world_address = "0x446f1f19ba951b59935df72974f8ba6060e5fbb411ca21d3e3e3812e3eb8df8" # Update this line with your world address
+
+[tool.dojo.world]
+name = "P/War"
+description = "To host game events on PixeLAW to create engaging experiences for users and developers. One of the core values of PixeLAW is the ability to add rules, proving that new experiences can be created through simple games with the addition of rules."
+cover_uri = "file://assets/cover.png"
+icon_uri = "file://assets/icon.png"
+website = "https://github.com/pixelaw/p_war"
