@@ -2,6 +2,7 @@ mod systems {
     mod actions;
     mod propose;
     mod voting;
+    mod apps;
 }
 
 mod models {

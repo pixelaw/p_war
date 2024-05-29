@@ -187,7 +187,6 @@ fn can_propose(status: Status) -> bool {
 }
 
 fn create_proposal(game: Game, terms: Terms) -> Proposal {
-    print!("creating proposal");
     let author = get_caller_address();
     let start = get_block_timestamp();
     let end = start + PROPOSAL_DURATION;

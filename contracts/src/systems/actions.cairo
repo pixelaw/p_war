@@ -17,7 +17,7 @@ trait IActions {
 #[dojo::contract]
 mod actions {
     use super::{IActions, GAME_DURATION, DEFAULT_AREA};
-    use p_war::models::{game::{Game, Status}, board::{Board, GameId, Position}, allowed_color::AllowedColor};
+    use p_war::models::{game::{Game, Status}, board::{Board, GameId, Position}, allowed_color::AllowedColor, allowed_app::AllowedApp};
     use starknet::{ContractAddress, get_block_timestamp, get_caller_address, get_contract_address};
     use pixelaw::core::actions::{
         IActionsDispatcher as ICoreActionsDispatcher,
@@ -25,6 +25,7 @@ mod actions {
     };
     use pixelaw::core::utils::{get_core_actions, DefaultParameters};
     use pixelaw::core::models::pixel::PixelUpdate;
+    use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -45,6 +46,33 @@ mod actions {
         id: usize,
         timestamp: u128,
         // should we emit here the states of the pixel as well?
+    }
+
+    #[abi(embed_v0)]
+    impl AllowedAppImpl of IAllowedApp<ContractState> {
+        fn set_pixel(world: IWorldDispatcher, default_params: DefaultParameters) {
+
+        let player = get_caller_address();
+        let system = get_contract_address();
+        let core_actions = get_core_actions(world);
+
+        core_actions
+            .update_pixel(
+            player,
+            system,
+            PixelUpdate {
+                x: default_params.position.x,
+                y: default_params.position.y,
+                color: Option::Some(default_params.color),
+                timestamp: Option::None,
+                text: Option::None,
+                app: Option::None,
+                owner: Option::None,
+                action: Option::None
+            }
+        );
+
+        }
     }
 
     #[abi(embed_v0)]
@@ -138,25 +166,18 @@ mod actions {
             let allowed_color = get!(world, (game_id.value, default_params.color), (AllowedColor));
             assert(allowed_color.is_allowed, 'color is not allowed');
 
-            let player = get_caller_address();
-            let system = get_contract_address();
-            let core_actions = get_core_actions(world);
+            let allowed_app = get!(world, (game_id.value, app), (AllowedApp));
+            assert(app.is_zero() || allowed_app.is_allowed, 'app is not allowed');
 
-            core_actions
-                .update_pixel(
-                    player,
-                    system,
-                    PixelUpdate {
-                        x: default_params.position.x,
-                        y: default_params.position.y,
-                        color: Option::Some(default_params.color),
-                        timestamp: Option::None,
-                        text: Option::None,
-                        app: Option::None,
-                        owner: Option::None,
-                        action: Option::None
-                    }
-            );
+            let contract_address = if app.is_zero() {
+                get_contract_address()
+            } else {
+              app
+            };
+
+            let app = IAllowedAppDispatcher { contract_address };
+            app.set_pixel(default_params);
+
         }
     }
 }
