@@ -13,7 +13,8 @@ mod tests {
         models::{game::{Game, game}, board::{Board, GameId, Position, board, game_id}},
         systems::{
             actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
-            propose::{propose, IProposeDispatcher, IProposeDispatcherTrait}
+            propose::{propose, IProposeDispatcher, IProposeDispatcherTrait},
+            voting::{voting, IVotingDispatcher, IVotingDispatcherTrait}
         }
     };
     use pixelaw::core::{
@@ -72,6 +73,10 @@ mod tests {
             .deploy_contract('salty1', propose::TEST_CLASS_HASH.try_into().unwrap());
         let propose_system = IProposeDispatcher { contract_address: propose_contract_address };
 
+        let voting_contract_address = world
+            .deploy_contract('salty2', voting::TEST_CLASS_HASH.try_into().unwrap());
+        let voting_system = IVotingDispatcher { contract_address: voting_contract_address };
+
         let default_params = DefaultParameters{
             for_player: caller,
             for_system: caller,
@@ -86,7 +91,7 @@ mod tests {
         print!("id = {}", id);
 
         let index = propose_system.toggle_allowed_color(id, COLOR);
-        // print!("index = {}", index);
+        voting_system.vote(id, index, true);
         propose_system.activate_proposal(id, index);
 
 

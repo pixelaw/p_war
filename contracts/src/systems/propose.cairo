@@ -2,7 +2,7 @@ use starknet::{ContractAddress, get_caller_address, get_block_timestamp};
 use p_war::models::{game::{Game, Status}, proposal::{Terms, Proposal}};
 
 const PROPOSAL_DURATION: u64 = 0;
-const NEEDED_YES_PX: u32 = 0;
+const NEEDED_YES_PX: u32 = 1;
 
 // define the interface
 #[dojo::interface]

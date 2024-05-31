@@ -16,7 +16,9 @@ mod voting {
     #[abi(embed_v0)]
     impl VotingImpl of IVoting<ContractState> {
         fn vote(world: IWorldDispatcher, game_id: usize, index: usize, is_in_favor: bool) {
-            let (mut player_vote, mut proposal) = get!(world, (game_id, index), (PlayerVote, Proposal));
+            let player = get_caller_address();
+            let mut proposal = get!(world, (game_id, index), (Proposal));
+            let mut player_vote = get!(world, (player, game_id, index), (PlayerVote));
             assert(player_vote.px == 0, 'player already voted');
 
             if is_in_favor {
