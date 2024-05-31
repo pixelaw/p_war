@@ -1,30 +1,40 @@
 use pixelaw::core::utils::DefaultParameters;
+use pixelaw::core::models::pixel::PixelUpdate;
 use starknet::ContractAddress;
 use p_war::models::board::Position;
 
 const GAME_DURATION: u64 = 111;
 const DEFAULT_AREA: u32 = 5;
+const APP_KEY: felt252 = 'p_war';
+const APP_ICON: felt252 = 'U+2694';
+/// BASE means using the server's default manifest.json handler
+const APP_MANIFEST: felt252 = 'BASE/manifests/p_war';
 
 // define the interface
 #[dojo::interface]
 trait IActions {
+    fn init();
+    fn interact(default_params: DefaultParameters);
     fn create_game(origin: Position) -> usize;
+    fn get_game_id(position: Position) -> usize;
     fn place_pixel(app: ContractAddress, default_params: DefaultParameters);
+    fn update_pixel(pixel_update: PixelUpdate);
     // fn end_game(game_id: usize);
 }
 
 // dojo decorator
 #[dojo::contract]
-mod actions {
-    use super::{IActions, GAME_DURATION, DEFAULT_AREA};
+mod p_war_actions {
+    use super::{APP_KEY, APP_ICON, APP_MANIFEST, IActions, IActionsDispatcher, IActionsDispatcherTrait, GAME_DURATION, DEFAULT_AREA};
     use p_war::models::{game::{Game, Status}, board::{Board, GameId, Position}, allowed_color::AllowedColor, allowed_app::AllowedApp};
-    use starknet::{ContractAddress, get_block_timestamp, get_caller_address, get_contract_address};
+    use starknet::{ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info};
     use pixelaw::core::actions::{
         IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
     use pixelaw::core::utils::{get_core_actions, DefaultParameters};
-    use pixelaw::core::models::pixel::PixelUpdate;
+    use pixelaw::core::models::{ pixel::PixelUpdate, registry::App };
+    use pixelaw::core::traits::IInteroperability;
     use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
 
     #[event]
@@ -49,17 +59,32 @@ mod actions {
     }
 
     #[abi(embed_v0)]
+    impl ActionsInteroperability of IInteroperability<ContractState> {
+        fn on_pre_update(
+            pixel_update: PixelUpdate,
+            app_caller: App,
+            player_caller: ContractAddress
+        ) {
+            // do nothing
+        }
+
+        fn on_post_update(
+            pixel_update: PixelUpdate,
+            app_caller: App,
+            player_caller: ContractAddress
+        ) {
+            // do nothing
+        }
+    }
+
+    #[abi(embed_v0)]
     impl AllowedAppImpl of IAllowedApp<ContractState> {
-        fn set_pixel(world: IWorldDispatcher, default_params: DefaultParameters) {
+        fn set_pixel(default_params: DefaultParameters) {
 
-        let player = get_caller_address();
-        let system = get_contract_address();
-        let core_actions = get_core_actions(world);
+        let actions = IActionsDispatcher { contract_address: get_contract_address() };
 
-        core_actions
+        actions
             .update_pixel(
-            player,
-            system,
             PixelUpdate {
                 x: default_params.position.x,
                 y: default_params.position.y,
@@ -77,6 +102,30 @@ mod actions {
 
     #[abi(embed_v0)]
     impl ActionsImpl of IActions<ContractState> {
+
+        fn init(world: IWorldDispatcher) {
+            let core_actions = get_core_actions(world);
+            core_actions.update_app(APP_KEY, APP_ICON, APP_MANIFEST);
+        }
+
+        fn interact(default_params: DefaultParameters) {
+            let position = Position {
+                                x: default_params.position.x,
+                                y: default_params.position.y
+                            };
+            let game_id = self.get_game_id(position);
+            if game_id == 0 {
+                self.create_game(position);
+            } else {
+                self.place_pixel(starknet::contract_address_const::<0x0>(), default_params);
+            };
+        }
+
+        fn get_game_id(world: IWorldDispatcher, position: Position) -> usize {
+            let game_id = get!(world, (position.x, position.y), GameId);
+            game_id.value
+        }
+
         fn create_game(world: IWorldDispatcher, origin: Position) -> usize {
 
             // check if a game exists
@@ -126,9 +175,8 @@ mod actions {
                                 color: Option::None,
                                 timestamp: Option::None,
                                 text: Option::None,
-                                app: Option::None,
-                                // owner should be p_war
-                                owner: Option::Some(player),
+                                app: Option::Some(system),
+                                owner: Option::None,
                                 action: Option::None
                             }
                         );
@@ -177,7 +225,21 @@ mod actions {
 
             let app = IAllowedAppDispatcher { contract_address };
             app.set_pixel(default_params);
+        }
 
+        fn update_pixel(world: IWorldDispatcher, pixel_update: PixelUpdate) {
+            assert(get_caller_address() == get_contract_address(), 'invalid caller');
+
+            let player = get_tx_info().unbox().account_contract_address;
+            let system = get_contract_address();
+            let core_actions = get_core_actions(world);
+
+            core_actions
+                .update_pixel(
+                player,
+                system,
+                pixel_update
+            );
         }
     }
 }

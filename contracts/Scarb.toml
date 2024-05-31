@@ -7,7 +7,7 @@ version = "0.6.0"
 sierra-replace-ids = true
 
 [dependencies]
-pixelaw = { git = "https://github.com/pixelaw/core", tag = "v0.3.0" }
+pixelaw = { git = "https://github.com/pixelaw/core", tag = "v0.3.18" }
 
 [[target.dojo]]
 build-external-contracts = [
@@ -35,6 +35,10 @@ build-external-contracts = [
 
 [tool.dojo]
 initializer_class_hash = "0xbeef"
+
+[scripts]
+ready_for_deployment = "bash ./scripts/ready_for_deployment.sh"
+initialize = "bash ./scripts/default_auth.sh"
 
 [tool.dojo.env]
 rpc_url = "http://localhost:5050/"

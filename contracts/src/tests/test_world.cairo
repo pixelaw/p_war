@@ -12,7 +12,7 @@ mod tests {
     use p_war::{
         models::{game::{Game, game}, board::{Board, GameId, Position, board, game_id}},
         systems::{
-            actions::{actions, IActionsDispatcher, IActionsDispatcherTrait},
+            actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
             propose::{propose, IProposeDispatcher, IProposeDispatcherTrait}
         }
     };
@@ -65,15 +65,24 @@ mod tests {
 
         // deploy systems contract
         let contract_address = world
-            .deploy_contract('salty', actions::TEST_CLASS_HASH.try_into().unwrap());
+            .deploy_contract('salty', p_war_actions::TEST_CLASS_HASH.try_into().unwrap());
         let actions_system = IActionsDispatcher { contract_address };
 
         let propose_contract_address = world
             .deploy_contract('salty1', propose::TEST_CLASS_HASH.try_into().unwrap());
         let propose_system = IProposeDispatcher { contract_address: propose_contract_address };
 
-        // call create_game()
-        let id = actions_system.create_game(Position { x: 0, y: 0 });
+        let default_params = DefaultParameters{
+            for_player: caller,
+            for_system: caller,
+            position: PixelawPosition {
+                x: 0,
+                y: 0
+            },
+            color: COLOR
+        };
+        actions_system.interact(default_params);
+        let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
 
         let index = propose_system.toggle_allowed_color(id, COLOR);
@@ -82,15 +91,7 @@ mod tests {
 
 
         // call place_pixel
-        actions_system.place_pixel(caller, DefaultParameters{
-            for_player: caller,
-            for_system: caller,
-            position: PixelawPosition {
-                x: 0,
-                y: 0
-            },
-            color: COLOR
-        })
+        actions_system.interact(default_params);
 
 
     }

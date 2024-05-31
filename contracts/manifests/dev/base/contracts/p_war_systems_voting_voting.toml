@@ -1,6 +1,6 @@
 kind = "DojoContract"
-class_hash = "0x25572644fe53d6c13affbb5cb2dae304f5b6b5c15115ba3076e647495614b6a"
-original_class_hash = "0x25572644fe53d6c13affbb5cb2dae304f5b6b5c15115ba3076e647495614b6a"
+class_hash = "0x6fb00db596cd89fa14c73c77f207e8c425d8cce1a7053a18800a59edaa46987"
+original_class_hash = "0x6fb00db596cd89fa14c73c77f207e8c425d8cce1a7053a18800a59edaa46987"
 base_class_hash = "0x0"
 abi = "manifests/dev/abis/base/contracts/p_war_systems_voting_voting.json"
 reads = []
