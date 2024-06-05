@@ -160,8 +160,8 @@ mod p_war_actions {
             let board = Board {
                 id,
                 origin,
-                length: DEFAULT_AREA,
-                width: DEFAULT_AREA
+                width: DEFAULT_AREA,
+                height: DEFAULT_AREA,
             };
 
             // make sure that game board has been set with game id

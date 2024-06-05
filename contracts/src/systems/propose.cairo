@@ -18,10 +18,18 @@ mod propose {
     use p_war::models::{
         game::{Game, Status, GameTrait},
         proposal::{Args, ProposalType, Proposal, PixelRecoveryRate},
+        board::{GameId, Board, Position},
         allowed_app::AllowedApp,
         allowed_color::AllowedColor
     };
-    use starknet::{ContractAddress, get_caller_address, get_block_timestamp};
+    use pixelaw::core::utils::{get_core_actions, DefaultParameters};
+    use pixelaw::core::actions::{
+        IActionsDispatcher as ICoreActionsDispatcher,
+        IActionsDispatcherTrait as ICoreActionsDispatcherTrait
+    };
+    use pixelaw::core::models::{ pixel::PixelUpdate };
+    use starknet::{ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info};
+
 
     #[abi(embed_v0)]
     impl ProposeImpl of IPropose<ContractState> {
@@ -68,7 +76,7 @@ mod propose {
 
             match proposal.proposal_type {
                 ProposalType::Unknown => 0,
-                ProposalType::ToggleAllowedApp => 1,
+                ProposalType::ToggleAllowedApp => 1, // TODO
                 ProposalType::ToggleAllowedColor => {
                     let new_color: u32 = proposal.args.arg1.try_into().unwrap();
                     let mut allowed_color = get!(world, (game_id, new_color), (AllowedColor));
@@ -102,9 +110,78 @@ mod propose {
                         })
                     );
                     4
-                },            
-                ProposalType::ExpandArea => 5,     
+                },
 
+                ProposalType::ExpandArea => {
+                    let core_actions = get_core_actions(world);
+                    let player_address = get_caller_address();
+                    let system = get_caller_address();
+
+                    let mut board = get!(
+                        world,
+                        (game_id),
+                        (Board)
+                    );
+                    let origin: Position = board.origin;
+                    let original_height = board.height;
+                    let original_width = board.width;
+
+                    let add_w: u32 = proposal.args.arg1.try_into().unwrap();
+                    let add_h: u32 = proposal.args.arg2.try_into().unwrap();
+
+                    // make sure that game board has been set with game id
+                    let mut y = origin.y + original_height;
+                    loop {
+                        if y >= origin.y + original_height + add_h {
+                            break;
+                        };
+                        let mut x = origin.x + original_width;
+                        loop {
+                            if x >= origin.x + original_width + add_w {
+                                break;
+                            };
+                            core_actions
+                                .update_pixel(
+                                    player_address,
+                                    system,
+                                    PixelUpdate {
+                                        x,
+                                        y,
+                                        color: Option::None,
+                                        timestamp: Option::None,
+                                        text: Option::None,
+                                        app: Option::Some(system),
+                                        owner: Option::None,
+                                        action: Option::None
+                                    }
+                                );
+                            set!(
+                                world,
+                                (
+                                    GameId {
+                                        x,
+                                        y,
+                                        value: game_id
+                                    }
+                                )
+                            );
+                            x += 1;
+                        };
+                        y += 1;
+                    };
+
+                    board.width += add_w;
+                    board.height += add_h;
+
+
+                    set!(
+                        world,
+                        (
+                            board
+                        )
+                    );
+                    5
+                },
             };
 
         }
