@@ -74,7 +74,20 @@ mod propose {
                     );
                     2
                 },
-                ProposalType::ChangeGameDuration => 3,
+                ProposalType::ChangeGameDuration => {
+                    let add_duration: u64 = proposal.args.arg1;
+                    let mut game = get!(
+                        world,
+                        (game_id),
+                        (Game)
+                    );
+                    game.end += add_duration;
+                    set!(
+                        world,
+                        (game)
+                    );
+                    3
+                },
                 ProposalType::ChangePixelRecovery => 4,            
                 ProposalType::ExpandArea => 5,     
 
