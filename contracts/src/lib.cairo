@@ -14,5 +14,6 @@ mod models {
 }
 
 mod tests {
-    mod test_world;
+    mod test_create_world;
+    mod test_color_update;
 }

@@ -69,13 +69,13 @@ mod tests {
             .deploy_contract('salty', p_war_actions::TEST_CLASS_HASH.try_into().unwrap());
         let actions_system = IActionsDispatcher { contract_address };
 
-        let propose_contract_address = world
-            .deploy_contract('salty1', propose::TEST_CLASS_HASH.try_into().unwrap());
-        let propose_system = IProposeDispatcher { contract_address: propose_contract_address };
+        // let propose_contract_address = world
+        //     .deploy_contract('salty1', propose::TEST_CLASS_HASH.try_into().unwrap());
+        // let propose_system = IProposeDispatcher { contract_address: propose_contract_address };
 
-        let voting_contract_address = world
-            .deploy_contract('salty2', voting::TEST_CLASS_HASH.try_into().unwrap());
-        let voting_system = IVotingDispatcher { contract_address: voting_contract_address };
+        // let voting_contract_address = world
+        //     .deploy_contract('salty2', voting::TEST_CLASS_HASH.try_into().unwrap());
+        // let voting_system = IVotingDispatcher { contract_address: voting_contract_address };
 
         let default_params = DefaultParameters{
             for_player: caller,
@@ -86,18 +86,29 @@ mod tests {
             },
             color: COLOR
         };
+        
+        // create a game
         actions_system.interact(default_params);
         let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
 
-        let index = propose_system.toggle_allowed_color(id, COLOR);
-        voting_system.vote(id, index, true);
-        propose_system.activate_proposal(id, index);
+        // let index = propose_system.toggle_allowed_color(id, COLOR);
+        // voting_system.vote(id, index, true);
+        // propose_system.activate_proposal(id, index);
 
 
         // call place_pixel
-        actions_system.interact(default_params);
-
+        let NEW_COLOR: u32 = 0xffffff;
+        let new_params = DefaultParameters{
+            for_player: caller,
+            for_system: caller,
+            position: PixelawPosition {
+                x: 1,
+                y: 1
+            },
+            color: NEW_COLOR
+        };
+        actions_system.interact(new_params);
 
     }
 }

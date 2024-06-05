@@ -5,6 +5,8 @@ use p_war::models::board::Position;
 
 const GAME_DURATION: u64 = 111;
 const DEFAULT_AREA: u32 = 5;
+const DEFAULT_COLOR_0: u32 = 0;
+const DEFAULT_COLOR_1: u32 = 0xffffff;
 const APP_KEY: felt252 = 'p_war';
 const APP_ICON: felt252 = 'U+2694';
 /// BASE means using the server's default manifest.json handler
@@ -26,6 +28,7 @@ trait IActions {
 #[dojo::contract]
 mod p_war_actions {
     use super::{APP_KEY, APP_ICON, APP_MANIFEST, IActions, IActionsDispatcher, IActionsDispatcherTrait, GAME_DURATION, DEFAULT_AREA};
+    use super::{DEFAULT_COLOR_0, DEFAULT_COLOR_1};
     use p_war::models::{game::{Game, Status}, board::{Board, GameId, Position}, allowed_color::AllowedColor, allowed_app::AllowedApp};
     use starknet::{ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info};
     use pixelaw::core::actions::{
@@ -203,6 +206,26 @@ mod p_war_actions {
                     board
                 )
             );
+
+            // add default colors
+            set!(
+                world,
+                (AllowedColor{
+                    game_id: id,
+                    color: DEFAULT_COLOR_0,
+                    is_allowed: true,
+                })
+            );
+
+            set!(
+                world,
+                (AllowedColor{
+                    game_id: id,
+                    color: DEFAULT_COLOR_1,
+                    is_allowed: true,
+                })
+            );
+
             id
             // emit event that game has started
         }
