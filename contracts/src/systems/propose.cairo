@@ -1,18 +1,13 @@
 use starknet::{ContractAddress, get_caller_address, get_block_timestamp};
 use p_war::models::{game::{Game, Status}, proposal::{Args, ProposalType, Proposal}};
 
-const PROPOSAL_DURATION: u64 = 0;
+const PROPOSAL_DURATION: u64 = 0; // should change it later.
 const NEEDED_YES_PX: u32 = 1;
 
 // define the interface
 #[dojo::interface]
 trait IPropose {
     fn create_proposal(game_id: usize, proposal_type: ProposalType, args: Args) -> usize;
-    // fn toggle_allowed_app(game_id: usize, app: ContractAddress);
-    // fn toggle_allowed_color(game_id: usize, color: u32) -> usize;
-    // fn change_game_duration(game_id: usize, duration: u64);
-    // fn change_pixel_recovery(game_id: usize, rate: u32);
-    // fn expand_area(game_id: usize, amount: u32);
     fn activate_proposal(game_id: usize, index: usize);
 }
 

@@ -50,7 +50,7 @@ struct PlayerVote {
 struct PixelRecoveryRate {
     #[key]
     id: usize,
-    rate: u32
+    rate: u64
 }
 
 impl ProposalTypeFelt252 of Into<ProposalType, felt252> {

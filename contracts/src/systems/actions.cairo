@@ -5,6 +5,7 @@ use p_war::models::board::Position;
 
 const GAME_DURATION: u64 = 111;
 const DEFAULT_AREA: u32 = 5;
+const DEFAULT_PX: u32 = 10;
 const DEFAULT_COLOR_0: u32 = 0;
 const DEFAULT_COLOR_1: u32 = 0xffffff;
 const APP_KEY: felt252 = 'p_war';
@@ -21,6 +22,7 @@ trait IActions {
     fn get_game_id(position: Position) -> usize;
     fn place_pixel(app: ContractAddress, default_params: DefaultParameters);
     fn update_pixel(pixel_update: PixelUpdate);
+    fn recover_px();
     // fn end_game(game_id: usize);
 }
 
@@ -28,8 +30,15 @@ trait IActions {
 #[dojo::contract]
 mod p_war_actions {
     use super::{APP_KEY, APP_ICON, APP_MANIFEST, IActions, IActionsDispatcher, IActionsDispatcherTrait, GAME_DURATION, DEFAULT_AREA};
-    use super::{DEFAULT_COLOR_0, DEFAULT_COLOR_1};
-    use p_war::models::{game::{Game, Status}, board::{Board, GameId, Position}, allowed_color::AllowedColor, allowed_app::AllowedApp};
+    use super::{DEFAULT_PX, DEFAULT_COLOR_0, DEFAULT_COLOR_1};
+    use p_war::models::{
+        game::{Game, Status},
+        board::{Board, GameId, Position},
+        player::{Player},
+        proposal::{PixelRecoveryRate},
+        allowed_color::AllowedColor,
+        allowed_app::AllowedApp
+    };
     use starknet::{ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info};
     use pixelaw::core::actions::{
         IActionsDispatcher as ICoreActionsDispatcher,
@@ -84,22 +93,20 @@ mod p_war_actions {
     impl AllowedAppImpl of IAllowedApp<ContractState> {
         fn set_pixel(default_params: DefaultParameters) {
 
-        let actions = IActionsDispatcher { contract_address: get_contract_address() };
-
-        actions
-            .update_pixel(
-            PixelUpdate {
-                x: default_params.position.x,
-                y: default_params.position.y,
-                color: Option::Some(default_params.color),
-                timestamp: Option::None,
-                text: Option::None,
-                app: Option::None,
-                owner: Option::None,
-                action: Option::None
-            }
-        );
-
+            let actions = IActionsDispatcher { contract_address: get_contract_address() };            
+            actions
+                .update_pixel(
+                    PixelUpdate {
+                        x: default_params.position.x,
+                        y: default_params.position.y,
+                        color: Option::Some(default_params.color),
+                        timestamp: Option::None,
+                        text: Option::None,
+                        app: Option::None,
+                        owner: Option::None,
+                        action: Option::None
+                    }
+                );
         }
     }
 
@@ -247,21 +254,100 @@ mod p_war_actions {
             };
 
             let app = IAllowedAppDispatcher { contract_address };
+
+            let player_address = get_tx_info().unbox().account_contract_address;
+
+            // if this is first time for the caller, let's set initial px.
+            let mut player = get!(
+                world,
+                (player_address),
+                (Player)
+            );
+            // if this is first time for the caller, let's set initial px.
+            if player.max_px == 0 {
+                player.max_px = DEFAULT_PX;
+                player.current_px = DEFAULT_PX;
+                set!(
+                    world,
+                    (Player{
+                        address: player.address,
+                        max_px: DEFAULT_PX,
+                        current_px: DEFAULT_PX,
+                        last_date: get_block_timestamp(),
+                    }),
+                );
+            } else {
+                // recover px
+                self.recover_px();
+            }
+
+            // check the current px is not 0
+            assert(player.current_px > 0, 'you cannot paint');
+
             app.set_pixel(default_params);
+
+            set!(
+                world,
+                (Player{
+                    address: player.address,
+                    max_px: player.max_px,
+                    current_px: player.current_px - 1,
+                    last_date: get_block_timestamp(),
+                }),
+            );
         }
 
         fn update_pixel(world: IWorldDispatcher, pixel_update: PixelUpdate) {
             assert(get_caller_address() == get_contract_address(), 'invalid caller');
 
-            let player = get_tx_info().unbox().account_contract_address;
+            let player_address = get_tx_info().unbox().account_contract_address;
             let system = get_contract_address();
             let core_actions = get_core_actions(world);
 
             core_actions
                 .update_pixel(
-                player,
+                player_address,
                 system,
                 pixel_update
+            );
+        }
+
+
+        fn recover_px(world: IWorldDispatcher) {
+            let player_address = get_tx_info().unbox().account_contract_address;
+            let mut player = get!(
+                world,
+                (player_address),
+                (Player)
+            );
+
+            // if this is first time for the caller, let's set initial px.
+            if player.max_px == 0 {
+                player.max_px = DEFAULT_PX;
+                player.current_px = DEFAULT_PX;
+                player.last_date = get_block_timestamp();
+            } else {
+                let recovery_rate = get!(
+                    world,
+                    (world.uuid()),
+                    (PixelRecoveryRate)
+                );
+
+                let current_time = get_block_timestamp();
+                let time_diff = current_time - player.last_date;
+
+                let recover_pxs: u32 = ((time_diff) / recovery_rate.rate).try_into().unwrap();
+
+                if player.max_px >= (player.current_px + recover_pxs) {
+                    player.current_px = player.current_px + recover_pxs;
+                } else {
+                    player.current_px = player.max_px;
+                }
+            }
+
+            set!(
+                world,
+                (player)
             );
         }
     }

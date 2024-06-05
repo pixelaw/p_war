@@ -43,7 +43,7 @@ mod tests {
 
     #[test]
     #[available_gas(999_999_999)]
-    fn test_color_update() {
+    fn test_add_color() {
         // caller
         let caller = starknet::contract_address_const::<0x0>();
 
@@ -101,13 +101,6 @@ mod tests {
 
         let NEW_COLOR: u32 = 0xff0000;
 
-        
-
-
-        // change proposal creation.
-
-        // fn create_proposal(game_id: usize, proposal_type: ProposalType, args: Args);
-
         let args = Args{
             toggle_allowed_app: starknet::contract_address_const::<0x0>(),
             arg1: NEW_COLOR.into(),
@@ -130,6 +123,7 @@ mod tests {
         
         print!("Proposal end: {}\n", proposal.end);
 
+        // should add cheat code to spend time
         propose_system.activate_proposal(id, index);
 
 

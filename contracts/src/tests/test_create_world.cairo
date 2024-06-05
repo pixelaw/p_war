@@ -2,7 +2,9 @@
 mod tests {
     use starknet::{
         class_hash::Felt252TryIntoClassHash,
-        ContractAddress
+        ContractAddress,
+        get_caller_address,
+        get_tx_info,
     };
     // import world dispatcher
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
@@ -13,6 +15,7 @@ mod tests {
         models::{
             game::{Game, game},
             board::{Board, GameId, Position, board, game_id},
+            player::{Player},
             allowed_color::AllowedColor
         },
         systems::{
@@ -105,6 +108,14 @@ mod tests {
             color: NEW_COLOR
         };
         actions_system.interact(new_params);
+
+        let player = get!(
+            world,
+            (get_tx_info().unbox().account_contract_address),
+            (Player)
+        );
+
+        assert(player.current_px == 9, 'current px should be 9');
 
     }
 }
