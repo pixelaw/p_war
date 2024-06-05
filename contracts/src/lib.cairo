@@ -3,6 +3,7 @@ mod systems {
     mod propose;
     mod voting;
     mod apps;
+    mod utils;
 }
 
 mod models {
@@ -11,8 +12,13 @@ mod models {
     mod board;
     mod game;
     mod proposal;
+    mod player;
 }
 
 mod tests {
-    mod test_world;
+    mod test_create_world;
+    mod test_add_color;
+    mod test_change_game_duration;
+    mod test_change_pixel_recovery;
+    mod test_expand_area;
 }

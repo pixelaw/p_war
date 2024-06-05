@@ -1,46 +1,57 @@
 use starknet::{ContractAddress, get_caller_address, get_block_timestamp};
-use p_war::models::{game::{Game, Status}, proposal::{Terms, Proposal}};
+use p_war::models::{game::{Game, Status}, proposal::{Args, ProposalType, Proposal}};
 
-const PROPOSAL_DURATION: u64 = 0;
+const PROPOSAL_DURATION: u64 = 0; // should change it later.
 const NEEDED_YES_PX: u32 = 1;
 
 // define the interface
 #[dojo::interface]
 trait IPropose {
-    fn toggle_allowed_app(game_id: usize, app: ContractAddress);
-    fn toggle_allowed_color(game_id: usize, color: u32) -> usize;
-    fn change_game_duration(game_id: usize, duration: u64);
-    fn change_pixel_recovery(game_id: usize, rate: u32);
-    fn expand_area(game_id: usize, amount: u32);
+    fn create_proposal(game_id: usize, proposal_type: ProposalType, args: Args) -> usize;
     fn activate_proposal(game_id: usize, index: usize);
 }
 
 // dojo decorator
 #[dojo::contract]
 mod propose {
-    use super::{IPropose, can_propose, create_proposal, NEEDED_YES_PX};
-    use p_war::models::{game::{Game, Status, GameTrait}, proposal::{Terms, Proposal}, allowed_app::AllowedApp, allowed_color::AllowedColor};
-    use starknet::{ContractAddress, get_block_timestamp};
+    use super::{IPropose, can_propose, NEEDED_YES_PX, PROPOSAL_DURATION};
+    use p_war::models::{
+        game::{Game, Status, GameTrait},
+        proposal::{Args, ProposalType, Proposal, PixelRecoveryRate},
+        board::{GameId, Board, Position},
+        allowed_app::AllowedApp,
+        allowed_color::AllowedColor
+    };
+    use pixelaw::core::utils::{get_core_actions, DefaultParameters};
+    use pixelaw::core::actions::{
+        IActionsDispatcher as ICoreActionsDispatcher,
+        IActionsDispatcherTrait as ICoreActionsDispatcherTrait
+    };
+    use pixelaw::core::models::{ pixel::PixelUpdate };
+    use starknet::{ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info};
+
 
     #[abi(embed_v0)]
     impl ProposeImpl of IPropose<ContractState> {
-        fn toggle_allowed_app(world: IWorldDispatcher, game_id: usize, app: ContractAddress) {
+
+        fn create_proposal(world: IWorldDispatcher, game_id: usize, proposal_type: ProposalType, args: Args) -> usize {
             // get the game
             let mut game = get!(world, game_id, (Game));
             assert(can_propose(game.status()), 'cannot submit proposal');
 
-            let proposal = create_proposal(
-                game,
-                Terms {
-                    toggle_allowed_app: app,
-                    toggle_allowed_color: 0,
-                    change_game_duration: 0,
-                    change_pixel_recovery: 0,
-                    expand_area: 0
-                }
-            );
+            let proposal = Proposal{
+                game_id: game_id,
+                index: game.proposal_idx,
+                author: get_caller_address(),
+                proposal_type: proposal_type,
+                args: args,
+                start: get_block_timestamp(),
+                end: get_block_timestamp() + PROPOSAL_DURATION,
+                yes_px: 0,
+                no_px: 0
+            };
 
-            game.proposals += 1;
+            game.proposal_idx += 1;
 
             set!(
                 world,
@@ -49,109 +60,10 @@ mod propose {
                     game
                 )
             );
-        }
-
-        fn toggle_allowed_color(world: IWorldDispatcher, game_id: usize, color: u32) -> usize {
-            // get the game
-            let mut game = get!(world, game_id, (Game));
-            assert(can_propose(game.status()), 'cannot submit proposal');
-
-            let proposal = create_proposal(
-                game,
-                Terms {
-                    toggle_allowed_app: starknet::contract_address_const::<0x0>(),
-                    toggle_allowed_color: color,
-                    change_game_duration: 0,
-                    change_pixel_recovery: 0,
-                    expand_area: 0
-                }
-            );
-
-            game.proposals += 1;
-
-            set!(
-                world,
-                (proposal,
-                game)
-            );
 
             proposal.index
         }
 
-        fn change_game_duration(world: IWorldDispatcher, game_id: usize, duration: u64) {
-            // get the game
-            let mut game = get!(world, game_id, (Game));
-            assert(can_propose(game.status()), 'cannot submit proposal');
-
-            let proposal = create_proposal(
-                game,
-                Terms {
-                    toggle_allowed_app: starknet::contract_address_const::<0x0>(),
-                    toggle_allowed_color: 0,
-                    change_game_duration: duration,
-                    change_pixel_recovery: 0,
-                    expand_area: 0
-                }
-            );
-
-            game.proposals += 1;
-
-            set!(
-                world,
-                (proposal,
-                game)
-            )
-        }
-
-        fn change_pixel_recovery(world: IWorldDispatcher, game_id: usize, rate: u32) {
-            // get the game
-            let mut game = get!(world, game_id, (Game));
-            assert(can_propose(game.status()), 'cannot submit proposal');
-
-            let proposal = create_proposal(
-                game,
-                Terms {
-                    toggle_allowed_app: starknet::contract_address_const::<0x0>(),
-                    toggle_allowed_color: 0,
-                    change_game_duration: 0,
-                    change_pixel_recovery: rate,
-                    expand_area: 0
-                }
-            );
-
-            game.proposals += 1;
-
-            set!(
-                world,
-                (proposal,
-                game)
-            )
-        }
-
-        fn expand_area(world: IWorldDispatcher, game_id: usize, amount: u32) {
-            // get the game
-            let mut game = get!(world, game_id, (Game));
-            assert(can_propose(game.status()), 'cannot submit proposal');
-
-            let proposal = create_proposal(
-                game,
-                Terms {
-                    toggle_allowed_app: starknet::contract_address_const::<0x0>(),
-                    toggle_allowed_color: 0,
-                    change_game_duration: 0,
-                    change_pixel_recovery: 0,
-                    expand_area: amount
-                }
-            );
-
-            game.proposals += 1;
-
-            set!(
-                world,
-                (proposal,
-                game)
-            )
-        }
 
         fn activate_proposal(world: IWorldDispatcher, game_id: usize, index: usize){
             // get the proposal
@@ -160,23 +72,117 @@ mod propose {
             assert(current_timestamp >= proposal.end, 'proposal period has not ended');
             assert(proposal.yes_px >= NEEDED_YES_PX, 'did not reach minimum yes_px');
 
-            if !proposal.terms.toggle_allowed_app.is_zero() {
-                let mut allowed_app = get!(world, (game_id, proposal.terms.toggle_allowed_app), (AllowedApp));
-                allowed_app.is_allowed = !allowed_app.is_allowed;
-                set!(
-                    world,
-                    (allowed_app)
-                );
-            }
+            // activate the proposal.
 
-            if proposal.terms.toggle_allowed_color > 0 {
-                let mut allowed_color = get!(world, (game_id, proposal.terms.toggle_allowed_color), (AllowedColor));
-                allowed_color.is_allowed = !allowed_color.is_allowed;
-                set!(
-                    world,
-                    (allowed_color)
-                );
-            }
+            match proposal.proposal_type {
+                ProposalType::Unknown => 0,
+                ProposalType::ToggleAllowedApp => 1, // TODO
+                ProposalType::ToggleAllowedColor => {
+                    let new_color: u32 = proposal.args.arg1.try_into().unwrap();
+                    let mut allowed_color = get!(world, (game_id, new_color), (AllowedColor));
+                    allowed_color.is_allowed = !allowed_color.is_allowed;
+                    set!(
+                        world,
+                        (allowed_color)
+                    );
+                    2
+                },
+                ProposalType::ChangeGameDuration => {
+                    let add_duration: u64 = proposal.args.arg1;
+                    let mut game = get!(
+                        world,
+                        (game_id),
+                        (Game)
+                    );
+                    game.end += add_duration;
+                    set!(
+                        world,
+                        (game)
+                    );
+                    3
+                },
+                ProposalType::ChangePixelRecovery => {
+                    set!(
+                        world,
+                        (PixelRecoveryRate{
+                            game_id: game_id,
+                            rate: proposal.args.arg1,
+                        })
+                    );
+                    4
+                },
+
+                ProposalType::ExpandArea => {
+                    let core_actions = get_core_actions(world);
+                    let player_address = get_caller_address();
+                    let system = get_caller_address();
+
+                    let mut board = get!(
+                        world,
+                        (game_id),
+                        (Board)
+                    );
+                    let origin: Position = board.origin;
+                    let original_height = board.height;
+                    let original_width = board.width;
+
+                    let add_w: u32 = proposal.args.arg1.try_into().unwrap();
+                    let add_h: u32 = proposal.args.arg2.try_into().unwrap();
+
+                    // make sure that game board has been set with game id
+                    let mut y = origin.y + original_height;
+                    loop {
+                        if y >= origin.y + original_height + add_h {
+                            break;
+                        };
+                        let mut x = origin.x + original_width;
+                        loop {
+                            if x >= origin.x + original_width + add_w {
+                                break;
+                            };
+                            core_actions
+                                .update_pixel(
+                                    player_address,
+                                    system,
+                                    PixelUpdate {
+                                        x,
+                                        y,
+                                        color: Option::None,
+                                        timestamp: Option::None,
+                                        text: Option::None,
+                                        app: Option::Some(system),
+                                        owner: Option::None,
+                                        action: Option::None
+                                    }
+                                );
+                            set!(
+                                world,
+                                (
+                                    GameId {
+                                        x,
+                                        y,
+                                        value: game_id
+                                    }
+                                )
+                            );
+                            x += 1;
+                        };
+                        y += 1;
+                    };
+
+                    board.width += add_w;
+                    board.height += add_h;
+
+
+                    set!(
+                        world,
+                        (
+                            board
+                        )
+                    );
+                    5
+                },
+            };
 
         }
     }
@@ -184,21 +190,4 @@ mod propose {
 
 fn can_propose(status: Status) -> bool {
     status == Status::Pending || status == Status::Ongoing
-}
-
-fn create_proposal(game: Game, terms: Terms) -> Proposal {
-    let author = get_caller_address();
-    let start = get_block_timestamp();
-    let end = start + PROPOSAL_DURATION;
-
-    Proposal {
-        game_id: game.id,
-        index: game.proposals,
-        author,
-        terms,
-        start,
-        end,
-        yes_px: 0,
-        no_px: 0
-    }
 }

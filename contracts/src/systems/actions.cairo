@@ -5,6 +5,9 @@ use p_war::models::board::Position;
 
 const GAME_DURATION: u64 = 111;
 const DEFAULT_AREA: u32 = 5;
+const DEFAULT_COLOR_0: u32 = 0;
+const DEFAULT_RECOVERY_RATE: u64 = 10;
+const DEFAULT_COLOR_1: u32 = 0xffffff;
 const APP_KEY: felt252 = 'p_war';
 const APP_ICON: felt252 = 'U+2694';
 /// BASE means using the server's default manifest.json handler
@@ -19,14 +22,22 @@ trait IActions {
     fn get_game_id(position: Position) -> usize;
     fn place_pixel(app: ContractAddress, default_params: DefaultParameters);
     fn update_pixel(pixel_update: PixelUpdate);
-    // fn end_game(game_id: usize);
+    fn end_game(game_id: usize);
 }
 
 // dojo decorator
 #[dojo::contract]
 mod p_war_actions {
     use super::{APP_KEY, APP_ICON, APP_MANIFEST, IActions, IActionsDispatcher, IActionsDispatcherTrait, GAME_DURATION, DEFAULT_AREA};
-    use p_war::models::{game::{Game, Status}, board::{Board, GameId, Position}, allowed_color::AllowedColor, allowed_app::AllowedApp};
+    use super::{DEFAULT_RECOVERY_RATE, DEFAULT_COLOR_0, DEFAULT_COLOR_1};
+    use p_war::models::{
+        game::{Game, Status},
+        board::{Board, GameId, Position},
+        player::{Player},
+        proposal::{PixelRecoveryRate},
+        allowed_color::AllowedColor,
+        allowed_app::AllowedApp
+    };
     use starknet::{ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info};
     use pixelaw::core::actions::{
         IActionsDispatcher as ICoreActionsDispatcher,
@@ -36,6 +47,7 @@ mod p_war_actions {
     use pixelaw::core::models::{ pixel::PixelUpdate, registry::App };
     use pixelaw::core::traits::IInteroperability;
     use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
+    use p_war::systems::utils::recover_px;
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -81,22 +93,20 @@ mod p_war_actions {
     impl AllowedAppImpl of IAllowedApp<ContractState> {
         fn set_pixel(default_params: DefaultParameters) {
 
-        let actions = IActionsDispatcher { contract_address: get_contract_address() };
-
-        actions
-            .update_pixel(
-            PixelUpdate {
-                x: default_params.position.x,
-                y: default_params.position.y,
-                color: Option::Some(default_params.color),
-                timestamp: Option::None,
-                text: Option::None,
-                app: Option::None,
-                owner: Option::None,
-                action: Option::None
-            }
-        );
-
+            let actions = IActionsDispatcher { contract_address: get_contract_address() };            
+            actions
+                .update_pixel(
+                    PixelUpdate {
+                        x: default_params.position.x,
+                        y: default_params.position.y,
+                        color: Option::Some(default_params.color),
+                        timestamp: Option::None,
+                        text: Option::None,
+                        app: Option::None,
+                        owner: Option::None,
+                        action: Option::None
+                    }
+                );
         }
     }
 
@@ -144,14 +154,15 @@ mod p_war_actions {
                 id,
                 start,
                 end: start + GAME_DURATION,
-                proposals: 0
+                proposal_idx: 0,
+                winner: starknet::contract_address_const::<0x0>(),
             };
 
             let board = Board {
                 id,
                 origin,
-                length: DEFAULT_AREA,
-                width: DEFAULT_AREA
+                width: DEFAULT_AREA,
+                height: DEFAULT_AREA,
             };
 
             // make sure that game board has been set with game id
@@ -203,6 +214,35 @@ mod p_war_actions {
                     board
                 )
             );
+
+            // add default colors
+            set!(
+                world,
+                (AllowedColor{
+                    game_id: id,
+                    color: DEFAULT_COLOR_0,
+                    is_allowed: true,
+                })
+            );
+
+            set!(
+                world,
+                (AllowedColor{
+                    game_id: id,
+                    color: DEFAULT_COLOR_1,
+                    is_allowed: true,
+                })
+            );
+
+            // set default recovery_rate
+            set!(
+                world,
+                (PixelRecoveryRate{
+                    game_id: id,
+                    rate: DEFAULT_RECOVERY_RATE,
+                })
+            );
+
             id
             // emit event that game has started
         }
@@ -224,21 +264,70 @@ mod p_war_actions {
             };
 
             let app = IAllowedAppDispatcher { contract_address };
+
+            let player_address = get_tx_info().unbox().account_contract_address;
+
+            // recover px
+            recover_px(world, game_id.value);
+
+            // if this is first time for the caller, let's set initial px.
+            let mut player = get!(
+                world,
+                (player_address),
+                (Player)
+            );
+
+            // check the current px is not 0
+            assert(player.current_px > 0, 'you cannot paint');
+
             app.set_pixel(default_params);
+
+            set!(
+                world,
+                (Player{
+                    address: player.address,
+                    max_px: player.max_px,
+                    current_px: player.current_px - 1,
+                    last_date: get_block_timestamp(),
+                }),
+            );
         }
 
         fn update_pixel(world: IWorldDispatcher, pixel_update: PixelUpdate) {
             assert(get_caller_address() == get_contract_address(), 'invalid caller');
 
-            let player = get_tx_info().unbox().account_contract_address;
+            let player_address = get_tx_info().unbox().account_contract_address;
             let system = get_contract_address();
             let core_actions = get_core_actions(world);
 
             core_actions
                 .update_pixel(
-                player,
+                player_address,
                 system,
                 pixel_update
+            );
+        }
+
+        fn end_game(world: IWorldDispatcher, game_id: usize) {
+            // check if the time is expired.
+            let mut game = get!(
+                world,
+                (game_id),
+                (Game)
+            );
+            assert(get_block_timestamp() >= game.end, 'game is not ended');
+
+            // TODO: emit the status??
+
+            // TODO: get winner correctly
+            // let winCondition = 0; // can we customize by contractaddress? or match&implement each?
+            let winner = starknet::contract_address_const::<0x0>(); // set for now.
+
+            game.winner = winner;
+
+            set!(
+                world,
+                (game)
             );
         }
     }

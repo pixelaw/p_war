@@ -1,4 +1,5 @@
 use starknet::get_block_timestamp;
+use starknet::ContractAddress;
 
 #[derive(Model, Copy, Drop, Serde)]
 struct Game {
@@ -6,7 +7,8 @@ struct Game {
     id: usize,
     start: u64,
     end: u64,
-    proposals: usize
+    proposal_idx: usize,
+    winner: ContractAddress,
 }
 
 #[derive(PartialEq, Copy, Drop, Serde)]
@@ -38,4 +40,3 @@ impl GameImpl of GameTrait {
         }
     }
 }
-
