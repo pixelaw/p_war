@@ -22,7 +22,7 @@ trait IActions {
     fn get_game_id(position: Position) -> usize;
     fn place_pixel(app: ContractAddress, default_params: DefaultParameters);
     fn update_pixel(pixel_update: PixelUpdate);
-    // fn end_game(game_id: usize);
+    fn end_game(game_id: usize);
 }
 
 // dojo decorator
@@ -154,7 +154,8 @@ mod p_war_actions {
                 id,
                 start,
                 end: start + GAME_DURATION,
-                proposal_idx: 0
+                proposal_idx: 0,
+                winner: starknet::contract_address_const::<0x0>(),
             };
 
             let board = Board {
@@ -304,6 +305,29 @@ mod p_war_actions {
                 player_address,
                 system,
                 pixel_update
+            );
+        }
+
+        fn end_game(world: IWorldDispatcher, game_id: usize) {
+            // check if the time is expired.
+            let mut game = get!(
+                world,
+                (game_id),
+                (Game)
+            );
+            assert(get_block_timestamp() >= game.end, 'game is not ended');
+
+            // TODO: emit the status??
+
+            // TODO: get winner correctly
+            // let winCondition = 0; // can we customize by contractaddress? or match&implement each?
+            let winner = starknet::contract_address_const::<0x0>(); // set for now.
+
+            game.winner = winner;
+
+            set!(
+                world,
+                (game)
             );
         }
     }
