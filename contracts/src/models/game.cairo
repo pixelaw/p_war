@@ -6,7 +6,7 @@ struct Game {
     id: usize,
     start: u64,
     end: u64,
-    proposals: usize
+    proposal_idx: usize
 }
 
 #[derive(PartialEq, Copy, Drop, Serde)]
@@ -38,4 +38,3 @@ impl GameImpl of GameTrait {
         }
     }
 }
-

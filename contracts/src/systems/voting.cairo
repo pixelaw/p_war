@@ -9,7 +9,7 @@ trait IVoting {
 mod voting {
     use super::IVoting;
     use starknet::{ContractAddress, get_caller_address};
-    use p_war::models::proposal::{PlayerVote, Proposal};
+    use p_war::models::proposal::{PlayerVote, Args, ProposalType, Proposal};
 
     // one px vote per person
 

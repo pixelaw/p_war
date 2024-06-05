@@ -147,7 +147,7 @@ mod p_war_actions {
                 id,
                 start,
                 end: start + GAME_DURATION,
-                proposals: 0
+                proposal_idx: 0
             };
 
             let board = Board {

@@ -10,7 +10,11 @@ mod tests {
     use dojo::test_utils::{spawn_test_world, deploy_contract};
     // import test utils
     use p_war::{
-        models::{game::{Game, game}, board::{Board, GameId, Position, board, game_id}},
+        models::{
+            game::{Game, game},
+            board::{Board, GameId, Position, board, game_id},
+            allowed_color::AllowedColor
+        },
         systems::{
             actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
             propose::{propose, IProposeDispatcher, IProposeDispatcherTrait},
@@ -69,14 +73,6 @@ mod tests {
             .deploy_contract('salty', p_war_actions::TEST_CLASS_HASH.try_into().unwrap());
         let actions_system = IActionsDispatcher { contract_address };
 
-        // let propose_contract_address = world
-        //     .deploy_contract('salty1', propose::TEST_CLASS_HASH.try_into().unwrap());
-        // let propose_system = IProposeDispatcher { contract_address: propose_contract_address };
-
-        // let voting_contract_address = world
-        //     .deploy_contract('salty2', voting::TEST_CLASS_HASH.try_into().unwrap());
-        // let voting_system = IVotingDispatcher { contract_address: voting_contract_address };
-
         let default_params = DefaultParameters{
             for_player: caller,
             for_system: caller,
@@ -92,13 +88,13 @@ mod tests {
         let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
 
-        // let index = propose_system.toggle_allowed_color(id, COLOR);
-        // voting_system.vote(id, index, true);
-        // propose_system.activate_proposal(id, index);
-
-
         // call place_pixel
         let NEW_COLOR: u32 = 0xffffff;
+
+        let allowed_color = get!(world, (id, NEW_COLOR), (AllowedColor));
+
+        print!("\n allowed_color: {} \n", allowed_color.is_allowed);
+
         let new_params = DefaultParameters{
             for_player: caller,
             for_system: caller,
