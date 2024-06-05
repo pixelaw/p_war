@@ -49,7 +49,7 @@ struct PlayerVote {
 #[derive(Model, Copy, Drop, Serde, Print)]
 struct PixelRecoveryRate {
     #[key]
-    id: usize,
+    game_id: usize,
     rate: u64
 }
 

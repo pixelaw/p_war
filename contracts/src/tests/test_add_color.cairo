@@ -96,6 +96,7 @@ mod tests {
         
         // create a game
         actions_system.interact(default_params);
+
         let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
 
@@ -115,7 +116,8 @@ mod tests {
 
 
         // let index = propose_system.toggle_allowed_color(id, NEW_COLOR);
-        voting_system.vote(id, index, true);
+        let vote_px = 3;
+        voting_system.vote(id, index, vote_px, true);
 
         let proposal = get!(world, (id, index), (Proposal));
 
@@ -139,7 +141,6 @@ mod tests {
         };
 
         actions_system.interact(new_params);
-
 
     }
 }
