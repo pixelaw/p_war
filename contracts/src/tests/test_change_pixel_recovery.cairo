@@ -13,7 +13,7 @@ mod tests {
         models::{
             game::{Game, game},
             board::{Board, GameId, Position, board, game_id},
-            proposal::{Args, ProposalType, Proposal},
+            proposal::{Args, ProposalType, Proposal, PixelRecoveryRate},
             allowed_app::AllowedApp,
             allowed_color::AllowedColor,
         },
@@ -100,21 +100,21 @@ mod tests {
         let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
 
-        let change_duration: u64 = 100;
+        let change_pixel_recovery: u64 = 20;
 
         let args = Args{
             toggle_allowed_app: starknet::contract_address_const::<0x0>(),
-            arg1: change_duration,
+            arg1: change_pixel_recovery,
             arg2: 0,
         }; 
 
         let index = propose_system.create_proposal(
             game_id: id,
-            proposal_type: ProposalType::ChangeGameDuration,
+            proposal_type: ProposalType::ChangePixelRecovery,
             args: args,
         );
 
-        let vote_px = 3;
+        let vote_px = 4;
         voting_system.vote(id, index, vote_px, true);
 
         let proposal = get!(world, (id, index), (Proposal));
@@ -127,12 +127,12 @@ mod tests {
 
 
         // assert change
-        let game = get!(
+        let recovery_rate = get!(
             world,
             (id),
-            (Game)
+            (PixelRecoveryRate)
         );
 
-        assert(game.end > change_duration - 1, 'failed to activate proposal');
+        assert(recovery_rate.rate == change_pixel_recovery, 'failed to activate proposal');
     }
 }

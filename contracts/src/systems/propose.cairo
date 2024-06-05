@@ -15,7 +15,12 @@ trait IPropose {
 #[dojo::contract]
 mod propose {
     use super::{IPropose, can_propose, NEEDED_YES_PX, PROPOSAL_DURATION};
-    use p_war::models::{game::{Game, Status, GameTrait}, proposal::{Args, ProposalType, Proposal}, allowed_app::AllowedApp, allowed_color::AllowedColor};
+    use p_war::models::{
+        game::{Game, Status, GameTrait},
+        proposal::{Args, ProposalType, Proposal, PixelRecoveryRate},
+        allowed_app::AllowedApp,
+        allowed_color::AllowedColor
+    };
     use starknet::{ContractAddress, get_caller_address, get_block_timestamp};
 
     #[abi(embed_v0)]
@@ -88,7 +93,16 @@ mod propose {
                     );
                     3
                 },
-                ProposalType::ChangePixelRecovery => 4,            
+                ProposalType::ChangePixelRecovery => {
+                    set!(
+                        world,
+                        (PixelRecoveryRate{
+                            game_id: game_id,
+                            rate: proposal.args.arg1,
+                        })
+                    );
+                    4
+                },            
                 ProposalType::ExpandArea => 5,     
 
             };
