@@ -104,7 +104,7 @@ mod tests {
         let add_h: u64 = 4;
 
         let args = Args{
-            toggle_allowed_app: starknet::contract_address_const::<0x0>(),
+            address: starknet::contract_address_const::<0x0>(),
             arg1: add_w,
             arg2: add_h,
         }; 

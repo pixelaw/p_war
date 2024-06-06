@@ -2,7 +2,8 @@
 mod tests {
     use starknet::{
         class_hash::Felt252TryIntoClassHash,
-        ContractAddress
+        ContractAddress,
+        get_caller_address,
     };
     // import world dispatcher
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
@@ -14,14 +15,16 @@ mod tests {
             game::{Game, game},
             board::{Board, GameId, Position, board, game_id},
             proposal::{Args, ProposalType, Proposal},
+            player::{Player},
             allowed_app::AllowedApp,
             allowed_color::AllowedColor,
         },
         systems::{
             actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
             propose::{propose, IProposeDispatcher, IProposeDispatcherTrait},
-            voting::{voting, IVotingDispatcher, IVotingDispatcherTrait}
-        }
+            voting::{voting, IVotingDispatcher, IVotingDispatcherTrait},
+            utils::update_max_px,
+        },
     };
 
     use pixelaw::core::{
@@ -43,7 +46,7 @@ mod tests {
 
     #[test]
     #[available_gas(999_999_999)]
-    fn test_add_color() {
+    fn test_change_winner_config() {
         // caller
         let caller = starknet::contract_address_const::<0x0>();
 
@@ -100,23 +103,26 @@ mod tests {
         let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
 
-        let NEW_COLOR: u32 = 0xff0000;
+        // change config type by arg1
+        // 0: set the person with the most pixels at the end as the winner.
+        // 1: set the winner by the proposal directly.
+        // 2: winner is the person who has committied at the most.
 
         let args = Args{
-            address: starknet::contract_address_const::<0x0>(),
-            arg1: NEW_COLOR.into(),
+            address: caller,
+            arg1: 1,
             arg2: 0,
         }; 
 
         let index = propose_system.create_proposal(
             game_id: id,
-            proposal_type: ProposalType::ToggleAllowedColor,
+            proposal_type: ProposalType::ChangeWinnerConfig,
             args: args,
         );
 
 
         // let index = propose_system.toggle_allowed_color(id, NEW_COLOR);
-        let vote_px = 3;
+        let vote_px = 1;
         voting_system.vote(id, index, vote_px, true);
 
         let proposal = get!(world, (id, index), (Proposal));
@@ -127,20 +133,17 @@ mod tests {
 
         // should add cheat code to spend time
         propose_system.activate_proposal(id, index);
+        
+        // TODO: add cheat code to spend time
+        // actions_system.end_game(id);
 
 
-        // call place_pixel
-        let new_params = DefaultParameters{
-            for_player: caller,
-            for_system: caller,
-            position: PixelawPosition {
-                x: 1,
-                y: 1
-            },
-            color: NEW_COLOR
-        };
-
-        actions_system.interact(new_params);
-
+        let game = get!(
+            world,
+            (id),
+            (Game)
+        );
+        
+        // assert(game.winner == caller, 'winner should be the caller');
     }
 }

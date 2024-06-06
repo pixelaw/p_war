@@ -1,4 +1,4 @@
-use starknet::{ContractAddress, get_caller_address, get_block_timestamp};
+use starknet::{ContractAddress, get_caller_address, get_block_timestamp, contract_address_const};
 use p_war::models::{game::{Game, Status}, proposal::{Args, ProposalType, Proposal}};
 
 const PROPOSAL_DURATION: u64 = 0; // should change it later.
@@ -19,6 +19,7 @@ mod propose {
         game::{Game, Status, GameTrait},
         proposal::{Args, ProposalType, Proposal, PixelRecoveryRate},
         board::{GameId, Board, Position},
+        player::{Player},
         allowed_app::AllowedApp,
         allowed_color::AllowedColor
     };
@@ -181,6 +182,84 @@ mod propose {
                         )
                     );
                     5
+                },
+
+                ProposalType::BanPlayerAddress => {
+                    let target_address: ContractAddress = proposal.args.address;
+                    let mut target_player = get!(
+                        world,
+                        (target_address),
+                        (Player)
+                    );
+
+                    target_player.is_banned = true;
+
+                    set!(
+                        world,
+                        (
+                            target_player
+                        )
+                    );
+                    6
+                },
+
+                ProposalType::ChangeMaxPXConfig => {
+                    // change config type by arg1
+                    let mut game = get!(
+                        world,
+                        (game_id),
+                        (Game)
+                    );
+                    match proposal.args.arg1 {
+
+                        // change constant value for max_px
+                        0 => {
+                            game.const_val = proposal.args.arg2.try_into().unwrap();
+                            0
+                        },
+
+                        // change coefficient for number of own pixels for max_px
+                        1 => {
+                            game.coeff_own_pixels = proposal.args.arg2.try_into().unwrap();
+                            1
+                        },
+
+                        // change coefficient for the past commitments for max_px
+                        2 => {
+                            game.coeff_commits = proposal.args.arg2.try_into().unwrap();
+                            1
+                        },
+                        _ => {7},
+                    };
+                    set!(
+                        world,
+                        (game)
+                    );
+                    7
+                },
+                ProposalType::ChangeWinnerConfig => {
+                    // change config type by arg1
+                    // 0: set the person with the most pixels at the end as the winner.
+                    // 1: set the winner by the proposal directly.
+                    // 2: winner is the person who has committied at the most.
+
+                    let mut game = get!(
+                        world,
+                        (game_id),
+                        (Game)
+                    );
+                    game.winner_config = proposal.args.arg1.try_into().unwrap();
+
+                    if game.winner_config == 1 {
+                        // set winner
+                        game.winner = proposal.args.address;
+                    };
+
+                    set!(
+                        world,
+                        (game)
+                    );
+                    8
                 },
             };
 

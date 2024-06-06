@@ -11,41 +11,73 @@ use p_war::models::{
 
 const DEFAULT_PX: u32 = 10;
 
-fn recover_px(world: IWorldDispatcher, game_id: usize) {
-    let player_address = get_tx_info().unbox().account_contract_address;
+fn update_max_px(world: IWorldDispatcher, game_id: usize, player_address: ContractAddress){
     let mut player = get!(
         world,
         (player_address),
         (Player)
     );
 
-    // if this is first time for the caller, let's set initial px.
+    let game = get!(
+        world,
+        (game_id),
+        (Game)
+    );
+
+    let mut max_px = game.const_val + game.coeff_own_pixels * player.num_owns + game.coeff_commits * player.num_commit;
+
+    if max_px < 1 {
+        max_px = 1;
+    };
+
+    // if the player is new one:
     if player.max_px == 0 {
-        player.max_px = DEFAULT_PX;
-        player.current_px = DEFAULT_PX;
+        player.current_px = max_px;
         player.last_date = get_block_timestamp();
+        player.num_owns = 0;
+        player.num_commit = 0;
+        player.is_banned = false;
+    };
+
+    player.max_px = max_px;
+
+    set!(
+        world,
+        (player)
+    );
+}
+
+fn recover_px(world: IWorldDispatcher, game_id: usize, player_address: ContractAddress) {
+    
+    update_max_px(world, game_id, player_address);
+
+    let mut player = get!(
+        world,
+        (player_address),
+        (Player)
+    );
+
+    let recovery_rate = get!(
+        world,
+        (game_id),
+        (PixelRecoveryRate)
+    );
+
+    let current_time = get_block_timestamp();
+    let time_diff = current_time - player.last_date;
+
+
+    let recover_pxs: u32 = ((time_diff) / recovery_rate.rate).try_into().unwrap();
+
+    if player.max_px >= (player.current_px + recover_pxs) {
+        player.current_px = player.current_px + recover_pxs;
     } else {
-        let recovery_rate = get!(
-            world,
-            (game_id),
-            (PixelRecoveryRate)
-        );
-
-        let current_time = get_block_timestamp();
-        let time_diff = current_time - player.last_date;
-
-        print!("\n ## RECOVERY_RATE: {} ##\n", recovery_rate.rate);
-
-        let recover_pxs: u32 = ((time_diff) / recovery_rate.rate).try_into().unwrap();
-
-        if player.max_px >= (player.current_px + recover_pxs) {
-            player.current_px = player.current_px + recover_pxs;
-        } else {
-            player.current_px = player.max_px;
-        }
+        player.current_px = player.max_px;
     }
 
-    print!("\n ### CURRENT PX: {} ###\n", player.current_px);
+    print!("\n## RECOVERY_RATE: {} ##\n", recovery_rate.rate);
+    print!("## RECOVER_PXS: {} ##\n", recover_pxs);
+    print!("## CURRENT PX: {} ##\n", player.current_px);
 
     set!(
         world,

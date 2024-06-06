@@ -103,7 +103,7 @@ mod tests {
         let change_duration: u64 = 100;
 
         let args = Args{
-            toggle_allowed_app: starknet::contract_address_const::<0x0>(),
+            address: starknet::contract_address_const::<0x0>(),
             arg1: change_duration,
             arg2: 0,
         }; 
