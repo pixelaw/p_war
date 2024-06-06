@@ -2,7 +2,8 @@
 mod tests {
     use starknet::{
         class_hash::Felt252TryIntoClassHash,
-        ContractAddress
+        ContractAddress,
+        get_caller_address,
     };
     // import world dispatcher
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
@@ -14,6 +15,7 @@ mod tests {
             game::{Game, game},
             board::{Board, GameId, Position, board, game_id},
             proposal::{Args, ProposalType, Proposal},
+            player::{Player},
             allowed_app::AllowedApp,
             allowed_color::AllowedColor,
         },
@@ -43,7 +45,8 @@ mod tests {
 
     #[test]
     #[available_gas(999_999_999)]
-    fn test_add_color() {
+    #[should_panic(expected: ('you are banned', 'ENTRYPOINT_FAILED'))]
+    fn test_ban_player() {
         // caller
         let caller = starknet::contract_address_const::<0x0>();
 
@@ -100,23 +103,23 @@ mod tests {
         let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
 
-        let NEW_COLOR: u32 = 0xff0000;
+        // let player_address = get_caller_address(); // ban myself.
 
         let args = Args{
-            address: starknet::contract_address_const::<0x0>(),
-            arg1: NEW_COLOR.into(),
+            address: caller,
+            arg1: 0,
             arg2: 0,
         }; 
 
         let index = propose_system.create_proposal(
             game_id: id,
-            proposal_type: ProposalType::ToggleAllowedColor,
+            proposal_type: ProposalType::BanPlayerAddress,
             args: args,
         );
 
 
         // let index = propose_system.toggle_allowed_color(id, NEW_COLOR);
-        let vote_px = 3;
+        let vote_px = 6;
         voting_system.vote(id, index, vote_px, true);
 
         let proposal = get!(world, (id, index), (Proposal));
@@ -128,6 +131,14 @@ mod tests {
         // should add cheat code to spend time
         propose_system.activate_proposal(id, index);
 
+        let player = get!(
+            world,
+            (caller),
+            (Player)
+        );
+
+        assert(player.is_banned == true, 'should ban caller');
+
 
         // call place_pixel
         let new_params = DefaultParameters{
@@ -137,10 +148,11 @@ mod tests {
                 x: 1,
                 y: 1
             },
-            color: NEW_COLOR
+            color: 0
         };
 
-        actions_system.interact(new_params);
-
+        actions_system.interact(new_params); // should panic here.
     }
+
+
 }

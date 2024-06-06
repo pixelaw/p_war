@@ -2,7 +2,7 @@ use starknet::ContractAddress;
 
 #[derive(Copy, Drop, Serde, Introspect, PartialEq, Print)]
 struct Args {
-    toggle_allowed_app: ContractAddress,
+    address: ContractAddress,
     arg1: u64,
     arg2: u64,
 }
@@ -15,6 +15,7 @@ enum ProposalType {
     ChangeGameDuration,
     ChangePixelRecovery,
     ExpandArea,
+    BanPlayerAddress,
 }
 
 
@@ -61,7 +62,8 @@ impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
             ProposalType::ToggleAllowedColor => 2,
             ProposalType::ChangeGameDuration => 3,
             ProposalType::ChangePixelRecovery => 4,            
-            ProposalType::ExpandArea => 5,       
+            ProposalType::ExpandArea => 5,
+            ProposalType::BanPlayerAddress => 6,
         }
     }
 }

@@ -24,6 +24,7 @@ fn recover_px(world: IWorldDispatcher, game_id: usize) {
         player.max_px = DEFAULT_PX;
         player.current_px = DEFAULT_PX;
         player.last_date = get_block_timestamp();
+        player.is_banned = false;
     } else {
         let recovery_rate = get!(
             world,

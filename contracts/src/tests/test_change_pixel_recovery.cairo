@@ -103,7 +103,7 @@ mod tests {
         let change_pixel_recovery: u64 = 20;
 
         let args = Args{
-            toggle_allowed_app: starknet::contract_address_const::<0x0>(),
+            address: starknet::contract_address_const::<0x0>(),
             arg1: change_pixel_recovery,
             arg2: 0,
         }; 

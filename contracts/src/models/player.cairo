@@ -8,4 +8,5 @@ struct Player {
     max_px: u32,
     current_px: u32,
     last_date: u64,
+    is_banned: bool,
 }

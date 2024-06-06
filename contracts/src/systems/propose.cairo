@@ -1,4 +1,4 @@
-use starknet::{ContractAddress, get_caller_address, get_block_timestamp};
+use starknet::{ContractAddress, get_caller_address, get_block_timestamp, contract_address_const};
 use p_war::models::{game::{Game, Status}, proposal::{Args, ProposalType, Proposal}};
 
 const PROPOSAL_DURATION: u64 = 0; // should change it later.
@@ -19,6 +19,7 @@ mod propose {
         game::{Game, Status, GameTrait},
         proposal::{Args, ProposalType, Proposal, PixelRecoveryRate},
         board::{GameId, Board, Position},
+        player::{Player},
         allowed_app::AllowedApp,
         allowed_color::AllowedColor
     };
@@ -181,6 +182,25 @@ mod propose {
                         )
                     );
                     5
+                },
+
+                ProposalType::BanPlayerAddress => {
+                    let target_address: ContractAddress = proposal.args.address;
+                    let mut target_player = get!(
+                        world,
+                        (target_address),
+                        (Player)
+                    );
+
+                    target_player.is_banned = true;
+
+                    set!(
+                        world,
+                        (
+                            target_player
+                        )
+                    );
+                    6
                 },
             };
 

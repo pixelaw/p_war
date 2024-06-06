@@ -280,6 +280,9 @@ mod p_war_actions {
             // check the current px is not 0
             assert(player.current_px > 0, 'you cannot paint');
 
+            // check the player is banned or not
+            assert(player.is_banned == false, 'you are banned');
+
             app.set_pixel(default_params);
 
             set!(
@@ -289,6 +292,7 @@ mod p_war_actions {
                     max_px: player.max_px,
                     current_px: player.current_px - 1,
                     last_date: get_block_timestamp(),
+                    is_banned: false,
                 }),
             );
         }
