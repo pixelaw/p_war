@@ -23,4 +23,5 @@ mod tests {
     mod test_expand_area;
     mod test_ban_player;
     mod test_change_max_px;
+    mod test_change_winner_config;
 }

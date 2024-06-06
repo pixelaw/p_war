@@ -237,6 +237,30 @@ mod propose {
                     );
                     7
                 },
+                ProposalType::ChangeWinnerConfig => {
+                    // change config type by arg1
+                    // 0: set the person with the most pixels at the end as the winner.
+                    // 1: set the winner by the proposal directly.
+                    // 2: winner is the person who has committied at the most.
+
+                    let mut game = get!(
+                        world,
+                        (game_id),
+                        (Game)
+                    );
+                    game.winner_config = proposal.args.arg1.try_into().unwrap();
+
+                    if game.winner_config == 1 {
+                        // set winner
+                        game.winner = proposal.args.address;
+                    };
+
+                    set!(
+                        world,
+                        (game)
+                    );
+                    8
+                },
             };
 
         }

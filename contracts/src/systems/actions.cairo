@@ -335,7 +335,24 @@ mod p_war_actions {
 
             // TODO: get winner correctly
             // let winCondition = 0; // can we customize by contractaddress? or match&implement each?
-            let winner = starknet::contract_address_const::<0x0>(); // set for now.
+            let winner = match game.winner_config {
+                0 => {
+                    // set the person with the most pixels at the end as the winner.
+                    // TODO: get such a person. (We need to set  player.num_owns correctly.)
+                    starknet::contract_address_const::<0x0>()
+                },
+                1 => {
+                    // set the winner by the proposal directly.
+                    // already set the winner.
+                    game.winner
+                },
+                2 => {
+                    // winner is the person who has committied at the most.
+                    // TODO: get such a person.
+                    starknet::contract_address_const::<0x2>()
+                },
+                _ => {starknet::contract_address_const::<0x99>()},
+            };
 
             game.winner = winner;
 
@@ -343,6 +360,8 @@ mod p_war_actions {
                 world,
                 (game)
             );
+
+            // TODO: emit the winner!
         }
     }
 }
