@@ -47,7 +47,7 @@ mod p_war_actions {
     use pixelaw::core::models::{ pixel::PixelUpdate, registry::App };
     use pixelaw::core::traits::IInteroperability;
     use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
-    use p_war::systems::utils::recover_px;
+    use p_war::systems::utils::{ recover_px, update_max_px };
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -156,8 +156,8 @@ mod p_war_actions {
                 end: start + GAME_DURATION,
                 proposal_idx: 0,
                 const_val: 10, // Default is 10.
-                coeff_own_pixels: 10,
-                coeff_commits: 10,
+                coeff_own_pixels: 0,
+                coeff_commits: 0,
                 winner_config: 0,
                 winner: starknet::contract_address_const::<0x0>(),
             };
@@ -303,6 +303,8 @@ mod p_war_actions {
             );
 
             // TODO: should reduce the num_owns of previous user.
+
+            update_max_px(world, game_id.value, player.address);
         }
 
         fn update_pixel(world: IWorldDispatcher, pixel_update: PixelUpdate) {

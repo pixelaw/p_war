@@ -22,8 +22,9 @@ mod tests {
         systems::{
             actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
             propose::{propose, IProposeDispatcher, IProposeDispatcherTrait},
-            voting::{voting, IVotingDispatcher, IVotingDispatcherTrait}
-        }
+            voting::{voting, IVotingDispatcher, IVotingDispatcherTrait},
+            utils::update_max_px,
+        },
     };
 
     use pixelaw::core::{
@@ -129,15 +130,15 @@ mod tests {
         // should add cheat code to spend time
         propose_system.activate_proposal(id, index);
 
-        let player = get!(
+        let game = get!(
             world,
-            (caller),
-            (Player)
+            (id),
+            (Game)
         );
+        // print!("\n**** game state: {} ****", game.const_val);
+        assert(game.const_val == 20, 'const_val should be 20');
 
-        assert(player.max_px == 20, 'max_px should be 20');
-
-        // call place_pixel
+        // call place_pixel (to update player's max_px)
         let new_params = DefaultParameters{
             for_player: caller,
             for_system: caller,
@@ -149,6 +150,13 @@ mod tests {
         };
 
         actions_system.interact(new_params);
+
+        let player = get!(
+            world,
+            (caller),
+            (Player)
+        );
+        assert(player.max_px == 20, 'max_px should be 20');
 
         // change the max_px by num_owns
 
@@ -166,14 +174,29 @@ mod tests {
         );
 
 
-        // let index = propose_system.toggle_allowed_color(id, NEW_COLOR);
         let vote_px = 1;
         voting_system.vote(id, index, vote_px, true);
 
-        let proposal = get!(world, (id, index), (Proposal));
-
         // should add cheat code to spend time
         propose_system.activate_proposal(id, index);
+
+        // interact to update user's status
+        let another_params = DefaultParameters{
+            for_player: caller,
+            for_system: caller,
+            position: PixelawPosition {
+                x: 2,
+                y: 2
+            },
+            color: 0
+        };
+        actions_system.interact(another_params);
+
+        let game = get!(
+            world,
+            (id),
+            (Game)
+        );
 
         let player = get!(
             world,
@@ -181,8 +204,15 @@ mod tests {
             (Player)
         );
 
-        assert(player.max_px == 20 + 5 * 1, 'max_px should be 25');
+        print!("\n**** player max_px: {} ****\n", player.max_px);
+        print!("**** player num_commit: {} ****\n", player.num_commit);
+        print!("**** player num_owns: {} ****\n", player.num_owns);
+        print!("**** game const: {} ****\n", game.const_val);
+        print!("**** game coeff_commits: {} ****\n", game.coeff_commits);
+        print!("**** game coeff_own_pixels: {} ****\n", game.coeff_own_pixels);
+        let answer = game.const_val + game.coeff_commits * player.num_commit + game.coeff_own_pixels * player.num_owns;
+        print!("**** max_px should be: {} ****\n", answer);
+        
+        assert(player.max_px == 20 + 5 * player.num_commit, 'max_px should be 40');
     }
-
-
 }

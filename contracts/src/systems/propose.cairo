@@ -215,7 +215,7 @@ mod propose {
                         // change constant value for max_px
                         0 => {
                             game.const_val = proposal.args.arg2.try_into().unwrap();
-                            0               
+                            0
                         },
 
                         // change coefficient for number of own pixels for max_px
@@ -226,7 +226,7 @@ mod propose {
 
                         // change coefficient for the past commitments for max_px
                         2 => {
-                            game.coeff_own_pixels = proposal.args.arg2.try_into().unwrap();
+                            game.coeff_commits = proposal.args.arg2.try_into().unwrap();
                             1
                         },
                         _ => {7},

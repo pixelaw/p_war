@@ -13,7 +13,7 @@ mod voting {
         player::{Player},
         proposal::{PlayerVote, Args, ProposalType, Proposal}
     };
-    use p_war::systems::utils::recover_px;
+    use p_war::systems::utils::{ recover_px, update_max_px };
 
     // one px vote per person
 
@@ -43,6 +43,7 @@ mod voting {
             }
 
             player.current_px -= use_px;
+            player.num_commit += use_px;
             set!(
                 world,
                 (player)
@@ -57,9 +58,9 @@ mod voting {
                     proposal,
                     player_vote
                 )
-            )
+            );
 
-
+            update_max_px(world, game_id, player_address);
         }
     }
 }
