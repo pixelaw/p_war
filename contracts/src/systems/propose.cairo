@@ -202,6 +202,41 @@ mod propose {
                     );
                     6
                 },
+
+                ProposalType::ChangeMaxPXConfig => {
+                    // change config type by arg1
+                    let mut game = get!(
+                        world,
+                        (game_id),
+                        (Game)
+                    );
+                    match proposal.args.arg1 {
+
+                        // change constant value for max_px
+                        0 => {
+                            game.const_val = proposal.args.arg2.try_into().unwrap();
+                            0               
+                        },
+
+                        // change coefficient for number of own pixels for max_px
+                        1 => {
+                            game.coeff_own_pixels = proposal.args.arg2.try_into().unwrap();
+                            1
+                        },
+
+                        // change coefficient for the past commitments for max_px
+                        2 => {
+                            game.coeff_own_pixels = proposal.args.arg2.try_into().unwrap();
+                            1
+                        },
+                        _ => {7},
+                    };
+                    set!(
+                        world,
+                        (game)
+                    );
+                    7
+                },
             };
 
         }

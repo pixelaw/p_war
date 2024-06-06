@@ -16,6 +16,7 @@ enum ProposalType {
     ChangePixelRecovery,
     ExpandArea,
     BanPlayerAddress,
+    ChangeMaxPXConfig,
 }
 
 
@@ -64,6 +65,7 @@ impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
             ProposalType::ChangePixelRecovery => 4,            
             ProposalType::ExpandArea => 5,
             ProposalType::BanPlayerAddress => 6,
+            ProposalType::ChangeMaxPXConfig => 7,
         }
     }
 }

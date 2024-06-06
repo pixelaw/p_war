@@ -45,8 +45,7 @@ mod tests {
 
     #[test]
     #[available_gas(999_999_999)]
-    #[should_panic(expected: ('you are banned', 'ENTRYPOINT_FAILED'))]
-    fn test_ban_player() {
+    fn test_change_max_px() {
         // caller
         let caller = starknet::contract_address_const::<0x0>();
 
@@ -103,21 +102,22 @@ mod tests {
         let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
 
+        // const chnage from 10 to 20
         let args = Args{
-            address: caller,
+            address: starknet::contract_address_const::<0x0>(),
             arg1: 0,
-            arg2: 0,
+            arg2: 20,
         }; 
 
         let index = propose_system.create_proposal(
             game_id: id,
-            proposal_type: ProposalType::BanPlayerAddress,
+            proposal_type: ProposalType::ChangeMaxPXConfig,
             args: args,
         );
 
 
         // let index = propose_system.toggle_allowed_color(id, NEW_COLOR);
-        let vote_px = 6;
+        let vote_px = 1;
         voting_system.vote(id, index, vote_px, true);
 
         let proposal = get!(world, (id, index), (Proposal));
@@ -135,8 +135,7 @@ mod tests {
             (Player)
         );
 
-        assert(player.is_banned == true, 'should ban caller');
-
+        assert(player.max_px == 20, 'max_px should be 20');
 
         // call place_pixel
         let new_params = DefaultParameters{
@@ -149,7 +148,40 @@ mod tests {
             color: 0
         };
 
-        actions_system.interact(new_params); // should panic here.
+        actions_system.interact(new_params);
+
+        // change the max_px by num_owns
+
+        // change the max_px by commitments
+        let args = Args{
+            address: starknet::contract_address_const::<0x0>(),
+            arg1: 2, // change coefficient for the past commitments for max_px -> should use Enum...
+            arg2: 5,
+        }; 
+
+        let index = propose_system.create_proposal(
+            game_id: id,
+            proposal_type: ProposalType::ChangeMaxPXConfig,
+            args: args,
+        );
+
+
+        // let index = propose_system.toggle_allowed_color(id, NEW_COLOR);
+        let vote_px = 1;
+        voting_system.vote(id, index, vote_px, true);
+
+        let proposal = get!(world, (id, index), (Proposal));
+
+        // should add cheat code to spend time
+        propose_system.activate_proposal(id, index);
+
+        let player = get!(
+            world,
+            (caller),
+            (Player)
+        );
+
+        assert(player.max_px == 20 + 5 * 1, 'max_px should be 25');
     }
 
 

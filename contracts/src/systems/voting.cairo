@@ -25,7 +25,7 @@ mod voting {
             let mut player_vote = get!(world, (player_address, game_id, index), (PlayerVote));
             assert(player_vote.px == 0, 'player already voted');
 
-            recover_px(world, game_id);
+            recover_px(world, game_id, player_address);
 
             let mut player = get!(
                 world,

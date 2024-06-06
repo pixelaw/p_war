@@ -155,6 +155,10 @@ mod p_war_actions {
                 start,
                 end: start + GAME_DURATION,
                 proposal_idx: 0,
+                const_val: 10, // Default is 10.
+                coeff_own_pixels: 10,
+                coeff_commits: 10,
+                winner_config: 0,
                 winner: starknet::contract_address_const::<0x0>(),
             };
 
@@ -268,7 +272,7 @@ mod p_war_actions {
             let player_address = get_tx_info().unbox().account_contract_address;
 
             // recover px
-            recover_px(world, game_id.value);
+            recover_px(world, game_id.value, player_address);
 
             // if this is first time for the caller, let's set initial px.
             let mut player = get!(
@@ -290,11 +294,15 @@ mod p_war_actions {
                 (Player{
                     address: player.address,
                     max_px: player.max_px,
+                    num_owns: player.num_owns + 1,
+                    num_commit: player.num_commit + 1,
                     current_px: player.current_px - 1,
                     last_date: get_block_timestamp(),
                     is_banned: false,
                 }),
             );
+
+            // TODO: should reduce the num_owns of previous user.
         }
 
         fn update_pixel(world: IWorldDispatcher, pixel_update: PixelUpdate) {
