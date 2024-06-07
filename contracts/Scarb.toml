@@ -53,3 +53,7 @@ description = "To host game events on PixeLAW to create engaging experiences for
 cover_uri = "file://assets/cover.png"
 icon_uri = "file://assets/icon.png"
 website = "https://github.com/pixelaw/p_war"
+
+# cannot use snforge_std for dojo contracts...
+# [dev-dependencies]
+# snforge_std = { git = "https://github.com/foundry-rs/starknet-foundry.git", tag = "v0.24.0" }
