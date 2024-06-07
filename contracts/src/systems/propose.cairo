@@ -283,6 +283,19 @@ mod propose {
                 },
             };
 
+            // TODO: should we panish the author if the proposal is denied?
+            // add author's commitment points
+            let mut author = get!(
+                world,
+                (proposal.author),
+                (Player)
+            );
+
+            author.num_commit += 10; // get 10 commitments if the proposal is accepted
+            set!(
+                world,
+                (author)
+            );
         }
     }
 }
