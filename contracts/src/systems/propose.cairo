@@ -253,6 +253,8 @@ mod propose {
                     if game.winner_config == 1 {
                         // set winner
                         game.winner = proposal.args.address;
+
+                        // should we end the game instantly?? -> probably not.
                     };
 
                     set!(
@@ -261,8 +263,39 @@ mod propose {
                     );
                     8
                 },
+                ProposalType::ChangePaintCost => {
+                    // change the cost to paint 
+                    let mut game = get!(
+                        world,
+                        (game_id),
+                        (Game)
+                    );
+                    game.paint_cost = proposal.args.arg1.try_into().unwrap();
+
+                    set!(
+                        world,
+                        (game)
+                    );
+                    9
+                },
+                _ => {
+                    99
+                },
             };
 
+            // TODO: should we panish the author if the proposal is denied?
+            // add author's commitment points
+            let mut author = get!(
+                world,
+                (proposal.author),
+                (Player)
+            );
+
+            author.num_commit += 10; // get 10 commitments if the proposal is accepted
+            set!(
+                world,
+                (author)
+            );
         }
     }
 }

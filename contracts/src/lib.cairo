@@ -24,4 +24,5 @@ mod tests {
     mod test_ban_player;
     mod test_change_max_px;
     mod test_change_winner_config;
+    mod test_change_paint_cost;
 }

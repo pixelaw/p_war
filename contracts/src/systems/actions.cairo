@@ -32,7 +32,7 @@ mod p_war_actions {
     use super::{DEFAULT_RECOVERY_RATE, DEFAULT_COLOR_0, DEFAULT_COLOR_1};
     use p_war::models::{
         game::{Game, Status},
-        board::{Board, GameId, Position},
+        board::{Board, GameId, Position, PWarPixel},
         player::{Player},
         proposal::{PixelRecoveryRate},
         allowed_color::AllowedColor,
@@ -155,6 +155,7 @@ mod p_war_actions {
                 start,
                 end: start + GAME_DURATION,
                 proposal_idx: 0,
+                paint_cost: 1,
                 const_val: 10, // Default is 10.
                 coeff_own_pixels: 0,
                 coeff_commits: 0,
@@ -251,6 +252,7 @@ mod p_war_actions {
             // emit event that game has started
         }
 
+        // To paint, basically use this function.
         fn place_pixel(world: IWorldDispatcher, app: ContractAddress, default_params: DefaultParameters) {
             let game_id = get!(world, (default_params.position.x, default_params.position.y), GameId);
             assert(game_id.value != 0, 'this game does not exist');
@@ -281,8 +283,16 @@ mod p_war_actions {
                 (Player)
             );
 
-            // check the current px is not 0
-            assert(player.current_px > 0, 'you cannot paint');
+            // get the game info
+            let game = get!(
+                world,
+                (game_id.value),
+                (Game)
+            );
+
+
+            // check the current px is eq or larger than cost_paint
+            assert(player.current_px >= game.paint_cost, 'you cannot paint');
 
             // check the player is banned or not
             assert(player.is_banned == false, 'you are banned');
@@ -295,18 +305,56 @@ mod p_war_actions {
                     address: player.address,
                     max_px: player.max_px,
                     num_owns: player.num_owns + 1,
-                    num_commit: player.num_commit + 1,
-                    current_px: player.current_px - 1,
+                    num_commit: player.num_commit + game.paint_cost,
+                    current_px: player.current_px - game.paint_cost,
                     last_date: get_block_timestamp(),
                     is_banned: false,
                 }),
             );
 
-            // TODO: should reduce the num_owns of previous user.
+            // get the previous owner of PWarPixel
+            let position = Position {
+                                x: default_params.position.x,
+                                y: default_params.position.y
+                            };
+            let previous_pwarpixel = get!(
+                world,
+                (position),
+                (PWarPixel)
+            );
+
+            if (previous_pwarpixel.owner != starknet::contract_address_const::<0x0>() &&
+                    previous_pwarpixel.owner != player.address) {
+
+                // get the previous player's info
+                let mut previous_player = get!(
+                    world,
+                    (previous_pwarpixel.owner),
+                    (Player)
+                );
+
+                // decrease the previous player's num_owns
+                previous_player.num_owns -= 1;
+                set!(
+                    world,
+                    (previous_player)
+                );
+            }
+
+            // set the new owner of PWarPixel
+            set!(
+                world,
+                (PWarPixel{
+                    position: position,
+                    owner: player.address
+                }),
+            );
+            
 
             update_max_px(world, game_id.value, player.address);
         }
 
+        // only use for expand areas.
         fn update_pixel(world: IWorldDispatcher, pixel_update: PixelUpdate) {
             assert(get_caller_address() == get_contract_address(), 'invalid caller');
 

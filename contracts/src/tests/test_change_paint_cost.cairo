@@ -46,7 +46,7 @@ mod tests {
 
     #[test]
     #[available_gas(999_999_999)]
-    fn test_change_max_px() {
+    fn test_change_paint_cost() {
         // caller
         let caller = starknet::contract_address_const::<0x0>();
 
@@ -103,138 +103,32 @@ mod tests {
         let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
 
-        // const chnage from 10 to 20
+        // change paint cost.
         let args = Args{
             address: starknet::contract_address_const::<0x0>(),
-            arg1: 0,
-            arg2: 20,
+            arg1: 3,
+            arg2: 0,
         }; 
 
         let index = propose_system.create_proposal(
             game_id: id,
-            proposal_type: ProposalType::ChangeMaxPXConfig,
+            proposal_type: ProposalType::ChangePaintCost,
             args: args,
         );
 
 
-        // let index = propose_system.toggle_allowed_color(id, NEW_COLOR);
         let vote_px = 1;
         voting_system.vote(id, index, vote_px, true);
 
         let proposal = get!(world, (id, index), (Proposal));
 
         print!("\n## PROPOSAL INFO ##\n");
-        
         print!("Proposal end: {}\n", proposal.end);
 
         // should add cheat code to spend time
         propose_system.activate_proposal(id, index);
 
-        let game = get!(
-            world,
-            (id),
-            (Game)
-        );
-        // print!("\n**** game state: {} ****", game.const_val);
-        assert(game.const_val == 20, 'const_val should be 20');
-
-        // call place_pixel (to update player's max_px)
-        let new_params = DefaultParameters{
-            for_player: caller,
-            for_system: caller,
-            position: PixelawPosition {
-                x: 1,
-                y: 1
-            },
-            color: 0
-        };
-
-        actions_system.interact(new_params);
-
-        let player = get!(
-            world,
-            (caller),
-            (Player)
-        );
-        assert(player.max_px == 20, 'max_px should be 20');
-
-        // change the max_px by commitments
-        let args = Args{
-            address: starknet::contract_address_const::<0x0>(),
-            arg1: 2, // change coefficient for the past commitments for max_px -> should use Enum...
-            arg2: 5,
-        }; 
-
-        let index = propose_system.create_proposal(
-            game_id: id,
-            proposal_type: ProposalType::ChangeMaxPXConfig,
-            args: args,
-        );
-
-
-        let vote_px = 1;
-        voting_system.vote(id, index, vote_px, true);
-
-        // should add cheat code to spend time
-        propose_system.activate_proposal(id, index);
-
         // interact to update user's status
-        let another_params = DefaultParameters{
-            for_player: caller,
-            for_system: caller,
-            position: PixelawPosition {
-                x: 2,
-                y: 2
-            },
-            color: 0
-        };
-        actions_system.interact(another_params);
-
-        let game = get!(
-            world,
-            (id),
-            (Game)
-        );
-
-        let player = get!(
-            world,
-            (caller),
-            (Player)
-        );
-
-        print!("\n**** player max_px: {} ****\n", player.max_px);
-        print!("**** player num_commit: {} ****\n", player.num_commit);
-        print!("**** player num_owns: {} ****\n", player.num_owns);
-        print!("**** game const: {} ****\n", game.const_val);
-        print!("**** game coeff_commits: {} ****\n", game.coeff_commits);
-        print!("**** game coeff_own_pixels: {} ****\n", game.coeff_own_pixels);
-        let answer = game.const_val + game.coeff_commits * player.num_commit + game.coeff_own_pixels * player.num_owns;
-        print!("**** max_px should be: {} ****\n", answer);
-        
-        assert(player.max_px == 20 + 5 * player.num_commit, 'max_px should be 40');
-
-        // change the max_px by num_owns
-
-        let args = Args{
-            address: starknet::contract_address_const::<0x0>(),
-            arg1: 1, // change coefficient for the past commitments for max_px -> should use Enum...
-            arg2: 3,
-        }; 
-
-        let index = propose_system.create_proposal(
-            game_id: id,
-            proposal_type: ProposalType::ChangeMaxPXConfig,
-            args: args,
-        );
-
-
-        let vote_px = 1;
-        voting_system.vote(id, index, vote_px, true);
-
-        // should add cheat code to spend time
-        propose_system.activate_proposal(id, index);
-        
-        // interact to update user's status (or we can update max_px by calling update_max_px function.)
         let another_params = DefaultParameters{
             for_player: caller,
             for_system: caller,
@@ -246,29 +140,13 @@ mod tests {
         };
         actions_system.interact(another_params);
 
-        let game = get!(
-            world,
-            (id),
-            (Game)
-        );
-
         let player = get!(
             world,
             (caller),
-            (Player)
+            (Player),
         );
-
-        print!("\n**** player max_px: {} ****\n", player.max_px);
-        print!("**** player num_commit: {} ****\n", player.num_commit);
-        print!("**** player num_owns: {} ****\n", player.num_owns);
-        print!("**** game const: {} ****\n", game.const_val);
-        print!("**** game coeff_commits: {} ****\n", game.coeff_commits);
-        print!("**** game coeff_own_pixels: {} ****\n", game.coeff_own_pixels);
-        let answer = game.const_val + game.coeff_commits * player.num_commit + game.coeff_own_pixels * player.num_owns;
-        print!("**** max_px should be: {} ****\n", answer);
-
-        assert(player.max_px == 20 + 5 * player.num_commit + 3 * player.num_owns, 'max_px should be 51');
-
+        // print!("cu_px: {}", player.current_px);
+        assert(player.current_px == 10 - 1 - 3, 'current px should be 6');
 
     }
 }

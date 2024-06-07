@@ -18,6 +18,7 @@ enum ProposalType {
     BanPlayerAddress,
     ChangeMaxPXConfig,
     ChangeWinnerConfig,
+    ChangePaintCost,
 }
 
 
@@ -68,6 +69,7 @@ impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
             ProposalType::BanPlayerAddress => 6,
             ProposalType::ChangeMaxPXConfig => 7,
             ProposalType::ChangeWinnerConfig => 8,
+            ProposalType::ChangePaintCost => 9,
         }
     }
 }

@@ -138,11 +138,11 @@ mod tests {
         // actions_system.end_game(id);
 
 
-        let game = get!(
-            world,
-            (id),
-            (Game)
-        );
+        // let game = get!(
+        //     world,
+        //     (id),
+        //     (Game)
+        // );
         
         // assert(game.winner == caller, 'winner should be the caller');
     }
