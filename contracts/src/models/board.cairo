@@ -1,3 +1,5 @@
+use starknet::{ContractAddress};
+
 #[derive(Copy, Drop, Serde, Introspect)]
 struct Position {
     x: u32,
@@ -12,6 +14,14 @@ struct Board {
     width: u32,
     height: u32,
 }
+
+#[derive(Model, Copy, Drop, Serde)]
+struct PWarPixel {
+    #[key]
+    position: Position,
+    owner: ContractAddress
+}
+
 
 #[derive(Model, Copy, Drop, Serde)]
 struct GameId {

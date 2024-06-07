@@ -253,6 +253,8 @@ mod propose {
                     if game.winner_config == 1 {
                         // set winner
                         game.winner = proposal.args.address;
+
+                        // should we end the game instantly?? -> probably not.
                     };
 
                     set!(

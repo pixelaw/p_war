@@ -158,8 +158,6 @@ mod tests {
         );
         assert(player.max_px == 20, 'max_px should be 20');
 
-        // change the max_px by num_owns
-
         // change the max_px by commitments
         let args = Args{
             address: starknet::contract_address_const::<0x0>(),
@@ -214,5 +212,63 @@ mod tests {
         print!("**** max_px should be: {} ****\n", answer);
         
         assert(player.max_px == 20 + 5 * player.num_commit, 'max_px should be 40');
+
+        // change the max_px by num_owns
+
+        let args = Args{
+            address: starknet::contract_address_const::<0x0>(),
+            arg1: 1, // change coefficient for the past commitments for max_px -> should use Enum...
+            arg2: 3,
+        }; 
+
+        let index = propose_system.create_proposal(
+            game_id: id,
+            proposal_type: ProposalType::ChangeMaxPXConfig,
+            args: args,
+        );
+
+
+        let vote_px = 1;
+        voting_system.vote(id, index, vote_px, true);
+
+        // should add cheat code to spend time
+        propose_system.activate_proposal(id, index);
+        
+        // interact to update user's status (or we can update max_px by calling update_max_px function.)
+        let another_params = DefaultParameters{
+            for_player: caller,
+            for_system: caller,
+            position: PixelawPosition {
+                x: 3,
+                y: 3
+            },
+            color: 0
+        };
+        actions_system.interact(another_params);
+
+        let game = get!(
+            world,
+            (id),
+            (Game)
+        );
+
+        let player = get!(
+            world,
+            (caller),
+            (Player)
+        );
+
+        print!("\n**** player max_px: {} ****\n", player.max_px);
+        print!("**** player num_commit: {} ****\n", player.num_commit);
+        print!("**** player num_owns: {} ****\n", player.num_owns);
+        print!("**** game const: {} ****\n", game.const_val);
+        print!("**** game coeff_commits: {} ****\n", game.coeff_commits);
+        print!("**** game coeff_own_pixels: {} ****\n", game.coeff_own_pixels);
+        let answer = game.const_val + game.coeff_commits * player.num_commit + game.coeff_own_pixels * player.num_owns;
+        print!("**** max_px should be: {} ****\n", answer);
+
+        assert(player.max_px == 20 + 5 * player.num_commit + 3 * player.num_owns, 'max_px should be 51');
+
+
     }
 }

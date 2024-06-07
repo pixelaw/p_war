@@ -32,7 +32,7 @@ mod p_war_actions {
     use super::{DEFAULT_RECOVERY_RATE, DEFAULT_COLOR_0, DEFAULT_COLOR_1};
     use p_war::models::{
         game::{Game, Status},
-        board::{Board, GameId, Position},
+        board::{Board, GameId, Position, PWarPixel},
         player::{Player},
         proposal::{PixelRecoveryRate},
         allowed_color::AllowedColor,
@@ -251,6 +251,7 @@ mod p_war_actions {
             // emit event that game has started
         }
 
+        // To paint, basically use this function.
         fn place_pixel(world: IWorldDispatcher, app: ContractAddress, default_params: DefaultParameters) {
             let game_id = get!(world, (default_params.position.x, default_params.position.y), GameId);
             assert(game_id.value != 0, 'this game does not exist');
@@ -302,11 +303,49 @@ mod p_war_actions {
                 }),
             );
 
-            // TODO: should reduce the num_owns of previous user.
+            // get the previous owner of PWarPixel
+            let position = Position {
+                                x: default_params.position.x,
+                                y: default_params.position.y
+                            };
+            let previous_pwarpixel = get!(
+                world,
+                (position),
+                (PWarPixel)
+            );
+
+            if (previous_pwarpixel.owner != starknet::contract_address_const::<0x0>() &&
+                    previous_pwarpixel.owner != player.address) {
+
+                // get the previous player's info
+                let mut previous_player = get!(
+                    world,
+                    (previous_pwarpixel.owner),
+                    (Player)
+                );
+
+                // decrease the previous player's num_owns
+                previous_player.num_owns -= 1;
+                set!(
+                    world,
+                    (previous_player)
+                );
+            }
+
+            // set the new owner of PWarPixel
+            set!(
+                world,
+                (PWarPixel{
+                    position: position,
+                    owner: player.address
+                }),
+            );
+            
 
             update_max_px(world, game_id.value, player.address);
         }
 
+        // only use for expand areas.
         fn update_pixel(world: IWorldDispatcher, pixel_update: PixelUpdate) {
             assert(get_caller_address() == get_contract_address(), 'invalid caller');
 
