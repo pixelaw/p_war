@@ -263,6 +263,24 @@ mod propose {
                     );
                     8
                 },
+                ProposalType::ChangePaintCost => {
+                    // change the cost to paint 
+                    let mut game = get!(
+                        world,
+                        (game_id),
+                        (Game)
+                    );
+                    game.paint_cost = proposal.args.arg1.try_into().unwrap();
+
+                    set!(
+                        world,
+                        (game)
+                    );
+                    9
+                },
+                _ => {
+                    99
+                },
             };
 
         }
