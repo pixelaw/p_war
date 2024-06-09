@@ -36,6 +36,9 @@ mod voting {
             print!("\n@@ASSERT: CUR: {}, USE: {}\n", player.current_px, use_px);
             assert(player.current_px >= use_px, 'player do not have enough px');
 
+            // check the player is banned or not
+            assert(player.is_banned == false, 'you are banned');
+
             if is_in_favor {
                 proposal.yes_px += use_px;
             } else {

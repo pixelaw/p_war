@@ -23,6 +23,7 @@ mod propose {
         allowed_app::AllowedApp,
         allowed_color::AllowedColor
     };
+    use p_war::systems::utils::{ recover_px };
     use pixelaw::core::utils::{get_core_actions, DefaultParameters};
     use pixelaw::core::actions::{
         IActionsDispatcher as ICoreActionsDispatcher,
@@ -39,6 +40,26 @@ mod propose {
             // get the game
             let mut game = get!(world, game_id, (Game));
             assert(can_propose(game.status()), 'cannot submit proposal');
+
+            let player_address = get_tx_info().unbox().account_contract_address;
+
+            // recover px
+            recover_px(world, game_id, player_address);
+
+            // if this is first time for the caller, let's set initial px.
+            let mut player = get!(
+                world,
+                (player_address),
+                (Player)
+            );
+
+
+            // check the current px is eq or larger than cost_paint
+            assert(player.current_px >= game.base_cost, 'you cannot paint');
+
+            // check the player is banned or not
+            assert(player.is_banned == false, 'you are banned');
+
 
             let proposal = Proposal{
                 game_id: game_id,
@@ -61,6 +82,21 @@ mod propose {
                     game
                 )
             );
+
+            // consume px
+            set!(
+                world,
+                (Player{
+                    address: player.address,
+                    max_px: player.max_px,
+                    num_owns: player.num_owns,
+                    num_commit: player.num_commit + game.base_cost,
+                    current_px: player.current_px - game.base_cost,
+                    last_date: get_block_timestamp(),
+                    is_banned: false,
+                }),
+            );
+
 
             proposal.index
         }
@@ -270,7 +306,7 @@ mod propose {
                         (game_id),
                         (Game)
                     );
-                    game.paint_cost = proposal.args.arg1.try_into().unwrap();
+                    game.base_cost = proposal.args.arg1.try_into().unwrap();
 
                     set!(
                         world,

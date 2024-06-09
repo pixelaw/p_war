@@ -155,7 +155,7 @@ mod p_war_actions {
                 start,
                 end: start + GAME_DURATION,
                 proposal_idx: 0,
-                paint_cost: 1,
+                base_cost: 1,
                 const_val: 10, // Default is 10.
                 coeff_own_pixels: 0,
                 coeff_commits: 0,
@@ -292,7 +292,7 @@ mod p_war_actions {
 
 
             // check the current px is eq or larger than cost_paint
-            assert(player.current_px >= game.paint_cost, 'you cannot paint');
+            assert(player.current_px >= game.base_cost, 'you cannot paint');
 
             // check the player is banned or not
             assert(player.is_banned == false, 'you are banned');
@@ -305,8 +305,8 @@ mod p_war_actions {
                     address: player.address,
                     max_px: player.max_px,
                     num_owns: player.num_owns + 1,
-                    num_commit: player.num_commit + game.paint_cost,
-                    current_px: player.current_px - game.paint_cost,
+                    num_commit: player.num_commit + game.base_cost,
+                    current_px: player.current_px - game.base_cost,
                     last_date: get_block_timestamp(),
                     is_banned: false,
                 }),

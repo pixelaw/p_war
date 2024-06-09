@@ -46,7 +46,7 @@ mod tests {
 
     #[test]
     #[available_gas(999_999_999)]
-    fn test_change_paint_cost() {
+    fn test_change_base_cost() {
         // caller
         let caller = starknet::contract_address_const::<0x0>();
 
@@ -145,8 +145,9 @@ mod tests {
             (caller),
             (Player),
         );
-        // print!("cu_px: {}", player.current_px);
-        assert(player.current_px == 10 - 1 - 3, 'current px should be 6');
+
+        // print!("\n\ncu_px: {}", player.current_px);
+        assert(player.current_px == 5, 'current px should be 5');
 
     }
 }
