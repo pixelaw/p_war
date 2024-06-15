@@ -3,6 +3,7 @@ use p_war::models::{game::{Game, Status}, proposal::{Args, ProposalType, Proposa
 
 const PROPOSAL_DURATION: u64 = 0; // should change it later.
 const NEEDED_YES_PX: u32 = 1;
+const DISASTER_SIZE: u32 = 5;
 
 // define the interface
 #[dojo::interface]
@@ -14,11 +15,11 @@ trait IPropose {
 // dojo decorator
 #[dojo::contract]
 mod propose {
-    use super::{IPropose, can_propose, NEEDED_YES_PX, PROPOSAL_DURATION};
+    use super::{IPropose, can_propose, NEEDED_YES_PX, PROPOSAL_DURATION, DISASTER_SIZE};
     use p_war::models::{
         game::{Game, Status, GameTrait},
         proposal::{Args, ProposalType, Proposal, PixelRecoveryRate},
-        board::{GameId, Board, Position},
+        board::{GameId, Board, Position, PWarPixel},
         player::{Player},
         allowed_app::AllowedApp,
         allowed_color::AllowedColor
@@ -313,6 +314,77 @@ mod propose {
                         (game)
                     );
                     9
+                },
+                ProposalType::MakeADisaster => {
+                    let core_actions = get_core_actions(world);
+                    let system = get_caller_address();
+
+                    // get the size of board
+                    let mut board = get!(
+                        world,
+                        (game_id),
+                        (Board)
+                    );
+                    let origin: Position = board.origin;
+
+                    let top: u32 = proposal.args.arg2.try_into().unwrap();
+                    let left: u32 = proposal.args.arg1.try_into().unwrap();
+                    let mut y: u32 = proposal.args.arg2.try_into().unwrap();
+                    loop {
+                        if (y >= origin.y + board.height ||
+                                y >= top + DISASTER_SIZE) {
+                            break;
+                        };
+                        let mut x: u32 = proposal.args.arg1.try_into().unwrap();
+                        loop {
+                            if (x >= origin.x + board.width ||
+                                    x >= left + DISASTER_SIZE) {
+                                break;
+                            };
+
+                            core_actions
+                                .update_pixel(
+                                    get_caller_address(), // is it okay?
+                                    system,
+                                    PixelUpdate {
+                                        x,
+                                        y,
+                                        color: Option::None, // should it be white?
+                                        timestamp: Option::None,
+                                        text: Option::None,
+                                        app: Option::Some(system),
+                                        owner: Option::None,
+                                        action: Option::None
+                                    }
+                                );
+                            
+                            // decrease the previous player's num_owns
+                            let position = Position {x, y};
+                            let previous_pwarpixel = get!(
+                                world,
+                                (position),
+                                (PWarPixel)
+                            );
+                            if (previous_pwarpixel.owner != starknet::contract_address_const::<0x0>()) {
+                                // get the previous player's info
+                                let mut previous_player = get!(
+                                    world,
+                                    (previous_pwarpixel.owner),
+                                    (Player)
+                                );
+
+                                previous_player.num_owns -= 1;
+                                set!(
+                                    world,
+                                    (previous_player)
+                                );
+                            }
+
+                            x += 1;
+                        };
+                        y += 1;
+                    };
+                    10
                 },
                 _ => {
                     99

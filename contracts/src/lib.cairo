@@ -25,4 +25,5 @@ mod tests {
     mod test_change_max_px;
     mod test_change_winner_config;
     mod test_change_base_cost;
+    mod test_make_a_disaster;
 }
