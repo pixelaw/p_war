@@ -30,7 +30,7 @@ mod propose {
         IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
-    use pixelaw::core::models::{ pixel::PixelUpdate };
+    use pixelaw::core::models::{ pixel::PixelUpdate, pixel::Pixel };
     use starknet::{ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info};
 
 
@@ -359,7 +359,7 @@ mod propose {
                     );
                     9
                 },
-                ProposalType::MakeADisaster => {
+                ProposalType::MakeADisasterByCoordinates => {
                     let core_actions = get_core_actions(world);
                     let system = get_caller_address();
 
@@ -429,6 +429,84 @@ mod propose {
                         y += 1;
                     };
                     10
+                },
+                ProposalType::MakeADisasterByColor => {
+                    let core_actions = get_core_actions(world);
+                    let system = get_caller_address();
+                    
+                    // get the size of board
+                    let mut board = get!(
+                        world,
+                        (game_id),
+                        (Board)
+                    );
+                    let origin: Position = board.origin;
+
+                    let target_color: u32 = proposal.args.arg1.try_into().unwrap();
+                    let mut y: u32 = origin.y;
+
+                    loop {
+                        if (y >= origin.y + board.height) {
+                            break;
+                        };
+                        let mut x: u32 = origin.y;
+                        loop {
+                            if (x >= origin.x + board.width) {
+                                break;
+                            };
+
+                            let pixel_info = get!(
+                                world,
+                                (x, y),
+                                (Pixel)
+                            );
+
+                            if pixel_info.color == target_color {
+                                // make it white
+                                core_actions
+                                    .update_pixel(
+                                        get_caller_address(), // is it okay?
+                                        system,
+                                        PixelUpdate {
+                                            x,
+                                            y,
+                                            color: Option::Some(0xffffff),
+                                            timestamp: Option::None,
+                                            text: Option::None,
+                                            app: Option::Some(system),
+                                            owner: Option::None,
+                                            action: Option::None
+                                        }
+                                    );
+                                
+                                // decrease the previous owner's num_owns
+                                let position = Position {x, y};
+                                let previous_pwarpixel = get!(
+                                    world,
+                                    (position),
+                                    (PWarPixel)
+                                );
+                                if (previous_pwarpixel.owner != starknet::contract_address_const::<0x0>()) {
+                                    // get the previous player's info
+                                    let mut previous_player = get!(
+                                        world,
+                                        (previous_pwarpixel.owner),
+                                        (Player)
+                                    );
+
+                                    previous_player.num_owns -= 1;
+                                    set!(
+                                        world,
+                                        (previous_player)
+                                    );
+                                };
+
+                            };
+                            x += 1;
+                        };
+                        y += 1;
+                    };
+                    11
                 },
                 _ => {
                     99

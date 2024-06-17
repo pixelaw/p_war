@@ -43,7 +43,7 @@ mod tests {
 
     #[test]
     #[available_gas(999_999_999)]
-    fn test_make_a_disaster() {
+    fn test_make_a_disaster_by_color() {
         // caller
         let caller = starknet::contract_address_const::<0x0>();
 
@@ -97,16 +97,29 @@ mod tests {
         // create a game
         actions_system.interact(default_params);
 
+        // paint a color one
+        let target_color: u32 = 0xff0000;
+        let paint_params = DefaultParameters{
+            for_player: caller,
+            for_system: caller,
+            position: PixelawPosition {
+                x: 1,
+                y: 2
+            },
+            color: target_color
+        };
+        
+
+        actions_system.interact(paint_params);
+
         let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
         
-        let left: u64 = 1;
-        let top: u64 = 1;
 
         let args = Args{
             address: starknet::contract_address_const::<0x0>(),
-            arg1: left,
-            arg2: top,
+            arg1: target_color.into(),
+            arg2: 0,
         }; 
 
         let index = propose_system.create_proposal(
@@ -139,5 +152,15 @@ mod tests {
         
         // DEFAULT_AREA == 5
         // assert(board.width == 5 + add_w.try_into().unwrap(), 'expanded correctly');
+
+        let pixel = get!(
+            world,
+            (1, 2),
+            (Pixel)
+        );
+
+        print!("\n $$$$$$COLORRRRR: {} ######\n", pixel.color);
+
+        assert(pixel.color == 0xffffff, 'got the disaster');
     }
 }

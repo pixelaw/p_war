@@ -19,7 +19,8 @@ enum ProposalType {
     ChangeMaxPXConfig,
     ChangeWinnerConfig,
     ChangePaintCost,
-    MakeADisaster,
+    MakeADisasterByCoordinates,
+    MakeADisasterByColor,
 }
 
 
@@ -71,7 +72,8 @@ impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
             ProposalType::ChangeMaxPXConfig => 7,
             ProposalType::ChangeWinnerConfig => 8,
             ProposalType::ChangePaintCost => 9,
-            ProposalType::MakeADisaster => 10,
+            ProposalType::MakeADisasterByCoordinates => 10,
+            ProposalType::MakeADisasterByColor => 11,
         }
     }
 }
