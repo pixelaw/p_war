@@ -5,11 +5,12 @@ use p_war::models::board::Position;
 
 const GAME_DURATION: u64 = 111;
 const DEFAULT_AREA: u32 = 5;
-const DEFAULT_COLOR_0: u32 = 0;
 const DEFAULT_RECOVERY_RATE: u64 = 10;
-const DEFAULT_COLOR_1: u32 = 0xffffff;
 const APP_KEY: felt252 = 'p_war';
 const APP_ICON: felt252 = 'U+2694';
+const MAX_COLOR_SIZE: usize = 9;
+
+
 /// BASE means using the server's default manifest.json handler
 const APP_MANIFEST: felt252 = 'BASE/manifests/p_war';
 
@@ -29,13 +30,13 @@ trait IActions {
 #[dojo::contract]
 mod p_war_actions {
     use super::{APP_KEY, APP_ICON, APP_MANIFEST, IActions, IActionsDispatcher, IActionsDispatcherTrait, GAME_DURATION, DEFAULT_AREA};
-    use super::{DEFAULT_RECOVERY_RATE, DEFAULT_COLOR_0, DEFAULT_COLOR_1};
+    use super::{DEFAULT_RECOVERY_RATE};
     use p_war::models::{
         game::{Game, Status},
         board::{Board, GameId, Position, PWarPixel},
         player::{Player},
         proposal::{PixelRecoveryRate},
-        allowed_color::AllowedColor,
+        allowed_color::{AllowedColor, PaletteColors},
         allowed_app::AllowedApp
     };
     use starknet::{ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info};
@@ -155,6 +156,7 @@ mod p_war_actions {
                 start,
                 end: start + GAME_DURATION,
                 proposal_idx: 0,
+                next_color_idx_to_change: 0,
                 base_cost: 1,
                 const_val: 10, // Default is 10.
                 coeff_own_pixels: 0,
@@ -221,23 +223,40 @@ mod p_war_actions {
             );
 
             // add default colors
-            set!(
-                world,
-                (AllowedColor{
-                    game_id: id,
-                    color: DEFAULT_COLOR_0,
-                    is_allowed: true,
-                })
-            );
+            let mut color_idx = 0;
+            let mut a = ArrayTrait::new();
+            a.append(0xff0000);
+            a.append(0xff7f00);
+            a.append(0xffff00);
+            a.append(0x00ff00);
+            a.append(0x0000ff);
+            a.append(0x4b0082);
+            a.append(0x9400d3);
+            a.append(0xffffff);
+            a.append(0x0);
 
-            set!(
-                world,
-                (AllowedColor{
-                    game_id: id,
-                    color: DEFAULT_COLOR_1,
-                    is_allowed: true,
-                })
-            );
+            loop {
+                if color_idx > 8 {
+                    break;
+                };
+                set!(
+                    world,
+                    (AllowedColor{
+                        game_id: id,
+                        color: *a.at(color_idx),
+                        is_allowed: true,
+                    })
+                );
+                set!(
+                    world,
+                    (PaletteColors{
+                        game_id: id,
+                        idx: color_idx,
+                        color: *a.at(color_idx),
+                    })
+                );
+                color_idx += 1;
+            };
 
             // set default recovery_rate
             set!(

@@ -15,7 +15,7 @@ mod tests {
             board::{Board, GameId, Position, board, game_id},
             proposal::{Args, ProposalType, Proposal},
             allowed_app::AllowedApp,
-            allowed_color::AllowedColor,
+            allowed_color::{AllowedColor, PaletteColors},
         },
         systems::{
             actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
@@ -100,7 +100,7 @@ mod tests {
         let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
 
-        let NEW_COLOR: u32 = 0xff0000;
+        let NEW_COLOR: u32 = 0xAAAAAA;
 
         let args = Args{
             address: starknet::contract_address_const::<0x0>(),
@@ -114,6 +114,18 @@ mod tests {
             args: args,
         );
 
+        let game = get!(
+            world,
+            (id),
+            (Game)
+        );
+
+        let oldest_color_palette = get!(
+            world,
+            (id, game.next_color_idx_to_change),
+            (PaletteColors)
+        );
+
 
         // let index = propose_system.toggle_allowed_color(id, NEW_COLOR);
         let vote_px = 3;
@@ -122,7 +134,6 @@ mod tests {
         let proposal = get!(world, (id, index), (Proposal));
 
         print!("\n## PROPOSAL INFO ##\n");
-        
         print!("Proposal end: {}\n", proposal.end);
 
         // should add cheat code to spend time
@@ -141,6 +152,18 @@ mod tests {
         };
 
         actions_system.interact(new_params);
+
+        // check if the oldest color is unusable
+        let oldest_color_allowed = get!(
+            world,
+            (id, oldest_color_palette.color),
+            (AllowedColor)
+        );
+
+        print!("\n@@@@@ OLDEST_ALLOWED: {} @@@@\n", oldest_color_allowed.is_allowed);
+
+        // ERROR: idk why, but the oldest color is still allowed...
+        assert(oldest_color_allowed.is_allowed == false, 'the oldest became unusable');
 
     }
 }
