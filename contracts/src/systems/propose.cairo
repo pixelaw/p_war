@@ -464,24 +464,6 @@ mod propose {
                                 (Pixel)
                             );
 
-                            core_actions
-                                .update_pixel(
-                                    get_caller_address(), // is it okay?
-                                    system,
-                                    PixelUpdate {
-                                        x,
-                                        y,
-                                        color: Option::Some(0xffffff),
-                                        timestamp: Option::None,
-                                        text: Option::None,
-                                        app: Option::Some(system),
-                                        owner: Option::None,
-                                        action: Option::None
-                                    }
-                                );
-
-                            
-
                             if pixel_info.color == target_color {
                                 // make it white
                                 core_actions
