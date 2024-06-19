@@ -115,7 +115,7 @@ mod propose {
             match proposal.proposal_type {
                 ProposalType::Unknown => 0,
                 ProposalType::ToggleAllowedApp => 1, // TODO
-                ProposalType::ToggleAllowedColor => {
+                ProposalType::AddNewColor => {
                     // new feature: if the color is added, the oldest color become unusable.
                     let mut game = get!(
                         world,
@@ -124,48 +124,48 @@ mod propose {
                     );
 
                     let new_color: u32 = proposal.args.arg1.try_into().unwrap();
-                    let mut allowed_color = get!(world, (game_id, new_color), (AllowedColor));
+                    let mut new_color_allowed = get!(world, (game_id, new_color), (AllowedColor));
+
                     // only change it if it's not allowed.
-                    if !allowed_color.is_allowed {
-                        allowed_color.is_allowed = !allowed_color.is_allowed;
-                    };
+                    if !new_color_allowed.is_allowed {
+                        new_color_allowed.is_allowed = !new_color_allowed.is_allowed;
 
-                    // get the color to replace
-                    let mut oldest_color = get!(world, (game_id, game.next_color_idx_to_change), (PaletteColors));
-                    
-                    // ERROR: idk why, but the oldest color is still allowed... (TODO)
-                    // make it unusable
-                    let mut oldest_color_allowed = get!(world, (game_id, oldest_color), (AllowedColor));
+                        // get the color to replace
+                        let mut oldest_color = get!(world, (game_id, game.next_color_idx_to_change), (PaletteColors));
+                        
+                        // make it unusable
+                        let mut oldest_color_allowed = get!(world, (game_id, oldest_color.color), (AllowedColor));
 
-                    if oldest_color_allowed.is_allowed {
-                        oldest_color_allowed.is_allowed = false;
-                    };
+                        if oldest_color_allowed.is_allowed {
+                            oldest_color_allowed.is_allowed = false;
+                        };
 
-                    // set to the color palette
-                    set!(
-                        world,
-                        (PaletteColors{
-                            game_id: game_id,
-                            idx: game.next_color_idx_to_change,
-                            color: new_color,
-                        })
-                    );
+                        // set to the color palette
+                        set!(
+                            world,
+                            (PaletteColors{
+                                game_id: game_id,
+                                idx: game.next_color_idx_to_change,
+                                color: new_color,
+                            })
+                        );
 
-                    if game.next_color_idx_to_change == 8 {
-                        game.next_color_idx_to_change = 0;
-                    } else {
-                        game.next_color_idx_to_change += 1;
-                    };
-                    
-                    
-                    set!(
-                        world,
-                        (
-                            allowed_color,
-                            oldest_color_allowed,
-                            game
-                        )
-                    );
+                        if game.next_color_idx_to_change == 8 {
+                            game.next_color_idx_to_change = 0;
+                        } else {
+                            game.next_color_idx_to_change += 1;
+                        };
+                        
+                        
+                        set!(
+                            world,
+                            (
+                                new_color_allowed,
+                                oldest_color_allowed,
+                                game
+                            )
+                        );
+                    }
                     
                     2
                 },

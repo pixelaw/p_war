@@ -110,7 +110,7 @@ mod tests {
 
         let index = propose_system.create_proposal(
             game_id: id,
-            proposal_type: ProposalType::ToggleAllowedColor,
+            proposal_type: ProposalType::AddNewColor,
             args: args,
         );
 

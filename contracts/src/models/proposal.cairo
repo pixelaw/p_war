@@ -11,7 +11,7 @@ struct Args {
 enum ProposalType {
     Unknown,
     ToggleAllowedApp,
-    ToggleAllowedColor,
+    AddNewColor,
     ChangeGameDuration,
     ChangePixelRecovery,
     ExpandArea,
@@ -64,7 +64,7 @@ impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
         match self {
             ProposalType::Unknown => 0,
             ProposalType::ToggleAllowedApp => 1,
-            ProposalType::ToggleAllowedColor => 2,
+            ProposalType::AddNewColor => 2,
             ProposalType::ChangeGameDuration => 3,
             ProposalType::ChangePixelRecovery => 4,            
             ProposalType::ExpandArea => 5,
