@@ -227,8 +227,8 @@ mod propose {
                                     player_address,
                                     system,
                                     PixelUpdate {
-                                        x,
-                                        y,
+                                        x: x,
+                                        y: y,
                                         color: Option::None,
                                         timestamp: Option::None,
                                         text: Option::None,
@@ -393,7 +393,7 @@ mod propose {
                                     PixelUpdate {
                                         x,
                                         y,
-                                        color: Option::None, // should it be white?
+                                        color: Option::Some(0xffffff),
                                         timestamp: Option::None,
                                         text: Option::None,
                                         app: Option::Some(system),
@@ -431,7 +431,7 @@ mod propose {
                     10
                 },
                 ProposalType::MakeADisasterByColor => {
-                    let core_actions = get_core_actions(world);
+                    let core_actions = get_core_actions(world); // TODO: should we use p_war_actions insted of core_actions???
                     let system = get_caller_address();
                     
                     // get the size of board
@@ -440,10 +440,13 @@ mod propose {
                         (game_id),
                         (Board)
                     );
+
                     let origin: Position = board.origin;
 
                     let target_color: u32 = proposal.args.arg1.try_into().unwrap();
                     let mut y: u32 = origin.y;
+                
+
 
                     loop {
                         if (y >= origin.y + board.height) {
@@ -460,6 +463,24 @@ mod propose {
                                 (x, y),
                                 (Pixel)
                             );
+
+                            core_actions
+                                .update_pixel(
+                                    get_caller_address(), // is it okay?
+                                    system,
+                                    PixelUpdate {
+                                        x,
+                                        y,
+                                        color: Option::Some(0xffffff),
+                                        timestamp: Option::None,
+                                        text: Option::None,
+                                        app: Option::Some(system),
+                                        owner: Option::None,
+                                        action: Option::None
+                                    }
+                                );
+
+                            
 
                             if pixel_info.color == target_color {
                                 // make it white
@@ -486,6 +507,7 @@ mod propose {
                                     (position),
                                     (PWarPixel)
                                 );
+
                                 if (previous_pwarpixel.owner != starknet::contract_address_const::<0x0>()) {
                                     // get the previous player's info
                                     let mut previous_player = get!(

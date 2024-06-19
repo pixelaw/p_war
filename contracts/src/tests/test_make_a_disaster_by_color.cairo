@@ -124,7 +124,7 @@ mod tests {
 
         let index = propose_system.create_proposal(
             game_id: id,
-            proposal_type: ProposalType::MakeADisasterByCoordinates,
+            proposal_type: ProposalType::MakeADisasterByColor,
             args: args,
         );
 
@@ -144,6 +144,7 @@ mod tests {
 
 
         // check if the disaster happens.
+
         // let board = get!(
         //     world,
         //     (id),
@@ -159,7 +160,7 @@ mod tests {
             (Pixel)
         );
 
-        print!("\n $$$$$$COLORRRRR: {} ######\n", pixel.color);
+        print!("\n $$$$$$COLORRRRR: {} ######\n", pixel.color); // 16711680(#FF0000)
 
         assert(pixel.color == 0xffffff, 'got the disaster');
     }
