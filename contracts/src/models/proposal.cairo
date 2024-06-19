@@ -11,7 +11,7 @@ struct Args {
 enum ProposalType {
     Unknown,
     ToggleAllowedApp,
-    ToggleAllowedColor,
+    AddNewColor,
     ChangeGameDuration,
     ChangePixelRecovery,
     ExpandArea,
@@ -19,7 +19,8 @@ enum ProposalType {
     ChangeMaxPXConfig,
     ChangeWinnerConfig,
     ChangePaintCost,
-    MakeADisaster,
+    MakeADisasterByCoordinates,
+    MakeADisasterByColor,
 }
 
 
@@ -63,7 +64,7 @@ impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
         match self {
             ProposalType::Unknown => 0,
             ProposalType::ToggleAllowedApp => 1,
-            ProposalType::ToggleAllowedColor => 2,
+            ProposalType::AddNewColor => 2,
             ProposalType::ChangeGameDuration => 3,
             ProposalType::ChangePixelRecovery => 4,            
             ProposalType::ExpandArea => 5,
@@ -71,7 +72,8 @@ impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
             ProposalType::ChangeMaxPXConfig => 7,
             ProposalType::ChangeWinnerConfig => 8,
             ProposalType::ChangePaintCost => 9,
-            ProposalType::MakeADisaster => 10,
+            ProposalType::MakeADisasterByCoordinates => 10,
+            ProposalType::MakeADisasterByColor => 11,
         }
     }
 }

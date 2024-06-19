@@ -15,7 +15,7 @@ mod tests {
             board::{Board, GameId, Position, board, game_id},
             proposal::{Args, ProposalType, Proposal},
             allowed_app::AllowedApp,
-            allowed_color::{AllowedColor, PaletteColors},
+            allowed_color::AllowedColor,
         },
         systems::{
             actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
@@ -43,7 +43,7 @@ mod tests {
 
     #[test]
     #[available_gas(999_999_999)]
-    fn test_add_color() {
+    fn test_make_a_disaster_by_color() {
         // caller
         let caller = starknet::contract_address_const::<0x0>();
 
@@ -97,33 +97,35 @@ mod tests {
         // create a game
         actions_system.interact(default_params);
 
+        // paint a color one
+        let target_color: u32 = 0xff0000;
+        let paint_params = DefaultParameters{
+            for_player: caller,
+            for_system: caller,
+            position: PixelawPosition {
+                x: 1,
+                y: 2
+            },
+            color: target_color
+        };
+        
+
+        actions_system.interact(paint_params);
+
         let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
-
-        let NEW_COLOR: u32 = 0xAAAAAA;
+        
 
         let args = Args{
             address: starknet::contract_address_const::<0x0>(),
-            arg1: NEW_COLOR.into(),
+            arg1: target_color.into(),
             arg2: 0,
         }; 
 
         let index = propose_system.create_proposal(
             game_id: id,
-            proposal_type: ProposalType::AddNewColor,
+            proposal_type: ProposalType::MakeADisasterByColor,
             args: args,
-        );
-
-        let game = get!(
-            world,
-            (id),
-            (Game)
-        );
-
-        let oldest_color_palette = get!(
-            world,
-            (id, game.next_color_idx_to_change),
-            (PaletteColors)
         );
 
 
@@ -134,36 +136,32 @@ mod tests {
         let proposal = get!(world, (id, index), (Proposal));
 
         print!("\n## PROPOSAL INFO ##\n");
+        
         print!("Proposal end: {}\n", proposal.end);
 
-        // should add cheat code to spend time
+        // TODO: should add cheat code to spend time
         propose_system.activate_proposal(id, index);
 
 
-        // call place_pixel
-        let new_params = DefaultParameters{
-            for_player: caller,
-            for_system: caller,
-            position: PixelawPosition {
-                x: 1,
-                y: 1
-            },
-            color: NEW_COLOR
-        };
+        // check if the disaster happens.
 
-        actions_system.interact(new_params);
+        // let board = get!(
+        //     world,
+        //     (id),
+        //     (Board)
+        // );
+        
+        // DEFAULT_AREA == 5
+        // assert(board.width == 5 + add_w.try_into().unwrap(), 'expanded correctly');
 
-        // check if the oldest color is unusable
-        let oldest_color_allowed = get!(
+        let pixel = get!(
             world,
-            (id, oldest_color_palette.color),
-            (AllowedColor)
+            (1, 2),
+            (Pixel)
         );
 
-        print!("\n@@@@@ OLDEST_ALLOWED: {} @@@@\n", oldest_color_allowed.is_allowed);
+        print!("\n $$$$$$COLORRRRR: {} ######\n", pixel.color); // 16711680(#FF0000)
 
-        // ERROR: idk why, but the oldest color is still allowed...
-        assert(oldest_color_allowed.is_allowed == false, 'the oldest became unusable');
-
+        assert(pixel.color == 0xffffff, 'got the disaster');
     }
 }

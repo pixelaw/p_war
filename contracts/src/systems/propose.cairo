@@ -22,7 +22,7 @@ mod propose {
         board::{GameId, Board, Position, PWarPixel},
         player::{Player},
         allowed_app::AllowedApp,
-        allowed_color::AllowedColor
+        allowed_color::{ AllowedColor, PaletteColors }
     };
     use p_war::systems::utils::{ recover_px };
     use pixelaw::core::utils::{get_core_actions, DefaultParameters};
@@ -30,7 +30,7 @@ mod propose {
         IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
-    use pixelaw::core::models::{ pixel::PixelUpdate };
+    use pixelaw::core::models::{ pixel::PixelUpdate, pixel::Pixel };
     use starknet::{ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info};
 
 
@@ -115,14 +115,58 @@ mod propose {
             match proposal.proposal_type {
                 ProposalType::Unknown => 0,
                 ProposalType::ToggleAllowedApp => 1, // TODO
-                ProposalType::ToggleAllowedColor => {
-                    let new_color: u32 = proposal.args.arg1.try_into().unwrap();
-                    let mut allowed_color = get!(world, (game_id, new_color), (AllowedColor));
-                    allowed_color.is_allowed = !allowed_color.is_allowed;
-                    set!(
+                ProposalType::AddNewColor => {
+                    // new feature: if the color is added, the oldest color become unusable.
+                    let mut game = get!(
                         world,
-                        (allowed_color)
+                        (game_id),
+                        (Game)
                     );
+
+                    let new_color: u32 = proposal.args.arg1.try_into().unwrap();
+                    let mut new_color_allowed = get!(world, (game_id, new_color), (AllowedColor));
+
+                    // only change it if it's not allowed.
+                    if !new_color_allowed.is_allowed {
+                        new_color_allowed.is_allowed = !new_color_allowed.is_allowed;
+
+                        // get the color to replace
+                        let mut oldest_color = get!(world, (game_id, game.next_color_idx_to_change), (PaletteColors));
+                        
+                        // make it unusable
+                        let mut oldest_color_allowed = get!(world, (game_id, oldest_color.color), (AllowedColor));
+
+                        if oldest_color_allowed.is_allowed {
+                            oldest_color_allowed.is_allowed = false;
+                        };
+
+                        // set to the color palette
+                        set!(
+                            world,
+                            (PaletteColors{
+                                game_id: game_id,
+                                idx: game.next_color_idx_to_change,
+                                color: new_color,
+                            })
+                        );
+
+                        if game.next_color_idx_to_change == 8 {
+                            game.next_color_idx_to_change = 0;
+                        } else {
+                            game.next_color_idx_to_change += 1;
+                        };
+                        
+                        
+                        set!(
+                            world,
+                            (
+                                new_color_allowed,
+                                oldest_color_allowed,
+                                game
+                            )
+                        );
+                    }
+                    
                     2
                 },
                 ProposalType::ChangeGameDuration => {
@@ -183,8 +227,8 @@ mod propose {
                                     player_address,
                                     system,
                                     PixelUpdate {
-                                        x,
-                                        y,
+                                        x: x,
+                                        y: y,
                                         color: Option::None,
                                         timestamp: Option::None,
                                         text: Option::None,
@@ -315,7 +359,7 @@ mod propose {
                     );
                     9
                 },
-                ProposalType::MakeADisaster => {
+                ProposalType::MakeADisasterByCoordinates => {
                     let core_actions = get_core_actions(world);
                     let system = get_caller_address();
 
@@ -349,7 +393,7 @@ mod propose {
                                     PixelUpdate {
                                         x,
                                         y,
-                                        color: Option::None, // should it be white?
+                                        color: Option::Some(0xffffff),
                                         timestamp: Option::None,
                                         text: Option::None,
                                         app: Option::Some(system),
@@ -385,6 +429,88 @@ mod propose {
                         y += 1;
                     };
                     10
+                },
+                ProposalType::MakeADisasterByColor => {
+                    let core_actions = get_core_actions(world); // TODO: should we use p_war_actions insted of core_actions???
+                    let system = get_caller_address();
+                    
+                    // get the size of board
+                    let mut board = get!(
+                        world,
+                        (game_id),
+                        (Board)
+                    );
+
+                    let origin: Position = board.origin;
+
+                    let target_color: u32 = proposal.args.arg1.try_into().unwrap();
+                    let mut y: u32 = origin.y;
+                
+
+
+                    loop {
+                        if (y >= origin.y + board.height) {
+                            break;
+                        };
+                        let mut x: u32 = origin.y;
+                        loop {
+                            if (x >= origin.x + board.width) {
+                                break;
+                            };
+
+                            let pixel_info = get!(
+                                world,
+                                (x, y),
+                                (Pixel)
+                            );
+
+                            if pixel_info.color == target_color {
+                                // make it white
+                                core_actions
+                                    .update_pixel(
+                                        get_caller_address(), // is it okay?
+                                        system,
+                                        PixelUpdate {
+                                            x,
+                                            y,
+                                            color: Option::Some(0xffffff),
+                                            timestamp: Option::None,
+                                            text: Option::None,
+                                            app: Option::Some(system),
+                                            owner: Option::None,
+                                            action: Option::None
+                                        }
+                                    );
+                                
+                                // decrease the previous owner's num_owns
+                                let position = Position {x, y};
+                                let previous_pwarpixel = get!(
+                                    world,
+                                    (position),
+                                    (PWarPixel)
+                                );
+
+                                if (previous_pwarpixel.owner != starknet::contract_address_const::<0x0>()) {
+                                    // get the previous player's info
+                                    let mut previous_player = get!(
+                                        world,
+                                        (previous_pwarpixel.owner),
+                                        (Player)
+                                    );
+
+                                    previous_player.num_owns -= 1;
+                                    set!(
+                                        world,
+                                        (previous_player)
+                                    );
+                                };
+
+                            };
+                            x += 1;
+                        };
+                        y += 1;
+                    };
+                    11
                 },
                 _ => {
                     99
