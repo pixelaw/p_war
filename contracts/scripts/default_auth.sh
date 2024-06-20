@@ -1,43 +1,36 @@
 #!/bin/bash
 set -euo pipefail
+# shellcheck disable=SC2046
 pushd $(dirname "$0")/..
 
+# build contracts
+sozo build
 
-export APP_NAME=$(grep "^name" Scarb.toml | awk -F' = ' '{print $2}' | tr -d '"')
-export ACTIONS_ADDRESS=$(cat ./target/$SCARB_PROFILE/manifest.json | jq -r '.contracts | first | .address')
+# deploy contracts
+sozo migrate plan
+sozo migrate apply
 
-echo "---------------------------------------------------------------------------"
-echo app : $APP_NAME
-echo " "
-echo actions : $ACTIONS_ADDRESS
-echo "---------------------------------------------------------------------------"
+# grant writer to p_war_actions
+sozo auth grant writer AllowedApp,0x2dc8bfc2e33f2e6966cbd9c2e0856d63250549c2a8258884cacb7ba35c427de
+sozo auth grant writer AllowedColor,0x2dc8bfc2e33f2e6966cbd9c2e0856d63250549c2a8258884cacb7ba35c427de
+sozo auth grant writer Board,0x2dc8bfc2e33f2e6966cbd9c2e0856d63250549c2a8258884cacb7ba35c427de
+sozo auth grant writer GameId,0x2dc8bfc2e33f2e6966cbd9c2e0856d63250549c2a8258884cacb7ba35c427de
+sozo auth grant writer Game,0x2dc8bfc2e33f2e6966cbd9c2e0856d63250549c2a8258884cacb7ba35c427de
+sozo auth grant writer Player,0x2dc8bfc2e33f2e6966cbd9c2e0856d63250549c2a8258884cacb7ba35c427de
+sozo auth grant writer PixelRecoveryRate,0x2dc8bfc2e33f2e6966cbd9c2e0856d63250549c2a8258884cacb7ba35c427de
 
-# enable system -> component authorizations
-COMPONENTS=($(jq -r --arg APP_NAME "$APP_NAME" '.models[] | select(.name | contains($APP_NAME)) | .name' ./target/dev/manifest.json))
+# grant writer to propose
+sozo auth grant writer Proposal,0x481aadb9eab76d625be9d0ab0af0155c9f162fd3af1113abd0d0308ddb9346e
+sozo auth grant writer Player,0x481aadb9eab76d625be9d0ab0af0155c9f162fd3af1113abd0d0308ddb9346e
+sozo auth grant writer Game,0x481aadb9eab76d625be9d0ab0af0155c9f162fd3af1113abd0d0308ddb9346e
 
-for index in "${!COMPONENTS[@]}"; do
-    IFS='::' read -ra NAMES <<< "${COMPONENTS[index]}"
-    LAST_INDEX=${#NAMES[@]}-1
-    NEW_NAME=`echo ${NAMES[LAST_INDEX]} | sed -r 's/_/ /g' | awk '{for(j=1;j<=NF;j++){ $j=toupper(substr($j,1,1)) substr($j,2) }}1' | sed -r 's/ //g'`
-    COMPONENTS[index]=$NEW_NAME
-done
+# grant writer to voting
+sozo auth grant writer Proposal,0x481aadb9eab76d625be9d0ab0af0155c9f162fd3af1113abd0d0308ddb9346e
+sozo auth grant writer Player,0x405fdfa192f0a756c50dc081d0a4a10afbc5ed29a774665ab6a34cef4d4a549
+sozo auth grant writer PlayerVote,0x405fdfa192f0a756c50dc081d0a4a10afbc5ed29a774665ab6a34cef4d4a549
 
-# if #COMPONENTS is 0, then there are no models in the manifest. This might be error,
-echo "Write permissions for ACTIONS"
-if [ ${#COMPONENTS[@]} -eq 0 ]; then
-    echo "Warning: No models found in manifest.json. Are you sure you don't have new any components?"
-else
-    for component in ${COMPONENTS[@]}; do
-        echo "For $component"
-        sozo --profile $SCARB_PROFILE auth grant writer $component,$ACTIONS_ADDRESS
-    done
-fi
-echo "Write permissions for ACTIONS: Done"
-
-echo "Initialize ACTIONS: (sozo --profile $SCARB_PROFILE execute $ACTIONS_ADDRESS init)"
-sleep 0.1
-sozo --profile $SCARB_PROFILE execute $ACTIONS_ADDRESS init
-echo "Initialize ACTIONS: Done"
+# initialize p_war_actions
+sozo execute 0x2dc8bfc2e33f2e6966cbd9c2e0856d63250549c2a8258884cacb7ba35c427de init
 
 
 echo "Default authorizations have been successfully set."
