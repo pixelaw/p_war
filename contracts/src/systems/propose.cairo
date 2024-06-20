@@ -1,7 +1,7 @@
 use starknet::{ContractAddress, get_caller_address, get_block_timestamp, contract_address_const};
 use p_war::models::{game::{Game, Status}, proposal::{Args, ProposalType, Proposal}};
 
-const PROPOSAL_DURATION: u64 = 0; // should change it later.
+const PROPOSAL_DURATION: u64 = 172800; // 2 days in seconds.
 const NEEDED_YES_PX: u32 = 1;
 const DISASTER_SIZE: u32 = 5;
 

@@ -3,7 +3,8 @@ use pixelaw::core::models::pixel::PixelUpdate;
 use starknet::ContractAddress;
 use p_war::models::board::Position;
 
-const GAME_DURATION: u64 = 111;
+// 1 week in seconds
+const GAME_DURATION: u64 = 604800;
 const DEFAULT_AREA: u32 = 5;
 const DEFAULT_RECOVERY_RATE: u64 = 10;
 const APP_KEY: felt252 = 'p_war';
