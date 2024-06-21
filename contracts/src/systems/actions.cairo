@@ -10,6 +10,7 @@ const DEFAULT_RECOVERY_RATE: u64 = 10;
 const APP_KEY: felt252 = 'p_war';
 const APP_ICON: felt252 = 'U+2694';
 const MAX_COLOR_SIZE: usize = 9;
+const INITIAL_COLOR: u32 = 0xFFFFFF;
 
 
 /// BASE means using the server's default manifest.json handler
@@ -31,7 +32,7 @@ trait IActions {
 #[dojo::contract]
 mod p_war_actions {
     use super::{APP_KEY, APP_ICON, APP_MANIFEST, IActions, IActionsDispatcher, IActionsDispatcherTrait, GAME_DURATION, DEFAULT_AREA};
-    use super::{DEFAULT_RECOVERY_RATE};
+    use super::{DEFAULT_RECOVERY_RATE, INITIAL_COLOR};
     use p_war::models::{
         game::{Game, Status},
         board::{Board, GameId, Position, PWarPixel},
@@ -191,7 +192,7 @@ mod p_war_actions {
                             PixelUpdate {
                                 x,
                                 y,
-                                color: Option::None,
+                                color: Option::Some(INITIAL_COLOR),
                                 timestamp: Option::None,
                                 text: Option::None,
                                 app: Option::Some(system),

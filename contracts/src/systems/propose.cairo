@@ -107,7 +107,7 @@ mod propose {
             // get the proposal
             let proposal = get!(world, (game_id, index), (Proposal));
             let current_timestamp = get_block_timestamp();
-            assert(current_timestamp >= proposal.end, 'proposal period has not ended');
+            assert(current_timestamp >= proposal.end, 'proposal period has not ended'); // cannot test correctly without cheatcodes.
             assert(proposal.yes_px >= NEEDED_YES_PX, 'did not reach minimum yes_px');
 
             // activate the proposal.
