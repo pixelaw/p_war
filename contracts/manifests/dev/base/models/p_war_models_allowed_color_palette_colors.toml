@@ -1,0 +1,20 @@
+kind = "DojoModel"
+class_hash = "0x5dd036d17a36ae5166b87113c89bb1e37c59ca6edbfdc35f22102ab45cfadbe"
+original_class_hash = "0x5dd036d17a36ae5166b87113c89bb1e37c59ca6edbfdc35f22102ab45cfadbe"
+abi = "manifests/dev/abis/base/models/p_war_models_allowed_color_palette_colors.json"
+name = "p_war::models::allowed_color::palette_colors"
+
+[[members]]
+name = "game_id"
+type = "usize"
+key = true
+
+[[members]]
+name = "idx"
+type = "u32"
+key = true
+
+[[members]]
+name = "color"
+type = "u32"
+key = false

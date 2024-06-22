@@ -1,0 +1,25 @@
+kind = "DojoModel"
+class_hash = "0x2429cdd90cc9d51a903b0c8bbd3e19271f823937aab60f5b444200635b04044"
+original_class_hash = "0x2429cdd90cc9d51a903b0c8bbd3e19271f823937aab60f5b444200635b04044"
+abi = "manifests/dev/abis/base/models/p_war_models_board_board.json"
+name = "p_war::models::board::board"
+
+[[members]]
+name = "id"
+type = "usize"
+key = true
+
+[[members]]
+name = "origin"
+type = "Position"
+key = false
+
+[[members]]
+name = "width"
+type = "u32"
+key = false
+
+[[members]]
+name = "height"
+type = "u32"
+key = false

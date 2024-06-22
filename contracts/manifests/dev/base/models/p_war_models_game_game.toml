@@ -1,0 +1,60 @@
+kind = "DojoModel"
+class_hash = "0xed13224574e2416c6c1b7064d344cd64cb422f2e3d8cddfb8582307b170d72"
+original_class_hash = "0xed13224574e2416c6c1b7064d344cd64cb422f2e3d8cddfb8582307b170d72"
+abi = "manifests/dev/abis/base/models/p_war_models_game_game.json"
+name = "p_war::models::game::game"
+
+[[members]]
+name = "id"
+type = "usize"
+key = true
+
+[[members]]
+name = "start"
+type = "u64"
+key = false
+
+[[members]]
+name = "end"
+type = "u64"
+key = false
+
+[[members]]
+name = "proposal_idx"
+type = "usize"
+key = false
+
+[[members]]
+name = "next_color_idx_to_change"
+type = "usize"
+key = false
+
+[[members]]
+name = "base_cost"
+type = "u32"
+key = false
+
+[[members]]
+name = "const_val"
+type = "u32"
+key = false
+
+[[members]]
+name = "coeff_own_pixels"
+type = "u32"
+key = false
+
+[[members]]
+name = "coeff_commits"
+type = "u32"
+key = false
+
+[[members]]
+name = "winner_config"
+type = "u32"
+key = false
+
+[[members]]
+name = "winner"
+type = "ContractAddress"
+key = false

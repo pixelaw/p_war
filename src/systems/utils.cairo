@@ -66,6 +66,9 @@ fn recover_px(world: IWorldDispatcher, game_id: usize, player_address: ContractA
     let current_time = get_block_timestamp();
     let time_diff = current_time - player.last_date;
 
+    if recovery_rate.rate == 0 {
+        return;
+    }
 
     let recover_pxs: u32 = ((time_diff) / recovery_rate.rate).try_into().unwrap();
 

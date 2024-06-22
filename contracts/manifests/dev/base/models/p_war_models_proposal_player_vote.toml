@@ -1,0 +1,30 @@
+kind = "DojoModel"
+class_hash = "0x7cf83b952d7db2c69ad3ead0357513c6b519daffae9a4f9928fb0ad1752dba5"
+original_class_hash = "0x7cf83b952d7db2c69ad3ead0357513c6b519daffae9a4f9928fb0ad1752dba5"
+abi = "manifests/dev/abis/base/models/p_war_models_proposal_player_vote.json"
+name = "p_war::models::proposal::player_vote"
+
+[[members]]
+name = "player"
+type = "ContractAddress"
+key = true
+
+[[members]]
+name = "game_id"
+type = "usize"
+key = true
+
+[[members]]
+name = "index"
+type = "usize"
+key = true
+
+[[members]]
+name = "is_in_favor"
+type = "bool"
+key = false
+
+[[members]]
+name = "px"
+type = "u32"
+key = false

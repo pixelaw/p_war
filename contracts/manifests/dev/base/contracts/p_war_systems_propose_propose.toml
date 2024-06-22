@@ -1,0 +1,9 @@
+kind = "DojoContract"
+class_hash = "0x783cbadcce68d8d5269f62ff16562e5acbab9f9d8cd3d76d887c3929e119740"
+original_class_hash = "0x783cbadcce68d8d5269f62ff16562e5acbab9f9d8cd3d76d887c3929e119740"
+base_class_hash = "0x0"
+abi = "manifests/dev/abis/base/contracts/p_war_systems_propose_propose.json"
+reads = []
+writes = []
+computed = []
+name = "p_war::systems::propose::propose"

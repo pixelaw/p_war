@@ -1,0 +1,238 @@
+[
+  {
+    "type": "impl",
+    "name": "DojoResourceProviderImpl",
+    "interface_name": "dojo::world::IDojoResourceProvider"
+  },
+  {
+    "type": "interface",
+    "name": "dojo::world::IDojoResourceProvider",
+    "items": [
+      {
+        "type": "function",
+        "name": "dojo_resource",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "core::felt252"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "WorldProviderImpl",
+    "interface_name": "dojo::world::IWorldProvider"
+  },
+  {
+    "type": "struct",
+    "name": "dojo::world::IWorldDispatcher",
+    "members": [
+      {
+        "name": "contract_address",
+        "type": "core::starknet::contract_address::ContractAddress"
+      }
+    ]
+  },
+  {
+    "type": "interface",
+    "name": "dojo::world::IWorldProvider",
+    "items": [
+      {
+        "type": "function",
+        "name": "world",
+        "inputs": [],
+        "outputs": [
+          {
+            "type": "dojo::world::IWorldDispatcher"
+          }
+        ],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "ProposeImpl",
+    "interface_name": "p_war::systems::propose::IPropose"
+  },
+  {
+    "type": "enum",
+    "name": "p_war::models::proposal::ProposalType",
+    "variants": [
+      {
+        "name": "Unknown",
+        "type": "()"
+      },
+      {
+        "name": "ToggleAllowedApp",
+        "type": "()"
+      },
+      {
+        "name": "AddNewColor",
+        "type": "()"
+      },
+      {
+        "name": "ChangeGameDuration",
+        "type": "()"
+      },
+      {
+        "name": "ChangePixelRecovery",
+        "type": "()"
+      },
+      {
+        "name": "ExpandArea",
+        "type": "()"
+      },
+      {
+        "name": "BanPlayerAddress",
+        "type": "()"
+      },
+      {
+        "name": "ChangeMaxPXConfig",
+        "type": "()"
+      },
+      {
+        "name": "ChangeWinnerConfig",
+        "type": "()"
+      },
+      {
+        "name": "ChangePaintCost",
+        "type": "()"
+      },
+      {
+        "name": "MakeADisasterByCoordinates",
+        "type": "()"
+      },
+      {
+        "name": "MakeADisasterByColor",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "p_war::models::proposal::Args",
+    "members": [
+      {
+        "name": "address",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "arg1",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "arg2",
+        "type": "core::integer::u64"
+      }
+    ]
+  },
+  {
+    "type": "interface",
+    "name": "p_war::systems::propose::IPropose",
+    "items": [
+      {
+        "type": "function",
+        "name": "create_proposal",
+        "inputs": [
+          {
+            "name": "game_id",
+            "type": "core::integer::u32"
+          },
+          {
+            "name": "proposal_type",
+            "type": "p_war::models::proposal::ProposalType"
+          },
+          {
+            "name": "args",
+            "type": "p_war::models::proposal::Args"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u32"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "activate_proposal",
+        "inputs": [
+          {
+            "name": "game_id",
+            "type": "core::integer::u32"
+          },
+          {
+            "name": "index",
+            "type": "core::integer::u32"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "view"
+      }
+    ]
+  },
+  {
+    "type": "impl",
+    "name": "UpgradableImpl",
+    "interface_name": "dojo::components::upgradeable::IUpgradeable"
+  },
+  {
+    "type": "interface",
+    "name": "dojo::components::upgradeable::IUpgradeable",
+    "items": [
+      {
+        "type": "function",
+        "name": "upgrade",
+        "inputs": [
+          {
+            "name": "new_class_hash",
+            "type": "core::starknet::class_hash::ClassHash"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "dojo::components::upgradeable::upgradeable::Upgraded",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "class_hash",
+        "type": "core::starknet::class_hash::ClassHash",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "dojo::components::upgradeable::upgradeable::Event",
+    "kind": "enum",
+    "variants": [
+      {
+        "name": "Upgraded",
+        "type": "dojo::components::upgradeable::upgradeable::Upgraded",
+        "kind": "nested"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "p_war::systems::propose::propose::Event",
+    "kind": "enum",
+    "variants": [
+      {
+        "name": "UpgradeableEvent",
+        "type": "dojo::components::upgradeable::upgradeable::Event",
+        "kind": "nested"
+      }
+    ]
+  }
+]
