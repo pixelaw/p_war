@@ -1,5 +1,5 @@
 [package]
-cairo-version = "2.5.4"
+cairo-version = "2.6.3"
 name = "p_war"
 version = "0.6.0"
 
@@ -7,7 +7,7 @@ version = "0.6.0"
 sierra-replace-ids = true
 
 [dependencies]
-pixelaw = { git = "https://github.com/pixelaw/core", tag = "v0.3.18" }
+pixelaw = { git = "https://github.com/pixelaw/core", tag = "v0.3.20" }
 
 [[target.dojo]]
 build-external-contracts = [
