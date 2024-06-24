@@ -1,5 +1,15 @@
 PROFILE ?= dev
 
+REPO = ghcr.io/pixelaw/p_war
+VERSION = $(shell cat VERSION)
+
+
+docker_build:
+	docker build -t $(REPO):$(VERSION) -t $(REPO):latest \
+  --network=host \
+   --pull=false \
+  --progress=plain .
+
 build:
 	sozo --profile $(PROFILE) build;
 
