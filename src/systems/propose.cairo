@@ -19,7 +19,7 @@ mod propose {
     use super::{IPropose, can_propose, NEEDED_YES_PX, PROPOSAL_DURATION, DISASTER_SIZE};
     use p_war::models::{
         game::{Game, Status, GameTrait},
-        proposal::{Args, ProposalType, Proposal, PixelRecoveryRate},
+        proposal::{Proposal, PixelRecoveryRate},
         board::{GameId, Board, Position, PWarPixel},
         player::{Player},
         allowed_app::AllowedApp,
