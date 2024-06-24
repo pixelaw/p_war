@@ -14,3 +14,5 @@ https://www.notion.so/p-war-EthCC-version-Document-51fb8bc7721a424d8e4783a75f11a
 scarb run initialize
 ````
 3. The script will build your contracts, deploy them, grant auth, and then initialize p_war_actions
+
+4. You should run the client by using [p_war_client](https://github.com/pixelaw/p_war_client).
