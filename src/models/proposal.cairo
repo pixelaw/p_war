@@ -1,11 +1,11 @@
 use starknet::ContractAddress;
 
-#[derive(Copy, Drop, Serde, Introspect, PartialEq, Print)]
-struct Args {
-    address: ContractAddress,
-    arg1: u64,
-    arg2: u64,
-}
+// #[derive(Copy, Drop, Serde, Introspect, PartialEq, Print)]
+// struct Args {
+//     address: ContractAddress,
+//     arg1: u64,
+//     arg2: u64,
+// }
 
 #[derive(PartialEq, Copy, Introspect, Drop, Serde, Print)]
 enum ProposalType {
