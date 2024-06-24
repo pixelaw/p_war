@@ -13,7 +13,7 @@ mod tests {
         models::{
             game::{Game, game},
             board::{Board, GameId, Position, board, game_id},
-            proposal::{Args, ProposalType, Proposal},
+            proposal::{Proposal},
             allowed_app::AllowedApp,
             allowed_color::AllowedColor,
         },
@@ -116,16 +116,16 @@ mod tests {
         print!("id = {}", id);
         
 
-        let args = Args{
-            address: starknet::contract_address_const::<0x0>(),
-            arg1: target_color.into(),
-            arg2: 0,
-        }; 
+        // let args = Args{
+        //     address: starknet::contract_address_const::<0x0>(),
+        //     arg1: target_color.into(),
+        //     arg2: 0,
+        // }; 
 
         let index = propose_system.create_proposal(
             game_id: id,
-            proposal_type: ProposalType::MakeADisasterByColor,
-            args: args,
+            proposal_type: 2,
+            target_color: target_color,
         );
 
 
