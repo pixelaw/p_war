@@ -24,6 +24,21 @@ enum ProposalType {
 }
 
 
+// #[derive(Model, Copy, Drop, Serde, Print)]
+// struct Proposal {
+//     #[key]
+//     game_id: usize,
+//     #[key]
+//     index: usize,
+//     author: ContractAddress,
+//     proposal_type: ProposalType,
+//     args: Args,
+//     start: u64,
+//     end: u64,
+//     yes_px: u32,
+//     no_px: u32
+// }
+
 #[derive(Model, Copy, Drop, Serde, Print)]
 struct Proposal {
     #[key]
@@ -31,13 +46,14 @@ struct Proposal {
     #[key]
     index: usize,
     author: ContractAddress,
-    proposal_type: ProposalType,
-    args: Args,
+    proposal_type: u8, // don't use ProposalTYpe
+    target_color: u32,
     start: u64,
     end: u64,
     yes_px: u32,
     no_px: u32
 }
+
 
 #[derive(Model, Serde, Copy, Drop, PartialEq, Print)]
 struct PlayerVote {
@@ -59,21 +75,21 @@ struct PixelRecoveryRate {
     rate: u64
 }
 
-impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
-    fn into(self: ProposalType) -> felt252 {
-        match self {
-            ProposalType::Unknown => 0,
-            ProposalType::ToggleAllowedApp => 1,
-            ProposalType::AddNewColor => 2,
-            ProposalType::ChangeGameDuration => 3,
-            ProposalType::ChangePixelRecovery => 4,            
-            ProposalType::ExpandArea => 5,
-            ProposalType::BanPlayerAddress => 6,
-            ProposalType::ChangeMaxPXConfig => 7,
-            ProposalType::ChangeWinnerConfig => 8,
-            ProposalType::ChangePaintCost => 9,
-            ProposalType::MakeADisasterByCoordinates => 10,
-            ProposalType::MakeADisasterByColor => 11,
-        }
-    }
-}
+// impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
+//     fn into(self: ProposalType) -> felt252 {
+//         match self {
+//             ProposalType::Unknown => 0,
+//             ProposalType::ToggleAllowedApp => 1,
+//             ProposalType::AddNewColor => 2,
+//             ProposalType::ChangeGameDuration => 3,
+//             ProposalType::ChangePixelRecovery => 4,            
+//             ProposalType::ExpandArea => 5,
+//             ProposalType::BanPlayerAddress => 6,
+//             ProposalType::ChangeMaxPXConfig => 7,
+//             ProposalType::ChangeWinnerConfig => 8,
+//             ProposalType::ChangePaintCost => 9,
+//             ProposalType::MakeADisasterByCoordinates => 10,
+//             ProposalType::MakeADisasterByColor => 11,
+//         }
+//     }
+// }

@@ -1,14 +1,15 @@
 use starknet::{ContractAddress, get_caller_address, get_block_timestamp, contract_address_const};
-use p_war::models::{game::{Game, Status}, proposal::{Args, ProposalType, Proposal}};
+use p_war::models::{game::{Game, Status}, proposal::{Proposal}};
 
 const PROPOSAL_DURATION: u64 = 172800; // 2 days in seconds.
+// const PROPOSAL_DURATION: u64 = 0; // for test
 const NEEDED_YES_PX: u32 = 1;
 const DISASTER_SIZE: u32 = 5;
 
 // define the interface
 #[dojo::interface]
 trait IPropose {
-    fn create_proposal(game_id: usize, proposal_type: ProposalType, args: Args) -> usize;
+    fn create_proposal(game_id: usize, proposal_type: u8, target_color: u32) -> usize;
     fn activate_proposal(game_id: usize, index: usize);
 }
 
@@ -37,7 +38,7 @@ mod propose {
     #[abi(embed_v0)]
     impl ProposeImpl of IPropose<ContractState> {
 
-        fn create_proposal(world: IWorldDispatcher, game_id: usize, proposal_type: ProposalType, args: Args) -> usize {
+        fn create_proposal(world: IWorldDispatcher, game_id: usize, proposal_type: u8, target_color: u32) -> usize {
             // get the game
             let mut game = get!(world, game_id, (Game));
             assert(can_propose(game.status()), 'cannot submit proposal');
@@ -67,7 +68,7 @@ mod propose {
                 index: game.proposal_idx,
                 author: get_caller_address(),
                 proposal_type: proposal_type,
-                args: args,
+                target_color: target_color,
                 start: get_block_timestamp(),
                 end: get_block_timestamp() + PROPOSAL_DURATION,
                 yes_px: 0,
@@ -111,281 +112,94 @@ mod propose {
             assert(proposal.yes_px >= NEEDED_YES_PX, 'did not reach minimum yes_px');
 
             // activate the proposal.
+            if proposal.proposal_type == 1 {
+                // AddNewColor
+                // new feature: if the color is added, the oldest color become unusable.
+                let mut game = get!(
+                    world,
+                    (game_id),
+                    (Game)
+                );
 
-            match proposal.proposal_type {
-                ProposalType::Unknown => 0,
-                ProposalType::ToggleAllowedApp => 1, // TODO
-                ProposalType::AddNewColor => {
-                    // new feature: if the color is added, the oldest color become unusable.
-                    let mut game = get!(
-                        world,
-                        (game_id),
-                        (Game)
-                    );
+                let new_color: u32 = proposal.target_color;
+                let mut new_color_allowed = get!(world, (game_id, new_color), (AllowedColor));
 
-                    let new_color: u32 = proposal.args.arg1.try_into().unwrap();
-                    let mut new_color_allowed = get!(world, (game_id, new_color), (AllowedColor));
+                // only change it if it's not allowed.
+                if !new_color_allowed.is_allowed {
+                    new_color_allowed.is_allowed = !new_color_allowed.is_allowed;
 
-                    // only change it if it's not allowed.
-                    if !new_color_allowed.is_allowed {
-                        new_color_allowed.is_allowed = !new_color_allowed.is_allowed;
-
-                        // get the color to replace
-                        let mut oldest_color = get!(world, (game_id, game.next_color_idx_to_change), (PaletteColors));
-                        
-                        // make it unusable
-                        let mut oldest_color_allowed = get!(world, (game_id, oldest_color.color), (AllowedColor));
-
-                        if oldest_color_allowed.is_allowed {
-                            oldest_color_allowed.is_allowed = false;
-                        };
-
-                        // set to the color palette
-                        set!(
-                            world,
-                            (PaletteColors{
-                                game_id: game_id,
-                                idx: game.next_color_idx_to_change,
-                                color: new_color,
-                            })
-                        );
-
-                        if game.next_color_idx_to_change == 8 {
-                            game.next_color_idx_to_change = 0;
-                        } else {
-                            game.next_color_idx_to_change += 1;
-                        };
-                        
-                        
-                        set!(
-                            world,
-                            (
-                                new_color_allowed,
-                                oldest_color_allowed,
-                                game
-                            )
-                        );
-                    }
+                    // get the color to replace
+                    let mut oldest_color = get!(world, (game_id, game.next_color_idx_to_change), (PaletteColors));
                     
-                    2
-                },
-                ProposalType::ChangeGameDuration => {
-                    let add_duration: u64 = proposal.args.arg1;
-                    let mut game = get!(
-                        world,
-                        (game_id),
-                        (Game)
-                    );
-                    game.end += add_duration;
+                    // make it unusable
+                    let mut oldest_color_allowed = get!(world, (game_id, oldest_color.color), (AllowedColor));
+
+                    if oldest_color_allowed.is_allowed {
+                        oldest_color_allowed.is_allowed = false;
+                    };
+
+                    // set to the color palette
                     set!(
                         world,
-                        (game)
-                    );
-                    3
-                },
-                ProposalType::ChangePixelRecovery => {
-                    set!(
-                        world,
-                        (PixelRecoveryRate{
+                        (PaletteColors{
                             game_id: game_id,
-                            rate: proposal.args.arg1,
+                            idx: game.next_color_idx_to_change,
+                            color: new_color,
                         })
                     );
-                    4
-                },
 
-                ProposalType::ExpandArea => {
-                    let core_actions = get_core_actions(world);
-                    let player_address = get_caller_address();
-                    let system = get_caller_address();
-
-                    let mut board = get!(
-                        world,
-                        (game_id),
-                        (Board)
-                    );
-                    let origin: Position = board.origin;
-                    let original_height = board.height;
-                    let original_width = board.width;
-
-                    let add_w: u32 = proposal.args.arg1.try_into().unwrap();
-                    let add_h: u32 = proposal.args.arg2.try_into().unwrap();
-
-                    // make sure that game board has been set with game id
-                    let mut y = origin.y + original_height;
-                    loop {
-                        if y >= origin.y + original_height + add_h {
-                            break;
-                        };
-                        let mut x = origin.x + original_width;
-                        loop {
-                            if x >= origin.x + original_width + add_w {
-                                break;
-                            };
-                            core_actions
-                                .update_pixel(
-                                    player_address,
-                                    system,
-                                    PixelUpdate {
-                                        x: x,
-                                        y: y,
-                                        color: Option::None,
-                                        timestamp: Option::None,
-                                        text: Option::None,
-                                        app: Option::Some(system),
-                                        owner: Option::None,
-                                        action: Option::None
-                                    }
-                                );
-                            set!(
-                                world,
-                                (
-                                    GameId {
-                                        x,
-                                        y,
-                                        value: game_id
-                                    }
-                                )
-                            );
-                            x += 1;
-                        };
-                        y += 1;
+                    if game.next_color_idx_to_change == 8 {
+                        game.next_color_idx_to_change = 0;
+                    } else {
+                        game.next_color_idx_to_change += 1;
                     };
-
-                    board.width += add_w;
-                    board.height += add_h;
-
-
+                    
+                    
                     set!(
                         world,
                         (
-                            board
+                            new_color_allowed,
+                            oldest_color_allowed,
+                            game
                         )
                     );
-                    5
-                },
+                }
+            } else if proposal.proposal_type == 2 {
+                // Make a disaster by color
+                let core_actions = get_core_actions(world); // TODO: should we use p_war_actions insted of core_actions???
+                let system = get_caller_address();
+                
+                // get the size of board
+                let mut board = get!(
+                    world,
+                    (game_id),
+                    (Board)
+                );
 
-                ProposalType::BanPlayerAddress => {
-                    let target_address: ContractAddress = proposal.args.address;
-                    let mut target_player = get!(
-                        world,
-                        (target_address),
-                        (Player)
-                    );
+                let origin: Position = board.origin;
 
-                    target_player.is_banned = true;
+                let target_color: u32 = proposal.target_color;
+                let mut y: u32 = origin.y;
 
-                    set!(
-                        world,
-                        (
-                            target_player
-                        )
-                    );
-                    6
-                },
 
-                ProposalType::ChangeMaxPXConfig => {
-                    // change config type by arg1
-                    let mut game = get!(
-                        world,
-                        (game_id),
-                        (Game)
-                    );
-                    match proposal.args.arg1 {
-
-                        // change constant value for max_px
-                        0 => {
-                            game.const_val = proposal.args.arg2.try_into().unwrap();
-                            0
-                        },
-
-                        // change coefficient for number of own pixels for max_px
-                        1 => {
-                            game.coeff_own_pixels = proposal.args.arg2.try_into().unwrap();
-                            1
-                        },
-
-                        // change coefficient for the past commitments for max_px
-                        2 => {
-                            game.coeff_commits = proposal.args.arg2.try_into().unwrap();
-                            1
-                        },
-                        _ => {7},
+                loop {
+                    if (y >= origin.y + board.height) {
+                        break;
                     };
-                    set!(
-                        world,
-                        (game)
-                    );
-                    7
-                },
-                ProposalType::ChangeWinnerConfig => {
-                    // change config type by arg1
-                    // 0: set the person with the most pixels at the end as the winner.
-                    // 1: set the winner by the proposal directly.
-                    // 2: winner is the person who has committied at the most.
-
-                    let mut game = get!(
-                        world,
-                        (game_id),
-                        (Game)
-                    );
-                    game.winner_config = proposal.args.arg1.try_into().unwrap();
-
-                    if game.winner_config == 1 {
-                        // set winner
-                        game.winner = proposal.args.address;
-
-                        // should we end the game instantly?? -> probably not.
-                    };
-
-                    set!(
-                        world,
-                        (game)
-                    );
-                    8
-                },
-                ProposalType::ChangePaintCost => {
-                    // change the cost to paint 
-                    let mut game = get!(
-                        world,
-                        (game_id),
-                        (Game)
-                    );
-                    game.base_cost = proposal.args.arg1.try_into().unwrap();
-
-                    set!(
-                        world,
-                        (game)
-                    );
-                    9
-                },
-                ProposalType::MakeADisasterByCoordinates => {
-                    let core_actions = get_core_actions(world);
-                    let system = get_caller_address();
-
-                    // get the size of board
-                    let mut board = get!(
-                        world,
-                        (game_id),
-                        (Board)
-                    );
-                    let origin: Position = board.origin;
-
-                    let top: u32 = proposal.args.arg2.try_into().unwrap();
-                    let left: u32 = proposal.args.arg1.try_into().unwrap();
-                    let mut y: u32 = proposal.args.arg2.try_into().unwrap();
+                    let mut x: u32 = origin.y;
                     loop {
-                        if (y >= origin.y + board.height ||
-                                y >= top + DISASTER_SIZE) {
+                        if (x >= origin.x + board.width) {
                             break;
                         };
-                        let mut x: u32 = proposal.args.arg1.try_into().unwrap();
-                        loop {
-                            if (x >= origin.x + board.width ||
-                                    x >= left + DISASTER_SIZE) {
-                                break;
-                            };
 
+                        let pixel_info = get!(
+                            world,
+                            (x, y),
+                            (Pixel)
+                        );
+
+                        if pixel_info.color == target_color {
+                            // make it white
                             core_actions
                                 .update_pixel(
                                     get_caller_address(), // is it okay?
@@ -402,13 +216,14 @@ mod propose {
                                     }
                                 );
                             
-                            // decrease the previous player's num_owns
+                            // decrease the previous owner's num_owns
                             let position = Position {x, y};
                             let previous_pwarpixel = get!(
                                 world,
                                 (position),
                                 (PWarPixel)
                             );
+
                             if (previous_pwarpixel.owner != starknet::contract_address_const::<0x0>()) {
                                 // get the previous player's info
                                 let mut previous_player = get!(
@@ -422,114 +237,30 @@ mod propose {
                                     world,
                                     (previous_player)
                                 );
-                            }
-
-                            x += 1;
-                        };
-                        y += 1;
-                    };
-                    10
-                },
-                ProposalType::MakeADisasterByColor => {
-                    let core_actions = get_core_actions(world); // TODO: should we use p_war_actions insted of core_actions???
-                    let system = get_caller_address();
-                    
-                    // get the size of board
-                    let mut board = get!(
-                        world,
-                        (game_id),
-                        (Board)
-                    );
-
-                    let origin: Position = board.origin;
-
-                    let target_color: u32 = proposal.args.arg1.try_into().unwrap();
-                    let mut y: u32 = origin.y;
-                
-
-
-                    loop {
-                        if (y >= origin.y + board.height) {
-                            break;
-                        };
-                        let mut x: u32 = origin.y;
-                        loop {
-                            if (x >= origin.x + board.width) {
-                                break;
                             };
 
-                            let pixel_info = get!(
-                                world,
-                                (x, y),
-                                (Pixel)
-                            );
-
-                            if pixel_info.color == target_color {
-                                // make it white
-                                core_actions
-                                    .update_pixel(
-                                        get_caller_address(), // is it okay?
-                                        system,
-                                        PixelUpdate {
-                                            x,
-                                            y,
-                                            color: Option::Some(0xffffff),
-                                            timestamp: Option::None,
-                                            text: Option::None,
-                                            app: Option::Some(system),
-                                            owner: Option::None,
-                                            action: Option::None
-                                        }
-                                    );
-                                
-                                // decrease the previous owner's num_owns
-                                let position = Position {x, y};
-                                let previous_pwarpixel = get!(
-                                    world,
-                                    (position),
-                                    (PWarPixel)
-                                );
-
-                                if (previous_pwarpixel.owner != starknet::contract_address_const::<0x0>()) {
-                                    // get the previous player's info
-                                    let mut previous_player = get!(
-                                        world,
-                                        (previous_pwarpixel.owner),
-                                        (Player)
-                                    );
-
-                                    previous_player.num_owns -= 1;
-                                    set!(
-                                        world,
-                                        (previous_player)
-                                    );
-                                };
-
-                            };
-                            x += 1;
                         };
-                        y += 1;
+                        x += 1;
                     };
-                    11
-                },
-                _ => {
-                    99
-                },
+                    y += 1;
+                };
+            } else {
+                return;
             };
 
-            // TODO: should we panish the author if the proposal is denied?
-            // add author's commitment points
-            let mut author = get!(
-                world,
-                (proposal.author),
-                (Player)
-            );
+            // // Qustion: should we panish the author if the proposal is denied?
+            // // add author's commitment points
+            // let mut author = get!(
+            //     world,
+            //     (proposal.author),
+            //     (Player)
+            // );
 
-            author.num_commit += 10; // get 10 commitments if the proposal is accepted
-            set!(
-                world,
-                (author)
-            );
+            // author.num_commit += 10; // get 10 commitments if the proposal is accepted
+            // set!(
+            //     world,
+            //     (author)
+            // );
         }
     }
 }

@@ -11,7 +11,7 @@ mod voting {
     use starknet::{ContractAddress, get_caller_address};
     use p_war::models::{
         player::{Player},
-        proposal::{PlayerVote, Args, ProposalType, Proposal}
+        proposal::{PlayerVote, Proposal}
     };
     use p_war::systems::utils::{ recover_px, update_max_px };
 
