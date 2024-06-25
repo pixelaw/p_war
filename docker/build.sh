@@ -11,12 +11,12 @@ head -n -9 /pixelaw/scripts/startup.sh > temp && mv temp /pixelaw/scripts/startu
 bash /pixelaw/scripts/startup.sh
 
 # build and prep
-pushd build
-sozo build
-sozo migrate plan
-sozo migrate apply
+pushd /pixelaw/build/
+
+scarb run initialize
 popd
 
+sleep 10
 
 # shutdown nicely
 pm2 stop /pixelaw/core/docker/ecosystem.config.js

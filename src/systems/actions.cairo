@@ -12,6 +12,7 @@ const APP_ICON: felt252 = 'U+2694';
 const MAX_COLOR_SIZE: usize = 9;
 const INITIAL_COLOR: u32 = 0xFFFFFF;
 
+
 /// BASE means using the server's default manifest.json handler
 const APP_MANIFEST: felt252 = 'BASE/manifests/p_war';
 
