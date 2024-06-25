@@ -13,14 +13,16 @@ RUN  --mount=type=cache,mode=0777,target=/pixelaw/p_war_client_build/node_module
     yarn && \
     yarn build
 
-# TODO deploy the contracts
-RUN /pixelaw/scripts/startup.sh & \
-    sleep 10
 
+COPY docker/build.sh /pixelaw/scripts/
+COPY . /pixelaw/build/
+
+RUN /pixelaw/scripts/build.sh
 
 FROM ghcr.io/pixelaw/core:${CORE_VERSION} AS done
 
 RUN rm -rf /pixelaw/web/*
+COPY --from=builder /pixelaw/storage_init /pixelaw/storage_init
 COPY --from=builder /pixelaw/p_war_client_build/dist /pixelaw/web
 
 
