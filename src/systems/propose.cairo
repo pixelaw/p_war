@@ -131,7 +131,6 @@ mod propose {
 
                     // get the color to replace
                     let mut oldest_color = get!(world, (game_id, game.next_color_idx_to_change), (PaletteColors));
-                    
                     // make it unusable
                     let mut oldest_color_allowed = get!(world, (game_id, oldest_color.color), (AllowedColor));
 
@@ -148,6 +147,9 @@ mod propose {
                             color: new_color,
                         })
                     );
+
+                    // delete the oldest_color from color palette.
+                    delete!(world, (oldest_color));
 
                     if game.next_color_idx_to_change == 8 {
                         game.next_color_idx_to_change = 0;
