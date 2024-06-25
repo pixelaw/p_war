@@ -16,7 +16,7 @@ source = "git+https://github.com/dojoengine/dojo?tag=v0.3.11#1e651b5d4d3b79b14a7
 
 [[package]]
 name = "p_war"
-version = "0.6.0"
+version = "0.3.1"
 dependencies = [
  "pixelaw",
 ]
@@ -24,7 +24,7 @@ dependencies = [
 [[package]]
 name = "pixelaw"
 version = "0.0.0"
-source = "git+https://github.com/pixelaw/core?tag=v0.3.21#eef9afc55b145d53757823df040546a05a0672fc"
+source = "git+https://github.com/pixelaw/core?tag=v0.3.24#be43fe8b7e0b6d784a93fc8945042178464f3d62"
 dependencies = [
  "dojo",
 ]
