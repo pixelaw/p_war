@@ -151,10 +151,10 @@ mod propose {
                     // delete the oldest_color from color palette.
                     delete!(world, (oldest_color));
 
-                    if game.next_color_idx_to_change == 8 {
-                        game.next_color_idx_to_change = 0;
+                    if game.next_color_idx_to_change == 0 {
+                        game.next_color_idx_to_change = 8;
                     } else {
-                        game.next_color_idx_to_change += 1;
+                        game.next_color_idx_to_change -= 1;
                     };
                     
                     
