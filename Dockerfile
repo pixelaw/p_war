@@ -14,6 +14,8 @@ RUN  --mount=type=cache,mode=0777,target=/pixelaw/p_war_client_build/node_module
     yarn build
 
 # TODO deploy the contracts
+RUN /pixelaw/scripts/startup.sh & \
+    sleep 10
 
 
 FROM ghcr.io/pixelaw/core:${CORE_VERSION} AS done
