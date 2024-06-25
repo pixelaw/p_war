@@ -5,7 +5,7 @@ use p_war::models::board::Position;
 
 // 1 week in seconds
 const GAME_DURATION: u64 = 604800;
-const DEFAULT_AREA: u32 = 5;
+const DEFAULT_AREA: u32 = 10; // changed from 5
 const DEFAULT_RECOVERY_RATE: u64 = 10;
 const APP_KEY: felt252 = 'p_war';
 const APP_ICON: felt252 = 'U+2694';
@@ -157,7 +157,7 @@ mod p_war_actions {
                 start,
                 end: start + GAME_DURATION,
                 proposal_idx: 0,
-                next_color_idx_to_change: 0,
+                next_color_idx_to_change: 8,
                 base_cost: 1,
                 const_val: 10, // Default is 10.
                 coeff_own_pixels: 0,
