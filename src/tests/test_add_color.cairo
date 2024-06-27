@@ -39,7 +39,7 @@ mod tests {
         utils::{DefaultParameters, Position as PixelawPosition}
     };
 
-    const COLOR: u32 = 123456;
+    const COLOR: u32 = 0xAAAAAAFF;
 
     #[test]
     #[available_gas(999_999_999)]
@@ -100,7 +100,7 @@ mod tests {
         let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
 
-        let NEW_COLOR: u32 = 0xAAAAAA;
+        let NEW_COLOR: u32 = 0xAAAAAAFF;
 
         // let args = Args{
         //     address: starknet::contract_address_const::<0x0>(),

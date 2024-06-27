@@ -10,7 +10,7 @@ const DEFAULT_RECOVERY_RATE: u64 = 10;
 const APP_KEY: felt252 = 'p_war';
 const APP_ICON: felt252 = 'U+2694';
 const MAX_COLOR_SIZE: usize = 9;
-const INITIAL_COLOR: u32 = 0xFFFFFF;
+const INITIAL_COLOR: u32 = 0xFFFFFFFF;
 
 
 /// BASE means using the server's default manifest.json handler
