@@ -189,7 +189,7 @@ mod propose {
                     if (y >= origin.y + board.height) {
                         break;
                     };
-                    let mut x: u32 = origin.y;
+                    let mut x: u32 = origin.x;
                     loop {
                         if (x >= origin.x + board.width) {
                             break;
