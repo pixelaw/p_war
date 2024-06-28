@@ -39,7 +39,7 @@ mod tests {
         utils::{DefaultParameters, Position as PixelawPosition}
     };
 
-    const COLOR: u32 = 0xFFFFFFFF;
+    const COLOR: u32 = 0xFFFFFF00;
 
     #[test]
     #[available_gas(999_999_999)]
@@ -97,8 +97,9 @@ mod tests {
         // create a game
         actions_system.interact(default_params);
 
+
         // paint a color one
-        let target_color: u32 = 0x000000FF;
+        let target_color: u32 = 0xFF000000;
         let paint_params = DefaultParameters{
             for_player: caller,
             for_system: caller,
@@ -162,6 +163,6 @@ mod tests {
 
         print!("\n $$$$$$COLORRRRR: {} ######\n", pixel.color); // 16711680(#000000FF)
 
-        assert(pixel.color == 0xffffffff, 'got the disaster');
+        assert(pixel.color == 0xffffff00, 'shold get the disaster');
     }
 }

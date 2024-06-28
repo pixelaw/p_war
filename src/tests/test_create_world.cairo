@@ -39,7 +39,7 @@ mod tests {
         utils::{DefaultParameters, Position as PixelawPosition}
     };
 
-    const COLOR: u32 = 0xAAAAAAFF;
+    const COLOR: u32 = 0xFF000000;
 
     #[test]
     #[available_gas(999_999_999)]
@@ -92,7 +92,7 @@ mod tests {
         print!("id = {}", id);
 
         // call place_pixel
-        let NEW_COLOR: u32 = 0xFFFFFFFF;
+        let NEW_COLOR: u32 = 0xFFFFFF00;
 
         let allowed_color = get!(world, (id, NEW_COLOR), (AllowedColor));
 
