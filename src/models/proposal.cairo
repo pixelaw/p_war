@@ -51,7 +51,8 @@ struct Proposal {
     start: u64,
     end: u64,
     yes_px: u32,
-    no_px: u32
+    no_px: u32,
+    is_activated: bool, // added: check if the proposal is activated
 }
 
 
