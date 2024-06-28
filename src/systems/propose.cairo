@@ -210,7 +210,7 @@ mod propose {
                                     PixelUpdate {
                                         x,
                                         y,
-                                        color: Option::Some(0xffffff),
+                                        color: Option::Some(0xffffff00),
                                         timestamp: Option::None,
                                         text: Option::None,
                                         app: Option::Some(system),

@@ -10,7 +10,7 @@ const DEFAULT_RECOVERY_RATE: u64 = 10;
 const APP_KEY: felt252 = 'p_war';
 const APP_ICON: felt252 = 'U+2694';
 const MAX_COLOR_SIZE: usize = 9;
-const INITIAL_COLOR: u32 = 0xFFFFFFFF;
+const INITIAL_COLOR: u32 = 0xFFFFFF00;
 
 
 /// BASE means using the server's default manifest.json handler
@@ -224,17 +224,17 @@ mod p_war_actions {
                 )
             );
 
-            // add default colors
+            // add default colors (changed these to RGBA)
             let mut color_idx = 0;
             let mut a = ArrayTrait::new();
-            a.append(0xff0000);
-            a.append(0xff7f00);
-            a.append(0xffff00);
-            a.append(0x00ff00);
-            a.append(0x0000ff);
-            a.append(0x4b0082);
-            a.append(0x9400d3);
-            a.append(0xffffff);
+            a.append(0xff000000);
+            a.append(0xff7f0000);
+            a.append(0xffff0000);
+            a.append(0x00ff0000);
+            a.append(0x0000ff00);
+            a.append(0x4b008200);
+            a.append(0x9400d300);
+            a.append(0xffffff00);
             a.append(0x0);
 
             loop {
