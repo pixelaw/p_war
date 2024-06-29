@@ -58,7 +58,7 @@ mod propose {
 
 
             // check the current px is eq or larger than cost_paint
-            assert(player.current_px >= game.base_cost, 'you cannot paint');
+            assert(player.current_px >= game.base_cost, 'not enough PX');
 
             // check the player is banned or not
             assert(player.is_banned == false, 'you are banned');
