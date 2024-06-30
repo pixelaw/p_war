@@ -19,8 +19,8 @@ enum ProposalType {
     ChangeMaxPXConfig,
     ChangeWinnerConfig,
     ChangePaintCost,
-    MakeADisasterByCoordinates,
-    MakeADisasterByColor,
+    ResetToWhiteByCoordinates,
+    ResetToWhiteByColor,
 }
 
 
@@ -88,8 +88,8 @@ struct PixelRecoveryRate {
 //             ProposalType::ChangeMaxPXConfig => 7,
 //             ProposalType::ChangeWinnerConfig => 8,
 //             ProposalType::ChangePaintCost => 9,
-//             ProposalType::MakeADisasterByCoordinates => 10,
-//             ProposalType::MakeADisasterByColor => 11,
+//             ProposalType::ResetToWhiteByCoordinates => 10,
+//             ProposalType::ResetToWhiteByColor => 11,
 //         }
 //     }
 // }

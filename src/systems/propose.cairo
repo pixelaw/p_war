@@ -1,9 +1,9 @@
 use starknet::{ContractAddress, get_caller_address, get_block_timestamp, contract_address_const};
 use p_war::models::{game::{Game, Status}, proposal::{Proposal}};
 
-const PROPOSAL_DURATION: u64 = 120; // 2 mins in seconds.
-// const PROPOSAL_DURATION: u64 = 172800; // 2 days in seconds.
-// const PROPOSAL_DURATION: u64 = 0; // for test
+const PROPOSAL_DURATION: u64 = 120; // 2 mins in seconds. for local test.
+// const PROPOSAL_DURATION: u64 = 60 * 60 * 3; // 3 hours in seconds.
+// const PROPOSAL_DURATION: u64 = 0; // for sozo test
 const NEEDED_YES_PX: u32 = 1;
 const DISASTER_SIZE: u32 = 5;
 
@@ -168,7 +168,7 @@ mod propose {
                     );
                 }
             } else if proposal.proposal_type == 2 {
-                // Make a disaster by color
+                // Reset to white by color
                 let core_actions = get_core_actions(world); // TODO: should we use p_war_actions insted of core_actions???
                 let system = get_caller_address();
                 

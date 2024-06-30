@@ -43,7 +43,7 @@ mod tests {
 
     #[test]
     #[available_gas(999_999_999)]
-    fn test_make_a_disaster_by_color() {
+    fn test_reset_to_white() {
         // caller
         let caller = starknet::contract_address_const::<0x0>();
 

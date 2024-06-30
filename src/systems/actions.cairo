@@ -4,7 +4,11 @@ use starknet::ContractAddress;
 use p_war::models::board::Position;
 
 // 1 week in seconds
-const GAME_DURATION: u64 = 604800;
+// const GAME_DURATION: u64 = 604800; // 1 week in seconds
+// const DEFAULT_AREA: u64 = 259200; // 3 days in seconds for EthCC
+// const GAME_DURATION: u64 = 1800; // 30 minutes in seconds for closed playtest
+const GAME_DURATION: u64 = 300; // 5 minute in seconds for local testing
+
 const DEFAULT_AREA: u32 = 10; // changed from 5
 const DEFAULT_RECOVERY_RATE: u64 = 10;
 const APP_KEY: felt252 = 'p_war';
