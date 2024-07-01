@@ -42,7 +42,7 @@ mod p_war_actions {
         board::{Board, GameId, Position, PWarPixel},
         player::{Player},
         proposal::{PixelRecoveryRate},
-        allowed_color::{AllowedColor, PaletteColors},
+        allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette},
         allowed_app::AllowedApp
     };
     use starknet::{ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info};
@@ -231,15 +231,15 @@ mod p_war_actions {
             // add default colors (changed these to RGBA)
             let mut color_idx = 0;
             let mut a = ArrayTrait::new();
-            a.append(0xff000000);
-            a.append(0xff7f0000);
-            a.append(0xffff0000);
-            a.append(0x00ff0000);
-            a.append(0x0000ff00);
-            a.append(0x4b008200);
-            a.append(0x9400d300);
-            a.append(0xffffff00);
-            a.append(0x0);
+            a.append(0xff0000ff);
+            a.append(0xff7f00ff);
+            a.append(0xffff00ff);
+            a.append(0x00ff00ff);
+            a.append(0x0000ffff);
+            a.append(0x4b0082ff);
+            a.append(0x9400d3ff);
+            a.append(0xffffffff);
+            a.append(0x000000ff);
 
             loop {
                 if color_idx > 8 {
@@ -247,19 +247,25 @@ mod p_war_actions {
                 };
                 set!(
                     world,
-                    (AllowedColor{
-                        game_id: id,
-                        color: *a.at(color_idx),
-                        is_allowed: true,
-                    })
-                );
-                set!(
-                    world,
-                    (PaletteColors{
-                        game_id: id,
-                        idx: color_idx,
-                        color: *a.at(color_idx),
-                    })
+                    (
+                        AllowedColor{
+                            game_id: id,
+                            color: *a.at(color_idx),
+                            is_allowed: true,
+                        },
+
+                        PaletteColors{
+                            game_id: id,
+                            idx: color_idx,
+                            color: *a.at(color_idx),
+                        },
+
+                        InPalette{
+                            game_id: id,
+                            color: *a.at(color_idx),
+                            value: true
+                        }
+                    )
                 );
                 color_idx += 1;
             };
@@ -267,10 +273,16 @@ mod p_war_actions {
             // set default recovery_rate
             set!(
                 world,
-                (PixelRecoveryRate{
-                    game_id: id,
-                    rate: DEFAULT_RECOVERY_RATE,
-                })
+                (
+                    PixelRecoveryRate{
+                        game_id: id,
+                        rate: DEFAULT_RECOVERY_RATE,
+                    },
+                    GamePalette {
+                        game_id: id,
+                        length: 9
+                    }
+                )
             );
 
             id

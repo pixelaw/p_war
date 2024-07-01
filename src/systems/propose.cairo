@@ -24,7 +24,7 @@ mod propose {
         board::{GameId, Board, Position, PWarPixel},
         player::{Player},
         allowed_app::AllowedApp,
-        allowed_color::{ AllowedColor, PaletteColors }
+        allowed_color::{ AllowedColor, PaletteColors, InPalette, GamePalette }
     };
     use p_war::systems::utils::{ recover_px };
     use pixelaw::core::utils::{get_core_actions, DefaultParameters};
@@ -125,48 +125,101 @@ mod propose {
                 let new_color: u32 = proposal.target_color;
                 let mut new_color_allowed = get!(world, (game_id, new_color), (AllowedColor));
 
-                // only change it if it's not allowed.
+                // only change it if it's not allowed
                 if !new_color_allowed.is_allowed {
                     new_color_allowed.is_allowed = !new_color_allowed.is_allowed;
 
-                    // get the color to replace
-                    let mut oldest_color = get!(world, (game_id, game.next_color_idx_to_change), (PaletteColors));
-                    // make it unusable
-                    let mut oldest_color_allowed = get!(world, (game_id, oldest_color.color), (AllowedColor));
-
-                    if oldest_color_allowed.is_allowed {
-                        oldest_color_allowed.is_allowed = false;
-                    };
-
-                    // set to the color palette
                     set!(
-                        world,
-                        (PaletteColors{
-                            game_id: game_id,
-                            idx: game.next_color_idx_to_change,
-                            color: new_color,
-                        })
+                        world, (new_color_allowed)
                     );
 
-                    // delete the oldest_color from color palette.
-                    delete!(world, (oldest_color));
+                    // check if color already is in the palette
+                    let is_in_palette = get!(world, 
+                        (game_id, new_color), (InPalette)
+                    );
 
-                    if game.next_color_idx_to_change == 0 {
-                        game.next_color_idx_to_change = 8;
+                    // if aready in the palette early return
+                    if is_in_palette.value {
+                        return;
+                    }
+
+                    let mut game_palette = get!(world, 
+                        (game_id), (GamePalette)
+                    );
+
+                    // check if there's less colors in place
+                    if game_palette.length < 9 {
+                        set!(
+                            world,
+                            (
+                                PaletteColors {
+                                    game_id,
+                                    idx: game_palette.length,
+                                    color: new_color
+                                },
+                                InPalette {
+                                    game_id,
+                                    color: new_color,
+                                    value: true
+                                },
+                                GamePalette {
+                                    game_id,
+                                    length: game_palette.length + 1
+                                }
+                            )
+                        );
                     } else {
-                        game.next_color_idx_to_change -= 1;
+                        // get 0 idx
+                        let oldest_color = get!(world, (game_id, 0), (PaletteColors));
+
+                        let mut idx = 1;
+
+                        loop {
+
+                            let palette_color = get!(world, (game_id, idx), (PaletteColors));
+
+                            set!(
+                                world,
+                                (
+                                    PaletteColors {
+                                        game_id,
+                                        idx: idx - 1,
+                                        color: palette_color.color
+                                    }
+                                )
+                            );
+
+                            idx = idx + 1;
+
+                            if idx == 9 {
+                                break;
+                            };
+                        };
+                        
+                        set!(
+                            world,
+                            (
+                                InPalette {
+                                    game_id,
+                                    color: oldest_color.color,
+                                    value: false
+                                },
+
+                                InPalette {
+                                    game_id,
+                                    color: new_color,
+                                    value: true
+                                },
+
+                                PaletteColors {
+                                  game_id,
+                                  idx: 8,
+                                  color: new_color  
+                                }
+                            )
+                        );
                     };
-                    
-                    
-                    set!(
-                        world,
-                        (
-                            new_color_allowed,
-                            oldest_color_allowed,
-                            game
-                        )
-                    );
-                }
+                };
             } else if proposal.proposal_type == 2 {
                 // Reset to white by color
                 let core_actions = get_core_actions(world); // TODO: should we use p_war_actions insted of core_actions???
