@@ -73,7 +73,8 @@ mod propose {
                 start: get_block_timestamp(),
                 end: get_block_timestamp() + PROPOSAL_DURATION,
                 yes_px: 0,
-                no_px: 0
+                no_px: 0,
+                is_activated: false
             };
 
             game.proposal_idx += 1;
@@ -107,10 +108,11 @@ mod propose {
 
         fn activate_proposal(world: IWorldDispatcher, game_id: usize, index: usize){
             // get the proposal
-            let proposal = get!(world, (game_id, index), (Proposal));
+            let mut proposal = get!(world, (game_id, index), (Proposal));
             let current_timestamp = get_block_timestamp();
             assert(current_timestamp >= proposal.end, 'proposal period has not ended');
             assert(proposal.yes_px >= NEEDED_YES_PX, 'did not reach minimum yes_px');
+            assert(proposal.is_activated == false, 'this is already activated');
 
             // activate the proposal.
             if proposal.proposal_type == 1 {
@@ -303,6 +305,14 @@ mod propose {
             } else {
                 return;
             };
+
+            // make it activated.
+            proposal.is_activated = true;
+
+            set!(
+                world,
+                (proposal)
+            );
 
             // // Qustion: should we panish the author if the proposal is denied?
             // // add author's commitment points
