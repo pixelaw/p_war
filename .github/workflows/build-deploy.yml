@@ -60,6 +60,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             CACHEBUST=${{ github.run_id }}
+          no-cache: true
 
       - name: Create GitHub Release
         env:
