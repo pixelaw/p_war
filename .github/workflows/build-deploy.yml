@@ -58,6 +58,7 @@ jobs:
 #            DOJO_KEYSTORE_PASSWORD=${{ secrets.DOJO_KEYSTORE_PASSWORD }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache: false
 
       - name: Create GitHub Release
         env:
