@@ -39,7 +39,7 @@ mod tests {
         utils::{DefaultParameters, Position as PixelawPosition}
     };
 
-    const COLOR: u32 = 0xFFFFFF00;
+    const COLOR: u32 = 0xFFFFFFFF;
 
     #[test]
     #[available_gas(999_999_999)]
@@ -99,7 +99,7 @@ mod tests {
 
 
         // paint a color one
-        let target_color: u32 = 0xFF000000;
+        let target_color: u32 = 0xFF0000FF;
         let paint_params = DefaultParameters{
             for_player: caller,
             for_system: caller,
@@ -163,6 +163,6 @@ mod tests {
 
         print!("\n $$$$$$COLORRRRR: {} ######\n", pixel.color); // 16711680(#000000FF)
 
-        assert(pixel.color == 0xffffff00, 'shold get the disaster');
+        assert(pixel.color == 0xffffffff, 'shold get the disaster');
     }
 }

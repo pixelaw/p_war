@@ -8,7 +8,6 @@ struct Game {
     start: u64,
     end: u64,
     proposal_idx: usize,
-    next_color_idx_to_change: usize, // to handle the limits of number of colors.
     base_cost: u32,
     const_val: u32,
     coeff_own_pixels: u32,

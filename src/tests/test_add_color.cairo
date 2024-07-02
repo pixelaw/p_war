@@ -39,7 +39,7 @@ mod tests {
         utils::{DefaultParameters, Position as PixelawPosition}
     };
 
-    const COLOR: u32 = 0xAAAAAA00;
+    const COLOR: u32 = 0xAAAAAAFF;
 
     #[test]
     #[available_gas(999_999_999)]
@@ -100,7 +100,7 @@ mod tests {
         let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
 
-        let NEW_COLOR: u32 = 0xAAAAAA00;
+        let NEW_COLOR: u32 = 0xAABBCCFF;
 
         // let args = Args{
         //     address: starknet::contract_address_const::<0x0>(),
@@ -114,15 +114,15 @@ mod tests {
             target_color: NEW_COLOR,
         );
 
-        let game = get!(
-            world,
-            (id),
-            (Game)
-        );
+        // let game = get!(
+        //     world,
+        //     (id),
+        //     (Game)
+        // );
 
         let oldest_color_palette = get!(
             world,
-            (id, game.next_color_idx_to_change),
+            (id, 0),
             (PaletteColors)
         );
 
@@ -160,7 +160,7 @@ mod tests {
             (AllowedColor)
         );
 
-        print!("\n@@@@@ OLDEST_ALLOWED: {} @@@@\n", oldest_color_allowed.is_allowed);
+        print!("\n@@@@@ OLDEST_ALLOWED: {}, {} @@@@\n", oldest_color_palette.color, oldest_color_allowed.is_allowed);
 
         assert(oldest_color_allowed.is_allowed == false, 'the oldest became unusable');
 

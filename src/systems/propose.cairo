@@ -1,11 +1,7 @@
 use starknet::{ContractAddress, get_caller_address, get_block_timestamp, contract_address_const};
 use p_war::models::{game::{Game, Status}, proposal::{Proposal}};
 
-const PROPOSAL_DURATION: u64 = 120; // 2 mins in seconds. for local test.
-// const PROPOSAL_DURATION: u64 = 60 * 60 * 3; // 3 hours in seconds.
-// const PROPOSAL_DURATION: u64 = 0; // for sozo test
-const NEEDED_YES_PX: u32 = 1;
-const DISASTER_SIZE: u32 = 5;
+use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE};
 
 // define the interface
 #[dojo::interface]
@@ -118,11 +114,11 @@ mod propose {
             if proposal.proposal_type == 1 {
                 // AddNewColor
                 // new feature: if the color is added, the oldest color become unusable.
-                let mut game = get!(
-                    world,
-                    (game_id),
-                    (Game)
-                );
+                // let mut game = get!(
+                //     world,
+                //     (game_id),
+                //     (Game)
+                // );
 
                 let new_color: u32 = proposal.target_color;
                 let mut new_color_allowed = get!(world, (game_id, new_color), (AllowedColor));
@@ -217,7 +213,14 @@ mod propose {
                                   game_id,
                                   idx: 8,
                                   color: new_color  
-                                }
+                                },
+
+                                // make it unusable
+                                AllowedColor {
+                                    game_id,
+                                    color: oldest_color.color,
+                                    is_allowed: false
+                                },
                             )
                         );
                     };
@@ -265,7 +268,7 @@ mod propose {
                                     PixelUpdate {
                                         x,
                                         y,
-                                        color: Option::Some(0xffffff00),
+                                        color: Option::Some(0xffffffff),
                                         timestamp: Option::None,
                                         text: Option::None,
                                         app: Option::Some(system),
