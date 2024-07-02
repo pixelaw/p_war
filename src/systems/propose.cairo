@@ -108,6 +108,7 @@ mod propose {
             let current_timestamp = get_block_timestamp();
             assert(current_timestamp >= proposal.end, 'proposal period has not ended');
             assert(proposal.yes_px >= NEEDED_YES_PX, 'did not reach minimum yes_px');
+            assert(proposal.yes_px > proposal.no_px, 'yes_px is less than no_px');
             assert(proposal.is_activated == false, 'this is already activated');
 
             // activate the proposal.
