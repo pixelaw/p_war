@@ -142,6 +142,7 @@ mod p_war_actions {
             let player = get_caller_address();
             let system = get_contract_address();
 
+
             let game = Game {
                 id,
                 start,
@@ -268,6 +269,9 @@ mod p_war_actions {
                     }
                 )
             );
+
+            // recover px
+            recover_px(world, id, player);
 
             id
             // emit event that game has started
