@@ -3,22 +3,7 @@ use pixelaw::core::models::pixel::PixelUpdate;
 use starknet::ContractAddress;
 use p_war::models::board::Position;
 
-// 1 week in seconds
-// const GAME_DURATION: u64 = 604800; // 1 week in seconds
-// const DEFAULT_AREA: u64 = 259200; // 3 days in seconds for EthCC
-// const GAME_DURATION: u64 = 1800; // 30 minutes in seconds for closed playtest
-const GAME_DURATION: u64 = 300; // 5 minute in seconds for local testing
-
-const DEFAULT_AREA: u32 = 10; // changed from 5
-const DEFAULT_RECOVERY_RATE: u64 = 10;
-const APP_KEY: felt252 = 'p_war';
-const APP_ICON: felt252 = 'U+2694';
-const MAX_COLOR_SIZE: usize = 9;
-const INITIAL_COLOR: u32 = 0xFFFFFF00;
-
-
-/// BASE means using the server's default manifest.json handler
-const APP_MANIFEST: felt252 = 'BASE/manifests/p_war';
+use p_war::constants::{GAME_DURATION, DEFAULT_AREA, DEFAULT_RECOVERY_RATE, APP_KEY, APP_ICON, APP_MANIFEST, INITIAL_COLOR};
 
 // define the interface
 #[dojo::interface]
@@ -162,7 +147,6 @@ mod p_war_actions {
                 start,
                 end: start + GAME_DURATION,
                 proposal_idx: 0,
-                next_color_idx_to_change: 8,
                 base_cost: 1,
                 const_val: 10, // Default is 10.
                 coeff_own_pixels: 0,
@@ -231,15 +215,15 @@ mod p_war_actions {
             // add default colors (changed these to RGBA)
             let mut color_idx = 0;
             let mut a = ArrayTrait::new();
-            a.append(0xff0000ff);
-            a.append(0xff7f00ff);
-            a.append(0xffff00ff);
-            a.append(0x00ff00ff);
-            a.append(0x0000ffff);
-            a.append(0x4b0082ff);
-            a.append(0x9400d3ff);
-            a.append(0xffffffff);
             a.append(0x000000ff);
+            a.append(0xffffffff);
+            a.append(0x9400d3ff);
+            a.append(0x4b0082ff);
+            a.append(0x0000ffff);
+            a.append(0x00ff00ff);
+            a.append(0xffff00ff);
+            a.append(0xff7f00ff);
+            a.append(0xff0000ff);
 
             loop {
                 if color_idx > 8 {

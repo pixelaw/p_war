@@ -20,3 +20,5 @@ mod tests {
     mod test_add_color;
     mod test_reset_to_white;
 }
+
+mod constants;

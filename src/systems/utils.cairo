@@ -9,7 +9,7 @@ use p_war::models::{
     allowed_app::AllowedApp
 };
 
-const DEFAULT_PX: u32 = 10;
+use p_war::constants::DEFAULT_PX;
 
 fn update_max_px(world: IWorldDispatcher, game_id: usize, player_address: ContractAddress){
     let mut player = get!(
