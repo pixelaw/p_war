@@ -41,6 +41,8 @@ mod p_war_actions {
     use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
     use p_war::systems::utils::{ recover_px, update_max_px, check_game_status };
 
+    use p_war::constants::{ GAME_ID, OUT_OF_BOUNDS_GAME_ID };
+
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {
@@ -118,29 +120,53 @@ mod p_war_actions {
             let game_id = self.get_game_id(position);
             if game_id == 0 {
                 self.create_game(position);
+            } else if game_id == OUT_OF_BOUNDS_GAME_ID {
+                // out of bounds
+                return;
             } else {
                 self.place_pixel(starknet::contract_address_const::<0x0>(), default_params);
             };
         }
 
         fn get_game_id(world: IWorldDispatcher, position: Position) -> usize {
-            let game_id = get!(world, (position.x, position.y), GameId);
-            game_id.value
+            let mut id = world.uuid();
+            if id == 0 {
+                return 0;
+            };
+
+
+            // set id as GAME_ID=1
+            let board = get!(
+                world,
+                (GAME_ID),
+                (Board)
+            );
+
+            
+            if position.x < board.origin.x || position.x >= board.origin.x + board.width ||
+                position.y < board.origin.y || position.y >= board.origin.y + board.height {
+                return OUT_OF_BOUNDS_GAME_ID; // OUT_OF_BOUNDS_GAME_ID for out of bounds
+            };
+            return 1;
         }
 
         fn create_game(world: IWorldDispatcher, origin: Position) -> usize {
 
             // check if a game exists
-            let mut id = world.uuid();
+            // let mut tmp_uuid = world.uuid();
+            // if tmp_uuid != 0 {
+            //     return 0;
+            // };
 
-            if id == 0 {
-                id = world.uuid();
-            }
+            // if id == 0 {
+            //     id = world.uuid();
+            // }
+            let mut id = GAME_ID; // set as a constant for now.
 
             let start = get_block_timestamp();
-            let core_actions = get_core_actions(world);
+            // let core_actions = get_core_actions(world);
             let player = get_caller_address();
-            let system = get_contract_address();
+            // let system = get_contract_address();
 
 
             let game = Game {
@@ -163,46 +189,47 @@ mod p_war_actions {
                 height: DEFAULT_AREA,
             };
 
-            // make sure that game board has been set with game id
-            let mut y = origin.y;
-            loop {
-                if y >= origin.y + DEFAULT_AREA {
-                    break;
-                };
-                let mut x = origin.x;
-                loop {
-                    if x >= origin.x + DEFAULT_AREA {
-                        break;
-                    };
-                    core_actions
-                        .update_pixel(
-                            player,
-                            system,
-                            PixelUpdate {
-                                x,
-                                y,
-                                color: Option::Some(INITIAL_COLOR),
-                                timestamp: Option::None,
-                                text: Option::None,
-                                app: Option::Some(system),
-                                owner: Option::None,
-                                action: Option::None
-                            }
-                        );
-                    set!(
-                        world,
-                        (
-                            GameId {
-                                x,
-                                y,
-                                value: id
-                            }
-                        )
-                    );
-                    x += 1;
-                };
-                y += 1;
-            };
+            // To make a bigger area, we deleted this part.
+            // // make sure that game board has been set with game id
+            // let mut y = origin.y;
+            // loop {
+            //     if y >= origin.y + DEFAULT_AREA {
+            //         break;
+            //     };
+            //     let mut x = origin.x;
+            //     loop {
+            //         if x >= origin.x + DEFAULT_AREA {
+            //             break;
+            //         };
+            //         core_actions
+            //             .update_pixel(
+            //                 player,
+            //                 system,
+            //                 PixelUpdate {
+            //                     x,
+            //                     y,
+            //                     color: Option::Some(INITIAL_COLOR),
+            //                     timestamp: Option::None,
+            //                     text: Option::None,
+            //                     app: Option::Some(system),
+            //                     owner: Option::None,
+            //                     action: Option::None
+            //                 }
+            //             );
+            //         set!(
+            //             world,
+            //             (
+            //                 GameId {
+            //                     x,
+            //                     y,
+            //                     value: id
+            //                 }
+            //             )
+            //         );
+            //         x += 1;
+            //     };
+            //     y += 1;
+            // };
 
 
             set!(
@@ -279,13 +306,19 @@ mod p_war_actions {
 
         // To paint, basically use this function.
         fn place_pixel(world: IWorldDispatcher, app: ContractAddress, default_params: DefaultParameters) {
-            let game_id = get!(world, (default_params.position.x, default_params.position.y), GameId);
-            assert(game_id.value != 0, 'this game does not exist');
+            let position = Position {
+                x: default_params.position.x,
+                y: default_params.position.y
+            };
+            
+            // let game_id = get!(world, (default_params.position.x, default_params.position.y), GameId);
+            let game_id = self.get_game_id(position);
+            assert(game_id != 0, 'this game does not exist');
 
-            let allowed_color = get!(world, (game_id.value, default_params.color), (AllowedColor));
+            let allowed_color = get!(world, (game_id, default_params.color), (AllowedColor));
             assert(allowed_color.is_allowed, 'color is not allowed'); // cannot test correctly without cheatcodes.
 
-            let allowed_app = get!(world, (game_id.value, app), (AllowedApp));
+            let allowed_app = get!(world, (game_id, app), (AllowedApp));
             assert(app.is_zero() || allowed_app.is_allowed, 'app is not allowed');
 
             let contract_address = if app.is_zero() {
@@ -299,7 +332,7 @@ mod p_war_actions {
             let player_address = get_tx_info().unbox().account_contract_address;
 
             // recover px
-            recover_px(world, game_id.value, player_address);
+            recover_px(world, game_id, player_address);
 
             // if this is first time for the caller, let's set initial px.
             let mut player = get!(
@@ -311,7 +344,7 @@ mod p_war_actions {
             // get the game info
             let game = get!(
                 world,
-                (game_id.value),
+                (game_id),
                 (Game)
             );
 
@@ -379,7 +412,7 @@ mod p_war_actions {
             );
             
 
-            update_max_px(world, game_id.value, player.address);
+            update_max_px(world, game_id, player.address);
         }
 
         // only use for expand areas.
