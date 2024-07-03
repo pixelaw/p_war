@@ -28,8 +28,9 @@ const APP_MANIFEST: felt252 = 'BASE/manifests/p_war';
 // ### GAME CONFIGURATION FOR CLOSED BETA TEST ###
 // ###############################################
 // # Initial settings
+const GAME_ID: usize = 1;
 const INITIAL_COLOR: u32 = 0xFFFFFFFF;
-const DEFAULT_AREA: u32 = 16;
+const DEFAULT_AREA: u32 = 100;
 const DEFAULT_PX: u32 = 20;
 const MAX_COLOR_SIZE: usize = 9;
 const GAME_DURATION: u64 = 10 * 60; // 10 minutes in seconds
@@ -37,6 +38,7 @@ const DEFAULT_RECOVERY_RATE: u64 = 10; // 10 secs to recover 1PX
 
 // # For Governance
 const PROPOSAL_DURATION: u64 = 60; // 1 min in seconds.
+// const PROPOSAL_DURATION: u64 = 0; // 1 min in seconds.
 const NEEDED_YES_PX: u32 = 1;
 
 // for additional rules
