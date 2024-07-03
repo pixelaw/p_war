@@ -23,7 +23,7 @@ mod p_war_actions {
     use super::{APP_KEY, APP_ICON, APP_MANIFEST, IActions, IActionsDispatcher, IActionsDispatcherTrait, GAME_DURATION, DEFAULT_AREA};
     use super::{DEFAULT_RECOVERY_RATE, INITIAL_COLOR};
     use p_war::models::{
-        game::{Game, Status},
+        game::{Game, Status, GameTrait},
         board::{Board, GameId, Position, PWarPixel},
         player::{Player},
         proposal::{PixelRecoveryRate},
@@ -39,7 +39,7 @@ mod p_war_actions {
     use pixelaw::core::models::{ pixel::PixelUpdate, registry::App };
     use pixelaw::core::traits::IInteroperability;
     use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
-    use p_war::systems::utils::{ recover_px, update_max_px };
+    use p_war::systems::utils::{ recover_px, update_max_px, check_game_status };
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -321,6 +321,9 @@ mod p_war_actions {
 
             // check the player is banned or not
             assert(player.is_banned == false, 'you are banned');
+
+            // check if the game is ongoing
+            assert(check_game_status(game.status()), 'game is not ongoing');
 
             app.set_pixel(default_params);
 

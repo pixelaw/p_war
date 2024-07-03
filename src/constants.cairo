@@ -29,7 +29,7 @@ const APP_MANIFEST: felt252 = 'BASE/manifests/p_war';
 // ###############################################
 // # Initial settings
 const INITIAL_COLOR: u32 = 0xFFFFFFFF;
-const DEFAULT_AREA: u32 = 32;
+const DEFAULT_AREA: u32 = 16;
 const DEFAULT_PX: u32 = 20;
 const MAX_COLOR_SIZE: usize = 9;
 const GAME_DURATION: u64 = 10 * 60; // 10 minutes in seconds

@@ -13,7 +13,7 @@ trait IPropose {
 // dojo decorator
 #[dojo::contract]
 mod propose {
-    use super::{IPropose, can_propose, NEEDED_YES_PX, PROPOSAL_DURATION, DISASTER_SIZE};
+    use super::{IPropose, NEEDED_YES_PX, PROPOSAL_DURATION, DISASTER_SIZE};
     use p_war::models::{
         game::{Game, Status, GameTrait},
         proposal::{Proposal, PixelRecoveryRate},
@@ -22,7 +22,7 @@ mod propose {
         allowed_app::AllowedApp,
         allowed_color::{ AllowedColor, PaletteColors, InPalette, GamePalette }
     };
-    use p_war::systems::utils::{ recover_px };
+    use p_war::systems::utils::{ recover_px, check_game_status };
     use pixelaw::core::utils::{get_core_actions, DefaultParameters};
     use pixelaw::core::actions::{
         IActionsDispatcher as ICoreActionsDispatcher,
@@ -38,7 +38,7 @@ mod propose {
         fn create_proposal(world: IWorldDispatcher, game_id: usize, proposal_type: u8, target_color: u32) -> usize {
             // get the game
             let mut game = get!(world, game_id, (Game));
-            assert(can_propose(game.status()), 'cannot submit proposal');
+            assert(check_game_status(game.status()), 'game is not ongoing');
 
             let player_address = get_tx_info().unbox().account_contract_address;
 
@@ -105,21 +105,23 @@ mod propose {
         fn activate_proposal(world: IWorldDispatcher, game_id: usize, index: usize){
             // get the proposal
             let mut proposal = get!(world, (game_id, index), (Proposal));
+            let game = get!(
+                    world,
+                    (game_id),
+                    (Game)
+                );
             let current_timestamp = get_block_timestamp();
             assert(current_timestamp >= proposal.end, 'proposal period has not ended');
             assert(proposal.yes_px >= NEEDED_YES_PX, 'did not reach minimum yes_px');
             assert(proposal.yes_px > proposal.no_px, 'yes_px is not more than no_px');
             assert(proposal.is_activated == false, 'this is already activated');
+            assert(check_game_status(game.status()), 'game is not ongoing');
+
 
             // activate the proposal.
             if proposal.proposal_type == 1 {
                 // AddNewColor
                 // new feature: if the color is added, the oldest color become unusable.
-                // let mut game = get!(
-                //     world,
-                //     (game_id),
-                //     (Game)
-                // );
 
                 let new_color: u32 = proposal.target_color;
                 let mut new_color_allowed = get!(world, (game_id, new_color), (AllowedColor));
@@ -333,8 +335,4 @@ mod propose {
             // );
         }
     }
-}
-
-fn can_propose(status: Status) -> bool {
-    status == Status::Pending || status == Status::Ongoing
 }

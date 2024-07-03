@@ -87,3 +87,7 @@ fn recover_px(world: IWorldDispatcher, game_id: usize, player_address: ContractA
         (player)
     );
 }
+
+fn check_game_status(status: Status) -> bool {
+    status == Status::Pending || status == Status::Ongoing
+}
