@@ -41,7 +41,7 @@ mod p_war_actions {
     use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
     use p_war::systems::utils::{ recover_px, update_max_px, check_game_status };
 
-    use p_war::constants::GAME_ID;
+    use p_war::constants::{ GAME_ID, OUT_OF_BOUNDS_GAME_ID };
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -120,6 +120,9 @@ mod p_war_actions {
             let game_id = self.get_game_id(position);
             if game_id == 0 {
                 self.create_game(position);
+            } else if game_id == OUT_OF_BOUNDS_GAME_ID {
+                // out of bounds
+                return;
             } else {
                 self.place_pixel(starknet::contract_address_const::<0x0>(), default_params);
             };
@@ -139,9 +142,10 @@ mod p_war_actions {
                 (Board)
             );
 
+            
             if position.x < board.origin.x || position.x >= board.origin.x + board.width ||
                 position.y < board.origin.y || position.y >= board.origin.y + board.height {
-                return 0;
+                return OUT_OF_BOUNDS_GAME_ID; // OUT_OF_BOUNDS_GAME_ID for out of bounds
             };
             return 1;
         }

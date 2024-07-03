@@ -6,6 +6,7 @@ const APP_ICON: felt252 = 'U+2694';
 /// BASE means using the server's default manifest.json handler
 const APP_MANIFEST: felt252 = 'BASE/manifests/p_war';
 
+const OUT_OF_BOUNDS_GAME_ID: usize = 9999;
 // // ####################################
 // // ### GAME CONFIGURATION FOR EthCC ###
 // // ####################################
