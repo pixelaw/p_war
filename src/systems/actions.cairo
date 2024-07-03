@@ -36,7 +36,7 @@ mod p_war_actions {
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
     use pixelaw::core::utils::{get_core_actions, DefaultParameters};
-    use pixelaw::core::models::{ pixel::PixelUpdate, registry::App };
+    use pixelaw::core::models::{ pixel::{Pixel, PixelUpdate}, registry::App };
     use pixelaw::core::traits::IInteroperability;
     use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
     use p_war::systems::utils::{ recover_px, update_max_px, check_game_status };
@@ -163,6 +163,8 @@ mod p_war_actions {
                 height: DEFAULT_AREA,
             };
 
+            let current_timestamp = get_block_timestamp();
+
             // make sure that game board has been set with game id
             let mut y = origin.y;
             loop {
@@ -174,21 +176,6 @@ mod p_war_actions {
                     if x >= origin.x + DEFAULT_AREA {
                         break;
                     };
-                    core_actions
-                        .update_pixel(
-                            player,
-                            system,
-                            PixelUpdate {
-                                x,
-                                y,
-                                color: Option::Some(INITIAL_COLOR),
-                                timestamp: Option::None,
-                                text: Option::None,
-                                app: Option::Some(system),
-                                owner: Option::None,
-                                action: Option::None
-                            }
-                        );
                     set!(
                         world,
                         (
@@ -196,6 +183,19 @@ mod p_war_actions {
                                 x,
                                 y,
                                 value: id
+                            },
+                            
+                            Pixel {
+                                x,
+                                y,
+                                created_at: current_timestamp,
+                                updated_at: current_timestamp,
+                                color: INITIAL_COLOR,
+                                timestamp: current_timestamp,
+                                text: '',
+                                app: system,
+                                owner: starknet::contract_address_const::<0x0>(),
+                                action: ''
                             }
                         )
                     );
