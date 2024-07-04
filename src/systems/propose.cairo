@@ -1,7 +1,7 @@
 use starknet::{ContractAddress, get_caller_address, get_block_timestamp, contract_address_const};
 use p_war::models::{game::{Game, Status}, proposal::{Proposal}};
 
-use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE};
+use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL_FACTOR};
 
 // define the interface
 #[dojo::interface]
@@ -13,7 +13,7 @@ trait IPropose {
 // dojo decorator
 #[dojo::contract]
 mod propose {
-    use super::{IPropose, NEEDED_YES_PX, PROPOSAL_DURATION, DISASTER_SIZE};
+    use super::{IPropose, NEEDED_YES_PX, PROPOSAL_DURATION, DISASTER_SIZE, PROPOSAL_FACTOR};
     use p_war::models::{
         game::{Game, Status, GameTrait},
         proposal::{Proposal, PixelRecoveryRate},
@@ -54,7 +54,7 @@ mod propose {
 
 
             // check the current px is eq or larger than cost_paint
-            assert(player.current_px >= game.base_cost, 'not enough PX');
+            assert(player.current_px >= game.base_cost * PROPOSAL_FACTOR, 'not enough PX');
 
             // check the player is banned or not
             assert(player.is_banned == false, 'you are banned');
@@ -90,8 +90,8 @@ mod propose {
                     address: player.address,
                     max_px: player.max_px,
                     num_owns: player.num_owns,
-                    num_commit: player.num_commit + game.base_cost,
-                    current_px: player.current_px - game.base_cost,
+                    num_commit: player.num_commit + (game.base_cost * PROPOSAL_FACTOR),
+                    current_px: player.current_px - (game.base_cost * PROPOSAL_FACTOR),
                     last_date: get_block_timestamp(),
                     is_banned: false,
                 }),

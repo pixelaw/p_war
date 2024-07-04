@@ -3,7 +3,7 @@ use pixelaw::core::models::pixel::PixelUpdate;
 use starknet::ContractAddress;
 use p_war::models::board::Position;
 
-use p_war::constants::{GAME_DURATION, DEFAULT_AREA, DEFAULT_RECOVERY_RATE, APP_KEY, APP_ICON, APP_MANIFEST, INITIAL_COLOR};
+use p_war::constants::{GAME_DURATION, DEFAULT_AREA, DEFAULT_RECOVERY_RATE, APP_KEY, APP_ICON, APP_MANIFEST, INITIAL_COLOR, BASE_COST, DEFAULT_PX};
 
 // define the interface
 #[dojo::interface]
@@ -20,7 +20,7 @@ trait IActions {
 // dojo decorator
 #[dojo::contract]
 mod p_war_actions {
-    use super::{APP_KEY, APP_ICON, APP_MANIFEST, IActions, IActionsDispatcher, IActionsDispatcherTrait, GAME_DURATION, DEFAULT_AREA};
+    use super::{APP_KEY, APP_ICON, APP_MANIFEST, IActions, IActionsDispatcher, IActionsDispatcherTrait, GAME_DURATION, DEFAULT_AREA, BASE_COST, DEFAULT_PX};
     use super::{DEFAULT_RECOVERY_RATE, INITIAL_COLOR};
     use p_war::models::{
         game::{Game, Status, GameTrait},
@@ -174,8 +174,8 @@ mod p_war_actions {
                 start,
                 end: start + GAME_DURATION,
                 proposal_idx: 0,
-                base_cost: 1,
-                const_val: 10, // Default is 10.
+                base_cost: BASE_COST,
+                const_val: DEFAULT_PX, // Default is 10.
                 coeff_own_pixels: 0,
                 coeff_commits: 0,
                 winner_config: 0,
