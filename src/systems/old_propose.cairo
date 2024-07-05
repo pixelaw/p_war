@@ -1,5 +1,5 @@
 use starknet::{ContractAddress, get_caller_address, get_block_timestamp, contract_address_const};
-use p_war::models::{game::{Game, Status}, proposal::{Args, ProposalType, Proposal}};
+use p_war::models::{game::{Game, Status}, proposal::{Args, Proposal}};
 
 const PROPOSAL_DURATION: u64 = 172800; // 2 days in seconds.
 const NEEDED_YES_PX: u32 = 1;
@@ -8,7 +8,7 @@ const DISASTER_SIZE: u32 = 5;
 // define the interface
 #[dojo::interface]
 trait IPropose {
-    fn create_proposal(game_id: usize, proposal_type: ProposalType, args: Args) -> usize;
+    fn create_proposal(game_id: usize, proposal_type: u8, args: Args) -> usize;
     fn activate_proposal(game_id: usize, index: usize);
 }
 
@@ -37,7 +37,7 @@ mod propose {
     #[abi(embed_v0)]
     impl ProposeImpl of IPropose<ContractState> {
 
-        fn create_proposal(world: IWorldDispatcher, game_id: usize, proposal_type: ProposalType, args: Args) -> usize {
+        fn create_proposal(world: IWorldDispatcher, game_id: usize, proposal_type: u8, args: Args) -> usize {
             // get the game
             let mut game = get!(world, game_id, (Game));
             assert(can_propose(game.status()), 'cannot submit proposal');

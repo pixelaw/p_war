@@ -13,7 +13,7 @@ mod tests {
         models::{
             game::{Game, game},
             board::{Board, GameId, Position, board, game_id},
-            proposal::{Proposal,ProposalType},
+            proposal::{Proposal},
             allowed_app::AllowedApp,
             allowed_color::{AllowedColor, PaletteColors},
         },
@@ -104,7 +104,7 @@ mod tests {
 
         let index = propose_system.create_proposal(
             game_id: id,
-            proposal_type: ProposalType::ExtendGameEndTime,
+            proposal_type: 3,
             target_args_1: 60 * 60, // extend the game for 1 hour
             target_args_2: 0,
         );

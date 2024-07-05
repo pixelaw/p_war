@@ -7,21 +7,21 @@ use starknet::ContractAddress;
 //     arg2: u64,
 // }
 
-#[derive(PartialEq, Copy, Introspect, Drop, Serde, Print)]
-enum ProposalType {
-    Unknown,
-    ToggleAllowedApp,
-    AddNewColor,
-    ExtendGameEndTime,
-    ChangePixelRecovery,
-    ExpandArea,
-    BanPlayerAddress,
-    ChangeMaxPXConfig,
-    ChangeWinnerConfig,
-    ChangePaintCost,
-    ResetToWhiteByCoordinates,
-    ResetToWhiteByColor,
-}
+// #[derive(PartialEq, Copy, Introspect, Drop, Serde, Print)]
+// enum ProposalType {
+//     Unknown,
+//     ToggleAllowedApp,
+//     AddNewColor,
+//     ExtendGameEndTime,
+//     ChangePixelRecovery,
+//     ExpandArea,
+//     BanPlayerAddress,
+//     ChangeMaxPXConfig,
+//     ChangeWinnerConfig,
+//     ChangePaintCost,
+//     ResetToWhiteByCoordinates,
+//     ResetToWhiteByColor,
+// }
 
 
 // #[derive(Model, Copy, Drop, Serde, Print)]
@@ -46,7 +46,7 @@ struct Proposal {
     #[key]
     index: usize,
     author: ContractAddress,
-    proposal_type: ProposalType, // change it from u8
+    proposal_type: u8, // change it from ProposalType is not working...
     target_args_1: u32,
     target_args_2: u32,
     start: u64,
@@ -77,21 +77,21 @@ struct PixelRecoveryRate {
     rate: u64
 }
 
-impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
-    fn into(self: ProposalType) -> felt252 {
-        match self {
-            ProposalType::Unknown => 0,
-            ProposalType::ToggleAllowedApp => 1,
-            ProposalType::AddNewColor => 2,
-            ProposalType::ExtendGameEndTime => 3,
-            ProposalType::ChangePixelRecovery => 4,            
-            ProposalType::ExpandArea => 5,
-            ProposalType::BanPlayerAddress => 6,
-            ProposalType::ChangeMaxPXConfig => 7,
-            ProposalType::ChangeWinnerConfig => 8,
-            ProposalType::ChangePaintCost => 9,
-            ProposalType::ResetToWhiteByCoordinates => 10,
-            ProposalType::ResetToWhiteByColor => 11,
-        }
-    }
-}
+// impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
+//     fn into(self: ProposalType) -> felt252 {
+//         match self {
+//             ProposalType::Unknown => 0,
+//             ProposalType::ToggleAllowedApp => 1,
+//             ProposalType::AddNewColor => 2,
+//             ProposalType::ExtendGameEndTime => 3,
+//             ProposalType::ChangePixelRecovery => 4,            
+//             ProposalType::ExpandArea => 5,
+//             ProposalType::BanPlayerAddress => 6,
+//             ProposalType::ChangeMaxPXConfig => 7,
+//             ProposalType::ChangeWinnerConfig => 8,
+//             ProposalType::ChangePaintCost => 9,
+//             ProposalType::ResetToWhiteByCoordinates => 10,
+//             ProposalType::ResetToWhiteByColor => 11,
+//         }
+//     }
+// }

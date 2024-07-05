@@ -27,6 +27,6 @@ interact 1,1
 
 # fn create_proposal(game_id: usize, proposal_type: ProposalType, target_args_1: u32, target_args_2: u32) -> usize;
 # addNewColor -> 2
-create_proposal 1,2,0 # 2->reset to white
-create_proposal 1,1,1 # 1-> add a color
-create_proposal 1,3,3
+create_proposal 1,2,0,0 # 2->reset to white
+create_proposal 1,1,1,0 # 1-> add a color
+create_proposal 1,3,3,0

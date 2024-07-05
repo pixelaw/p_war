@@ -1,12 +1,12 @@
 use starknet::{ContractAddress, get_caller_address, get_block_timestamp, contract_address_const};
-use p_war::models::{game::{Game, Status}, proposal::{Proposal, ProposalType}};
+use p_war::models::{game::{Game, Status}, proposal::{Proposal}};
 
 use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL_FACTOR};
 
 // define the interface
 #[dojo::interface]
 trait IPropose {
-    fn create_proposal(game_id: usize, proposal_type: ProposalType, target_args_1: u32, target_args_2: u32) -> usize;
+    fn create_proposal(game_id: usize, proposal_type: u8, target_args_1: u32, target_args_2: u32) -> usize;
     fn activate_proposal(game_id: usize, index: usize);
 }
 
@@ -16,7 +16,7 @@ mod propose {
     use super::{IPropose, NEEDED_YES_PX, PROPOSAL_DURATION, DISASTER_SIZE, PROPOSAL_FACTOR};
     use p_war::models::{
         game::{Game, Status, GameTrait},
-        proposal::{Proposal, PixelRecoveryRate, ProposalType},
+        proposal::{Proposal, PixelRecoveryRate},
         board::{GameId, Board, Position, PWarPixel},
         player::{Player},
         allowed_app::AllowedApp,
@@ -35,7 +35,7 @@ mod propose {
     #[abi(embed_v0)]
     impl ProposeImpl of IPropose<ContractState> {
 
-        fn create_proposal(world: IWorldDispatcher, game_id: usize, proposal_type: ProposalType, target_args_1: u32, target_args_2: u32) -> usize {
+        fn create_proposal(world: IWorldDispatcher, game_id: usize, proposal_type: u8, target_args_1: u32, target_args_2: u32) -> usize {
             // get the game
             let mut game = get!(world, game_id, (Game));
             assert(check_game_status(game.status()), 'game is not ongoing');
@@ -120,7 +120,7 @@ mod propose {
 
 
             // activate the proposal.
-            if proposal.proposal_type == ProposalType::AddNewColor {
+            if proposal.proposal_type == 1{
                 // AddNewColor
                 // new feature: if the color is added, the oldest color become unusable.
 
@@ -229,7 +229,7 @@ mod propose {
                         );
                     };
                 };
-            } else if proposal.proposal_type == ProposalType::ResetToWhiteByColor {
+            } else if proposal.proposal_type == 2 {
                 // Reset to white by color
                 let core_actions = get_core_actions(world); // TODO: should we use p_war_actions insted of core_actions???
                 let system = get_caller_address();
@@ -309,7 +309,7 @@ mod propose {
                     };
                     y += 1;
                 };
-            } else if proposal.proposal_type == ProposalType::ExtendGameEndTime {
+            } else if proposal.proposal_type == 3 { // ProposalType::ExtendGameEndTime
                 let mut game = get!(
                     world,
                     (game_id),
@@ -329,7 +329,7 @@ mod propose {
                         game,
                     )
                 );
-            } else if proposal.proposal_type == ProposalType::ExpandArea {
+            } else if proposal.proposal_type == 4 { // ProposalType::ExpandArea
                 let mut board = get!(
                     world,
                     (game_id),
