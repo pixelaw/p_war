@@ -21,6 +21,9 @@ sed -i'' -e "s/version = "$prev_version"/version = "$next_version"/g" ./Scarb.to
 # Update README.md
 sed -i'' -e "s/Version $prev_version/Version $next_version/g" README.md
 
+# Update Docker image version in JSON
+sed -i'' -e "s/\"image\": \"ghcr.io\/pixelaw\/p_war:$prev_version\"/\"image\": \"ghcr.io\/pixelaw\/p_war:$next_version\"/g" devcontainer.json
+
 echo $1 > VERSION
 
 # Uncommented git commands
