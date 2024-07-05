@@ -1,6 +1,6 @@
 {
   "name": "Pixelaw P-WAR",
-  "image": "ghcr.io/pixelaw/p_war:0.3.36",
+  "image": "ghcr.io/pixelaw/p_war:0.3.37",
   "forwardPorts": [
     5050,
     8080,
