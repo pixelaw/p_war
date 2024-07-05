@@ -46,7 +46,7 @@ struct Proposal {
     #[key]
     index: usize,
     author: ContractAddress,
-    proposal_type: u8, // don't use ProposalTYpe
+    proposal_type: ProposalType, // change it from u8
     target_color: u32,
     start: u64,
     end: u64,
@@ -76,21 +76,21 @@ struct PixelRecoveryRate {
     rate: u64
 }
 
-// impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
-//     fn into(self: ProposalType) -> felt252 {
-//         match self {
-//             ProposalType::Unknown => 0,
-//             ProposalType::ToggleAllowedApp => 1,
-//             ProposalType::AddNewColor => 2,
-//             ProposalType::ChangeGameDuration => 3,
-//             ProposalType::ChangePixelRecovery => 4,            
-//             ProposalType::ExpandArea => 5,
-//             ProposalType::BanPlayerAddress => 6,
-//             ProposalType::ChangeMaxPXConfig => 7,
-//             ProposalType::ChangeWinnerConfig => 8,
-//             ProposalType::ChangePaintCost => 9,
-//             ProposalType::ResetToWhiteByCoordinates => 10,
-//             ProposalType::ResetToWhiteByColor => 11,
-//         }
-//     }
-// }
+impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
+    fn into(self: ProposalType) -> felt252 {
+        match self {
+            ProposalType::Unknown => 0,
+            ProposalType::ToggleAllowedApp => 1,
+            ProposalType::AddNewColor => 2,
+            ProposalType::ChangeGameDuration => 3,
+            ProposalType::ChangePixelRecovery => 4,            
+            ProposalType::ExpandArea => 5,
+            ProposalType::BanPlayerAddress => 6,
+            ProposalType::ChangeMaxPXConfig => 7,
+            ProposalType::ChangeWinnerConfig => 8,
+            ProposalType::ChangePaintCost => 9,
+            ProposalType::ResetToWhiteByCoordinates => 10,
+            ProposalType::ResetToWhiteByColor => 11,
+        }
+    }
+}

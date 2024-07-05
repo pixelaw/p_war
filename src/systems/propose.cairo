@@ -1,12 +1,12 @@
 use starknet::{ContractAddress, get_caller_address, get_block_timestamp, contract_address_const};
-use p_war::models::{game::{Game, Status}, proposal::{Proposal}};
+use p_war::models::{game::{Game, Status}, proposal::{Proposal, ProposalType}};
 
 use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL_FACTOR};
 
 // define the interface
 #[dojo::interface]
 trait IPropose {
-    fn create_proposal(game_id: usize, proposal_type: u8, target_color: u32) -> usize;
+    fn create_proposal(game_id: usize, proposal_type: ProposalType, target_color: u32) -> usize;
     fn activate_proposal(game_id: usize, index: usize);
 }
 
@@ -16,7 +16,7 @@ mod propose {
     use super::{IPropose, NEEDED_YES_PX, PROPOSAL_DURATION, DISASTER_SIZE, PROPOSAL_FACTOR};
     use p_war::models::{
         game::{Game, Status, GameTrait},
-        proposal::{Proposal, PixelRecoveryRate},
+        proposal::{Proposal, PixelRecoveryRate, ProposalType},
         board::{GameId, Board, Position, PWarPixel},
         player::{Player},
         allowed_app::AllowedApp,
@@ -35,7 +35,7 @@ mod propose {
     #[abi(embed_v0)]
     impl ProposeImpl of IPropose<ContractState> {
 
-        fn create_proposal(world: IWorldDispatcher, game_id: usize, proposal_type: u8, target_color: u32) -> usize {
+        fn create_proposal(world: IWorldDispatcher, game_id: usize, proposal_type: ProposalType, target_color: u32) -> usize {
             // get the game
             let mut game = get!(world, game_id, (Game));
             assert(check_game_status(game.status()), 'game is not ongoing');
@@ -119,7 +119,7 @@ mod propose {
 
 
             // activate the proposal.
-            if proposal.proposal_type == 1 {
+            if proposal.proposal_type == ProposalType::AddNewColor {
                 // AddNewColor
                 // new feature: if the color is added, the oldest color become unusable.
 
@@ -228,7 +228,7 @@ mod propose {
                         );
                     };
                 };
-            } else if proposal.proposal_type == 2 {
+            } else if proposal.proposal_type == ProposalType::ResetToWhiteByColor {
                 // Reset to white by color
                 let core_actions = get_core_actions(world); // TODO: should we use p_war_actions insted of core_actions???
                 let system = get_caller_address();
