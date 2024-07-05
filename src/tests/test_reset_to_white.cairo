@@ -13,7 +13,7 @@ mod tests {
         models::{
             game::{Game, game},
             board::{Board, GameId, Position, board, game_id},
-            proposal::{Proposal},
+            proposal::{Proposal, ProposalType},
             allowed_app::AllowedApp,
             allowed_color::AllowedColor,
         },
@@ -125,7 +125,7 @@ mod tests {
 
         let index = propose_system.create_proposal(
             game_id: id,
-            proposal_type: 2,
+            proposal_type: ProposalType::ResetToWhiteByColor,
             target_color: target_color,
         );
 
