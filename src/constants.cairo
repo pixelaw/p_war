@@ -40,8 +40,8 @@ const BASE_COST: u32 = 1;
 
 // # For Governance
 const PROPOSAL_FACTOR: u32 = 5;
-const PROPOSAL_DURATION: u64 = 60; // 1 min in seconds.
-// const PROPOSAL_DURATION: u64 = 0; // 0 for sozo test.
+// const PROPOSAL_DURATION: u64 = 60; // 1 min in seconds.
+const PROPOSAL_DURATION: u64 = 0; // 0 for sozo test.
 const NEEDED_YES_PX: u32 = 1;
 
 // for additional rules

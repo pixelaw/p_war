@@ -329,7 +329,20 @@ mod propose {
                         game,
                     )
                 );
-
+            } else if proposal.proposal_type == ProposalType::ExpandArea {
+                let mut board = get!(
+                    world,
+                    (game_id),
+                    (Board)
+                );
+                board.width += proposal.target_args_1.try_into().unwrap();
+                board.height += proposal.target_args_2.try_into().unwrap();
+                set!(
+                    world,
+                    (
+                        board,
+                    )
+                );
             } else {
                 return;
             };
