@@ -1491,7 +1491,7 @@
               "type": "()"
             },
             {
-              "name": "ChangeGameDuration",
+              "name": "ExtendGameEndTime",
               "type": "()"
             },
             {
@@ -5400,7 +5400,7 @@
               "type": "()"
             },
             {
-              "name": "ChangeGameDuration",
+              "name": "ExtendGameEndTime",
               "type": "()"
             },
             {

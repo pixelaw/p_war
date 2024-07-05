@@ -6,7 +6,7 @@ use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL
 // define the interface
 #[dojo::interface]
 trait IPropose {
-    fn create_proposal(game_id: usize, proposal_type: ProposalType, target_color: u32) -> usize;
+    fn create_proposal(game_id: usize, proposal_type: ProposalType, target_args_1: u32, target_args_2: u32) -> usize;
     fn activate_proposal(game_id: usize, index: usize);
 }
 
@@ -35,7 +35,7 @@ mod propose {
     #[abi(embed_v0)]
     impl ProposeImpl of IPropose<ContractState> {
 
-        fn create_proposal(world: IWorldDispatcher, game_id: usize, proposal_type: ProposalType, target_color: u32) -> usize {
+        fn create_proposal(world: IWorldDispatcher, game_id: usize, proposal_type: ProposalType, target_args_1: u32, target_args_2: u32) -> usize {
             // get the game
             let mut game = get!(world, game_id, (Game));
             assert(check_game_status(game.status()), 'game is not ongoing');
@@ -65,7 +65,8 @@ mod propose {
                 index: game.proposal_idx,
                 author: get_caller_address(),
                 proposal_type: proposal_type,
-                target_color: target_color,
+                target_args_1: target_args_1,
+                target_args_2: target_args_2,
                 start: get_block_timestamp(),
                 end: get_block_timestamp() + PROPOSAL_DURATION,
                 yes_px: 0,
@@ -123,7 +124,7 @@ mod propose {
                 // AddNewColor
                 // new feature: if the color is added, the oldest color become unusable.
 
-                let new_color: u32 = proposal.target_color;
+                let new_color: u32 = proposal.target_args_1;
                 let mut new_color_allowed = get!(world, (game_id, new_color), (AllowedColor));
 
                 // only change it if it's not allowed
@@ -242,7 +243,7 @@ mod propose {
 
                 let origin: Position = board.origin;
 
-                let target_color: u32 = proposal.target_color;
+                let target_args_1: u32 = proposal.target_args_1;
                 let mut y: u32 = origin.y;
 
 
@@ -262,7 +263,7 @@ mod propose {
                             (Pixel)
                         );
 
-                        if pixel_info.color == target_color {
+                        if pixel_info.color == target_args_1 {
                             // make it white
                             core_actions
                                 .update_pixel(
@@ -308,6 +309,20 @@ mod propose {
                     };
                     y += 1;
                 };
+            } else if proposal.proposal_type == ProposalType::ExtendGameEndTime {
+                let mut game = get!(
+                    world,
+                    (game_id),
+                    (Game)
+                );
+                let mut board = get!(
+                    world,
+                    (game_id),
+                    (Board)
+                );
+
+                game.end += proposal.target_args_1.into();
+
             } else {
                 return;
             };

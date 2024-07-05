@@ -75,7 +75,7 @@
         "type": "()"
       },
       {
-        "name": "ChangeGameDuration",
+        "name": "ExtendGameEndTime",
         "type": "()"
       },
       {

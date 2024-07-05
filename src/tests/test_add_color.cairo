@@ -111,7 +111,8 @@ mod tests {
         let index = propose_system.create_proposal(
             game_id: id,
             proposal_type: ProposalType::AddNewColor,
-            target_color: NEW_COLOR,
+            target_args_1: NEW_COLOR,
+            target_args_2: 0,
         );
 
         // let game = get!(
