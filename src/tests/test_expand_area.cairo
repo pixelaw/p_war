@@ -24,6 +24,8 @@ mod tests {
         }
     };
 
+    use p_war::constants::{DEFAULT_AREA};
+
     use pixelaw::core::{
         models::{
             permissions::permissions,
@@ -43,7 +45,7 @@ mod tests {
 
     #[test]
     #[available_gas(999_999_999)]
-    fn test_add_color() {
+    fn test_expand_area() {
         // caller
         let caller = starknet::contract_address_const::<0x0>();
 
@@ -100,31 +102,11 @@ mod tests {
         let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
 
-        let NEW_COLOR: u32 = 0xAABBCCFF;
-
-        // let args = Args{
-        //     address: starknet::contract_address_const::<0x0>(),
-        //     arg1: NEW_COLOR.into(),
-        //     arg2: 0,
-        // }; 
-
         let index = propose_system.create_proposal(
             game_id: id,
-            proposal_type: ProposalType::AddNewColor,
-            target_args_1: NEW_COLOR,
-            target_args_2: 0,
-        );
-
-        // let game = get!(
-        //     world,
-        //     (id),
-        //     (Game)
-        // );
-
-        let oldest_color_palette = get!(
-            world,
-            (id, 0),
-            (PaletteColors)
+            proposal_type: ProposalType::ExpandArea,
+            target_args_1: 20,
+            target_args_2: 30,
         );
 
 
@@ -141,29 +123,13 @@ mod tests {
         propose_system.activate_proposal(id, index);
 
 
-        // call place_pixel
-        let new_params = DefaultParameters{
-            for_player: caller,
-            for_system: caller,
-            position: PixelawPosition {
-                x: 1,
-                y: 1
-            },
-            color: NEW_COLOR
-        };
-
-        actions_system.interact(new_params);
-
-        // check if the oldest color is unusable
-        let oldest_color_allowed = get!(
+        let board = get!(
             world,
-            (id, oldest_color_palette.color),
-            (AllowedColor)
+            (id),
+            (Board)
         );
 
-        print!("\n@@@@@ OLDEST_ALLOWED: {}, {} @@@@\n", oldest_color_palette.color, oldest_color_allowed.is_allowed);
-
-        assert(oldest_color_allowed.is_allowed == false, 'the oldest became unusable');
-
+        assert(board.width == DEFAULT_AREA + 20, 'game area extended');
+        assert(board.height == DEFAULT_AREA + 30, 'game area extended');
     }
 }

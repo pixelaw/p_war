@@ -48,5 +48,4 @@ echo "Initializing p_war"
 # # initialize p_war_actions
 sozo execute 0x2dc8bfc2e33f2e6966cbd9c2e0856d63250549c2a8258884cacb7ba35c427de init
 
-
 # echo "Default authorizations have been successfully set."

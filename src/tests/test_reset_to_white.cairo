@@ -99,7 +99,7 @@ mod tests {
 
 
         // paint a color one
-        let target_color: u32 = 0xFF0000FF;
+        let target_args_1: u32 = 0xFF0000FF;
         let paint_params = DefaultParameters{
             for_player: caller,
             for_system: caller,
@@ -107,7 +107,7 @@ mod tests {
                 x: 1,
                 y: 2
             },
-            color: target_color
+            color: target_args_1
         };
         
 
@@ -119,14 +119,15 @@ mod tests {
 
         // let args = Args{
         //     address: starknet::contract_address_const::<0x0>(),
-        //     arg1: target_color.into(),
+        //     arg1: target_args_1.into(),
         //     arg2: 0,
         // }; 
 
         let index = propose_system.create_proposal(
             game_id: id,
             proposal_type: ProposalType::ResetToWhiteByColor,
-            target_color: target_color,
+            target_args_1: target_args_1,
+            target_args_2: 0
         );
 
 
