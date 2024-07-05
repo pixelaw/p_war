@@ -315,13 +315,20 @@ mod propose {
                     (game_id),
                     (Game)
                 );
-                let mut board = get!(
-                    world,
-                    (game_id),
-                    (Board)
-                );
+                // let mut board = get!(
+                //     world,
+                //     (game_id),
+                //     (Board)
+                // );
 
                 game.end += proposal.target_args_1.into();
+
+                set!(
+                    world,
+                    (
+                        game,
+                    )
+                );
 
             } else {
                 return;
