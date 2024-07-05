@@ -32,9 +32,9 @@ const OUT_OF_BOUNDS_GAME_ID: usize = 9999;
 const GAME_ID: usize = 1;
 const INITIAL_COLOR: u32 = 0xFFFFFFFF;
 const DEFAULT_AREA: u32 = 16;
-const DEFAULT_PX: u32 = 100000;
+const DEFAULT_PX: u32 = 10;
 const MAX_COLOR_SIZE: usize = 9;
-const GAME_DURATION: u64 = 15 * 60 * 60; // 15 minutes in seconds
+const GAME_DURATION: u64 = 15 * 60; // 15 minutes in seconds
 const DEFAULT_RECOVERY_RATE: u64 = 10; // 10 secs to recover 1PX
 const BASE_COST: u32 = 1;
 
