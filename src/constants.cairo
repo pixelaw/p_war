@@ -12,7 +12,7 @@ const OUT_OF_BOUNDS_GAME_ID: usize = 9999;
 // ####################################
 // # Initial settings
 const INITIAL_COLOR: u32 = 0xFFFFFFFF;
-const DEFAULT_AREA: u32 = 10; // changed from 5
+const DEFAULT_AREA: u32 = 32;
 const DEFAULT_PX: u32 = 10;
 const MAX_COLOR_SIZE: usize = 9;
 const GAME_DURATION: u64 = 259200; // 3 days in seconds for EthCC
