@@ -1,5 +1,5 @@
 use starknet::{ContractAddress, get_caller_address, get_block_timestamp, contract_address_const};
-use p_war::models::{game::{Game, Status}, proposal::{Proposal}};
+use p_war::models::{game::{Game, Status}, proposal::{Proposal}, board::Position};
 
 use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL_FACTOR};
 
@@ -7,7 +7,7 @@ use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL
 #[dojo::interface]
 trait IPropose {
     fn create_proposal(game_id: usize, proposal_type: u8, target_args_1: u32, target_args_2: u32) -> usize;
-    fn activate_proposal(game_id: usize, index: usize);
+    fn activate_proposal(game_id: usize, index: usize, clear_data: Span<Position>);
 }
 
 // dojo decorator
@@ -103,7 +103,7 @@ mod propose {
         }
 
 
-        fn activate_proposal(world: IWorldDispatcher, game_id: usize, index: usize){
+        fn activate_proposal(world: IWorldDispatcher, game_id: usize, index: usize, clear_data: Span<Position>){
             // get the proposal
             let mut proposal = get!(world, (game_id, index), (Proposal));
             let game = get!(
@@ -233,81 +233,73 @@ mod propose {
                 // Reset to white by color
                 let core_actions = get_core_actions(world); // TODO: should we use p_war_actions insted of core_actions???
                 let system = get_caller_address();
-                
-                // get the size of board
-                let mut board = get!(
-                    world,
-                    (game_id),
-                    (Board)
-                );
-
-                let origin: Position = board.origin;
 
                 let target_args_1: u32 = proposal.target_args_1;
-                let mut y: u32 = origin.y;
+
+                let mut idx: usize = 0;
 
 
                 loop {
-                    if (y >= origin.y + board.height) {
-                        break;
-                    };
-                    let mut x: u32 = origin.x;
-                    loop {
-                        if (x >= origin.x + board.width) {
-                            break;
-                        };
 
-                        let pixel_info = get!(
+                    let pixel_to_clear = clear_data.get(idx);
+
+                    if let Option::None = pixel_to_clear {
+                        break;
+                    }
+
+                    let pixel_to_clear = *clear_data.at(idx);
+
+                    let pixel_info = get!(
+                        world,
+                        (pixel_to_clear.x, pixel_to_clear.y),
+                        (Pixel)
+                    );
+
+                    if pixel_info.color == target_args_1 {
+
+                        // make it white
+                        core_actions
+                            .update_pixel(
+                                get_caller_address(), // is it okay?
+                                system,
+                                PixelUpdate {
+                                    x: pixel_to_clear.x,
+                                    y: pixel_to_clear.y,
+                                    color: Option::Some(0xffffffff),
+                                    timestamp: Option::None,
+                                    text: Option::None,
+                                    app: Option::Some(system),
+                                    owner: Option::None,
+                                    action: Option::None
+                                }
+                            );
+                        
+                        // decrease the previous owner's num_owns
+                        let position = Position {x: pixel_to_clear.x, y: pixel_to_clear.y};
+                        let previous_pwarpixel = get!(
                             world,
-                            (x, y),
-                            (Pixel)
+                            (position),
+                            (PWarPixel)
                         );
 
-                        if pixel_info.color == target_args_1 {
-                            // make it white
-                            core_actions
-                                .update_pixel(
-                                    get_caller_address(), // is it okay?
-                                    system,
-                                    PixelUpdate {
-                                        x,
-                                        y,
-                                        color: Option::Some(0xffffffff),
-                                        timestamp: Option::None,
-                                        text: Option::None,
-                                        app: Option::Some(system),
-                                        owner: Option::None,
-                                        action: Option::None
-                                    }
-                                );
-                            
-                            // decrease the previous owner's num_owns
-                            let position = Position {x, y};
-                            let previous_pwarpixel = get!(
+                        if (previous_pwarpixel.owner != starknet::contract_address_const::<0x0>()) {
+                            // get the previous player's info
+                            let mut previous_player = get!(
                                 world,
-                                (position),
-                                (PWarPixel)
+                                (previous_pwarpixel.owner),
+                                (Player)
                             );
 
-                            if (previous_pwarpixel.owner != starknet::contract_address_const::<0x0>()) {
-                                // get the previous player's info
-                                let mut previous_player = get!(
-                                    world,
-                                    (previous_pwarpixel.owner),
-                                    (Player)
-                                );
-
-                                previous_player.num_owns -= 1;
-                                set!(
-                                    world,
-                                    (previous_player)
-                                );
-                            };
-
+                            previous_player.num_owns -= 1;
+                            set!(
+                                world,
+                                (previous_player)
+                            );
                         };
-                        x += 1;
+
                     };
-                    y += 1;
+                    idx += 1;
+
                 };
             } else if proposal.proposal_type == 3 { // ProposalType::ExtendGameEndTime
                 let mut game = get!(
