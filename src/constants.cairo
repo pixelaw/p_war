@@ -16,7 +16,7 @@ const INITIAL_COLOR: u32 = 0xFFFFFFFF;
 const DEFAULT_AREA: u32 = 32;
 const DEFAULT_PX: u32 = 10;
 const MAX_COLOR_SIZE: usize = 9;
-const GAME_DURATION: u64 = 259200; // 3 days in seconds for EthCC
+const GAME_DURATION: u64 = 259200 + 3600; // 3 days + 1 hour in seconds for EthCC
 const DEFAULT_RECOVERY_RATE: u64 = 180; // 3 mins to recover 1PX
 const BASE_COST: u32 = 1;
 
