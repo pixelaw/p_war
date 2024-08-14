@@ -17,12 +17,12 @@ const DEFAULT_AREA: u32 = 32;
 const DEFAULT_PX: u32 = 10;
 const MAX_COLOR_SIZE: usize = 9;
 const GAME_DURATION: u64 = 259200 + 3600; // 3 days + 1 hour in seconds for EthCC
-const DEFAULT_RECOVERY_RATE: u64 = 180; // 3 mins to recover 1PX
+const DEFAULT_RECOVERY_RATE: u64 = 5; // 3 mins to recover 1PX
 const BASE_COST: u32 = 1;
 
 // # For Governance
 const PROPOSAL_FACTOR: u32 = 6;
-const PROPOSAL_DURATION: u64 = 60 * 60 * 3; // 3 hours in seconds.
+const PROPOSAL_DURATION: u64 = 60; // 3 hours in seconds.
 const NEEDED_YES_PX: u32 = 1;
 
 // for additional rules
