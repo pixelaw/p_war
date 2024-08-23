@@ -14,6 +14,7 @@ trait IActions {
     fn get_game_id(position: Position) -> usize;
     fn place_pixel(app: ContractAddress, default_params: DefaultParameters);
     fn update_pixel(pixel_update: PixelUpdate);
+    fn check_for_snap(app: ContractAddress, default_params: DefaultParameters); // A snap is when a player successfully connects a shape of pixels.
     fn end_game(game_id: usize);
 }
 
@@ -360,6 +361,8 @@ mod p_war_actions {
 
             app.set_pixel(default_params);
 
+            check_for_snap(app, default_params);
+
             set!(
                 world,
                 (Player{
@@ -413,6 +416,64 @@ mod p_war_actions {
             
 
             update_max_px(world, game_id, player.address);
+        }
+
+        // checks and completes a snap.
+        fn check_for_snap(world: IWorldDispatcher, app: ContractAddress, default_params: DefaultParameters) {
+            let position = Position { x: default_params.position.x, y: default_params.position.y };
+            let game_id = self.get_game_id(position);
+            let player_address = get_tx_info().unbox().account_contract_address;
+
+            // Get the current pixel
+            let current_pixel = get!(world, (position), (PWarPixel));
+            assert(current_pixel.owner == player_address, 'Not the pixel owner');
+
+            // Check for a closed shape
+            let (is_closed, pixels_to_fill) = find_closed_shape(world, position, player_address, default_params.color);
+
+            if is_closed {
+                // Fill the shape
+                fill_shape(world, pixels_to_fill, player_address, default_params.color);
+            }
+        }
+
+        // Helper function to find a closed shape
+        fn find_closed_shape(world: IWorldDispatcher, start: Position, owner: ContractAddress, color: u32) -> (bool, Array<Position>) {
+            // Implement flood fill algorithm to find connected pixels
+            // Return true if a closed shape is found, along with the pixels to fill
+        }
+
+        // Helper function to fill the shape
+        fn fill_shape(world: IWorldDispatcher, pixels: Array<Position>, owner: ContractAddress, color: u32) {
+            // Iterate through pixels and update them
+            let mut i = 0;
+            loop {
+                if i >= pixels.len() {
+                    break;
+                }
+                let pixel = *pixels.at(i);
+                set!(
+                    world,
+                    (PWarPixel {
+                        position: pixel,
+                        owner: owner
+                    })
+                );
+                // Update the pixel color using your existing update_pixel function
+                self.update_pixel(
+                    PixelUpdate {
+                        x: pixel.x,
+                        y: pixel.y,
+                        color: Option::Some(color),
+                        timestamp: Option::None,
+                        text: Option::None,
+                        app: Option::None,
+                        owner: Option::Some(owner),
+                        action: Option::None
+                    }
+                );
+                i += 1;
+            };
         }
 
         // only use for expand areas.
