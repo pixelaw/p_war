@@ -14,6 +14,7 @@ struct Game {
     coeff_commits: u32,
     winner_config: u32, // optimally, set by contract address.
     winner: ContractAddress,
+    guild_count: usize,
 }
 
 #[derive(PartialEq, Copy, Drop, Serde)]

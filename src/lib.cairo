@@ -4,6 +4,7 @@ mod systems {
     mod voting;
     mod apps;
     mod utils;
+    mod guilds;
 }
 
 mod models {
@@ -13,6 +14,7 @@ mod models {
     mod game;
     mod proposal;
     mod player;
+    mod guild;
 }
 
 mod tests {
