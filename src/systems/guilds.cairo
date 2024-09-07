@@ -4,10 +4,10 @@ use p_war::models::game::Game;
 
 #[dojo::interface]
 trait IGuild {
-    fn create_guild(game_id: usize, guild_name: felt252) -> usize;
+    fn create_guild(game_id: usize, guild_name: felt252) -> usize; //returns guild ID
     fn add_member(game_id: usize, guild_id: usize, member: ContractAddress);
     fn remove_member(game_id: usize, guild_id: usize, member: ContractAddress);
-
+}
 
 #[dojo::contract]
 mod guild_actions {
@@ -23,6 +23,7 @@ mod guild_actions {
 
             // Use the current guild_count as the new guild_id
             let guild_id = game.guild_count;
+            game.guild_ids.append(guild_id);
             game.guild_count += 1;
 
             // Create the new guild
@@ -40,7 +41,7 @@ mod guild_actions {
             guild_id
         }
 
-        fn add_member(world: IWorldDispatcher, game_id: usize, guild_id: usize, member: ContractAddress) {
+        fn add_member(world: IWorldDispatcher, game_id: usize, guild_id: usize, new_member: ContractAddress) {
             let caller = get_caller_address();
             
             // Get the guild
@@ -50,12 +51,10 @@ mod guild_actions {
             assert(guild.creator == caller, 'Only creator can add members');
 
             // Check if the member is not already in the guild
-            assert(!guild.members.contains(member), 'Member already in guild');
+            assert(!guild.members.contains(new_member), 'New Member already in guild');
 
             // Add the new member
-            let mut new_members = guild.members.to_array();
-            new_members.append(member);
-            guild.members = new_members.span();
+            guild.members.append(new_member);
 
             // Save the updated guild
             set!(world, (guild));
@@ -74,18 +73,18 @@ mod guild_actions {
             assert(guild.members.contains(member), 'Member not in guild');
 
             // Remove the member
-            let mut new_members = ArrayTrait::new();
+            let mut updated_members = ArrayTrait::new();
             let mut i = 0;
             loop {
                 if i == guild.members.len() {
                     break;
                 }
                 if *guild.members.at(i) != member {
-                    new_members.append(*guild.members.at(i));
+                    updated_members.append(*guild.members.at(i));
                 }
                 i += 1;
             };
-            guild.members = new_members.span();
+            guild.members = updated_members.span();
 
             // Save the updated guild
             set!(world, (guild));
