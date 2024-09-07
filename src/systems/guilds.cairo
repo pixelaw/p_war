@@ -1,12 +1,14 @@
 use starknet::{ContractAddress, get_caller_address};
 use p_war::models::guilds::Guild;
 use p_war::models::game::Game;
+use p_war::models::player::Player;
 
 #[dojo::interface]
 trait IGuild {
     fn create_guild(game_id: usize, guild_name: felt252) -> usize; //returns guild ID
     fn add_member(game_id: usize, guild_id: usize, member: ContractAddress);
     fn remove_member(game_id: usize, guild_id: usize, member: ContractAddress);
+    fn get_guild_points(game_id: usize, guild_id: usize) -> usize;
 }
 
 #[dojo::contract]
@@ -35,6 +37,9 @@ mod guild_actions {
                 members: array![caller].span()
             };
 
+            //set member count to 1
+            new_guild.member_count+= 1;
+
             // Save the guild and update the game
             set!(world, (new_guild, game));
 
@@ -55,6 +60,9 @@ mod guild_actions {
 
             // Add the new member
             guild.members.append(new_member);
+            
+            //update member count
+            guild.member_count += 1;
 
             // Save the updated guild
             set!(world, (guild));
@@ -76,7 +84,7 @@ mod guild_actions {
             let mut updated_members = ArrayTrait::new();
             let mut i = 0;
             loop {
-                if i == guild.members.len() {
+                if i == guild.member_count {
                     break;
                 }
                 if *guild.members.at(i) != member {
@@ -88,6 +96,26 @@ mod guild_actions {
 
             // Save the updated guild
             set!(world, (guild));
+        }
+
+        //this function is very inefficient. better implementation is updating guild points when member points are updated.
+        fn get_guild_points(world: IWorldDispatcher, game_id: usize, guild_id: usize) -> usize {
+            // Get the guild
+            let mut guild = get!(world, (game_id, guild_id), (Guild));
+
+            let mut guild_total_points;
+            let mut i = 0;
+            loop {
+                if i >= guild.member_count {
+                    break;
+                }
+                let mut player = get!(
+                    world,
+                    (*guild.members.at(i), game_id),
+                    (Player)
+                );
+                guild_total_points += player.num_commit;
+            }
         }
     }
 }

@@ -9,4 +9,5 @@ struct Guild {
     guild_name: felt252,
     creator: ContractAddress,
     members: Vec<ContractAddress>
+    member_count: usize;
 }
