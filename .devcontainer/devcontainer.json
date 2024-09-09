@@ -32,9 +32,10 @@
       // Set *default* container specific settings.json values on container create.
       "settings": {
         "cairo1.enableLanguageServer": true,
+        "cairo1.languageServerPath": "${userHome}/.asdf/installs/dojo/1.0.0-alpha.11/bin/dojo-language-server",
         "cairo1.enableScarb": true,
-        "cairo1.languageServerPath": "/root/.dojo/dojo-language-server",
-        "cairo1.scarbPath": "/root/.local/bin/scarb",
+        "cairo1.scarbPath": "${userHome}/.asdf/installs/scarb/2.7.0/bin/scarb",
+        "cairo1.preferScarbLanguageServer": false,
         "lldb.executable": "/usr/bin/lldb",
         // VS Code don't watch files under ./target
         "files.watcherExclude": {

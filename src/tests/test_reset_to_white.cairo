@@ -1,9 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use starknet::{
-        class_hash::Felt252TryIntoClassHash,
-        ContractAddress
-    };
+    use starknet::{class_hash::Felt252TryIntoClassHash, ContractAddress};
     // import world dispatcher
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
     // import test utils
@@ -11,11 +8,10 @@ mod tests {
     // import test utils
     use p_war::{
         models::{
-            game::{Game, game},
-            board::{Board, GameId, Position, board, game_id},
-            proposal::{Proposal},
-            allowed_app::AllowedApp,
-            allowed_color::AllowedColor,
+            game::{Game, game}, board::{Board, GameId, board, game_id, p_war_pixel},
+            proposal::{Proposal, pixel_recovery_rate}, 
+            allowed_app::{AllowedApp, allowed_app},
+            allowed_color::{AllowedColor, allowed_color, palette_colors, in_palette, game_palette}, 
         },
         systems::{
             actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
@@ -26,17 +22,14 @@ mod tests {
 
     use pixelaw::core::{
         models::{
-            permissions::permissions,
-            pixel::{pixel, Pixel, PixelUpdate},
-            queue::queue_item,
+            permissions::permissions, pixel::{pixel, Pixel, PixelUpdate}, queue::queue_item,
             registry::{app, app_user, app_name, core_actions_address, instruction}
         },
         actions::{
-            actions as core_actions,
-            IActionsDispatcher as ICoreActionsDispatcher,
+            actions as core_actions, IActionsDispatcher as ICoreActionsDispatcher,
             IActionsDispatcherTrait as ICoreActionsDispatcherTrait
         },
-        utils::{DefaultParameters, Position as PixelawPosition}
+        utils::{DefaultParameters, Position }
     };
 
     const COLOR: u32 = 0xFFFFFFFF;
@@ -53,97 +46,110 @@ mod tests {
             app_name::TEST_CLASS_HASH,
             app_user::TEST_CLASS_HASH,
             core_actions_address::TEST_CLASS_HASH,
-            core_actions_address::TEST_CLASS_HASH,
             permissions::TEST_CLASS_HASH,
             queue_item::TEST_CLASS_HASH,
-
             game::TEST_CLASS_HASH,
             board::TEST_CLASS_HASH,
-            game_id::TEST_CLASS_HASH
+            game_id::TEST_CLASS_HASH,
+            p_war_pixel::TEST_CLASS_HASH,
+            allowed_app::TEST_CLASS_HASH,
+            allowed_color::TEST_CLASS_HASH,
+            palette_colors::TEST_CLASS_HASH, 
+            in_palette::TEST_CLASS_HASH,
+            game_palette::TEST_CLASS_HASH,
+            pixel_recovery_rate::TEST_CLASS_HASH
         ];
 
         // deploy world with models
         let world = spawn_test_world(["pixelaw"].span(), models.into());
 
-        let core_actions_contract_address = world
+        let core_actions_address = world
             .deploy_contract('salt', core_actions::TEST_CLASS_HASH.try_into().unwrap());
-        let core_actions = ICoreActionsDispatcher { contract_address: core_actions_contract_address };
+
+        let core_actions = ICoreActionsDispatcher { contract_address: core_actions_address };
+
+
+
+        // deploy systems contract
+        let p_war_actions_address = world
+            .deploy_contract('salty', p_war_actions::TEST_CLASS_HASH.try_into().unwrap());
+        let p_war_actions = IActionsDispatcher { contract_address: p_war_actions_address };
+
+        let propose_address = world
+            .deploy_contract('salty1', propose::TEST_CLASS_HASH.try_into().unwrap());
+        let propose = IProposeDispatcher { contract_address: propose_address };
+
+        let voting_address = world
+            .deploy_contract('salty2', voting::TEST_CLASS_HASH.try_into().unwrap());
+        let voting = IVotingDispatcher { contract_address: voting_address };
+
+
+
+        world.grant_writer(selector_from_tag!("pixelaw-App"), core_actions_address);
+        world.grant_writer(selector_from_tag!("pixelaw-AppName"), core_actions_address);
+        world.grant_writer(selector_from_tag!("pixelaw-CoreActionsAddress"), core_actions_address);
+
+        world.grant_writer(selector_from_tag!("pixelaw-Game"), p_war_actions_address);
+        world.grant_writer(selector_from_tag!("pixelaw-Board"), p_war_actions_address);
+        world.grant_writer(selector_from_tag!("pixelaw-AllowedColor"), p_war_actions_address);
+        world.grant_writer(selector_from_tag!("pixelaw-PaletteColors"), p_war_actions_address);
+        world.grant_writer(selector_from_tag!("pixelaw-PixelRecoveryRate"), p_war_actions_address);
+        world.grant_writer(selector_from_tag!("pixelaw-InPalette"), p_war_actions_address);
+        world.grant_writer(selector_from_tag!("pixelaw-GamePalette"), p_war_actions_address);
 
         core_actions.init();
 
-        // deploy systems contract
-        let contract_address = world
-            .deploy_contract('salty', p_war_actions::TEST_CLASS_HASH.try_into().unwrap());
-        let actions_system = IActionsDispatcher { contract_address };
 
-        let propose_contract_address = world
-            .deploy_contract('salty1', propose::TEST_CLASS_HASH.try_into().unwrap());
-        let propose_system = IProposeDispatcher { contract_address: propose_contract_address };
+        let position = Position{x: 1, y:1};
 
-        let voting_contract_address = world
-            .deploy_contract('salty2', voting::TEST_CLASS_HASH.try_into().unwrap());
-        let voting_system = IVotingDispatcher { contract_address: voting_contract_address };
-
-        let default_params = DefaultParameters{
+        let default_params = DefaultParameters {
             for_player: caller,
             for_system: caller,
-            position: PixelawPosition {
-                x: 0,
-                y: 0
-            },
+            position,
             color: COLOR
         };
-        
+println!("1");
         // create a game
-        actions_system.interact(default_params);
-
-
+        p_war_actions.interact(default_params);
+        println!("2");
         // paint a color one
         let target_args_1: u32 = 0xFF0000FF;
-        let paint_params = DefaultParameters{
+        let paint_params = DefaultParameters {
             for_player: caller,
             for_system: caller,
-            position: PixelawPosition {
-                x: 1,
-                y: 2
-            },
+            position: Position { x: 1, y: 2 },
             color: target_args_1
         };
-        
 
-        actions_system.interact(paint_params);
+        p_war_actions.interact(paint_params);
 
-        let id = actions_system.get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
+        let id = p_war_actions
+            .get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
         print!("id = {}", id);
-        
 
         // let args = Args{
         //     address: starknet::contract_address_const::<0x0>(),
         //     arg1: target_args_1.into(),
         //     arg2: 0,
-        // }; 
+        // };
 
-        let index = propose_system.create_proposal(
-            game_id: id,
-            proposal_type: 2,
-            target_args_1: target_args_1,
-            target_args_2: 0
-        );
-
+        let index = propose
+            .create_proposal(
+                game_id: id, proposal_type: 2, target_args_1: target_args_1, target_args_2: 0
+            );
 
         // let index = propose_system.toggle_allowed_color(id, NEW_COLOR);
         let vote_px = 3;
-        voting_system.vote(id, index, vote_px, true);
+        voting.vote(id, index, vote_px, true);
 
         let proposal = get!(world, (id, index), (Proposal));
 
         print!("\n## PROPOSAL INFO ##\n");
-        
+
         print!("Proposal end: {}\n", proposal.end);
 
         // TODO: should add cheat code to spend time
-        propose_system.activate_proposal(id, index, array![default_params.position].into());
-
+        propose.activate_proposal(id, index, array![default_params.position].into());
 
         // check if the disaster happens.
 
@@ -152,15 +158,11 @@ mod tests {
         //     (id),
         //     (Board)
         // );
-        
+
         // DEFAULT_AREA == 5
         // assert(board.width == 5 + add_w.try_into().unwrap(), 'expanded correctly');
 
-        let pixel = get!(
-            world,
-            (1, 2),
-            (Pixel)
-        );
+        let pixel = get!(world, (1, 2), (Pixel));
 
         print!("\n $$$$$$COLORRRRR: {} ######\n", pixel.color); // 16711680(#000000FF)
 
