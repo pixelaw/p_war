@@ -1,7 +1,8 @@
 use starknet::get_block_timestamp;
 use starknet::ContractAddress;
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model(namespace: "pixelaw", nomapping: true)]
 struct Game {
     #[key]
     id: usize,

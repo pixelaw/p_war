@@ -3,16 +3,16 @@ version = 1
 
 [[package]]
 name = "dojo"
-version = "0.6.0"
-source = "git+https://github.com/dojoengine/dojo?tag=v0.7.0-alpha.2#f648e870fc48d004e770559ab61a3a8537e4624c"
+version = "1.0.0-alpha.4"
+source = "git+https://github.com/dojoengine/dojo?tag=v1.0.0-alpha.9#e42ce0c220a59d75c5b08e87a81de12cfdc27a55"
 dependencies = [
  "dojo_plugin",
 ]
 
 [[package]]
 name = "dojo_plugin"
-version = "0.3.11"
-source = "git+https://github.com/dojoengine/dojo?tag=v0.3.11#1e651b5d4d3b79b14a7d8aa29a92062fcb9e6659"
+version = "1.0.0-alpha.4"
+source = "git+https://github.com/dojoengine/dojo?rev=f15def33#f15def330c0d099e79351d11c197f63e8cc1ff36"
 
 [[package]]
 name = "p_war"
@@ -23,8 +23,8 @@ dependencies = [
 
 [[package]]
 name = "pixelaw"
-version = "0.0.0"
-source = "git+https://github.com/pixelaw/core?tag=v0.3.24#be43fe8b7e0b6d784a93fc8945042178464f3d62"
+version = "0.3.40"
+source = "git+https://github.com/pixelaw/core?tag=v0.3.48#740ceaf50879cdad1c766010f0b90144adb427f8"
 dependencies = [
  "dojo",
 ]

@@ -1,5 +1,5 @@
 [package]
-cairo-version = "2.6.3"
+cairo-version = "=2.7.0"
 name = "p_war"
 version = "0.3.1"
 
@@ -7,7 +7,7 @@ version = "0.3.1"
 sierra-replace-ids = true
 
 [dependencies]
-pixelaw = { git = "https://github.com/pixelaw/core", tag = "v0.3.24" }
+pixelaw = { git = "https://github.com/pixelaw/core", tag = "v0.3.48" }
 
 [[target.dojo]]
 build-external-contracts = [
@@ -32,28 +32,3 @@ build-external-contracts = [
     "pixelaw::core::actions::IActionsDispatcher",
     "pixelaw::core::actions::IActionsDispatcherTrait"
 ]
-
-[tool.dojo]
-initializer_class_hash = "0xbeef"
-
-[scripts]
-ready_for_deployment = "bash ./scripts/ready_for_deployment.sh"
-initialize = "bash ./scripts/default_auth.sh"
-
-# Dev: http://localhost:3000
-[tool.dojo.env]
-rpc_url = "http://127.0.0.1:5050/"
-account_address = "0x003c4dd268780ef738920c801edc3a75b6337bc17558c74795b530c0ff502486"
-private_key = "0x2bbf4f9fd0bbb2e60b0316c1fe0b76cf7a4d0198bd493ced9b8df2a3a24d68a"
-world_address= "0x60916a73fe631fcba3b2a930e21c6f7bb2533ea398c7bfa75c72f71a8709fc2"
-
-[tool.dojo.world]
-name = "P/War"
-description = "To host game events on PixeLAW to create engaging experiences for users and developers. One of the core values of PixeLAW is the ability to add rules, proving that new experiences can be created through simple games with the addition of rules."
-cover_uri = "file://assets/cover.png"
-icon_uri = "file://assets/icon.png"
-website = "https://github.com/pixelaw/p_war"
-
-# cannot use snforge_std for dojo contracts...
-# [dev-dependencies]
-# snforge_std = { git = "https://github.com/foundry-rs/starknet-foundry.git", tag = "v0.24.0" }

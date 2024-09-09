@@ -1,6 +1,7 @@
 use starknet::{get_block_timestamp, ContractAddress};
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model(namespace: "pixelaw", nomapping: true)]
 struct Player {
     #[key]
     address: ContractAddress,

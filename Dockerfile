@@ -1,4 +1,4 @@
-ARG CORE_VERSION=0.3.25
+ARG CORE_VERSION=0.3.47
 
 FROM ghcr.io/pixelaw/core:${CORE_VERSION} AS builder
 
