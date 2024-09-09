@@ -1,5 +1,6 @@
 // if the color is allowed
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model(namespace: "pixelaw", nomapping: true)]
 struct AllowedColor {
     #[key]
     game_id: usize,
@@ -9,7 +10,8 @@ struct AllowedColor {
 }
 
 // the color found in what index
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model(namespace: "pixelaw", nomapping: true)]
 struct PaletteColors {
     #[key]
     game_id: usize,
@@ -19,7 +21,8 @@ struct PaletteColors {
 }
 
 // if the color is already in the palette
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model(namespace: "pixelaw", nomapping: true)]
 struct InPalette {
     #[key]
     game_id: usize,
@@ -29,7 +32,8 @@ struct InPalette {
 }
 
 // number of colors in the game's palette
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model(namespace: "pixelaw", nomapping: true)]
 struct GamePalette {
     #[key]
     game_id: usize,

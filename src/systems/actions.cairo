@@ -1,3 +1,4 @@
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use pixelaw::core::utils::DefaultParameters;
 use pixelaw::core::models::pixel::PixelUpdate;
 use starknet::ContractAddress;
@@ -8,18 +9,17 @@ use p_war::constants::{GAME_DURATION, DEFAULT_AREA, DEFAULT_RECOVERY_RATE, APP_K
 // define the interface
 #[dojo::interface]
 trait IActions {
-    fn init();
-    fn interact(default_params: DefaultParameters);
-    fn create_game(origin: Position) -> usize;
-    fn get_game_id(position: Position) -> usize;
-    fn place_pixel(app: ContractAddress, default_params: DefaultParameters);
-    fn update_pixel(pixel_update: PixelUpdate);
-    fn check_for_snap(app: ContractAddress, default_params: DefaultParameters); // A snap is when a player successfully connects a shape of pixels.
-    fn end_game(game_id: usize);
+    fn init(ref world: IWorldDispatcher);
+    fn interact(ref world: IWorldDispatcher, default_params: DefaultParameters);
+    fn create_game(ref world: IWorldDispatcher, origin: Position) -> usize;
+    fn get_game_id(ref world: IWorldDispatcher, position: Position) -> usize;
+    fn place_pixel(ref world: IWorldDispatcher, app: ContractAddress, default_params: DefaultParameters);
+    fn update_pixel(ref world: IWorldDispatcher, pixel_update: PixelUpdate);
+    fn end_game(ref world: IWorldDispatcher, game_id: usize);
 }
 
 // dojo decorator
-#[dojo::contract]
+#[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod p_war_actions {
     use super::{APP_KEY, APP_ICON, APP_MANIFEST, IActions, IActionsDispatcher, IActionsDispatcherTrait, GAME_DURATION, DEFAULT_AREA, BASE_COST, DEFAULT_PX};
     use super::{DEFAULT_RECOVERY_RATE, INITIAL_COLOR};
@@ -68,19 +68,23 @@ mod p_war_actions {
     #[abi(embed_v0)]
     impl ActionsInteroperability of IInteroperability<ContractState> {
         fn on_pre_update(
+            ref world: IWorldDispatcher,
             pixel_update: PixelUpdate,
             app_caller: App,
             player_caller: ContractAddress
         ) {
             // do nothing
+            let _world = world;
         }
 
         fn on_post_update(
+            ref world: IWorldDispatcher,
             pixel_update: PixelUpdate,
             app_caller: App,
             player_caller: ContractAddress
         ) {
             // do nothing
+            let _world = world;
         }
     }
 
@@ -108,12 +112,12 @@ mod p_war_actions {
     #[abi(embed_v0)]
     impl ActionsImpl of IActions<ContractState> {
 
-        fn init(world: IWorldDispatcher) {
+        fn init(ref world: IWorldDispatcher) {
             let core_actions = get_core_actions(world);
             core_actions.update_app(APP_KEY, APP_ICON, APP_MANIFEST);
         }
 
-        fn interact(default_params: DefaultParameters) {
+        fn interact(ref world: IWorldDispatcher, default_params: DefaultParameters) {
             let position = Position {
                                 x: default_params.position.x,
                                 y: default_params.position.y
@@ -129,7 +133,7 @@ mod p_war_actions {
             };
         }
 
-        fn get_game_id(world: IWorldDispatcher, position: Position) -> usize {
+        fn get_game_id(ref world: IWorldDispatcher, position: Position) -> usize {
             let mut id = world.uuid();
             if id == 0 {
                 return 0;
@@ -151,7 +155,7 @@ mod p_war_actions {
             return 1;
         }
 
-        fn create_game(world: IWorldDispatcher, origin: Position) -> usize {
+        fn create_game(ref world: IWorldDispatcher, origin: Position) -> usize {
 
             // check if a game exists
             // let mut tmp_uuid = world.uuid();
@@ -306,7 +310,7 @@ mod p_war_actions {
         }
 
         // To paint, basically use this function.
-        fn place_pixel(world: IWorldDispatcher, app: ContractAddress, default_params: DefaultParameters) {
+        fn place_pixel(ref world: IWorldDispatcher, app: ContractAddress, default_params: DefaultParameters) {
             let position = Position {
                 x: default_params.position.x,
                 y: default_params.position.y
@@ -360,8 +364,6 @@ mod p_war_actions {
             assert(check_game_status(game.status()), 'game is not ongoing');
 
             app.set_pixel(default_params);
-
-            check_for_snap(app, default_params);
 
             set!(
                 world,
@@ -418,66 +420,8 @@ mod p_war_actions {
             update_max_px(world, game_id, player.address);
         }
 
-        // checks and completes a snap.
-        fn check_for_snap(world: IWorldDispatcher, app: ContractAddress, default_params: DefaultParameters) {
-            let position = Position { x: default_params.position.x, y: default_params.position.y };
-            let game_id = self.get_game_id(position);
-            let player_address = get_tx_info().unbox().account_contract_address;
-
-            // Get the current pixel
-            let current_pixel = get!(world, (position), (PWarPixel));
-            assert(current_pixel.owner == player_address, 'Not the pixel owner');
-
-            // Check for a closed shape
-            let (is_closed, pixels_to_fill) = find_closed_shape(world, position, player_address, default_params.color);
-
-            if is_closed {
-                // Fill the shape
-                fill_shape(world, pixels_to_fill, player_address, default_params.color);
-            }
-        }
-
-        // Helper function to find a closed shape
-        fn find_closed_shape(world: IWorldDispatcher, start: Position, owner: ContractAddress, color: u32) -> (bool, Array<Position>) {
-            // Implement flood fill algorithm to find connected pixels
-            // Return true if a closed shape is found, along with the pixels to fill
-        }
-
-        // Helper function to fill the shape
-        fn fill_shape(world: IWorldDispatcher, pixels: Array<Position>, owner: ContractAddress, color: u32) {
-            // Iterate through pixels and update them
-            let mut i = 0;
-            loop {
-                if i >= pixels.len() {
-                    break;
-                }
-                let pixel = *pixels.at(i);
-                set!(
-                    world,
-                    (PWarPixel {
-                        position: pixel,
-                        owner: owner
-                    })
-                );
-                // Update the pixel color using your existing update_pixel function
-                self.update_pixel(
-                    PixelUpdate {
-                        x: pixel.x,
-                        y: pixel.y,
-                        color: Option::Some(color),
-                        timestamp: Option::None,
-                        text: Option::None,
-                        app: Option::None,
-                        owner: Option::Some(owner),
-                        action: Option::None
-                    }
-                );
-                i += 1;
-            };
-        }
-
         // only use for expand areas.
-        fn update_pixel(world: IWorldDispatcher, pixel_update: PixelUpdate) {
+        fn update_pixel(ref world: IWorldDispatcher, pixel_update: PixelUpdate) {
             assert(get_caller_address() == get_contract_address(), 'invalid caller');
 
             let player_address = get_tx_info().unbox().account_contract_address;
@@ -492,7 +436,7 @@ mod p_war_actions {
             );
         }
 
-        fn end_game(world: IWorldDispatcher, game_id: usize) {
+        fn end_game(ref world: IWorldDispatcher, game_id: usize) {
             // check if the time is expired.
             let mut game = get!(
                 world,

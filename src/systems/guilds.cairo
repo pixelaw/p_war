@@ -5,10 +5,10 @@ use p_war::models::player::Player;
 
 #[dojo::interface]
 trait IGuild {
-    fn create_guild(game_id: usize, guild_name: felt252) -> usize; //returns guild ID
-    fn add_member(game_id: usize, guild_id: usize, member: ContractAddress);
-    fn remove_member(game_id: usize, guild_id: usize, member: ContractAddress);
-    fn get_guild_points(game_id: usize, guild_id: usize) -> usize;
+    fn create_guild(ref world: IWorldDispatcher, game_id: usize, guild_name: felt252) -> usize; //returns guild ID
+    fn add_member(ref world: IWorldDispatcher, game_id: usize, guild_id: usize, member: ContractAddress);
+    fn remove_member(ref world: IWorldDispatcher, game_id: usize, guild_id: usize, member: ContractAddress);
+    fn get_guild_points(ref world: IWorldDispatcher, game_id: usize, guild_id: usize) -> usize;
 }
 
 #[dojo::contract]
@@ -16,7 +16,7 @@ mod guild_actions {
 
     #[abi(embed_v0)]
     impl GuildImpl of IGuild<ContractState> {
-        fn create_guild(world: IWorldDispatcher, game_id: usize, guild_name: felt252) -> usize {
+        fn create_guild(ref world: IWorldDispatcher, game_id: usize, guild_name: felt252) -> usize {
             let caller = get_caller_address();
             
             // Check if the game exists and get the game data
@@ -46,7 +46,7 @@ mod guild_actions {
             guild_id
         }
 
-        fn add_member(world: IWorldDispatcher, game_id: usize, guild_id: usize, new_member: ContractAddress) {
+        fn add_member(ref world: IWorldDispatcher, game_id: usize, guild_id: usize, new_member: ContractAddress) {
             let caller = get_caller_address();
             
             // Get the guild
@@ -68,7 +68,7 @@ mod guild_actions {
             set!(world, (guild));
         }
 
-        fn remove_member(world: IWorldDispatcher, game_id: usize, guild_id: usize, member: ContractAddress) {
+        fn remove_member(ref world: IWorldDispatcher, game_id: usize, guild_id: usize, member: ContractAddress) {
             let caller = get_caller_address();
             
             // Get the guild
@@ -99,11 +99,11 @@ mod guild_actions {
         }
 
         //this function is very inefficient. better implementation is updating guild points when member points are updated.
-        fn get_guild_points(world: IWorldDispatcher, game_id: usize, guild_id: usize) -> usize {
+        fn get_guild_points(ref world: IWorldDispatcher, game_id: usize, guild_id: usize) -> usize {
             // Get the guild
             let mut guild = get!(world, (game_id, guild_id), (Guild));
 
-            let mut guild_total_points;
+            let mut guild_total_points = 0;
             let mut i = 0;
             loop {
                 if i >= guild.member_count {

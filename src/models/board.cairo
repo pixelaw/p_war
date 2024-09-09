@@ -1,12 +1,14 @@
 use starknet::{ContractAddress};
+use pixelaw::core::utils::Position;
 
-#[derive(Copy, Drop, Serde, Introspect)]
-struct Position {
-    x: u32,
-    y: u32
-}
+// #[derive(Copy, Drop, Serde, Introspect)]
+// struct Position {
+//     x: u32,
+//     y: u32
+// }
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive( Copy, Drop, Serde)]
+#[dojo::model(namespace: "pixelaw", nomapping: true)]
 struct Board {
     #[key]
     id: usize,
@@ -15,7 +17,8 @@ struct Board {
     height: u32,
 }
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model(namespace: "pixelaw", nomapping: true)]
 struct PWarPixel {
     #[key]
     position: Position,
@@ -23,7 +26,8 @@ struct PWarPixel {
 }
 
 
-#[derive(Model, Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model(namespace: "pixelaw", nomapping: true)]
 struct GameId {
     #[key]
     x: u32,

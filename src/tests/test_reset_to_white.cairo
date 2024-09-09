@@ -7,7 +7,7 @@ mod tests {
     // import world dispatcher
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
     // import test utils
-    use dojo::test_utils::{spawn_test_world, deploy_contract};
+    use dojo::utils::test::{spawn_test_world, deploy_contract};
     // import test utils
     use p_war::{
         models::{
@@ -63,7 +63,7 @@ mod tests {
         ];
 
         // deploy world with models
-        let world = spawn_test_world(models);
+        let world = spawn_test_world(["pixelaw"].span(), models.into());
 
         let core_actions_contract_address = world
             .deploy_contract('salt', core_actions::TEST_CLASS_HASH.try_into().unwrap());
@@ -142,7 +142,7 @@ mod tests {
         print!("Proposal end: {}\n", proposal.end);
 
         // TODO: should add cheat code to spend time
-        propose_system.activate_proposal(id, index);
+        propose_system.activate_proposal(id, index, array![default_params.position].into());
 
 
         // check if the disaster happens.

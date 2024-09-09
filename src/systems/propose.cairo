@@ -6,12 +6,12 @@ use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL
 // define the interface
 #[dojo::interface]
 trait IPropose {
-    fn create_proposal(game_id: usize, proposal_type: u8, target_args_1: u32, target_args_2: u32) -> usize;
-    fn activate_proposal(game_id: usize, index: usize, clear_data: Span<Position>);
+    fn create_proposal(ref world: IWorldDispatcher, game_id: usize, proposal_type: u8, target_args_1: u32, target_args_2: u32) -> usize;
+    fn activate_proposal(ref world: IWorldDispatcher, game_id: usize, index: usize, clear_data: Span<Position>);
 }
 
 // dojo decorator
-#[dojo::contract]
+#[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod propose {
     use super::{IPropose, NEEDED_YES_PX, PROPOSAL_DURATION, DISASTER_SIZE, PROPOSAL_FACTOR};
     use p_war::models::{
@@ -35,7 +35,7 @@ mod propose {
     #[abi(embed_v0)]
     impl ProposeImpl of IPropose<ContractState> {
 
-        fn create_proposal(world: IWorldDispatcher, game_id: usize, proposal_type: u8, target_args_1: u32, target_args_2: u32) -> usize {
+        fn create_proposal(ref world: IWorldDispatcher, game_id: usize, proposal_type: u8, target_args_1: u32, target_args_2: u32) -> usize {
             // get the game
             let mut game = get!(world, game_id, (Game));
             assert(check_game_status(game.status()), 'game is not ongoing');
@@ -103,7 +103,7 @@ mod propose {
         }
 
 
-        fn activate_proposal(world: IWorldDispatcher, game_id: usize, index: usize, clear_data: Span<Position>){
+        fn activate_proposal(ref world: IWorldDispatcher, game_id: usize, index: usize, clear_data: Span<Position>){
             // get the proposal
             let mut proposal = get!(world, (game_id, index), (Proposal));
             let game = get!(

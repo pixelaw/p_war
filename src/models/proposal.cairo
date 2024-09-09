@@ -39,7 +39,8 @@ use starknet::ContractAddress;
 //     no_px: u32
 // }
 
-#[derive(Model, Copy, Drop, Serde, Print)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model(namespace: "pixelaw", nomapping: true)]
 struct Proposal {
     #[key]
     game_id: usize,
@@ -57,7 +58,8 @@ struct Proposal {
 }
 
 
-#[derive(Model, Serde, Copy, Drop, PartialEq, Print)]
+#[derive(Serde, Copy, Drop, PartialEq)]
+#[dojo::model(namespace: "pixelaw", nomapping: true)]
 struct PlayerVote {
     #[key]
     player: ContractAddress,
@@ -70,7 +72,8 @@ struct PlayerVote {
     px: u32
 }
 
-#[derive(Model, Copy, Drop, Serde, Print)]
+#[derive(Copy, Drop, Serde)]
+#[dojo::model(namespace: "pixelaw", nomapping: true)]
 struct PixelRecoveryRate {
     #[key]
     game_id: usize,
