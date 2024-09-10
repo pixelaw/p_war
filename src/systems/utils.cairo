@@ -57,12 +57,14 @@ fn recover_px(world: IWorldDispatcher, game_id: usize, player_address: ContractA
         (Player)
     );
 
+    println!("create_game 3");
     let recovery_rate = get!(
         world,
         (game_id),
         (PixelRecoveryRate)
     );
 
+    println!("create_game 4");
     let current_time = get_block_timestamp();
     let time_diff = current_time - player.last_date;
 

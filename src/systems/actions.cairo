@@ -25,7 +25,7 @@ mod p_war_actions {
     use super::{DEFAULT_RECOVERY_RATE, INITIAL_COLOR};
     use p_war::models::{
         game::{Game, Status, GameTrait},
-        board::{Board, GameId, Position, PWarPixel},
+        board::{Board, GameId, PWarPixel},
         player::{Player},
         proposal::{PixelRecoveryRate},
         allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette},
@@ -36,7 +36,7 @@ mod p_war_actions {
         IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
-    use pixelaw::core::utils::{get_core_actions, DefaultParameters};
+    use pixelaw::core::utils::{get_core_actions, DefaultParameters, Position};
     use pixelaw::core::models::{ pixel::PixelUpdate, registry::App };
     use pixelaw::core::traits::IInteroperability;
     use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
@@ -156,6 +156,7 @@ mod p_war_actions {
         }
 
         fn create_game(ref world: IWorldDispatcher, origin: Position) -> usize {
+println!("create_game BEGIN");
 
             // check if a game exists
             // let mut tmp_uuid = world.uuid();
@@ -244,7 +245,7 @@ mod p_war_actions {
                     board
                 )
             );
-
+            println!("create_game 1");
             // add default colors (changed these to RGBA)
             let mut color_idx = 0;
             let mut a = ArrayTrait::new();
@@ -287,6 +288,7 @@ mod p_war_actions {
                 color_idx += 1;
             };
 
+            println!("create_game 2");
             // set default recovery_rate
             set!(
                 world,
@@ -302,6 +304,7 @@ mod p_war_actions {
                 )
             );
 
+            println!("create_game 2.1");
             // recover px
             recover_px(world, id, player);
 
