@@ -31,7 +31,6 @@ use pixelaw::core::{
 };
 
 
-
 pub fn setup() -> (
     IWorldDispatcher,
     ICoreActionsDispatcher,

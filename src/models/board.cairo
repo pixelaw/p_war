@@ -1,12 +1,6 @@
 use starknet::{ContractAddress};
 use pixelaw::core::utils::Position;
 
-// #[derive(Copy, Drop, Serde, Introspect)]
-// struct Position {
-//     x: u32,
-//     y: u32
-// }
-
 #[derive( Copy, Drop, Serde)]
 #[dojo::model(namespace: "pixelaw", nomapping: true)]
 struct Board {

@@ -1,30 +1,22 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use starknet::{ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info};
+use starknet::{
+    ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
+};
 use p_war::models::{
-    game::{Game, Status},
-    board::{Board, GameId, Position},
-    player::{Player},
-    proposal::{PixelRecoveryRate},
-    allowed_color::AllowedColor,
-    allowed_app::AllowedApp
+    game::{Game, Status}, board::{Board, GameId, Position}, player::{Player},
+    proposal::{PixelRecoveryRate}, allowed_color::AllowedColor, allowed_app::AllowedApp
 };
 
 use p_war::constants::DEFAULT_PX;
 
-fn update_max_px(world: IWorldDispatcher, game_id: usize, player_address: ContractAddress){
-    let mut player = get!(
-        world,
-        (player_address),
-        (Player)
-    );
+fn update_max_px(world: IWorldDispatcher, game_id: usize, player_address: ContractAddress) {
+    let mut player = get!(world, (player_address), (Player));
 
-    let game = get!(
-        world,
-        (game_id),
-        (Game)
-    );
+    let game = get!(world, (game_id), (Game));
 
-    let mut max_px = game.const_val + game.coeff_own_pixels * player.num_owns + game.coeff_commits * player.num_commit;
+    let mut max_px = game.const_val
+        + game.coeff_own_pixels * player.num_owns
+        + game.coeff_commits * player.num_commit;
 
     if max_px < 1 {
         max_px = 1;
@@ -41,28 +33,16 @@ fn update_max_px(world: IWorldDispatcher, game_id: usize, player_address: Contra
 
     player.max_px = max_px;
 
-    set!(
-        world,
-        (player)
-    );
+    set!(world, (player));
 }
 
 fn recover_px(world: IWorldDispatcher, game_id: usize, player_address: ContractAddress) {
-    
     update_max_px(world, game_id, player_address);
 
-    let mut player = get!(
-        world,
-        (player_address),
-        (Player)
-    );
+    let mut player = get!(world, (player_address), (Player));
 
     println!("create_game 3");
-    let recovery_rate = get!(
-        world,
-        (game_id),
-        (PixelRecoveryRate)
-    );
+    let recovery_rate = get!(world, (game_id), (PixelRecoveryRate));
 
     println!("create_game 4");
     let current_time = get_block_timestamp();
@@ -84,10 +64,7 @@ fn recover_px(world: IWorldDispatcher, game_id: usize, player_address: ContractA
     print!("## RECOVER_PXS: {} ##\n", recover_pxs);
     print!("## CURRENT PX: {} ##\n", player.current_px);
 
-    set!(
-        world,
-        (player)
-    );
+    set!(world, (player));
 }
 
 fn check_game_status(status: Status) -> bool {

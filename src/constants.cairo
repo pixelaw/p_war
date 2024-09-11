@@ -27,7 +27,6 @@ const NEEDED_YES_PX: u32 = 1;
 
 // for additional rules
 const DISASTER_SIZE: u32 = 5;
-
 // // ###############################################
 // // ### GAME CONFIGURATION FOR CLOSED BETA TEST ###
 // // ###############################################
@@ -50,7 +49,6 @@ const DISASTER_SIZE: u32 = 5;
 // // for additional rules
 // const DISASTER_SIZE: u32 = 5;
 
-
 // // ####################################
 // // ### GAME CONFIGURATION FOR LOCAL ###
 // // ####################################
@@ -69,3 +67,4 @@ const DISASTER_SIZE: u32 = 5;
 
 // // for additional rules
 // const DISASTER_SIZE: u32 = 5;
+
