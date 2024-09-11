@@ -1,4 +1,4 @@
-#[cfg(test)]
+
 mod tests {
     use starknet::{
         class_hash::Felt252TryIntoClassHash,
