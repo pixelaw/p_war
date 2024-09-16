@@ -50,7 +50,6 @@ const DISASTER_SIZE: u32 = 5; // 5x5 grid size for disasters
 // // for additional rules
 // const DISASTER_SIZE: u32 = 5;
 
-
 // // ####################################
 // // ### GAME CONFIGURATION FOR LOCAL ###
 // // ####################################
@@ -69,3 +68,4 @@ const DISASTER_SIZE: u32 = 5; // 5x5 grid size for disasters
 
 // // for additional rules
 // const DISASTER_SIZE: u32 = 5;
+
