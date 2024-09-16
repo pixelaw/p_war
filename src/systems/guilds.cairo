@@ -11,7 +11,7 @@ trait IGuild {
     fn get_guild_points(ref world: IWorldDispatcher, game_id: usize, guild_id: usize) -> usize;
 }
 
-#[dojo::contract]
+#[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod guild_actions {
 
     #[abi(embed_v0)]

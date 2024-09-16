@@ -186,6 +186,8 @@ println!("create_game BEGIN");
                 coeff_commits: 0,
                 winner_config: 0,
                 winner: starknet::contract_address_const::<0x0>(),
+                guild_ids: 0,
+                guild_count: 0
             };
 
             let board = Board {

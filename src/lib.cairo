@@ -14,7 +14,7 @@ mod models {
     mod game;
     mod proposal;
     mod player;
-    mod guild;
+    mod guilds;
 }
 
 mod tests {
