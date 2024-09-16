@@ -15,7 +15,7 @@ struct Game {
     coeff_commits: u32,
     winner_config: u32, // optimally, set by contract address.
     winner: ContractAddress,
-    guild_ids: ByteArray, //list of guild IDs inside the game struct
+    guild_ids: Span<u32>, //list of guild IDs inside the game struct
     guild_count: usize,
 }
 

@@ -6,13 +6,23 @@ use p_war::models::player::Player;
 #[dojo::interface]
 trait IGuild {
     fn create_guild(ref world: IWorldDispatcher, game_id: usize, guild_name: felt252) -> usize; //returns guild ID
-    fn add_member(ref world: IWorldDispatcher, game_id: usize, guild_id: usize, member: ContractAddress);
+    fn add_member(ref world: IWorldDispatcher, game_id: usize, guild_id: usize, new_member: ContractAddress);
     fn remove_member(ref world: IWorldDispatcher, game_id: usize, guild_id: usize, member: ContractAddress);
     fn get_guild_points(ref world: IWorldDispatcher, game_id: usize, guild_id: usize) -> usize;
 }
 
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod guild_actions {
+
+    use super::{IGuild};
+
+    use p_war::models::{
+        game::{Game, Status, GameTrait}, guilds::{Guild},
+        board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,
+    };
+    use starknet::{
+        ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
+    };
 
     #[abi(embed_v0)]
     impl GuildImpl of IGuild<ContractState> {
@@ -25,7 +35,23 @@ mod guild_actions {
 
             // Use the current guild_count as the new guild_id
             let guild_id = game.guild_count;
-            game.guild_ids.append(guild_id);
+
+            // Create a new Array and populate it with existing guild_ids
+            let mut new_guild_ids = ArrayTrait::new();
+            let mut i = 0;
+            loop {
+                if i == game.guild_ids.len() {
+                    break;
+                }
+                new_guild_ids.append(*game.guild_ids.at(i));
+                i += 1;
+            };
+
+            // Append the new guild_id
+            new_guild_ids.append(guild_id);
+
+            // Update the game with the new guild_ids
+            game.guild_ids = new_guild_ids.span();
             game.guild_count += 1;
 
             // Create the new guild
@@ -34,11 +60,9 @@ mod guild_actions {
                 guild_id: guild_id,
                 guild_name: guild_name,
                 creator: caller,
-                members: array![caller].span()
+                members: array![caller].span(),
+                member_count: 1
             };
-
-            //set member count to 1
-            new_guild.member_count+= 1;
 
             // Save the guild and update the game
             set!(world, (new_guild, game));
@@ -56,10 +80,35 @@ mod guild_actions {
             assert(guild.creator == caller, 'Only creator can add members');
 
             // Check if the member is not already in the guild
-            assert(!guild.members.contains(new_member), 'New Member already in guild');
+            let mut is_member = false;
+            let mut i = 0;
+            loop {
+                if i == guild.members.len() {
+                    break;
+                }
+                if guild.members.at(i) == @new_member {
+                    is_member = true;
+                }
+                i += 1;
+            };
+            assert(!is_member, 'New Member already in guild');
 
-            // Add the new member
-            guild.members.append(new_member);
+            // Create a new Array and populate it with existing guild_ids
+            let mut new_guild_members = ArrayTrait::new();
+            let mut i = 0;
+            loop {
+                if i == guild.members.len() {
+                    break;
+                }
+                new_guild_members.append(*guild.members.at(i));
+                i += 1;
+            };
+
+            // Append the new guild_id
+            new_guild_members.append(new_member);
+
+            // Update the game with the new guild_ids
+            guild.members = new_guild_members.span();
             
             //update member count
             guild.member_count += 1;
@@ -78,7 +127,18 @@ mod guild_actions {
             assert(guild.creator == caller, 'Only creator can remove members');
 
             // Check if the member is in the guild
-            assert(guild.members.contains(member), 'Member not in guild');
+            let mut is_member = false;
+            let mut i = 0;
+            loop {
+                if i == guild.members.len() {
+                    break;
+                }
+                if guild.members.at(i) == @member {
+                    is_member = true;
+                }
+                i += 1;
+            };
+            assert(!is_member, 'New Member already in guild');
 
             // Remove the member
             let mut updated_members = ArrayTrait::new();
@@ -98,7 +158,7 @@ mod guild_actions {
             set!(world, (guild));
         }
 
-        //this function is very inefficient. better implementation is updating guild points when member points are updated.
+        // //this function is very inefficient. better implementation is updating guild points when member points are updated.
         fn get_guild_points(ref world: IWorldDispatcher, game_id: usize, guild_id: usize) -> usize {
             // Get the guild
             let mut guild = get!(world, (game_id, guild_id), (Guild));
@@ -115,7 +175,8 @@ mod guild_actions {
                     (Player)
                 );
                 guild_total_points += player.num_commit;
-            }
+            };
+            guild_total_points
         }
     }
 }
