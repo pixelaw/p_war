@@ -1,5 +1,7 @@
 mod tests {
-    use starknet::{class_hash::Felt252TryIntoClassHash, ContractAddress};
+    use starknet::{
+        class_hash::Felt252TryIntoClassHash, ContractAddress, testing::{set_block_timestamp},
+    };
     // import world dispatcher
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
     // import test utils
@@ -74,6 +76,7 @@ mod tests {
         println!("Proposal end: {}\n", proposal.end);
 
         // should add cheat code to spend time
+        set_block_timestamp(proposal.end + 1); // NOTE: we need to set block timestamp forcely
         propose_system.activate_proposal(id, index, array![default_params.position].into());
 
         // // call place_pixel

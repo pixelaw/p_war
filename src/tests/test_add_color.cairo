@@ -1,5 +1,7 @@
 mod tests {
-    use starknet::{class_hash::Felt252TryIntoClassHash, ContractAddress};
+    use starknet::{
+        class_hash::Felt252TryIntoClassHash, ContractAddress, testing::{set_block_timestamp},
+    };
     // import world dispatcher
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
     // import test utils
@@ -51,7 +53,7 @@ mod tests {
 
         let id = p_war_actions
             .get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
-        print!("id = {}", id);
+        println!("id = {}", id);
 
         let NEW_COLOR: u32 = 0xAABBCCFF;
 
@@ -84,6 +86,7 @@ mod tests {
         println!("Proposal end: {}\n", proposal.end);
 
         // should add cheat code to spend time
+        set_block_timestamp(proposal.end + 1); // NOTE: we need to set block timestamp forcely
         propose_system.activate_proposal(id, index, array![default_params.position].into());
 
         // call place_pixel
