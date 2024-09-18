@@ -36,7 +36,9 @@ fi
 
 # make sure all components/systems are deployed
 CORE_MODELS=("pixelaw-App" "pixelaw-AppName" "pixelaw-CoreActionsAddress" "pixelaw-Pixel" "pixelaw-Permissions" "pixelaw-QueueItem" "pixelaw-Instruction")
-P_WAR_MODELS=("pixelaw-AllowedApp" "pixelaw-Game" "pixelaw-GameId" "pixelaw-GamePalette" "pixelaw-InPalette" "pixelaw-Player" "pixelaw-PixelRecoveryRate" "pixelaw-Position" "pixelaw-Proposal" "pixelaw-Status")
+P_WAR_MODELS=("pixelaw-AllowedApp" "pixelaw-Game" "pixelaw-GameId" "pixelaw-GamePalette" "pixelaw-InPalette" "pixelaw-Player" "pixelaw-PixelRecoveryRate" "pixelaw-Proposal")
+PROPOSE_MODELS=("pixelaw-AllowedColor" "pixelaw-GamePalette" "pixelaw-InPalette" "pixelaw-PaletteColors" "pixelaw-Proposal")
+VOTING_MODELS=("pixelaw-PlayerVote" "pixelaw-Proposal" "pixelaw-Player")
 
 echo "Write permissions for CORE_ACTIONS"
 for model in ${CORE_MODELS[@]}; do
@@ -51,6 +53,20 @@ for model in ${P_WAR_MODELS[@]}; do
     sozo --profile $SCARB_PROFILE auth grant writer model:$model,$P_WAR_ACTIONS
 done
 echo "Write permissions for P_WAR_ACTIONS: Done"
+
+echo "Write permissions for PROPOSE_ACTIONS"
+for model in ${PROPOSE_MODELS[@]}; do
+    sleep 0.1
+    sozo --profile $SCARB_PROFILE auth grant writer model:$model,$PROPOSE_ACTIONS
+done
+echo "Write permissions for PROPOSE_ACTIONS: Done"
+
+echo "Write permissions for VOTING_ACTIONS"
+for model in ${VOTING_MODELS[@]}; do
+    sleep 0.1
+    sozo --profile $SCARB_PROFILE auth grant writer model:$model,$VOTING_ACTIONS
+done
+echo "Write permissions for VOTING_ACTIONS: Done"
 
 echo "Initialize CORE_ACTIONS : $CORE_ACTIONS"
 sleep 0.1
