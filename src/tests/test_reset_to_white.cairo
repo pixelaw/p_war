@@ -53,7 +53,7 @@ fn test_reset_to_white() {
     let ZERO_ADDRESS: ContractAddress = contract_address_const::<0>();
 
     // Initialize the world and the actions
-    let (world, core_actions, p_war_actions, propose, voting,) = p_war::tests::utils::setup();
+    let (world, _, p_war_actions, propose, voting,) = p_war::tests::utils::setup();
 
 
     // Setup players
