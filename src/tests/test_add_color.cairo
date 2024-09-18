@@ -1,11 +1,8 @@
 mod tests {
-    use starknet::{
-        class_hash::Felt252TryIntoClassHash, ContractAddress, testing::{set_block_timestamp},
-    };
-    // import world dispatcher
-    use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
     // import test utils
     use dojo::utils::test::{spawn_test_world, deploy_contract};
+    // import world dispatcher
+    use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
     // import test utils
     use p_war::{
         models::{
@@ -30,6 +27,9 @@ mod tests {
             IActionsDispatcherTrait as ICoreActionsDispatcherTrait
         },
         utils::{DefaultParameters, Position as PixelawPosition}
+    };
+    use starknet::{
+        class_hash::Felt252TryIntoClassHash, ContractAddress, testing::{set_block_timestamp},
     };
 
     const COLOR: u32 = 0xAAAAAAFF;

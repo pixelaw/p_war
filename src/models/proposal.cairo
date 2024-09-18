@@ -23,7 +23,6 @@ use starknet::ContractAddress;
 //     ResetToWhiteByColor,
 // }
 
-
 // #[derive(Model, Copy, Drop, Serde, Print)]
 // struct Proposal {
 //     #[key]
@@ -67,7 +66,6 @@ struct PlayerVote {
     game_id: usize,
     #[key]
     index: usize,
-
     is_in_favor: bool,
     px: u32
 }
@@ -79,7 +77,6 @@ struct PixelRecoveryRate {
     game_id: usize,
     rate: u64
 }
-
 // impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
 //     fn into(self: ProposalType) -> felt252 {
 //         match self {
@@ -87,7 +84,7 @@ struct PixelRecoveryRate {
 //             ProposalType::ToggleAllowedApp => 1,
 //             ProposalType::AddNewColor => 2,
 //             ProposalType::ExtendGameEndTime => 3,
-//             ProposalType::ChangePixelRecovery => 4,            
+//             ProposalType::ChangePixelRecovery => 4,
 //             ProposalType::ExpandArea => 5,
 //             ProposalType::BanPlayerAddress => 6,
 //             ProposalType::ChangeMaxPXConfig => 7,
@@ -98,3 +95,4 @@ struct PixelRecoveryRate {
 //         }
 //     }
 // }
+

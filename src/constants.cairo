@@ -68,3 +68,4 @@ const DISASTER_SIZE: u32 = 5;
 // // for additional rules
 // const DISASTER_SIZE: u32 = 5;
 
+
