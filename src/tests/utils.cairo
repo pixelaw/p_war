@@ -8,20 +8,22 @@ use p_war::{
     models::{
         player::{player}, game::{Game, game}, board::{Board, GameId, board, game_id, p_war_pixel},
         proposal::{Proposal, pixel_recovery_rate, proposal, player_vote},
+        guilds::{guild},
         allowed_app::{AllowedApp, allowed_app},
         allowed_color::{AllowedColor, allowed_color, palette_colors, in_palette, game_palette},
     },
     systems::{
         actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
         propose::{propose, IProposeDispatcher, IProposeDispatcherTrait},
-        voting::{voting, IVotingDispatcher, IVotingDispatcherTrait}
+        voting::{voting, IVotingDispatcher, IVotingDispatcherTrait},
+        guilds::{guild_actions, IGuildDispatcher, IGuildDispatcherTrait}
     }
 };
 
 use pixelaw::core::{
     models::{
         permissions::{permissions}, pixel::{pixel, Pixel, PixelUpdate}, queue::queue_item,
-        registry::{app, app_user, app_name, core_actions_address, instruction}
+        registry::{app, app_user, app_name, core_actions_address, instruction},
     },
     actions::{
         actions as core_actions, IActionsDispatcher as ICoreActionsDispatcher,
@@ -36,7 +38,8 @@ pub fn setup() -> (
     ICoreActionsDispatcher,
     IActionsDispatcher,
     IProposeDispatcher,
-    IVotingDispatcher
+    IVotingDispatcher,
+    IGuildDispatcher
 ) {
     let mut models = array![
         allowed_app::TEST_CLASS_HASH,
@@ -60,10 +63,13 @@ pub fn setup() -> (
         permissions::TEST_CLASS_HASH,
         queue_item::TEST_CLASS_HASH,
         instruction::TEST_CLASS_HASH,
+        guild::TEST_CLASS_HASH
     ];
 
     // deploy world with models
     let world = spawn_test_world(["pixelaw"].span(), models.into());
+
+    println!("world deployed");
 
     let core_actions_address = world
         .deploy_contract('salt', core_actions::TEST_CLASS_HASH.try_into().unwrap());
@@ -82,6 +88,11 @@ pub fn setup() -> (
     let voting_address = world
         .deploy_contract('salty2', voting::TEST_CLASS_HASH.try_into().unwrap());
     let voting = IVotingDispatcher { contract_address: voting_address };
+
+    let guild_address = world.deploy_contract('salty3', guild_actions::TEST_CLASS_HASH.try_into().unwrap());
+    let guild = IGuildDispatcher { contract_address: guild_address };
+
+    println!("contracts deployed");
 
     world.grant_writer(selector_from_tag!("pixelaw-App"), core_actions_address);
     world.grant_writer(selector_from_tag!("pixelaw-AppName"), core_actions_address);
@@ -110,7 +121,12 @@ pub fn setup() -> (
     world.grant_writer(selector_from_tag!("pixelaw-Player"), voting_address);
     world.grant_writer(selector_from_tag!("pixelaw-PlayerVote"), voting_address);
 
+    world.grant_writer(selector_from_tag!("pixelaw-Guild"), guild_address);
+    world.grant_writer(selector_from_tag!("pixelaw-Game"), guild_address);
+    world.grant_writer(selector_from_tag!("pixelaw-Player"), guild_address);
     core_actions.init();
 
-    (world, core_actions, p_war_actions, propose, voting,)
+    println!("grants done");
+
+    (world, core_actions, p_war_actions, propose, voting, guild)
 }

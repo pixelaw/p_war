@@ -35,21 +35,24 @@ mod guild_actions {
 
             // Use the current guild_count as the new guild_id
             let guild_id = game.guild_count;
+            println!("guild_id: {}", guild_id);
 
             // Create a new Array and populate it with existing guild_ids
             let mut new_guild_ids = ArrayTrait::new();
             let mut i = 0;
             loop {
+                println!("i: {}", i);
                 if i == game.guild_ids.len() {
                     break;
                 }
+                println!("game.guild_ids.at(i): {}", *game.guild_ids.at(i));
                 new_guild_ids.append(*game.guild_ids.at(i));
                 i += 1;
             };
 
             // Append the new guild_id
             new_guild_ids.append(guild_id);
-
+            println!("new_guild_ids.len(): {}", new_guild_ids.len());
             // Update the game with the new guild_ids
             game.guild_ids = new_guild_ids.span();
             game.guild_count += 1;
@@ -63,10 +66,11 @@ mod guild_actions {
                 members: array![caller].span(),
                 member_count: 1
             };
+            println!("new_guild.guild_id: {}", new_guild.guild_id);
 
             // Save the guild and update the game
             set!(world, (new_guild, game));
-
+            println!("set guild");
             guild_id
         }
 
@@ -91,7 +95,8 @@ mod guild_actions {
                 }
                 i += 1;
             };
-            assert(!is_member, 'New Member already in guild');
+            println!("is_member: {}", is_member);
+            assert(is_member == false, 'New Member already in guild');
 
             // Create a new Array and populate it with existing guild_ids
             let mut new_guild_members = ArrayTrait::new();
@@ -138,7 +143,8 @@ mod guild_actions {
                 }
                 i += 1;
             };
-            assert(!is_member, 'New Member already in guild');
+            println!("is_member: {}", is_member);
+            assert(is_member == true, 'Member not in guild');
 
             // Remove the member
             let mut updated_members = ArrayTrait::new();
@@ -153,6 +159,7 @@ mod guild_actions {
                 i += 1;
             };
             guild.members = updated_members.span();
+            guild.member_count -= 1;
 
             // Save the updated guild
             set!(world, (guild));
@@ -166,6 +173,7 @@ mod guild_actions {
             let mut guild_total_points = 0;
             let mut i = 0;
             loop {
+                println!("member_count: {}", guild.member_count);
                 if i >= guild.member_count {
                     break;
                 }
@@ -174,8 +182,11 @@ mod guild_actions {
                     (*guild.members.at(i), game_id),
                     (Player)
                 );
+                println!("player.num_commit: {}", player.num_commit);
                 guild_total_points += player.num_commit;
+                i += 1;
             };
+            println!("contract: guild_total_points: {}", guild_total_points);
             guild_total_points
         }
     }
