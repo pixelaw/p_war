@@ -1,9 +1,10 @@
 mod tests {
-    use starknet::{class_hash::Felt252TryIntoClassHash, ContractAddress};
-    // import world dispatcher
-    use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
     // import test utils
     use dojo::utils::test::{spawn_test_world, deploy_contract};
+    // import world dispatcher
+    use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+
+    use p_war::constants::{DEFAULT_AREA};
     // import test utils
     use p_war::{
         models::{
@@ -18,8 +19,6 @@ mod tests {
         }
     };
 
-    use p_war::constants::{DEFAULT_AREA};
-
     use pixelaw::core::{
         models::{
             permissions::permissions, pixel::{pixel, Pixel, PixelUpdate}, queue::queue_item,
@@ -31,6 +30,7 @@ mod tests {
         },
         utils::{DefaultParameters, Position as PixelawPosition}
     };
+    use starknet::{class_hash::Felt252TryIntoClassHash, ContractAddress};
 
     const COLOR: u32 = 0xAAAAAAFF;
 

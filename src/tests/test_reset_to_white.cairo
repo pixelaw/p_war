@@ -1,11 +1,6 @@
-use starknet::{
-    class_hash::Felt252TryIntoClassHash, ContractAddress, testing::{set_block_timestamp, set_account_contract_address},
-    get_block_timestamp,contract_address_const
-};
+use dojo::utils::test::{spawn_test_world, deploy_contract};
 
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-
-use dojo::utils::test::{spawn_test_world, deploy_contract};
 
 use p_war::{
     models::{
@@ -33,6 +28,11 @@ use pixelaw::core::{
     },
     utils::{DefaultParameters, Position, is_pixel_color}
 };
+use starknet::{
+    class_hash::Felt252TryIntoClassHash, ContractAddress,
+    testing::{set_block_timestamp, set_account_contract_address}, get_block_timestamp,
+    contract_address_const
+};
 
 
 const WHITE_COLOR: u32 = 0xFFFFFFFF;
@@ -55,15 +55,12 @@ fn test_reset_to_white() {
     // Initialize the world and the actions
     let (world, _, p_war_actions, propose, voting,) = p_war::tests::utils::setup();
 
-
     // Setup players
     let PLAYER_1 = contract_address_const::<0x1337>();
     let PLAYER_2 = contract_address_const::<0x42>();
 
     // Impersonate player1
     set_account_contract_address(PLAYER_1);
-
-
 
     // Create a game.
     // This creates a 10x10 grid to the bottom-right of the start_position
@@ -115,7 +112,9 @@ fn test_reset_to_white() {
     propose.activate_proposal(game_id, proposal_id, array![GAME_PAINT_POSITION].into());
 
     // Retrieve the pixel that was reset
-    assert(is_pixel_color(world, GAME_PAINT_POSITION, WHITE_COLOR), 'Pixel should be entirely white');
+    assert(
+        is_pixel_color(world, GAME_PAINT_POSITION, WHITE_COLOR), 'Pixel should be entirely white'
+    );
 
     // Now try to paint on it again
     p_war_actions
@@ -144,6 +143,7 @@ fn test_reset_to_white() {
             }
         );
 
-    assert(is_pixel_color(world, GAME_PAINT_POSITION, WHITE_COLOR), 'Pixel should be entirely white');
-
+    assert(
+        is_pixel_color(world, GAME_PAINT_POSITION, WHITE_COLOR), 'Pixel should be entirely white'
+    );
 }

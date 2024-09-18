@@ -1,13 +1,13 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use starknet::{
-    ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
-};
+
+use p_war::constants::DEFAULT_PX;
 use p_war::models::{
     game::{Game, Status}, board::{Board, GameId, Position}, player::{Player},
     proposal::{PixelRecoveryRate}, allowed_color::AllowedColor, allowed_app::AllowedApp
 };
-
-use p_war::constants::DEFAULT_PX;
+use starknet::{
+    ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
+};
 
 fn update_max_px(world: IWorldDispatcher, game_id: usize, player_address: ContractAddress) {
     let mut player = get!(world, (player_address), (Player));
