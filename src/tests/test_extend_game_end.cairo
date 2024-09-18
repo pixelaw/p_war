@@ -1,11 +1,10 @@
 mod tests {
-    use starknet::{
-        class_hash::Felt252TryIntoClassHash, ContractAddress, testing::{set_block_timestamp},
-    };
-    // import world dispatcher
-    use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
     // import test utils
     use dojo::utils::test::{spawn_test_world, deploy_contract};
+    // import world dispatcher
+    use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+
+    use p_war::constants::{GAME_DURATION};
     // import test utils
     use p_war::{
         models::{
@@ -20,8 +19,6 @@ mod tests {
         }
     };
 
-    use p_war::constants::{GAME_DURATION};
-
     use pixelaw::core::{
         models::{
             permissions::permissions, pixel::{pixel, Pixel, PixelUpdate}, queue::queue_item,
@@ -32,6 +29,9 @@ mod tests {
             IActionsDispatcherTrait as ICoreActionsDispatcherTrait
         },
         utils::{DefaultParameters, Position as PixelawPosition}
+    };
+    use starknet::{
+        class_hash::Felt252TryIntoClassHash, ContractAddress, testing::{set_block_timestamp},
     };
 
     const COLOR: u32 = 0xAAAAAAFF;

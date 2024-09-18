@@ -1,13 +1,13 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use pixelaw::core::utils::DefaultParameters;
-use pixelaw::core::models::pixel::PixelUpdate;
-use starknet::ContractAddress;
-use p_war::models::board::Position;
 
 use p_war::constants::{
     GAME_DURATION, DEFAULT_AREA, DEFAULT_RECOVERY_RATE, APP_KEY, APP_ICON, APP_MANIFEST,
     INITIAL_COLOR, BASE_COST, DEFAULT_PX
 };
+use p_war::models::board::Position;
+use pixelaw::core::models::pixel::PixelUpdate;
+use pixelaw::core::utils::DefaultParameters;
+use starknet::ContractAddress;
 
 // define the interface
 #[dojo::interface]
@@ -26,32 +26,31 @@ trait IActions {
 // dojo decorator
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod p_war_actions {
-    use super::{
-        APP_KEY, APP_ICON, APP_MANIFEST, IActions, IActionsDispatcher, IActionsDispatcherTrait,
-        GAME_DURATION, DEFAULT_AREA, BASE_COST, DEFAULT_PX
-    };
-    use super::{DEFAULT_RECOVERY_RATE, INITIAL_COLOR};
+    use p_war::constants::{GAME_ID, OUT_OF_BOUNDS_GAME_ID};
     use p_war::models::{
         game::{Game, Status, GameTrait}, board::{Board, GameId, PWarPixel}, player::{Player},
         proposal::{PixelRecoveryRate},
         allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette},
         allowed_app::AllowedApp
     };
-    use starknet::{
-        ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info,
-        contract_address_const,
-    };
+    use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
+    use p_war::systems::utils::{recover_px, update_max_px, check_game_status};
     use pixelaw::core::actions::{
         IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
-    use pixelaw::core::utils::{get_core_actions, DefaultParameters, Position};
     use pixelaw::core::models::{pixel::PixelUpdate, registry::App};
     use pixelaw::core::traits::IInteroperability;
-    use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
-    use p_war::systems::utils::{recover_px, update_max_px, check_game_status};
-
-    use p_war::constants::{GAME_ID, OUT_OF_BOUNDS_GAME_ID};
+    use pixelaw::core::utils::{get_core_actions, DefaultParameters, Position};
+    use starknet::{
+        ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info,
+        contract_address_const,
+    };
+    use super::{
+        APP_KEY, APP_ICON, APP_MANIFEST, IActions, IActionsDispatcher, IActionsDispatcherTrait,
+        GAME_DURATION, DEFAULT_AREA, BASE_COST, DEFAULT_PX
+    };
+    use super::{DEFAULT_RECOVERY_RATE, INITIAL_COLOR};
 
     #[event]
     #[derive(Drop, starknet::Event)]

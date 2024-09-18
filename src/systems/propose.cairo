@@ -1,7 +1,6 @@
-use starknet::{ContractAddress, get_caller_address, get_block_timestamp, contract_address_const};
-use p_war::models::{game::{Game, Status}, proposal::{Proposal}, board::Position};
-
 use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL_FACTOR};
+use p_war::models::{game::{Game, Status}, proposal::{Proposal}, board::Position};
+use starknet::{ContractAddress, get_caller_address, get_block_timestamp, contract_address_const};
 
 // define the interface
 #[dojo::interface]
@@ -21,22 +20,22 @@ trait IPropose {
 // dojo decorator
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod propose {
-    use super::{IPropose, NEEDED_YES_PX, PROPOSAL_DURATION, DISASTER_SIZE, PROPOSAL_FACTOR};
     use p_war::models::{
         game::{Game, Status, GameTrait}, proposal::{Proposal, PixelRecoveryRate},
         board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,
         allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette}
     };
     use p_war::systems::utils::{recover_px, check_game_status};
-    use pixelaw::core::utils::{get_core_actions, DefaultParameters};
     use pixelaw::core::actions::{
         IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
     use pixelaw::core::models::{pixel::PixelUpdate, pixel::Pixel};
+    use pixelaw::core::utils::{get_core_actions, DefaultParameters};
     use starknet::{
         ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
     };
+    use super::{IPropose, NEEDED_YES_PX, PROPOSAL_DURATION, DISASTER_SIZE, PROPOSAL_FACTOR};
 
 
     #[abi(embed_v0)]

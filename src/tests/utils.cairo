@@ -1,8 +1,7 @@
-use starknet::{class_hash::Felt252TryIntoClassHash, ContractAddress};
-// import world dispatcher
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 // import test utils
 use dojo::utils::test::{spawn_test_world, deploy_contract};
+// import world dispatcher
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 // import test utils
 use p_war::{
     models::{
@@ -29,6 +28,7 @@ use pixelaw::core::{
     },
     utils::{DefaultParameters, Position}
 };
+use starknet::{class_hash::Felt252TryIntoClassHash, ContractAddress};
 
 
 pub fn setup() -> (

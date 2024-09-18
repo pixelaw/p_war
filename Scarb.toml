@@ -33,5 +33,11 @@ build-external-contracts = [
     "pixelaw::core::utils::DefaultParameters",
     "pixelaw::core::actions::actions",
     "pixelaw::core::actions::IActionsDispatcher",
-    "pixelaw::core::actions::IActionsDispatcherTrait"
+    "pixelaw::core::actions::IActionsDispatcherTrait",
 ]
+
+[tool.fmt]
+sort-module-level-items = true
+
+[scripts]
+init_auth = "./scripts/init_auth.sh"
