@@ -6,8 +6,7 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use p_war::{
     models::{
         player::{player}, game::{Game, game}, board::{Board, GameId, board, game_id, p_war_pixel},
-        proposal::{Proposal, pixel_recovery_rate, proposal, player_vote},
-        guilds::{guild},
+        proposal::{Proposal, pixel_recovery_rate, proposal, player_vote}, guilds::{guild},
         allowed_app::{AllowedApp, allowed_app},
         allowed_color::{AllowedColor, allowed_color, palette_colors, in_palette, game_palette},
     },
@@ -89,7 +88,8 @@ pub fn setup() -> (
         .deploy_contract('salty2', voting::TEST_CLASS_HASH.try_into().unwrap());
     let voting = IVotingDispatcher { contract_address: voting_address };
 
-    let guild_address = world.deploy_contract('salty3', guild_actions::TEST_CLASS_HASH.try_into().unwrap());
+    let guild_address = world
+        .deploy_contract('salty3', guild_actions::TEST_CLASS_HASH.try_into().unwrap());
     let guild = IGuildDispatcher { contract_address: guild_address };
 
     println!("contracts deployed");

@@ -42,7 +42,8 @@ mod tests {
         // caller
         let caller = starknet::contract_address_const::<0x0>();
 
-        let (world, _, p_war_actions, propose_system, voting_system, _) = p_war::tests::utils::setup();
+        let (world, _, p_war_actions, propose_system, voting_system, _) =
+            p_war::tests::utils::setup();
 
         let default_params = DefaultParameters {
             for_player: caller,
