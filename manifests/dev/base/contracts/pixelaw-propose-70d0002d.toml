@@ -1,0 +1,11 @@
+kind = "DojoContract"
+class_hash = "0x6ab9709bc640341001ea4107261f6de824ef8f076d21d056f4521d205f5cb5a"
+original_class_hash = "0x6ab9709bc640341001ea4107261f6de824ef8f076d21d056f4521d205f5cb5a"
+base_class_hash = "0x0"
+abi = "manifests/dev/base/abis/contracts/pixelaw-propose-70d0002d.json"
+reads = []
+writes = []
+init_calldata = []
+tag = "pixelaw-propose"
+systems = ["activate_proposal"]
+manifest_name = "pixelaw-propose-70d0002d"

@@ -1,13 +1,13 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use pixelaw::core::utils::DefaultParameters;
-use pixelaw::core::models::pixel::PixelUpdate;
-use starknet::ContractAddress;
-use p_war::models::board::Position;
 
 use p_war::constants::{
     GAME_DURATION, DEFAULT_AREA, DEFAULT_RECOVERY_RATE, APP_KEY, APP_ICON, APP_MANIFEST,
     INITIAL_COLOR, BASE_COST, DEFAULT_PX
 };
+use p_war::models::board::Position;
+use pixelaw::core::models::pixel::PixelUpdate;
+use pixelaw::core::utils::DefaultParameters;
+use starknet::ContractAddress;
 
 // define the interface
 #[dojo::interface]
@@ -26,31 +26,31 @@ trait IActions {
 // dojo decorator
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod p_war_actions {
-    use super::{
-        APP_KEY, APP_ICON, APP_MANIFEST, IActions, IActionsDispatcher, IActionsDispatcherTrait,
-        GAME_DURATION, DEFAULT_AREA, BASE_COST, DEFAULT_PX
-    };
-    use super::{DEFAULT_RECOVERY_RATE, INITIAL_COLOR};
+    use p_war::constants::{GAME_ID, OUT_OF_BOUNDS_GAME_ID};
     use p_war::models::{
         game::{Game, Status, GameTrait}, board::{Board, GameId, PWarPixel}, player::{Player},
         proposal::{PixelRecoveryRate},
         allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette},
         allowed_app::AllowedApp
     };
-    use starknet::{
-        ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
-    };
+    use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
+    use p_war::systems::utils::{recover_px, update_max_px, check_game_status};
     use pixelaw::core::actions::{
         IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
-    use pixelaw::core::utils::{get_core_actions, DefaultParameters, Position};
     use pixelaw::core::models::{pixel::PixelUpdate, registry::App};
     use pixelaw::core::traits::IInteroperability;
-    use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
-    use p_war::systems::utils::{recover_px, update_max_px, check_game_status};
-
-    use p_war::constants::{GAME_ID, OUT_OF_BOUNDS_GAME_ID};
+    use pixelaw::core::utils::{get_core_actions, DefaultParameters, Position};
+    use starknet::{
+        ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info,
+        contract_address_const,
+    };
+    use super::{
+        APP_KEY, APP_ICON, APP_MANIFEST, IActions, IActionsDispatcher, IActionsDispatcherTrait,
+        GAME_DURATION, DEFAULT_AREA, BASE_COST, DEFAULT_PX
+    };
+    use super::{DEFAULT_RECOVERY_RATE, INITIAL_COLOR};
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -120,7 +120,7 @@ mod p_war_actions {
     impl ActionsImpl of IActions<ContractState> {
         fn init(ref world: IWorldDispatcher) {
             let core_actions = get_core_actions(world);
-            core_actions.update_app(APP_KEY, APP_ICON, APP_MANIFEST);
+            core_actions.new_app(contract_address_const::<0>(), APP_KEY, APP_ICON);
         }
 
         fn interact(ref world: IWorldDispatcher, default_params: DefaultParameters) {
@@ -132,7 +132,7 @@ mod p_war_actions {
                 // out of bounds
                 return;
             } else {
-                self.place_pixel(starknet::contract_address_const::<0x0>(), default_params);
+                self.place_pixel(contract_address_const::<0x0>(), default_params);
             };
         }
 
@@ -345,7 +345,7 @@ mod p_war_actions {
             let position = Position { x: default_params.position.x, y: default_params.position.y };
             let previous_pwarpixel = get!(world, (position), (PWarPixel));
 
-            if (previous_pwarpixel.owner != starknet::contract_address_const::<0x0>()
+            if (previous_pwarpixel.owner != contract_address_const::<0x0>()
                 && previous_pwarpixel.owner != player.address) {
                 // get the previous player's info
                 let mut previous_player = get!(world, (previous_pwarpixel.owner), (Player));
@@ -386,7 +386,7 @@ mod p_war_actions {
                 0 => {
                     // set the person with the most pixels at the end as the winner.
                     // TODO: get such a person. (We need to set  player.num_owns correctly.)
-                    starknet::contract_address_const::<0x0>()
+                    contract_address_const::<0x0>()
                 },
                 1 => {
                     // set the winner by the proposal directly.
@@ -396,9 +396,9 @@ mod p_war_actions {
                 2 => {
                     // winner is the person who has committied at the most.
                     // TODO: get such a person.
-                    starknet::contract_address_const::<0x2>()
+                    contract_address_const::<0x2>()
                 },
-                _ => { starknet::contract_address_const::<0x99>() },
+                _ => { contract_address_const::<0x99>() },
             };
 
             game.winner = winner;

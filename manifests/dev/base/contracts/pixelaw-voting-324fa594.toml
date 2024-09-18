@@ -1,0 +1,11 @@
+kind = "DojoContract"
+class_hash = "0x4912812ac8ddd08414516cc63b9b4f5e41b83931aa297e46dab6424227ad814"
+original_class_hash = "0x4912812ac8ddd08414516cc63b9b4f5e41b83931aa297e46dab6424227ad814"
+base_class_hash = "0x0"
+abi = "manifests/dev/base/abis/contracts/pixelaw-voting-324fa594.json"
+reads = []
+writes = []
+init_calldata = []
+tag = "pixelaw-voting"
+systems = ["vote"]
+manifest_name = "pixelaw-voting-324fa594"

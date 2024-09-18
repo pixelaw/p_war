@@ -1,5 +1,5 @@
-use starknet::get_block_timestamp;
 use starknet::ContractAddress;
+use starknet::get_block_timestamp;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model(namespace: "pixelaw", nomapping: true)]
@@ -33,7 +33,6 @@ trait GameTrait {
 
 impl GameImpl of GameTrait {
     fn status(self: Game) -> Status {
-
         if self.start == 0 && self.end == 0 {
             return Status::Unknown;
         }

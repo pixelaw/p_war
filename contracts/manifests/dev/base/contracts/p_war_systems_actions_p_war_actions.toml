@@ -1,9 +1,0 @@
-kind = "DojoContract"
-class_hash = "0x777fd0c408dd44d17a85cc1553b3396c4645ce3ab6a11edb26bf1a0a68b1ced"
-original_class_hash = "0x777fd0c408dd44d17a85cc1553b3396c4645ce3ab6a11edb26bf1a0a68b1ced"
-base_class_hash = "0x0"
-abi = "manifests/dev/abis/base/contracts/p_war_systems_actions_p_war_actions.json"
-reads = []
-writes = []
-computed = []
-name = "p_war::systems::actions::p_war_actions"

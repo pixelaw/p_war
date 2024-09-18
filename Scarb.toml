@@ -1,13 +1,15 @@
 [package]
 cairo-version = "=2.7.0"
 name = "p_war"
-version = "0.3.1"
+version = "0.3.54"
 
 [cairo]
 sierra-replace-ids = true
 
 [dependencies]
-pixelaw = { git = "https://github.com/pixelaw/core", tag = "v0.3.50" }
+pixelaw = { git = "https://github.com/pixelaw/core", branch = "main" }
+# Added explicitly for https://github.com/dojoengine/dojo/issues/2430
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-alpha.11" }
 # pixelaw = { path = "../core/contracts" }
 
 [[target.dojo]]
@@ -31,5 +33,11 @@ build-external-contracts = [
     "pixelaw::core::utils::DefaultParameters",
     "pixelaw::core::actions::actions",
     "pixelaw::core::actions::IActionsDispatcher",
-    "pixelaw::core::actions::IActionsDispatcherTrait"
+    "pixelaw::core::actions::IActionsDispatcherTrait",
 ]
+
+[tool.fmt]
+sort-module-level-items = true
+
+[scripts]
+init_auth = "./scripts/init_auth.sh"

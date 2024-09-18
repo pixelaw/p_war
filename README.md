@@ -1,21 +1,105 @@
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://avatars.githubusercontent.com/u/140254228?s=200&v=4">  
+<img alt="Dojo logo" align="right" width="100" src="https://avatars.githubusercontent.com/u/140254228?s=200&v=4">
+</picture>
 
+<a href="https://x.com/0xpixelaw">
+<img src="https://img.shields.io/twitter/follow/0xpixelaw?style=social"/>
+</a>
+<a href="https://github.com/pixelaw/core">
+<img src="https://img.shields.io/github/stars/pixelaw/core?style=social"/>
+</a>
+
+[![discord](https://img.shields.io/badge/join-PixeLAW-green?logo=discord&logoColor=white)](https://t.co/jKDjNbFdZ5)
 
 # p/war
-Version v0.3.55
-## Purpose
 
-To host game events on PixeLAW to create engaging experiences for users and developers. One of the core values of PixeLAW is the ability to add rules, proving that new experiences can be created through simple games with the addition of rules.
+Contracts written in Cairo using Dojo to showcase a Pixel World with app interoperability. Its interoperability is made possible with core actions. Apps are any other contracts that are deployed to the Pixel World.
 
-## Details
+## Prerequisites
 
-https://www.notion.so/p-war-EthCC-version-Document-51fb8bc7721a424d8e4783a75f11ab4e
+- [asdf](https://asdf-vm.com/)
+- [scarb](https://docs.swmansion.com/scarb/)
+- [dojo](https://github.com/dojoengine/dojo)
 
-## Running P_War
-1. Run the dev container ([check this out](https://code.visualstudio.com/docs/devcontainers/containers))
-2. Once the startup has finished, on the terminal run the following code:
-````shell
-scarb run initialize
-````
-3. The script will build your contracts, deploy them, grant auth, and then initialize p_war_actions
+## Install asdf
 
-4. You should run the client by using [p_war_client](https://github.com/pixelaw/p_war_client).
+Follow the asdf installation instructions.
+
+## Install dojo
+
+```
+asdf plugin add dojo https://github.com/dojoengine/asdf-dojo
+asdf install dojo 1.0.0-alpha.11
+```
+
+## Install scarb
+
+```
+asdf plugin add scarb
+asdf install scarb 2.7.0
+```
+
+And after moving into contracts directory, the versions for these libs are set in the .tool-versions file.
+
+## Running Locally
+
+#### Terminal one (Make sure this is running)
+
+```bash
+# Run Katana
+katana --disable-fee --allowed-origins "*"
+```
+
+#### Terminal two
+
+```bash
+# Build the example
+sozo build
+
+# Migrate the example
+sozo migrate apply
+
+# Initialize the pixelaw app
+scarb run init_auth
+
+# Start Torii
+torii --world 0x263ae44e5414519a5c5a135cccaf3d9d7ee196d37e8de47a178da91f3de9b34 --allowed-origins "*"
+```
+
+### How to deploy
+
+you can deploy your app to our katana testnet by running the following commands:
+
+```bash
+# Deploy the pixelaw app
+sozo build -P release
+sozo migrate apply -P release
+```
+
+
+## Troubleshooting
+
+If you want to use latest dojo version, you need to clone core by yourself and modify the path in `Scarb.toml` file.
+
+1. Clone core repo
+```bash
+git clone https://github.com/pixelaw/core
+```
+
+2. Modify the path in `Scarb.toml` file
+```Scarb.toml
+pixelaw = { path = "../pixelaw/core/contracts" }
+```
+
+3. Modify version in `Scarb.toml` file in core repo
+```Scarb.toml
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-alpha.11" }
+```
+
+4. Build and run core
+```bash
+cd contracts
+sozo build
+sozo migrate apply
+```
