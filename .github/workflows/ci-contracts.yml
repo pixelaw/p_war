@@ -2,17 +2,13 @@ name: ci-contracts
 
 on:
   push:
-    branches: [main]
+    branches: [master]
     paths:
       - "src/**"
   pull_request:
-    branches: [main]
+    branches: [master]
     paths:
       - "src/**"
-
-defaults:
-  run:
-    working-directory: contracts
 
 env:
   CARGO_TERM_COLOR: always

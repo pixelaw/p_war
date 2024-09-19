@@ -1,21 +1,24 @@
-use starknet::{ContractAddress, get_caller_address};
-use p_war::models::guilds::Guild;
 use p_war::models::game::Game;
+use p_war::models::guilds::Guild;
 use p_war::models::player::Player;
+use starknet::{ContractAddress, get_caller_address};
 
 #[dojo::interface]
 trait IGuild {
-    fn create_guild(ref world: IWorldDispatcher, game_id: usize, guild_name: felt252) -> usize; //returns guild ID
-    fn add_member(ref world: IWorldDispatcher, game_id: usize, guild_id: usize, new_member: ContractAddress);
-    fn remove_member(ref world: IWorldDispatcher, game_id: usize, guild_id: usize, member: ContractAddress);
+    fn create_guild(
+        ref world: IWorldDispatcher, game_id: usize, guild_name: felt252
+    ) -> usize; //returns guild ID
+    fn add_member(
+        ref world: IWorldDispatcher, game_id: usize, guild_id: usize, new_member: ContractAddress
+    );
+    fn remove_member(
+        ref world: IWorldDispatcher, game_id: usize, guild_id: usize, member: ContractAddress
+    );
     fn get_guild_points(ref world: IWorldDispatcher, game_id: usize, guild_id: usize) -> usize;
 }
 
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod guild_actions {
-
-    use super::{IGuild};
-
     use p_war::models::{
         game::{Game, Status, GameTrait}, guilds::{Guild},
         board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,
@@ -24,11 +27,13 @@ mod guild_actions {
         ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
     };
 
+    use super::{IGuild};
+
     #[abi(embed_v0)]
     impl GuildImpl of IGuild<ContractState> {
         fn create_guild(ref world: IWorldDispatcher, game_id: usize, guild_name: felt252) -> usize {
             let caller = get_caller_address();
-            
+
             // Check if the game exists and get the game data
             let mut game = get!(world, game_id, (Game));
             assert(game.id == game_id, 'Game does not exist');
@@ -74,12 +79,17 @@ mod guild_actions {
             guild_id
         }
 
-        fn add_member(ref world: IWorldDispatcher, game_id: usize, guild_id: usize, new_member: ContractAddress) {
+        fn add_member(
+            ref world: IWorldDispatcher,
+            game_id: usize,
+            guild_id: usize,
+            new_member: ContractAddress
+        ) {
             let caller = get_caller_address();
-            
+
             // Get the guild
             let mut guild = get!(world, (game_id, guild_id), (Guild));
-            
+
             // Check if the caller is the creator
             assert(guild.creator == caller, 'Only creator can add members');
 
@@ -114,7 +124,7 @@ mod guild_actions {
 
             // Update the game with the new guild_ids
             guild.members = new_guild_members.span();
-            
+
             //update member count
             guild.member_count += 1;
 
@@ -122,12 +132,14 @@ mod guild_actions {
             set!(world, (guild));
         }
 
-        fn remove_member(ref world: IWorldDispatcher, game_id: usize, guild_id: usize, member: ContractAddress) {
+        fn remove_member(
+            ref world: IWorldDispatcher, game_id: usize, guild_id: usize, member: ContractAddress
+        ) {
             let caller = get_caller_address();
-            
+
             // Get the guild
             let mut guild = get!(world, (game_id, guild_id), (Guild));
-            
+
             // Check if the caller is the creator
             assert(guild.creator == caller, 'Only creator can remove members');
 
@@ -165,7 +177,8 @@ mod guild_actions {
             set!(world, (guild));
         }
 
-        // //this function is very inefficient. better implementation is updating guild points when member points are updated.
+        // //this function is very inefficient. better implementation is updating guild points when
+        // member points are updated.
         fn get_guild_points(ref world: IWorldDispatcher, game_id: usize, guild_id: usize) -> usize {
             // Get the guild
             let mut guild = get!(world, (game_id, guild_id), (Guild));
@@ -177,11 +190,7 @@ mod guild_actions {
                 if i >= guild.member_count {
                     break;
                 }
-                let mut player = get!(
-                    world,
-                    (*guild.members.at(i), game_id),
-                    (Player)
-                );
+                let mut player = get!(world, (*guild.members.at(i), game_id), (Player));
                 println!("player.num_commit: {}", player.num_commit);
                 guild_total_points += player.num_commit;
                 i += 1;

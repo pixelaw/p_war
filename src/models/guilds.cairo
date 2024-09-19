@@ -1,5 +1,5 @@
-use starknet::ContractAddress;
 use dojo::world::IWorldDispatcher;
+use starknet::ContractAddress;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model(namespace: "pixelaw", nomapping: true)]
