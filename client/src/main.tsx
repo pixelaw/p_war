@@ -8,7 +8,7 @@ import { dojoConfig } from "../dojoConfig";
 import { ThemeProvider } from "./components/ThemeProvider";
 import { Toaster } from "./components/ui/Sonner";
 import SwipeControl from "./components/SwipeControl";
-import { StarknetConfig, publicProvider, voyager } from "@starknet-react/core";
+import { StarknetConfig, jsonRpcProvider, voyager } from "@starknet-react/core";
 import cartridgeConnector from "@/libs/cartriggeController";
 import { sepolia } from "@starknet-react/chains";
 
@@ -42,7 +42,7 @@ const Main = () => {
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
           <StarknetConfig
             chains={[sepolia]}
-            provider={publicProvider()}
+            provider={jsonRpcProvider({ rpc: () => ({ nodeUrl: import.meta.env.VITE_PUBLIC_RPC_URL }) })}
             connectors={[cartridgeConnector]}
             explorer={voyager}
             autoConnect={true}
