@@ -37,7 +37,7 @@ fi
 
 # make sure all components/systems are deployed
 CORE_MODELS=("pixelaw-App" "pixelaw-AppName" "pixelaw-CoreActionsAddress" "pixelaw-Pixel" "pixelaw-Permissions" "pixelaw-QueueItem" "pixelaw-Instruction")
-P_WAR_MODELS=("pixelaw-AllowedApp" "pixelaw-Game" "pixelaw-GameId" "pixelaw-GamePalette" "pixelaw-InPalette" "pixelaw-Player" "pixelaw-PixelRecoveryRate" "pixelaw-Proposal")
+P_WAR_MODELS=("pixelaw-AllowedColor" "pixelaw-PaletteColors" "pixelaw-AllowedApp" "pixelaw-Game" "pixelaw-GameId" "pixelaw-GamePalette" "pixelaw-InPalette" "pixelaw-Player" "pixelaw-PixelRecoveryRate" "pixelaw-Proposal" "pixelaw-Board")
 PROPOSE_MODELS=("pixelaw-AllowedColor" "pixelaw-GamePalette" "pixelaw-InPalette" "pixelaw-PaletteColors" "pixelaw-Proposal")
 VOTING_MODELS=("pixelaw-PlayerVote" "pixelaw-Proposal" "pixelaw-Player")
 GUILDS_MODELS=("pixelaw-Guild")

@@ -47,6 +47,8 @@ And after moving into contracts directory, the versions for these libs are set i
 If you use vscode, you can start katana and torii just press `⌘ + ⇧ + B` in your vscode. This can be executed by selecting commands here:
 ![image](./public/assets/start_katana_and_torii.png)
 
+If you use these shortcut, please check out if the contract was deployed.
+
 otherwise,
 
 #### Terminal one (Make sure this is running)
