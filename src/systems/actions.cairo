@@ -15,7 +15,7 @@ trait IActions {
     fn init(ref world: IWorldDispatcher);
     fn interact(ref world: IWorldDispatcher, default_params: DefaultParameters);
     fn create_game(ref world: IWorldDispatcher, origin: Position) -> usize;
-    fn get_game_id(ref world: IWorldDispatcher, position: Position) -> usize;
+    fn get_game_id(world: @IWorldDispatcher, position: Position) -> usize;
     fn place_pixel(
         ref world: IWorldDispatcher, app: ContractAddress, default_params: DefaultParameters
     );
@@ -136,7 +136,7 @@ mod p_war_actions {
             };
         }
 
-        fn get_game_id(ref world: IWorldDispatcher, position: Position) -> usize {
+        fn get_game_id(world: @IWorldDispatcher, position: Position) -> usize {
             let mut id = world.uuid();
             if id == 0 {
                 return 0;
