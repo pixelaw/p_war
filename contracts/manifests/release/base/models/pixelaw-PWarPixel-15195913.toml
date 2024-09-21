@@ -1,0 +1,17 @@
+kind = "DojoModel"
+class_hash = "0x3f15ee957414f1442830161943dfac7ca65fb77b5a9a2ed2e53099d8493c261"
+original_class_hash = "0x3f15ee957414f1442830161943dfac7ca65fb77b5a9a2ed2e53099d8493c261"
+abi = "manifests/release/base/abis/models/pixelaw-PWarPixel-15195913.json"
+tag = "pixelaw-PWarPixel"
+qualified_path = "p_war::models::board::p_war_pixel"
+manifest_name = "pixelaw-PWarPixel-15195913"
+
+[[members]]
+name = "position"
+type = "Position"
+key = true
+
+[[members]]
+name = "owner"
+type = "ContractAddress"
+key = false

@@ -1,0 +1,20 @@
+kind = "DojoContract"
+class_hash = "0x317693d5c8f562ba5920e57218000c8839bf0624e9310f947068947e4e0c3fb"
+original_class_hash = "0x317693d5c8f562ba5920e57218000c8839bf0624e9310f947068947e4e0c3fb"
+base_class_hash = "0x0"
+abi = "manifests/release/base/abis/contracts/pixelaw-p_war_actions-60819afd.json"
+reads = []
+writes = []
+init_calldata = []
+tag = "pixelaw-p_war_actions"
+systems = [
+    "on_pre_update",
+    "on_post_update",
+    "set_pixel",
+    "init",
+    "interact",
+    "place_pixel",
+    "update_pixel",
+    "end_game",
+]
+manifest_name = "pixelaw-p_war_actions-60819afd"

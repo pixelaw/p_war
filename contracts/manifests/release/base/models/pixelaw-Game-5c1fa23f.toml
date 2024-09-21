@@ -1,0 +1,67 @@
+kind = "DojoModel"
+class_hash = "0x794c64750ec570c0678f6afd54210e88f6da106ba0172f2ec03405c3c0ad70e"
+original_class_hash = "0x794c64750ec570c0678f6afd54210e88f6da106ba0172f2ec03405c3c0ad70e"
+abi = "manifests/release/base/abis/models/pixelaw-Game-5c1fa23f.json"
+tag = "pixelaw-Game"
+qualified_path = "p_war::models::game::game"
+manifest_name = "pixelaw-Game-5c1fa23f"
+
+[[members]]
+name = "id"
+type = "usize"
+key = true
+
+[[members]]
+name = "start"
+type = "u64"
+key = false
+
+[[members]]
+name = "end"
+type = "u64"
+key = false
+
+[[members]]
+name = "proposal_idx"
+type = "usize"
+key = false
+
+[[members]]
+name = "base_cost"
+type = "u32"
+key = false
+
+[[members]]
+name = "const_val"
+type = "u32"
+key = false
+
+[[members]]
+name = "coeff_own_pixels"
+type = "u32"
+key = false
+
+[[members]]
+name = "coeff_commits"
+type = "u32"
+key = false
+
+[[members]]
+name = "winner_config"
+type = "u32"
+key = false
+
+[[members]]
+name = "winner"
+type = "ContractAddress"
+key = false
+
+[[members]]
+name = "guild_ids"
+type = "Span<u32>"
+key = false
+
+[[members]]
+name = "guild_count"
+type = "usize"
+key = false
