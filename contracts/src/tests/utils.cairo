@@ -12,8 +12,8 @@ use p_war::{
     },
     systems::{
         actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
-        propose::{propose, IProposeDispatcher, IProposeDispatcherTrait},
-        voting::{voting, IVotingDispatcher, IVotingDispatcherTrait},
+        propose::{propose_actions, IProposeDispatcher, IProposeDispatcherTrait},
+        voting::{voting_actions, IVotingDispatcher, IVotingDispatcherTrait},
         guilds::{guild_actions, IGuildDispatcher, IGuildDispatcherTrait}
     }
 };
@@ -81,11 +81,11 @@ pub fn setup() -> (
     let p_war_actions = IActionsDispatcher { contract_address: p_war_actions_address };
 
     let propose_address = world
-        .deploy_contract('salty1', propose::TEST_CLASS_HASH.try_into().unwrap());
+        .deploy_contract('salty1', propose_actions::TEST_CLASS_HASH.try_into().unwrap());
     let propose = IProposeDispatcher { contract_address: propose_address };
 
     let voting_address = world
-        .deploy_contract('salty2', voting::TEST_CLASS_HASH.try_into().unwrap());
+        .deploy_contract('salty2', voting_actions::TEST_CLASS_HASH.try_into().unwrap());
     let voting = IVotingDispatcher { contract_address: voting_address };
 
     let guild_address = world

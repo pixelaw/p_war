@@ -19,7 +19,7 @@ trait IPropose {
 
 // dojo decorator
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
-mod propose {
+mod propose_actions {
     use p_war::models::{
         game::{Game, Status, GameTrait}, proposal::{Proposal, PixelRecoveryRate},
         board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,

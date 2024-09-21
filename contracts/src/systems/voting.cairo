@@ -8,7 +8,7 @@ trait IVoting {
 
 // dojo decorator
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
-mod voting {
+mod voting_actions {
     use p_war::models::{player::{Player}, proposal::{PlayerVote, Proposal}};
     use p_war::systems::utils::{recover_px, update_max_px};
     use starknet::{ContractAddress, get_caller_address};

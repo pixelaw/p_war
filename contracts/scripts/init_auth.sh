@@ -24,6 +24,7 @@ declare "CORE_ACTIONS"="pixelaw-actions"
 declare "P_WAR_ACTIONS"="pixelaw-p_war_actions"
 declare "PROPOSE_ACTIONS"="pixelaw-propose"
 declare "VOTING_ACTIONS"="pixelaw-voting"
+declare "GUILDS_ACTIONS"="pixelaw-guild_actions"
 
 ## Set RPC_URL with default value
 #RPC_URL="http://localhost:5050"
@@ -39,6 +40,7 @@ CORE_MODELS=("pixelaw-App" "pixelaw-AppName" "pixelaw-CoreActionsAddress" "pixel
 P_WAR_MODELS=("pixelaw-AllowedApp" "pixelaw-Game" "pixelaw-GameId" "pixelaw-GamePalette" "pixelaw-InPalette" "pixelaw-Player" "pixelaw-PixelRecoveryRate" "pixelaw-Proposal")
 PROPOSE_MODELS=("pixelaw-AllowedColor" "pixelaw-GamePalette" "pixelaw-InPalette" "pixelaw-PaletteColors" "pixelaw-Proposal")
 VOTING_MODELS=("pixelaw-PlayerVote" "pixelaw-Proposal" "pixelaw-Player")
+GUILDS_MODELS=("pixelaw-Guild")
 
 echo "Write permissions for CORE_ACTIONS"
 for model in ${CORE_MODELS[@]}; do
@@ -67,6 +69,13 @@ for model in ${VOTING_MODELS[@]}; do
     sozo --profile $SCARB_PROFILE auth grant writer model:$model,$VOTING_ACTIONS
 done
 echo "Write permissions for VOTING_ACTIONS: Done"
+
+echo "Write permissions for GUILDS_ACTIONS"
+for model in ${GUILDS_MODELS[@]}; do
+    sleep 0.1
+    sozo --profile $SCARB_PROFILE auth grant writer model:$model,$GUILDS_ACTIONS
+done
+echo "Write permissions for GUILDS_ACTIONS: Done"
 
 echo "Initialize CORE_ACTIONS : $CORE_ACTIONS"
 sleep 0.1

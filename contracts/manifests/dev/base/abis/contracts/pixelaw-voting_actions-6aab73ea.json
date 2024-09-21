@@ -178,11 +178,11 @@
   {
     "type": "impl",
     "name": "IDojoInitImpl",
-    "interface_name": "p_war::systems::voting::voting::IDojoInit"
+    "interface_name": "p_war::systems::voting::voting_actions::IDojoInit"
   },
   {
     "type": "interface",
-    "name": "p_war::systems::voting::voting::IDojoInit",
+    "name": "p_war::systems::voting::voting_actions::IDojoInit",
     "items": [
       {
         "type": "function",
@@ -242,7 +242,7 @@
   },
   {
     "type": "event",
-    "name": "p_war::systems::voting::voting::Event",
+    "name": "p_war::systems::voting::voting_actions::Event",
     "kind": "enum",
     "variants": [
       {

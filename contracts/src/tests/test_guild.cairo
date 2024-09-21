@@ -1,33 +1,15 @@
-use dojo::utils::test::{spawn_test_world, deploy_contract};
-
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-
 use p_war::{
-    models::{
-        player::{Player, player}, game::{Game, game},
-        board::{Board, GameId, board, game_id, p_war_pixel},
-        proposal::{Proposal, pixel_recovery_rate, proposal, player_vote},
-        allowed_app::{AllowedApp, allowed_app},
-        allowed_color::{AllowedColor, allowed_color, palette_colors, in_palette, game_palette},
-        guilds::{Guild, guild},
-    },
+    models::{guilds::{Guild, guild}},
     systems::{
         actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
-        propose::{propose, IProposeDispatcher, IProposeDispatcherTrait},
-        voting::{voting, IVotingDispatcher, IVotingDispatcherTrait},
-        guilds::{guild_actions, IGuild, IGuildDispatcher, IGuildDispatcherTrait},
-    },
-    tests::utils as test_utils
+        guilds::{guild_actions, IGuildDispatcher, IGuildDispatcherTrait}
+    }
 };
 
 use pixelaw::core::{
     models::{
         permissions::{permissions}, pixel::{pixel, Pixel, PixelUpdate}, queue::queue_item,
         registry::{app, app_user, app_name, core_actions_address, instruction}
-    },
-    actions::{
-        actions as core_actions, IActionsDispatcher as ICoreActionsDispatcher,
-        IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     },
     utils::{DefaultParameters, Position}
 };

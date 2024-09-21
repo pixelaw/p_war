@@ -1,7 +1,3 @@
-use dojo::utils::test::{spawn_test_world, deploy_contract};
-
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-
 use p_war::{
     models::{
         player::{player}, game::{Game, game}, board::{Board, GameId, board, game_id, p_war_pixel},
@@ -11,10 +7,10 @@ use p_war::{
     },
     systems::{
         actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
-        propose::{propose, IProposeDispatcher, IProposeDispatcherTrait},
-        voting::{voting, IVotingDispatcher, IVotingDispatcherTrait}
-    },
-    tests::utils as test_utils
+        propose::{propose_actions, IProposeDispatcher, IProposeDispatcherTrait},
+        voting::{voting_actions, IVotingDispatcher, IVotingDispatcherTrait},
+        guilds::{guild_actions, IGuildDispatcher, IGuildDispatcherTrait}
+    }
 };
 
 use pixelaw::core::{
@@ -22,12 +18,9 @@ use pixelaw::core::{
         permissions::{permissions}, pixel::{pixel, Pixel, PixelUpdate}, queue::queue_item,
         registry::{app, app_user, app_name, core_actions_address, instruction}
     },
-    actions::{
-        actions as core_actions, IActionsDispatcher as ICoreActionsDispatcher,
-        IActionsDispatcherTrait as ICoreActionsDispatcherTrait
-    },
     utils::{DefaultParameters, Position, is_pixel_color}
 };
+
 use starknet::{
     class_hash::Felt252TryIntoClassHash, ContractAddress,
     testing::{set_block_timestamp, set_account_contract_address}, get_block_timestamp,
@@ -53,7 +46,7 @@ fn test_reset_to_white() {
     let ZERO_ADDRESS: ContractAddress = contract_address_const::<0>();
 
     // Initialize the world and the actions
-    let (world, __, p_war_actions, propose, voting, _) = p_war::tests::utils::setup();
+    let (world, _, p_war_actions, propose, voting, _) = p_war::tests::utils::setup();
 
     // Setup players
     let PLAYER_1 = contract_address_const::<0x1337>();
