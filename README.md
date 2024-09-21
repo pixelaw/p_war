@@ -82,6 +82,15 @@ sozo build -P release
 sozo migrate apply -P release
 ```
 
+### Setup Client
+
+After finishing setup a contract side, you can run the client locally by following commands: 
+```bash
+cd ./client
+bun install
+bun run dev
+```
+
 ## Troubleshooting
 
 If you want to use latest dojo version, you need to clone core by yourself and modify the path in `Scarb.toml` file.

@@ -111,7 +111,7 @@ export const PixelViewer: React.FC = () => {
         onCellClick={onCellClick}
         onSwipe={onPan}
         onPan={onPan}
-        // onTap={onCellClick} // NOTE: somehow tap and mouseup events are called duplicated
+        onTap={onCellClick} // NOTE: somehow tap and mouseup events are called duplicated (it might be depends on the environemtns??)
         onDrawGrid={onDrawGrid}
         setCurrentMousePos={setCurrentMousePos}
         gridState={gridState}
