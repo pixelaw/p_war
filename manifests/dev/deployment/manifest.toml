@@ -45,9 +45,26 @@ manifest_name = "pixelaw-actions-16928a49"
 
 [[contracts]]
 kind = "DojoContract"
+address = "0x138243b2aeb794df3c6a1b9fb9f834591b3e99c0d73cb59441a6e7cac15c7a"
+class_hash = "0x11472c33465ac19ee8fd27f6d901c6c4c68ec3b7aca25da683f9ada76edf5ff"
+original_class_hash = "0x11472c33465ac19ee8fd27f6d901c6c4c68ec3b7aca25da683f9ada76edf5ff"
+base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
+abi = "manifests/dev/deployment/abis/contracts/pixelaw-guild_actions-4c9f5931.json"
+reads = []
+writes = []
+init_calldata = []
+tag = "pixelaw-guild_actions"
+systems = [
+    "add_member",
+    "remove_member",
+]
+manifest_name = "pixelaw-guild_actions-4c9f5931"
+
+[[contracts]]
+kind = "DojoContract"
 address = "0x2045bbeab298c52664537ae151262ca5f2a4e41b07f221c4860879551c65cb5"
-class_hash = "0x21cec3b0828e4b206170a9eba80f3cdea068c53ab9ba00196b996dc6aa266c4"
-original_class_hash = "0x21cec3b0828e4b206170a9eba80f3cdea068c53ab9ba00196b996dc6aa266c4"
+class_hash = "0x317693d5c8f562ba5920e57218000c8839bf0624e9310f947068947e4e0c3fb"
+original_class_hash = "0x317693d5c8f562ba5920e57218000c8839bf0624e9310f947068947e4e0c3fb"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/pixelaw-p_war_actions-60819afd.json"
 reads = []
@@ -69,8 +86,8 @@ manifest_name = "pixelaw-p_war_actions-60819afd"
 [[contracts]]
 kind = "DojoContract"
 address = "0x72e4bb5459874f51d4d2204d4d0b00719087cd5dcd1957bbac5473152d348ea"
-class_hash = "0x84bd3040033c83ad370fed726f4697fc76e7f16e1d254e66de26e767a78653"
-original_class_hash = "0x84bd3040033c83ad370fed726f4697fc76e7f16e1d254e66de26e767a78653"
+class_hash = "0x6ab9709bc640341001ea4107261f6de824ef8f076d21d056f4521d205f5cb5a"
+original_class_hash = "0x6ab9709bc640341001ea4107261f6de824ef8f076d21d056f4521d205f5cb5a"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/pixelaw-propose-70d0002d.json"
 reads = []
@@ -83,8 +100,8 @@ manifest_name = "pixelaw-propose-70d0002d"
 [[contracts]]
 kind = "DojoContract"
 address = "0x1a7d8c29568c3ca9c2f4308ed04a790fbb8a6b07e8801f02c589946566896d6"
-class_hash = "0x9e27330384b6dab78836d58d402a04da9c4a746244179ae59969917e6eec74"
-original_class_hash = "0x9e27330384b6dab78836d58d402a04da9c4a746244179ae59969917e6eec74"
+class_hash = "0x4912812ac8ddd08414516cc63b9b4f5e41b83931aa297e46dab6424227ad814"
+original_class_hash = "0x4912812ac8ddd08414516cc63b9b4f5e41b83931aa297e46dab6424227ad814"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/pixelaw-voting-324fa594.json"
 reads = []
@@ -264,8 +281,8 @@ key = false
 
 [[models]]
 kind = "DojoModel"
-class_hash = "0xae291a350d93211b1adcc4ece17b19ec53ff50207b01be6fc0c39cfc7974b9"
-original_class_hash = "0xae291a350d93211b1adcc4ece17b19ec53ff50207b01be6fc0c39cfc7974b9"
+class_hash = "0x794c64750ec570c0678f6afd54210e88f6da106ba0172f2ec03405c3c0ad70e"
+original_class_hash = "0x794c64750ec570c0678f6afd54210e88f6da106ba0172f2ec03405c3c0ad70e"
 abi = "manifests/dev/deployment/abis/models/pixelaw-Game-5c1fa23f.json"
 tag = "pixelaw-Game"
 qualified_path = "p_war::models::game::game"
@@ -321,6 +338,16 @@ name = "winner"
 type = "ContractAddress"
 key = false
 
+[[models.members]]
+name = "guild_ids"
+type = "Span<u32>"
+key = false
+
+[[models.members]]
+name = "guild_count"
+type = "usize"
+key = false
+
 [[models]]
 kind = "DojoModel"
 class_hash = "0x22a02c0555eedefbbf217bf90fa1796bd4e113b4ee5f79007ea3d271181c2f4"
@@ -361,6 +388,45 @@ key = true
 
 [[models.members]]
 name = "length"
+type = "usize"
+key = false
+
+[[models]]
+kind = "DojoModel"
+class_hash = "0x54ea4b52cb546ddc0cd309cd998980b20b333d9cec4dd148a8da1a2500cff95"
+original_class_hash = "0x54ea4b52cb546ddc0cd309cd998980b20b333d9cec4dd148a8da1a2500cff95"
+abi = "manifests/dev/deployment/abis/models/pixelaw-Guild-40e97c00.json"
+tag = "pixelaw-Guild"
+qualified_path = "p_war::models::guilds::guild"
+manifest_name = "pixelaw-Guild-40e97c00"
+
+[[models.members]]
+name = "game_id"
+type = "usize"
+key = true
+
+[[models.members]]
+name = "guild_id"
+type = "usize"
+key = true
+
+[[models.members]]
+name = "guild_name"
+type = "felt252"
+key = false
+
+[[models.members]]
+name = "creator"
+type = "ContractAddress"
+key = false
+
+[[models.members]]
+name = "members"
+type = "Span<ContractAddress>"
+key = false
+
+[[models.members]]
+name = "member_count"
 type = "usize"
 key = false
 

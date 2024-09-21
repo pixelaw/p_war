@@ -14,7 +14,7 @@ trait IGuild {
     fn remove_member(
         ref world: IWorldDispatcher, game_id: usize, guild_id: usize, member: ContractAddress
     );
-    fn get_guild_points(ref world: IWorldDispatcher, game_id: usize, guild_id: usize) -> usize;
+    fn get_guild_points(world: @IWorldDispatcher, game_id: usize, guild_id: usize) -> usize;
 }
 
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
@@ -179,7 +179,7 @@ mod guild_actions {
 
         // //this function is very inefficient. better implementation is updating guild points when
         // member points are updated.
-        fn get_guild_points(ref world: IWorldDispatcher, game_id: usize, guild_id: usize) -> usize {
+        fn get_guild_points(world: @IWorldDispatcher, game_id: usize, guild_id: usize) -> usize {
             // Get the guild
             let mut guild = get!(world, (game_id, guild_id), (Guild));
 
