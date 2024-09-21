@@ -11,6 +11,7 @@ import { useWebGL } from "@/hooks/useWebGL";
 import { CoordinateFinder } from "@/components/CoordinateFinder";
 import { ColorPalette } from "@/components/ColorPallette";
 import { CanvasGrid } from "@/components/CanvasGrid";
+import { Account } from "starknet";
 
 export const PixelViewer: React.FC = () => {
   // Refs
@@ -42,7 +43,12 @@ export const PixelViewer: React.FC = () => {
       startTransition(async () => {
         setOptimisticPixels({ x, y, color: selectedColor });
         play();
-        await interact(activeAccount, { x, y, color: rgbaToHex(selectedColor) });
+        await interact(activeAccount as Account, {
+          position: { x, y },
+          color: rgbaToHex(selectedColor),
+          for_player: 0n,
+          for_system: 0n,
+        });
       });
     },
     [selectedColor, activeAccount, interact, setOptimisticPixels, play]
@@ -111,7 +117,7 @@ export const PixelViewer: React.FC = () => {
         onCellClick={onCellClick}
         onSwipe={onPan}
         onPan={onPan}
-        onTap={onCellClick} // NOTE: somehow tap and mouseup events are called duplicated (it might be depends on the environemtns??)
+        onTap={onCellClick} // NOTE: somehow tap and mouseup events are called duplicated (it might be depends on the environemnts??)
         onDrawGrid={onDrawGrid}
         setCurrentMousePos={setCurrentMousePos}
         gridState={gridState}
