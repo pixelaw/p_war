@@ -6,6 +6,34 @@ export type ContractComponents = Awaited<ReturnType<typeof defineContractCompone
 
 export function defineContractComponents(world: World) {
   return {
+    AllowedApp: (() => {
+      return defineComponent(
+        world,
+        { game_id: RecsType.Number, contract: RecsType.BigInt, is_allowed: RecsType.Boolean },
+        {
+          metadata: {
+            namespace: "pixelaw",
+            name: "AllowedApp",
+            types: ["u32", "contractaddress", "bool"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
+    AllowedColor: (() => {
+      return defineComponent(
+        world,
+        { game_id: RecsType.Number, color: RecsType.Number, is_allowed: RecsType.Boolean },
+        {
+          metadata: {
+            namespace: "pixelaw",
+            name: "AllowedColor",
+            types: ["u32", "u32", "bool"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
     App: (() => {
       return defineComponent(
         world,
@@ -48,6 +76,25 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    Board: (() => {
+      return defineComponent(
+        world,
+        {
+          id: RecsType.Number,
+          origin: { x: RecsType.Number, y: RecsType.Number },
+          width: RecsType.Number,
+          height: RecsType.Number,
+        },
+        {
+          metadata: {
+            namespace: "pixelaw",
+            name: "Board",
+            types: ["u32", "u32", "u32", "u32", "u32"],
+            customTypes: ["Position"],
+          },
+        }
+      );
+    })(),
     CoreActionsAddress: (() => {
       return defineComponent(
         world,
@@ -62,6 +109,96 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    Game: (() => {
+      return defineComponent(
+        world,
+        {
+          id: RecsType.Number,
+          start: RecsType.BigInt,
+          end: RecsType.BigInt,
+          proposal_idx: RecsType.Number,
+          base_cost: RecsType.Number,
+          const_val: RecsType.Number,
+          coeff_own_pixels: RecsType.Number,
+          coeff_commits: RecsType.Number,
+          winner_config: RecsType.Number,
+          winner: RecsType.BigInt,
+          guild_ids: RecsType.StringArray,
+          guild_count: RecsType.Number,
+        },
+        {
+          metadata: {
+            namespace: "pixelaw",
+            name: "Game",
+            types: ["u32", "u64", "u64", "u32", "u32", "u32", "u32", "u32", "u32", "contractaddress", "u32"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
+    GameId: (() => {
+      return defineComponent(
+        world,
+        { x: RecsType.Number, y: RecsType.Number, value: RecsType.Number },
+        {
+          metadata: {
+            namespace: "pixelaw",
+            name: "GameId",
+            types: ["u32", "u32", "u32"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
+    GamePalette: (() => {
+      return defineComponent(
+        world,
+        { game_id: RecsType.Number, length: RecsType.Number },
+        {
+          metadata: {
+            namespace: "pixelaw",
+            name: "GamePalette",
+            types: ["u32", "u32"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
+    Guild: (() => {
+      return defineComponent(
+        world,
+        {
+          game_id: RecsType.Number,
+          guild_id: RecsType.Number,
+          guild_name: RecsType.BigInt,
+          creator: RecsType.BigInt,
+          members: RecsType.StringArray,
+          member_count: RecsType.Number,
+        },
+        {
+          metadata: {
+            namespace: "pixelaw",
+            name: "Guild",
+            types: ["u32", "u32", "felt252", "contractaddress", "u32"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
+    InPalette: (() => {
+      return defineComponent(
+        world,
+        { game_id: RecsType.Number, color: RecsType.Number, value: RecsType.Boolean },
+        {
+          metadata: {
+            namespace: "pixelaw",
+            name: "InPalette",
+            types: ["u32", "u32", "bool"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
     Instruction: (() => {
       return defineComponent(
         world,
@@ -71,6 +208,34 @@ export function defineContractComponents(world: World) {
             namespace: "pixelaw",
             name: "Instruction",
             types: ["contractaddress", "felt252", "felt252"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
+    PWarPixel: (() => {
+      return defineComponent(
+        world,
+        { position: { x: RecsType.Number, y: RecsType.Number }, owner: RecsType.BigInt },
+        {
+          metadata: {
+            namespace: "pixelaw",
+            name: "PWarPixel",
+            types: ["u32", "u32", "contractaddress"],
+            customTypes: ["Position"],
+          },
+        }
+      );
+    })(),
+    PaletteColors: (() => {
+      return defineComponent(
+        world,
+        { game_id: RecsType.Number, idx: RecsType.Number, color: RecsType.Number },
+        {
+          metadata: {
+            namespace: "pixelaw",
+            name: "PaletteColors",
+            types: ["u32", "u32", "u32"],
             customTypes: [],
           },
         }
@@ -137,6 +302,88 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    PixelRecoveryRate: (() => {
+      return defineComponent(
+        world,
+        { game_id: RecsType.Number, rate: RecsType.BigInt },
+        {
+          metadata: {
+            namespace: "pixelaw",
+            name: "PixelRecoveryRate",
+            types: ["u32", "u64"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
+    Player: (() => {
+      return defineComponent(
+        world,
+        {
+          address: RecsType.BigInt,
+          max_px: RecsType.Number,
+          num_owns: RecsType.Number,
+          num_commit: RecsType.Number,
+          current_px: RecsType.Number,
+          last_date: RecsType.BigInt,
+          is_banned: RecsType.Boolean,
+        },
+        {
+          metadata: {
+            namespace: "pixelaw",
+            name: "Player",
+            types: ["contractaddress", "u32", "u32", "u32", "u32", "u64", "bool"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
+    PlayerVote: (() => {
+      return defineComponent(
+        world,
+        {
+          player: RecsType.BigInt,
+          game_id: RecsType.Number,
+          index: RecsType.Number,
+          is_in_favor: RecsType.Boolean,
+          px: RecsType.Number,
+        },
+        {
+          metadata: {
+            namespace: "pixelaw",
+            name: "PlayerVote",
+            types: ["contractaddress", "u32", "u32", "bool", "u32"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
+    Proposal: (() => {
+      return defineComponent(
+        world,
+        {
+          game_id: RecsType.Number,
+          index: RecsType.Number,
+          author: RecsType.BigInt,
+          proposal_type: RecsType.Number,
+          target_args_1: RecsType.Number,
+          target_args_2: RecsType.Number,
+          start: RecsType.BigInt,
+          end: RecsType.BigInt,
+          yes_px: RecsType.Number,
+          no_px: RecsType.Number,
+          is_activated: RecsType.Boolean,
+        },
+        {
+          metadata: {
+            namespace: "pixelaw",
+            name: "Proposal",
+            types: ["u32", "u32", "contractaddress", "u8", "u32", "u32", "u64", "u64", "u32", "u32", "bool"],
+            customTypes: [],
+          },
+        }
+      );
+    })(),
     QueueItem: (() => {
       return defineComponent(
         world,
@@ -146,52 +393,6 @@ export function defineContractComponents(world: World) {
             namespace: "pixelaw",
             name: "QueueItem",
             types: ["felt252", "bool"],
-            customTypes: [],
-          },
-        }
-      );
-    })(),
-    Snake: (() => {
-      return defineComponent(
-        world,
-        {
-          owner: RecsType.BigInt,
-          length: RecsType.Number,
-          first_segment_id: RecsType.Number,
-          last_segment_id: RecsType.Number,
-          direction: RecsType.Number,
-          color: RecsType.Number,
-          text: RecsType.BigInt,
-          is_dying: RecsType.Boolean,
-        },
-        {
-          metadata: {
-            namespace: "pixelaw",
-            name: "Snake",
-            types: ["contractaddress", "u8", "u32", "u32", "enum", "u32", "felt252", "bool"],
-            customTypes: ["Direction"],
-          },
-        }
-      );
-    })(),
-    SnakeSegment: (() => {
-      return defineComponent(
-        world,
-        {
-          id: RecsType.Number,
-          previous_id: RecsType.Number,
-          next_id: RecsType.Number,
-          x: RecsType.Number,
-          y: RecsType.Number,
-          pixel_original_color: RecsType.Number,
-          pixel_original_text: RecsType.BigInt,
-          pixel_original_app: RecsType.BigInt,
-        },
-        {
-          metadata: {
-            namespace: "pixelaw",
-            name: "SnakeSegment",
-            types: ["u32", "u32", "u32", "u32", "u32", "u32", "felt252", "contractaddress"],
             customTypes: [],
           },
         }
