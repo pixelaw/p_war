@@ -47,19 +47,20 @@ This project is the client application for PixeLAW, a decentralized pixel-based 
 │   └── vite-env.d.ts
 ```
 
+## Contributing
+
+### Before push your commit, please run the following command:
+
+for make sure your code is formatted and linted:
+
+```bash
+bun run format
+bun run lint
+```
+
 ## Slot
+
 Currently Version `1.0.0-alpha.9` is live!
 
 - Katana: https://api.cartridge.gg/x/pixelaw-dev/katana
 - Torii: https://api.cartridge.gg/x/pixelaw-dev/torii
-
-
-## Contributing
-
-Contributions are welcome! Please follow the existing code style and create a new PR.
-
-## License
-
-[LICENSE](https://github.com/pixelaw/core/blob/main/LICENSE)
-
-For more information on the underlying smart contracts, please refer to the [pixelaw/core repository](https://github.com/pixelaw/core).
