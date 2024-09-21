@@ -128,30 +128,68 @@
   },
   {
     "type": "impl",
-    "name": "VotingImpl",
-    "interface_name": "p_war::systems::voting::IVoting"
+    "name": "ProposeImpl",
+    "interface_name": "p_war::systems::propose::IPropose"
   },
   {
-    "type": "enum",
-    "name": "core::bool",
-    "variants": [
+    "type": "struct",
+    "name": "pixelaw::core::utils::Position",
+    "members": [
       {
-        "name": "False",
-        "type": "()"
+        "name": "x",
+        "type": "core::integer::u32"
       },
       {
-        "name": "True",
-        "type": "()"
+        "name": "y",
+        "type": "core::integer::u32"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "core::array::Span::<pixelaw::core::utils::Position>",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<pixelaw::core::utils::Position>"
       }
     ]
   },
   {
     "type": "interface",
-    "name": "p_war::systems::voting::IVoting",
+    "name": "p_war::systems::propose::IPropose",
     "items": [
       {
         "type": "function",
-        "name": "vote",
+        "name": "create_proposal",
+        "inputs": [
+          {
+            "name": "game_id",
+            "type": "core::integer::u32"
+          },
+          {
+            "name": "proposal_type",
+            "type": "core::integer::u8"
+          },
+          {
+            "name": "target_args_1",
+            "type": "core::integer::u32"
+          },
+          {
+            "name": "target_args_2",
+            "type": "core::integer::u32"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::integer::u32"
+          }
+        ],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "activate_proposal",
         "inputs": [
           {
             "name": "game_id",
@@ -162,12 +200,8 @@
             "type": "core::integer::u32"
           },
           {
-            "name": "use_px",
-            "type": "core::integer::u32"
-          },
-          {
-            "name": "is_in_favor",
-            "type": "core::bool"
+            "name": "clear_data",
+            "type": "core::array::Span::<pixelaw::core::utils::Position>"
           }
         ],
         "outputs": [],
@@ -178,11 +212,11 @@
   {
     "type": "impl",
     "name": "IDojoInitImpl",
-    "interface_name": "p_war::systems::voting::voting::IDojoInit"
+    "interface_name": "p_war::systems::propose::propose_actions::IDojoInit"
   },
   {
     "type": "interface",
-    "name": "p_war::systems::voting::voting::IDojoInit",
+    "name": "p_war::systems::propose::propose_actions::IDojoInit",
     "items": [
       {
         "type": "function",
@@ -242,7 +276,7 @@
   },
   {
     "type": "event",
-    "name": "p_war::systems::voting::voting::Event",
+    "name": "p_war::systems::propose::propose_actions::Event",
     "kind": "enum",
     "variants": [
       {

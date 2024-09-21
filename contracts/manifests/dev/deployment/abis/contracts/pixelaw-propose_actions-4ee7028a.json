@@ -212,11 +212,11 @@
   {
     "type": "impl",
     "name": "IDojoInitImpl",
-    "interface_name": "p_war::systems::propose::propose::IDojoInit"
+    "interface_name": "p_war::systems::propose::propose_actions::IDojoInit"
   },
   {
     "type": "interface",
-    "name": "p_war::systems::propose::propose::IDojoInit",
+    "name": "p_war::systems::propose::propose_actions::IDojoInit",
     "items": [
       {
         "type": "function",
@@ -276,7 +276,7 @@
   },
   {
     "type": "event",
-    "name": "p_war::systems::propose::propose::Event",
+    "name": "p_war::systems::propose::propose_actions::Event",
     "kind": "enum",
     "variants": [
       {

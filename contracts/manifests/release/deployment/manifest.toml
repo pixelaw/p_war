@@ -80,29 +80,29 @@ manifest_name = "pixelaw-p_war_actions-60819afd"
 
 [[contracts]]
 kind = "DojoContract"
-class_hash = "0x6ab9709bc640341001ea4107261f6de824ef8f076d21d056f4521d205f5cb5a"
-original_class_hash = "0x6ab9709bc640341001ea4107261f6de824ef8f076d21d056f4521d205f5cb5a"
+class_hash = "0xdfa69aecb748b5e097a5dc04b9cc1ed8b666a5cc72c725ee5f0ca1acca12d"
+original_class_hash = "0xdfa69aecb748b5e097a5dc04b9cc1ed8b666a5cc72c725ee5f0ca1acca12d"
 base_class_hash = "0x0"
-abi = "manifests/release/deployment/abis/contracts/pixelaw-propose-70d0002d.json"
+abi = "manifests/release/deployment/abis/contracts/pixelaw-propose_actions-4ee7028a.json"
 reads = []
 writes = []
 init_calldata = []
-tag = "pixelaw-propose"
+tag = "pixelaw-propose_actions"
 systems = ["activate_proposal"]
-manifest_name = "pixelaw-propose-70d0002d"
+manifest_name = "pixelaw-propose_actions-4ee7028a"
 
 [[contracts]]
 kind = "DojoContract"
-class_hash = "0x4912812ac8ddd08414516cc63b9b4f5e41b83931aa297e46dab6424227ad814"
-original_class_hash = "0x4912812ac8ddd08414516cc63b9b4f5e41b83931aa297e46dab6424227ad814"
+class_hash = "0x6f99e0edb3ddfed67f824d61714382477dc94678bfd666890ab4e039afe58b"
+original_class_hash = "0x6f99e0edb3ddfed67f824d61714382477dc94678bfd666890ab4e039afe58b"
 base_class_hash = "0x0"
-abi = "manifests/release/deployment/abis/contracts/pixelaw-voting-324fa594.json"
+abi = "manifests/release/deployment/abis/contracts/pixelaw-voting_actions-6aab73ea.json"
 reads = []
 writes = []
 init_calldata = []
-tag = "pixelaw-voting"
+tag = "pixelaw-voting_actions"
 systems = ["vote"]
-manifest_name = "pixelaw-voting-324fa594"
+manifest_name = "pixelaw-voting_actions-6aab73ea"
 
 [[models]]
 kind = "DojoModel"
@@ -775,102 +775,4 @@ key = true
 [[models.members]]
 name = "valid"
 type = "bool"
-key = false
-
-[[models]]
-kind = "DojoModel"
-class_hash = "0x5a3afeed7a51a51cab27a99c9d99064fc467ecdb9a8cc606c4d4899dffb7f6c"
-original_class_hash = "0x5a3afeed7a51a51cab27a99c9d99064fc467ecdb9a8cc606c4d4899dffb7f6c"
-abi = "manifests/release/deployment/abis/models/pixelaw-Snake-62b876d4.json"
-tag = "pixelaw-Snake"
-qualified_path = "pixelaw::apps::snake::app::snake"
-manifest_name = "pixelaw-Snake-62b876d4"
-
-[[models.members]]
-name = "owner"
-type = "ContractAddress"
-key = true
-
-[[models.members]]
-name = "length"
-type = "u8"
-key = false
-
-[[models.members]]
-name = "first_segment_id"
-type = "u32"
-key = false
-
-[[models.members]]
-name = "last_segment_id"
-type = "u32"
-key = false
-
-[[models.members]]
-name = "direction"
-type = "Direction"
-key = false
-
-[[models.members]]
-name = "color"
-type = "u32"
-key = false
-
-[[models.members]]
-name = "text"
-type = "felt252"
-key = false
-
-[[models.members]]
-name = "is_dying"
-type = "bool"
-key = false
-
-[[models]]
-kind = "DojoModel"
-class_hash = "0x19a1ae61a4fb0ac303e15a4ca4befa5ae3962625eb37f379b941815e321191f"
-original_class_hash = "0x19a1ae61a4fb0ac303e15a4ca4befa5ae3962625eb37f379b941815e321191f"
-abi = "manifests/release/deployment/abis/models/pixelaw-SnakeSegment-302de0d8.json"
-tag = "pixelaw-SnakeSegment"
-qualified_path = "pixelaw::apps::snake::app::snake_segment"
-manifest_name = "pixelaw-SnakeSegment-302de0d8"
-
-[[models.members]]
-name = "id"
-type = "u32"
-key = true
-
-[[models.members]]
-name = "previous_id"
-type = "u32"
-key = false
-
-[[models.members]]
-name = "next_id"
-type = "u32"
-key = false
-
-[[models.members]]
-name = "x"
-type = "u32"
-key = false
-
-[[models.members]]
-name = "y"
-type = "u32"
-key = false
-
-[[models.members]]
-name = "pixel_original_color"
-type = "u32"
-key = false
-
-[[models.members]]
-name = "pixel_original_text"
-type = "felt252"
-key = false
-
-[[models.members]]
-name = "pixel_original_app"
-type = "ContractAddress"
 key = false
