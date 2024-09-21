@@ -22,8 +22,8 @@ world_address=$(grep "world_address" "$config_file" | cut -d'"' -f2)
 
 declare "CORE_ACTIONS"="pixelaw-actions"
 declare "P_WAR_ACTIONS"="pixelaw-p_war_actions"
-declare "PROPOSE_ACTIONS"="pixelaw-propose"
-declare "VOTING_ACTIONS"="pixelaw-voting"
+declare "PROPOSE_ACTIONS"="pixelaw-propose_actions"
+declare "VOTING_ACTIONS"="pixelaw-voting_actions"
 declare "GUILDS_ACTIONS"="pixelaw-guild_actions"
 
 ## Set RPC_URL with default value
