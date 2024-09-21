@@ -2,19 +2,18 @@ import { Connector } from "@starknet-react/core";
 import CartridgeConnector from "@cartridge/connector";
 import { getContractByName } from "@dojoengine/core";
 import { ControllerOptions } from "@cartridge/controller";
+import { manifest } from "../../../dojoConfig";
 
-import manifest from "@/libs/dojo/generated/manifests/deployments/slot/manifest.json";
-
-const paint_action_contract_address = getContractByName(manifest, "pixelaw", "paint_actions")?.address;
+const p_war_actions_contract_address = getContractByName(manifest, "pixelaw", "p_war_actions")?.address;
 
 const policies = [
   {
     target: import.meta.env.VITE_PUBLIC_FEE_TOKEN_ADDRESS,
     method: "approve",
   },
-  // paint_actions
+  // p_war_actions
   {
-    target: paint_action_contract_address,
+    target: p_war_actions_contract_address,
     method: "interact",
   },
 ];
