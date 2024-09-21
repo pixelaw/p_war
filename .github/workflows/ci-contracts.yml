@@ -4,11 +4,15 @@ on:
   push:
     branches: [master]
     paths:
-      - "src/**"
+      - "contracts/src/**"
   pull_request:
     branches: [master]
     paths:
-      - "src/**"
+      - "contracts/src/**"
+
+defaults:
+  run:
+    working-directory: contracts
 
 env:
   CARGO_TERM_COLOR: always

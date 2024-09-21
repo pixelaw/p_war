@@ -1,0 +1,17 @@
+kind = "DojoModel"
+class_hash = "0x432d5d7bf204934886fa3dc72b24ad292b14caf4bea83531cef5004d7cb5067"
+original_class_hash = "0x432d5d7bf204934886fa3dc72b24ad292b14caf4bea83531cef5004d7cb5067"
+abi = "manifests/release/base/abis/models/pixelaw-PixelRecoveryRate-3aa284c0.json"
+tag = "pixelaw-PixelRecoveryRate"
+qualified_path = "p_war::models::proposal::pixel_recovery_rate"
+manifest_name = "pixelaw-PixelRecoveryRate-3aa284c0"
+
+[[members]]
+name = "game_id"
+type = "usize"
+key = true
+
+[[members]]
+name = "rate"
+type = "u64"
+key = false

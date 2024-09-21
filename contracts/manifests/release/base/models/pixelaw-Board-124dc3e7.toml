@@ -1,0 +1,27 @@
+kind = "DojoModel"
+class_hash = "0x38dd4eb04738175abe3d1d4b2541dbf6c318004fe9a76d5181001bfe72ae66c"
+original_class_hash = "0x38dd4eb04738175abe3d1d4b2541dbf6c318004fe9a76d5181001bfe72ae66c"
+abi = "manifests/release/base/abis/models/pixelaw-Board-124dc3e7.json"
+tag = "pixelaw-Board"
+qualified_path = "p_war::models::board::board"
+manifest_name = "pixelaw-Board-124dc3e7"
+
+[[members]]
+name = "id"
+type = "usize"
+key = true
+
+[[members]]
+name = "origin"
+type = "Position"
+key = false
+
+[[members]]
+name = "width"
+type = "u32"
+key = false
+
+[[members]]
+name = "height"
+type = "u32"
+key = false

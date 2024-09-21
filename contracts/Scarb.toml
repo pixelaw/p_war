@@ -1,0 +1,33 @@
+[package]
+cairo-version = "=2.7.0"
+name = "p_war"
+version = "0.3.54"
+
+[cairo]
+sierra-replace-ids = true
+
+[dependencies]
+pixelaw = { git = "https://github.com/pixelaw/core", branch = "main" }
+# Added explicitly for https://github.com/dojoengine/dojo/issues/2430
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-alpha.11" }
+
+[[target.dojo]]
+build-external-contracts = [
+    "pixelaw::core::models::pixel::pixel",
+    "pixelaw::core::models::pixel::PixelUpdate",
+    "pixelaw::core::models::queue::queue_item",
+    "pixelaw::core::models::registry::app",
+    "pixelaw::core::models::registry::app_name",
+    "pixelaw::core::models::registry::app_user",
+    "pixelaw::core::models::registry::app_instruction",
+    "pixelaw::core::models::registry::instruction",
+    "pixelaw::core::models::registry::core_actions_address",
+    "pixelaw::core::models::permissions::permissions",
+    "pixelaw::core::actions::actions",
+]
+
+[tool.fmt]
+sort-module-level-items = true
+
+[scripts]
+init_auth = "./scripts/init_auth.sh"
