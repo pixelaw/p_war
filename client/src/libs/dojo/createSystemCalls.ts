@@ -15,7 +15,7 @@ export function createSystemCalls({ client }: { client: IWorld }, clientComponen
         account,
         default_params,
       });
-
+      
       // Wait for the indexer to update the entity
       // By doing this we keep the optimistic UI in sync with the actual state
       await new Promise<void>((resolve) => {
