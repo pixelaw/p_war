@@ -3,12 +3,14 @@ import { truncateAddress } from "@/utils";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/DropDownMenu";
 import { useDojo } from "@/hooks/useDojo";
 import { toast } from "sonner";
-// import { AppList } from "./AppList";
 import { ConnectButton } from "./ConnectButton";
 import { useControllerUsername } from "@/hooks/useControllerUserName";
 import { useDisconnect } from "@starknet-react/core";
 import { Button } from "./ui/Button";
 import { useMemo } from "react";
+import PxCounter from "./PxCounter";
+import { GameTimeCounter } from "./GameTimeCounter";
+import { useGame } from "@/hooks/useGame";
 
 const Header = () => {
   const {
@@ -24,6 +26,7 @@ const Header = () => {
   };
   const { disconnect } = useDisconnect();
   const { username } = useControllerUsername();
+  const { game } = useGame();
 
   const activeAccount = useMemo(() => {
     return connectedAccount || account;
@@ -35,32 +38,30 @@ const Header = () => {
         <h1 className="text-white text-lg font-bold">
           <img src="logo.png" alt="PixeLAW" className="object-contain h-10" />
         </h1>
-        {/* <AppList /> */}
       </div>
 
-      <div>
-        <Button>btn 1</Button>
-      </div>
-      {/* <div>
-        <Button>btn 2</Button>
-      </div> */}
-      <div className="flex items-center md:space-x-4 border-2 border-slate-600 rounded-sm p-1 px-3">
-        <div
-          className="text-white cursor-pointer text-xs md:text-base"
-          onClick={(e) => onCopy(e, activeAccount.address)}
-        >
-          {username ? username : truncateAddress(activeAccount.address)}
+      <GameTimeCounter endTime={game?.end} />
+
+      <div className="flex items-center space-x-4">
+        <PxCounter />
+        <div className="flex items-center md:space-x-4 border-2 border-slate-600 rounded-sm p-1 px-3">
+          <div
+            className="text-white cursor-pointer text-xs md:text-base"
+            onClick={(e) => onCopy(e, activeAccount.address)}
+          >
+            {username ? username : truncateAddress(activeAccount.address)}
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <Avatar address={activeAccount.address} size={32} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem>
+                {connectedAccount ? <Button onClick={() => disconnect()}>Disconnect</Button> : <ConnectButton />}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-        <DropdownMenu>
-          <DropdownMenuTrigger>
-            <Avatar address={activeAccount.address} size={32} />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuItem>
-              {connectedAccount ? <Button onClick={() => disconnect()}>Disconnect</Button> : <ConnectButton />}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
     </header>
   );

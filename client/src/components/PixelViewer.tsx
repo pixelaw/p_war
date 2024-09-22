@@ -1,5 +1,5 @@
 import { startTransition, useCallback, useMemo, useRef, useState, useEffect } from "react";
-import { COLOR_PALETTE, BASE_CELL_SIZE } from "@/constants/webgl";
+import { BASE_CELL_SIZE } from "@/constants/webgl";
 import { type Color } from "@/types";
 import { useDojo } from "@/hooks/useDojo";
 import { rgbaToHex } from "@/utils";
@@ -12,14 +12,11 @@ import { useWebGL } from "@/hooks/useWebGL";
 import { CoordinateFinder } from "@/components/CoordinateFinder";
 import { ColorPalette } from "@/components/ColorPallette";
 import { CanvasGrid } from "@/components/CanvasGrid";
+import { usePaletteColors } from "@/hooks/usePalleteColors";
 
 export const PixelViewer: React.FC = () => {
   // Refs
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  // States
-  const [selectedColor, setSelectedColor] = useState<Color>(COLOR_PALETTE[0]);
-  const [currentMousePos, setCurrentMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
   // Other Hooks
   const {
@@ -29,6 +26,11 @@ export const PixelViewer: React.FC = () => {
       connectedAccount,
     },
   } = useDojo();
+  const paletteColors = usePaletteColors();
+
+  // States
+  const [selectedColor, setSelectedColor] = useState<Color>(paletteColors[0]);
+  const [currentMousePos, setCurrentMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const { gridState, setGridState } = useGridState();
   const { drawPixels, drawBoard } = useWebGL(canvasRef, gridState);
@@ -57,7 +59,7 @@ export const PixelViewer: React.FC = () => {
 
   const onDrawGrid = useCallback(() => {
     drawPixels(optimisticPixels);
-    visibleBoards.forEach(board => drawBoard(board));
+    visibleBoards.forEach((board) => drawBoard(board));
   }, [optimisticPixels, drawPixels, visibleBoards, drawBoard]);
 
   useEffect(() => {

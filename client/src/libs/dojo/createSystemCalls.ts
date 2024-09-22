@@ -1,4 +1,4 @@
-import { defineSystem, Has, World } from "@dojoengine/recs";
+import { defineSystem, Has, HasValue, World } from "@dojoengine/recs";
 import { ClientComponents } from "./createClientComponents";
 import type { IWorld } from "./typescript/contracts.gen";
 import { Account } from "starknet";
@@ -29,9 +29,18 @@ export function createSystemCalls({ client }: { client: IWorld }, clientComponen
       // // Wait for the indexer to update the entity
       // // By doing this we keep the optimistic UI in sync with the actual state
       await new Promise<void>((resolve) => {
-        defineSystem(world, [Has(clientComponents.PWarPixel)], () => {
-          resolve();
-        });
+        defineSystem(
+          world,
+          [
+            Has(clientComponents.PWarPixel),
+            HasValue(clientComponents.Player, {
+              address: BigInt(account.address),
+            }),
+          ],
+          () => {
+            resolve();
+          }
+        );
       });
     } catch (e) {
       handleError("interact", e);
