@@ -12,7 +12,6 @@ import { useWebGL } from "@/hooks/useWebGL";
 import { CoordinateFinder } from "@/components/CoordinateFinder";
 import { ColorPalette } from "@/components/ColorPallette";
 import { CanvasGrid } from "@/components/CanvasGrid";
-import { Account } from "starknet";
 
 export const PixelViewer: React.FC = () => {
   // Refs

@@ -4,8 +4,8 @@ class_hash = "0x6f4515274ee23404789c3351a77107d0ec07508530119822046600ca6948d6e"
 original_class_hash = "0x6f4515274ee23404789c3351a77107d0ec07508530119822046600ca6948d6e"
 abi = "manifests/dev/deployment/abis/dojo-world.json"
 address = "0x263ae44e5414519a5c5a135cccaf3d9d7ee196d37e8de47a178da91f3de9b34"
-transaction_hash = "0x289631c02961b4572334cd0ff57596683d680df85dd48b5177a748bf5547324"
-block_number = 5
+transaction_hash = "0x507cd13b0e34b357d25bd0ddafa527c8caf0729f894e57ad9129c1f29311768"
+block_number = 3
 seed = "pixelaw"
 manifest_name = "dojo-world"
 
@@ -63,8 +63,8 @@ manifest_name = "pixelaw-guild_actions-4c9f5931"
 [[contracts]]
 kind = "DojoContract"
 address = "0x2045bbeab298c52664537ae151262ca5f2a4e41b07f221c4860879551c65cb5"
-class_hash = "0x317693d5c8f562ba5920e57218000c8839bf0624e9310f947068947e4e0c3fb"
-original_class_hash = "0x317693d5c8f562ba5920e57218000c8839bf0624e9310f947068947e4e0c3fb"
+class_hash = "0x806fe6e6de3d9ea410944be8e0bb9a6ea6aa22761a7e78dcf6080ecba54e"
+original_class_hash = "0x806fe6e6de3d9ea410944be8e0bb9a6ea6aa22761a7e78dcf6080ecba54e"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/pixelaw-p_war_actions-60819afd.json"
 reads = []
