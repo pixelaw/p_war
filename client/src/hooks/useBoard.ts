@@ -15,12 +15,14 @@ export const useBoard = () => {
 	const [visibleBoards, setVisibleBoards] = useState<Board[]>([]);
 
 	const fetchBoards = useCallback(async () => {
-
 		try {
 			const entities = await getBoardEntities(toriiClient, BOARD_LIMIT);
-
 			const newBoards = getBoardComponentFromEntities(entities);
-
+			
+			if (newBoards.length === 0) {
+				console.warn("No valid boards found");
+			}
+			
 			setVisibleBoards(newBoards);
 		} catch (error) {
 			console.error("Error fetching boards:", error);
@@ -32,7 +34,7 @@ export const useBoard = () => {
 		const subscription = async () => {
 			const sub = await toriiClient.onEntityUpdated([], (_entityId: any, entity: Entity) => {
 				const board = getBoardComponentValue(entity);
-				setVisibleBoards((prev) => [...prev, board]);
+				setVisibleBoards((prev) => [...prev, board].filter((b): b is Board => b !== undefined));
 			});
 
 			return sub;

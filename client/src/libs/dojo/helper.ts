@@ -78,7 +78,10 @@ export const getPixelEntities = async (
 };
 
 
-export const getBoardComponentValue = (entity: Entity): Board => {
+export const getBoardComponentValue = (entity: Entity): Board | undefined => {
+  if (!entity["pixelaw-Board"]) {
+    return undefined;
+  }
   return {
     id: entity["pixelaw-Board"].id.value as number,
     origin: entity["pixelaw-Board"].origin.value as unknown as Position,
@@ -87,8 +90,10 @@ export const getBoardComponentValue = (entity: Entity): Board => {
   };
 };
 
-export const getBoardComponentFromEntities = (entities: Entities) => {
-  return Object.values(entities).map(getBoardComponentValue);
+export const getBoardComponentFromEntities = (entities: Entities): Board[] => {
+  return Object.values(entities)
+    .map(getBoardComponentValue)
+    .filter((board): board is Board => board !== undefined);
 };
 
 
