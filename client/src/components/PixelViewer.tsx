@@ -1,4 +1,4 @@
-import { startTransition, useCallback, useMemo, useRef, useState } from "react";
+import { startTransition, useCallback, useMemo, useRef, useState, useEffect } from "react";
 import { COLOR_PALETTE, BASE_CELL_SIZE } from "@/constants/webgl";
 import { type Color } from "@/types";
 import { useDojo } from "@/hooks/useDojo";
@@ -6,6 +6,7 @@ import { rgbaToHex } from "@/utils";
 import { useSound } from "use-sound";
 import { sounds } from "@/constants";
 import { usePixels } from "@/hooks/usePixels";
+import { useBoard } from "@/hooks/useBoard";
 import { useGridState } from "@/hooks/useGridState";
 import { useWebGL } from "@/hooks/useWebGL";
 import { CoordinateFinder } from "@/components/CoordinateFinder";
@@ -31,8 +32,9 @@ export const PixelViewer: React.FC = () => {
   } = useDojo();
 
   const { gridState, setGridState } = useGridState();
-  const { drawPixels } = useWebGL(canvasRef, gridState);
+  const { drawPixels, drawBoard } = useWebGL(canvasRef, gridState);
   const { optimisticPixels, setOptimisticPixels, throttledFetchPixels } = usePixels(canvasRef, gridState);
+  const { visibleBoards, fetchBoards } = useBoard();
   const activeAccount = useMemo(() => connectedAccount || account, [connectedAccount, account]);
 
   const [play] = useSound(sounds.placeColor, { volume: 0.5 });
@@ -56,7 +58,12 @@ export const PixelViewer: React.FC = () => {
 
   const onDrawGrid = useCallback(() => {
     drawPixels(optimisticPixels);
-  }, [optimisticPixels, drawPixels]);
+    visibleBoards.forEach(board => drawBoard(board));
+  }, [optimisticPixels, drawPixels, visibleBoards, drawBoard]);
+
+  useEffect(() => {
+    fetchBoards();
+  }, [fetchBoards]);
 
   const onPan = useCallback(
     (dx: number, dy: number) => {

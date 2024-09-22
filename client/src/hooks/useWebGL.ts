@@ -1,10 +1,15 @@
 import { useCallback, useEffect, useRef } from "react";
-import { type Pixel, type GridState } from "@/types";
+import { type Pixel, type GridState, type Board, type Color, type Position } from "@/types";
+
+const BLACK_COLOR: Color = { r: 0, g: 0, b: 0, a: 1 };
+
 
 import gridVsSource from "@/libs/webgl/shaders/grid.vs";
 import gridFsSource from "@/libs/webgl/shaders/grid.fs";
 import pixelVsSource from "@/libs/webgl/shaders/pixel.vs";
 import pixelFsSource from "@/libs/webgl/shaders/pixel.fs";
+import boardVsSource from "@/libs/webgl/shaders/board.vs";
+import boardFsSource from "@/libs/webgl/shaders/board.fs";
 
 import {
   createProgramInfo,
@@ -14,7 +19,9 @@ import {
   drawBufferInfo,
   resizeCanvasToDisplaySize,
   ProgramInfo,
+  createProgram,
 } from "twgl.js";
+
 import { BASE_CELL_SIZE, BASE_LINE_WIDTH, BUFFER_RATIO, DEFAULT_GRID_COLOR, MIN_SCALE } from "@/constants/webgl";
 import { getVisibleArea } from "@/utils/canvas";
 
@@ -22,6 +29,7 @@ export const useWebGL = (canvasRef: React.RefObject<HTMLCanvasElement | null>, g
   const glRef = useRef<WebGLRenderingContext | null>(null);
   const gridProgramInfoRef = useRef<ProgramInfo | null>(null);
   const pixelProgramInfoRef = useRef<ProgramInfo | null>(null);
+  const boardProgramInfoRef = useRef<ProgramInfo | null>(null);
 
   const initWebGL = useCallback(() => {
     const canvas = canvasRef.current;
@@ -38,6 +46,7 @@ export const useWebGL = (canvasRef: React.RefObject<HTMLCanvasElement | null>, g
     resizeCanvasToDisplaySize(canvas);
     gridProgramInfoRef.current = createProgramInfo(gl, [gridVsSource, gridFsSource]);
     pixelProgramInfoRef.current = createProgramInfo(gl, [pixelVsSource, pixelFsSource]);
+    boardProgramInfoRef.current = createProgramInfo(gl, [boardVsSource, boardFsSource]);
 
     gl.clearColor(0, 0, 0, 0.8);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -162,9 +171,72 @@ export const useWebGL = (canvasRef: React.RefObject<HTMLCanvasElement | null>, g
     [gridState]
   );
 
+  const drawBoard = useCallback(
+    (board: Board) => {
+      const gl = glRef.current;
+      if (!gl) {
+        console.error("WebGL not supported");
+        return;
+      }
+
+      const boardProgramInfo = boardProgramInfoRef.current;
+      if (!boardProgramInfo) {
+        console.error("ProgramInfo not initialized");
+        return;
+      }
+
+
+      const { origin, width, height } = board;
+      const borderPositions: number[] = [];
+      const borderColors: number[] = [];
+
+      // 上下の境界線
+      for (let x = origin.x - 1; x <= origin.x + width; x++) {
+        borderPositions.push(
+          x * BASE_CELL_SIZE, (origin.y - 1) * BASE_CELL_SIZE,
+          x * BASE_CELL_SIZE, origin.y * BASE_CELL_SIZE,
+          x * BASE_CELL_SIZE, (origin.y + height) * BASE_CELL_SIZE,
+          x * BASE_CELL_SIZE, (origin.y + height + 1) * BASE_CELL_SIZE
+        );
+        for (let i = 0; i < 4; i++) {
+          borderColors.push(BLACK_COLOR.r, BLACK_COLOR.g, BLACK_COLOR.b, BLACK_COLOR.a);
+        }
+      }
+
+      // 左右の境界線
+      for (let y = origin.y - 1; y <= origin.y + height; y++) {
+        borderPositions.push(
+          (origin.x - 1) * BASE_CELL_SIZE, y * BASE_CELL_SIZE,
+          origin.x * BASE_CELL_SIZE, y * BASE_CELL_SIZE,
+          (origin.x + width) * BASE_CELL_SIZE, y * BASE_CELL_SIZE,
+          (origin.x + width + 1) * BASE_CELL_SIZE, y * BASE_CELL_SIZE
+        );
+        for (let i = 0; i < 4; i++) {
+          borderColors.push(BLACK_COLOR.r, BLACK_COLOR.g, BLACK_COLOR.b, BLACK_COLOR.a);
+        }
+      }
+
+      const borderBufferInfo = createBufferInfoFromArrays(gl, {
+        aPosition: { numComponents: 2, data: borderPositions },
+        aColor: { numComponents: 4, data: borderColors },
+      });
+
+      const borderUniforms = {
+        uResolution: [gl.canvas.width, gl.canvas.height],
+        uOffset: [gridState.offsetX, gridState.offsetY],
+        uScale: gridState.scale,
+      };
+
+      gl.useProgram(boardProgramInfo.program);
+      setBuffersAndAttributes(gl, boardProgramInfo, borderBufferInfo);
+      setUniforms(boardProgramInfo, borderUniforms);
+      drawBufferInfo(gl, borderBufferInfo, gl.LINES);
+    }, [gridState]);
+  
+
   useEffect(() => {
     initWebGL();
   }, [initWebGL]);
 
-  return { glRef, drawGrid, drawPixels };
+  return { glRef, drawGrid, drawPixels, drawBoard};
 };
