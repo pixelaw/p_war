@@ -6,6 +6,8 @@ import { useProposals } from "@/hooks/useProposal";
 import { ProposalItem, StartVoteParam } from "./item";
 import { useDojo } from "@/hooks/useDojo";
 import { cn } from "@/utils";
+import { CreateProposalButton } from "../CreateProposalButton";
+import { Popover, PopoverContent, PopoverTrigger } from "@radix-ui/react-popover";
 
 export const ProposalList = () => {
   // Hooks
@@ -60,9 +62,9 @@ export const ProposalList = () => {
   };
 
   return (
-    <div className="absolute top-32 left-8 z-10 bg-slate-900 p-4">
-      <div className={cn("mb-4 flex flex-col space-y-6 items-center justify-between", selectedProposal ? "blur" : "")}>
-        <div className="flex items-center justify-between">
+    <div className="absolute top-32 left-8 z-10 bg-slate-900 p-4 flex flex-col space-y-4">
+      <div className={cn("mb-4 items-center justify-between", selectedProposal ? "blur" : "")}>
+        <div className="flex items-center justify-between w-full">
           <div className="relative w-full">
             <input
               type="text"
@@ -76,20 +78,21 @@ export const ProposalList = () => {
             </span>
           </div>
           <div className="relative ml-1 flex items-center">
-            <button className="rounded-md bg-gray-700 px-4 py-2 text-white" onClick={() => setFilterOpen(!filterOpen)}>
-              <Filter />
-            </button>
-            {filterOpen && (
-              <div className="absolute z-10 mt-2 w-48 rounded-md bg-gray-800 shadow-lg">
+            <Popover>
+              <PopoverTrigger>
+                <button
+                  className="rounded-md bg-gray-700 px-4 py-2 text-white"
+                  onClick={() => setFilterOpen(!filterOpen)}
+                >
+                  <Filter />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="absolute z-10 mt-2 w-48 rounded-md bg-gray-800 shadow-lg">
                 <FilterMenu statusFilter={statusFilter} setStatusFilter={setStatusFilter} />
-              </div>
-            )}
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
-
-        <button className="mx-auto rounded-md bg-blue-600 px-6 py-3 text-lg font-semibold text-white shadow-lg transition duration-300 hover:bg-blue-500">
-          Create A New Proposal
-        </button>
       </div>
       <div className={cn("overflow-y-auto px-6", selectedProposal ? "blur" : "")}>
         <div className="space-y-4">
@@ -106,6 +109,7 @@ export const ProposalList = () => {
           })}
         </div>
       </div>
+      <CreateProposalButton className="w-full" />
       {selectedProposal && (
         <div className="fixed inset-0 z-20 flex items-center justify-center bg-black/50">
           <div className="w-1/3 rounded-lg bg-gray-800 p-6 text-white shadow-lg">

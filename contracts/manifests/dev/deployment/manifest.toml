@@ -120,6 +120,9 @@ writes = [
     "pixelaw-InPalette",
     "pixelaw-PaletteColors",
     "pixelaw-Proposal",
+    "pixelaw-Player",
+    "pixelaw-Game",
+    "pixelaw-Board",
 ]
 init_calldata = []
 tag = "pixelaw-propose_actions"

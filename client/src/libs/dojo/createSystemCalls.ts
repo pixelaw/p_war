@@ -5,6 +5,7 @@ import { Account } from "starknet";
 import { DefaultParameters } from "./typescript/models.gen";
 import { handleTransactionError } from "@/utils";
 import { toast } from "sonner";
+import { ProposalType } from "@/types";
 
 const handleError = (action: string, error: unknown) => {
   console.error(`Error executing ${action}:`, error);
@@ -84,26 +85,82 @@ export function createSystemCalls({ client }: { client: IWorld }, clientComponen
 
   const activateProposal = async (
     account: Account,
-    game_id: number,
+    gameId: number,
     index: number,
     clearData: { x: number; y: number }[]
   ) => {
     try {
       const { transaction_hash } = await client.propose_actions.activate_proposal({
         account,
-        game_id,
+        game_id: gameId,
         index,
         clear_data: clearData,
       });
       console.log(transaction_hash);
+
+      await new Promise<void>((resolve) => {
+        defineSystem(
+          world,
+          [
+            HasValue(clientComponents.Proposal, {
+              game_id: gameId,
+            }),
+            HasValue(clientComponents.Game, {
+              id: gameId,
+            }),
+            HasValue(clientComponents.Player, {
+              address: BigInt(account.address),
+            }),
+          ],
+          () => {
+            resolve();
+          }
+        );
+      });
     } catch (e) {
       handleError("activateProposal", e);
+    }
+  };
+
+  const createProposal = async (account: Account, gameId: number, proposalType: ProposalType, color?: string) => {
+    try {
+      const { transaction_hash } = await client.propose_actions.create_proposal({
+        account,
+        game_id: gameId,
+        proposal_type: proposalType,
+        target_args_1: color ? parseInt(color.replace("#", ""), 16) : 0,
+        target_args_2: 0,
+      });
+      console.log(transaction_hash);
+
+      await new Promise<void>((resolve) => {
+        defineSystem(
+          world,
+          [
+            HasValue(clientComponents.Proposal, {
+              game_id: gameId,
+            }),
+            HasValue(clientComponents.Game, {
+              id: gameId,
+            }),
+            HasValue(clientComponents.Player, {
+              address: BigInt(account.address),
+            }),
+          ],
+          () => {
+            resolve();
+          }
+        );
+      });
+    } catch (e) {
+      handleError("createProposal", e);
     }
   };
 
   return {
     interact,
     vote,
+    createProposal,
     activateProposal,
   };
 }

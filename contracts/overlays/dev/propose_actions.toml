@@ -5,4 +5,7 @@ writes = [
     "pixelaw-InPalette",
     "pixelaw-PaletteColors",
     "pixelaw-Proposal",
+    "pixelaw-Player",
+    "pixelaw-Game",
+    "pixelaw-Board",
 ]

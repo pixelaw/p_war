@@ -55,6 +55,11 @@ export const uint32ToHex = (uint32: number) => {
   return "#" + color.toString(16).padStart(6, "0");
 };
 
+export const rgbaToHex = (rgba: Color) => {
+  const { r, g, b, a } = rgba;
+  return `rgba(${r * 255}, ${g * 255}, ${b * 255}, ${a})`;
+};
+
 export const handleTransactionError = (error: unknown) => {
   let errorMessage = "An unexpected error occurred. Please try again.";
 
