@@ -1,6 +1,6 @@
 kind = "DojoContract"
-class_hash = "0x317693d5c8f562ba5920e57218000c8839bf0624e9310f947068947e4e0c3fb"
-original_class_hash = "0x317693d5c8f562ba5920e57218000c8839bf0624e9310f947068947e4e0c3fb"
+class_hash = "0x1a367552a5c071c3632eb91e7bdb42d6abe1b92ad1ae1710a036b487f695288"
+original_class_hash = "0x1a367552a5c071c3632eb91e7bdb42d6abe1b92ad1ae1710a036b487f695288"
 base_class_hash = "0x0"
 abi = "manifests/dev/base/abis/contracts/pixelaw-p_war_actions-60819afd.json"
 reads = []
@@ -13,6 +13,7 @@ systems = [
     "set_pixel",
     "init",
     "interact",
+    "create_game_guilds",
     "place_pixel",
     "update_pixel",
     "end_game",

@@ -3,7 +3,8 @@ use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use p_war::constants::DEFAULT_PX;
 use p_war::models::{
     game::{Game, Status}, board::{Board, GameId, Position}, player::{Player},
-    proposal::{PixelRecoveryRate}, allowed_color::AllowedColor, allowed_app::AllowedApp
+    proposal::{PixelRecoveryRate}, allowed_color::AllowedColor, allowed_app::AllowedApp,
+    guilds::{Guild}
 };
 use starknet::{
     ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
@@ -69,4 +70,21 @@ fn recover_px(world: IWorldDispatcher, game_id: usize, player_address: ContractA
 
 fn check_game_status(status: Status) -> bool {
     status == Status::Pending || status == Status::Ongoing
+}
+
+fn is_member(world: IWorldDispatcher, game_id: usize, guild_id: usize, member: ContractAddress) -> bool {
+    let guild = get!(world, (game_id, guild_id), (Guild));
+    let mut is_member = false;
+    let mut i = 0;
+    loop {
+        if i == guild.members.len() {
+            break;
+        }
+        if guild.members.at(i) == @member {
+            is_member = true;
+            break;
+        }
+        i += 1;
+    };
+    is_member
 }

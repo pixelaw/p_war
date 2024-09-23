@@ -5,7 +5,9 @@ use p_war::constants::{
     INITIAL_COLOR, BASE_COST, DEFAULT_PX
 };
 use p_war::models::board::Position;
+use p_war::systems::guilds::{IGuildDispatcher, IGuildDispatcherTrait};
 use pixelaw::core::models::pixel::PixelUpdate;
+use p_war::models::game::Game;
 use pixelaw::core::utils::DefaultParameters;
 use starknet::ContractAddress;
 
@@ -15,6 +17,7 @@ trait IActions {
     fn init(ref world: IWorldDispatcher);
     fn interact(ref world: IWorldDispatcher, default_params: DefaultParameters);
     fn create_game(ref world: IWorldDispatcher, origin: Position) -> usize;
+    fn create_game_guilds(ref world: IWorldDispatcher, game: Game);
     fn get_game_id(world: @IWorldDispatcher, position: Position) -> usize;
     fn place_pixel(
         ref world: IWorldDispatcher, app: ContractAddress, default_params: DefaultParameters
@@ -33,6 +36,7 @@ mod p_war_actions {
         allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette},
         allowed_app::AllowedApp
     };
+    use p_war::systems::guilds::{IGuildDispatcher, IGuildDispatcherTrait};
     use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
     use p_war::systems::utils::{recover_px, update_max_px, check_game_status};
     use pixelaw::core::actions::{
@@ -275,8 +279,19 @@ mod p_war_actions {
             // recover px
             recover_px(world, id, player);
 
+            self.create_game_guilds(game);
+
             id
             // emit event that game has started
+        }
+
+        // initialize guilds for the game
+        fn create_game_guilds(ref world: IWorldDispatcher, game: Game) {
+            let guild_dispatcher = IGuildDispatcher { contract_address: world.contract_address };
+            guild_dispatcher.create_guild(game.id, 'Fire');
+            guild_dispatcher.create_guild(game.id, 'Water');
+            guild_dispatcher.create_guild(game.id, 'Earth');
+            guild_dispatcher.create_guild(game.id, 'Air');
         }
 
         // To paint, basically use this function.

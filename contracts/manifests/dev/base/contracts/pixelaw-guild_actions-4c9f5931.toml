@@ -1,6 +1,6 @@
 kind = "DojoContract"
-class_hash = "0x11472c33465ac19ee8fd27f6d901c6c4c68ec3b7aca25da683f9ada76edf5ff"
-original_class_hash = "0x11472c33465ac19ee8fd27f6d901c6c4c68ec3b7aca25da683f9ada76edf5ff"
+class_hash = "0x6f6ccb38ccf4fa5456f18b40b2c3f133730e62a0680746dc5afe6f3a03ce03b"
+original_class_hash = "0x6f6ccb38ccf4fa5456f18b40b2c3f133730e62a0680746dc5afe6f3a03ce03b"
 base_class_hash = "0x0"
 abi = "manifests/dev/base/abis/contracts/pixelaw-guild_actions-4c9f5931.json"
 reads = []
@@ -9,6 +9,7 @@ init_calldata = []
 tag = "pixelaw-guild_actions"
 systems = [
     "add_member",
+    "join_guild",
     "remove_member",
 ]
 manifest_name = "pixelaw-guild_actions-4c9f5931"

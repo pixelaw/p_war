@@ -177,6 +177,22 @@
       },
       {
         "type": "function",
+        "name": "join_guild",
+        "inputs": [
+          {
+            "name": "game_id",
+            "type": "core::integer::u32"
+          },
+          {
+            "name": "guild_id",
+            "type": "core::integer::u32"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
         "name": "remove_member",
         "inputs": [
           {
