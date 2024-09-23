@@ -1,0 +1,8 @@
+tag = "pixelaw-propose_actions"
+writes = [
+    "pixelaw-AllowedColor",
+    "pixelaw-GamePalette",
+    "pixelaw-InPalette",
+    "pixelaw-PaletteColors",
+    "pixelaw-Proposal",
+]

@@ -67,9 +67,6 @@ sozo build
 # Migrate the example
 sozo migrate apply
 
-# Initialize the pixelaw app
-scarb run init_auth
-
 # Start Torii
 torii --world 0x263ae44e5414519a5c5a135cccaf3d9d7ee196d37e8de47a178da91f3de9b34 --allowed-origins "*"
 ```
