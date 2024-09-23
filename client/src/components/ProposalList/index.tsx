@@ -35,7 +35,7 @@ export const ProposalList = () => {
       setSelectedProposal(proposal);
       setVotePoints(0);
     },
-    [setSelectedProposal, setVotePoints]
+    [setSelectedProposal, setVotePoints],
   );
 
   const handleVoteProposal = useCallback(async () => {

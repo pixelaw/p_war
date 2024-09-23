@@ -38,13 +38,13 @@ export const ColorPalette = ({
           g: pickedColor.g,
           b: pickedColor.b,
           a: pickedColor.a,
-        })
+        }),
       );
       setSelectedColor(pickedColor);
       setCustomColors([...customColors, pickedColor]);
       setPickedColor(null);
     },
-    [pickedColor, customColors, setSelectedColor]
+    [pickedColor, customColors, setSelectedColor],
   );
 
   return (

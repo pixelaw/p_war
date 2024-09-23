@@ -18,7 +18,7 @@ export const GameTimeCounter = ({ endTime }: { endTime?: number }) => {
         setTimeLeft(
           `${days.toString().padStart(2, "0")}:${hours.toString().padStart(2, "0")}:${minutes
             .toString()
-            .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+            .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`,
         );
       } else {
         setTimeLeft("00:00:00:00");

@@ -48,7 +48,7 @@ export const PixelViewer: React.FC = () => {
           return { x: pixel.x, y: pixel.y, color: uint32ToRgba(pixel.color) };
         })
         .filter((pixel) => pixel !== undefined),
-    [pixelEntities, Pixel]
+    [pixelEntities, Pixel],
   );
   const [optimisticPixels, setOptimisticPixels] = useOptimistic(visiblePixels, (pixels, newPixel: Pixel) => {
     return [...pixels, newPixel];
@@ -68,7 +68,7 @@ export const PixelViewer: React.FC = () => {
         });
       });
     },
-    [selectedColor, activeAccount, interact, setOptimisticPixels, play]
+    [selectedColor, activeAccount, interact, setOptimisticPixels, play],
   );
 
   const onDrawGrid = useCallback(() => {
@@ -114,7 +114,7 @@ export const PixelViewer: React.FC = () => {
 
       requestAnimationFrame(animateFrame);
     },
-    [gridState, setGridState, setCurrentMousePos]
+    [gridState, setGridState, setCurrentMousePos],
   );
 
   return (

@@ -28,7 +28,7 @@ export const getPixelEntities = async (
     upperLeftY,
     lowerRightX,
     lowerRightY,
-  }: { upperLeftX: number; upperLeftY: number; lowerRightX: number; lowerRightY: number }
+  }: { upperLeftX: number; upperLeftY: number; lowerRightX: number; lowerRightY: number },
 ) => {
   const entities = await client.getEntities({
     limit,
@@ -77,7 +77,6 @@ export const getPixelEntities = async (
   return entities;
 };
 
-
 export const getBoardComponentValue = (entity: Entity): Board | undefined => {
   if (!entity["pixelaw-Board"]) {
     return undefined;
@@ -96,12 +95,7 @@ export const getBoardComponentFromEntities = (entities: Entities): Board[] => {
     .filter((board): board is Board => board !== undefined);
 };
 
-
-
-export const getBoardEntities = async (
-  client: ToriiClient,
-  limit: number
-) => {
+export const getBoardEntities = async (client: ToriiClient, limit: number) => {
   const entities = await client.getEntities({
     clause: undefined,
     limit,

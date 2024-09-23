@@ -46,7 +46,7 @@ export async function setup({ ...config }: DojoConfig) {
         nodeUrl: config.rpcUrl,
       },
       config.masterAddress,
-      config.masterPrivateKey
+      config.masterPrivateKey,
     ),
     accountClassHash: config.accountClassHash,
     rpcProvider: dojoProvider.provider,

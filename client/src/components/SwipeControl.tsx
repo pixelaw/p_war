@@ -27,7 +27,7 @@ const SwipeControl = ({ children }: { children: React.ReactNode }) => {
       (e) => {
         e.preventDefault();
       },
-      { passive: false }
+      { passive: false },
     );
   }, []);
 

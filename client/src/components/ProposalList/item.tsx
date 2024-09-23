@@ -128,7 +128,7 @@ export const ProposalItem: React.FC<PropsType> = ({ proposal, onStartVote, filte
   const handleActivateProposal = async () => {
     // NOTE: On the assumption that the all existing pixels are belongs to the a game
     const allPixelsInBoard: Position[] = Array.from({ length: DEFAULT_BOARD_SIZE }, (_, x) =>
-      Array.from({ length: DEFAULT_BOARD_SIZE }, (_, y) => ({ x, y }))
+      Array.from({ length: DEFAULT_BOARD_SIZE }, (_, y) => ({ x, y })),
     ).flat();
     await activateProposal(activeAccount, DEFAULT_GAME_ID, proposal.index, allPixelsInBoard);
   };
@@ -193,12 +193,12 @@ export const ProposalItem: React.FC<PropsType> = ({ proposal, onStartVote, filte
         {proposalStatus === ""
           ? "..."
           : proposal.is_activated
-          ? "Applied"
-          : proposalStatus === "closed"
-          ? canActivateProposal
-            ? "Activate"
-            : "Denied"
-          : "Vote"}
+            ? "Applied"
+            : proposalStatus === "closed"
+              ? canActivateProposal
+                ? "Activate"
+                : "Denied"
+              : "Vote"}
       </button>
     </div>
   );
