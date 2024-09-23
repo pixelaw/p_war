@@ -57,8 +57,8 @@ manifest_name = "pixelaw-actions-16928a49"
 [[contracts]]
 kind = "DojoContract"
 address = "0x138243b2aeb794df3c6a1b9fb9f834591b3e99c0d73cb59441a6e7cac15c7a"
-class_hash = "0x11472c33465ac19ee8fd27f6d901c6c4c68ec3b7aca25da683f9ada76edf5ff"
-original_class_hash = "0x11472c33465ac19ee8fd27f6d901c6c4c68ec3b7aca25da683f9ada76edf5ff"
+class_hash = "0x4e3183f1ff771f4f3936e2c5d13ce3198da5ea3a1ec05b6deeb01d70e9cd977"
+original_class_hash = "0x4e3183f1ff771f4f3936e2c5d13ce3198da5ea3a1ec05b6deeb01d70e9cd977"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/release/deployment/abis/contracts/pixelaw-guild_actions-4c9f5931.json"
 reads = []
@@ -109,8 +109,8 @@ manifest_name = "pixelaw-p_war_actions-60819afd"
 [[contracts]]
 kind = "DojoContract"
 address = "0x11c9f67cb73eece3bcf998a0b351e3cb936e0e41a94bebe352d1c1e0b4e09ce"
-class_hash = "0x1f503c258008d3de79615b721385e9797a4d07c7c1a7ca2f6fcc8503c1891f1"
-original_class_hash = "0x1f503c258008d3de79615b721385e9797a4d07c7c1a7ca2f6fcc8503c1891f1"
+class_hash = "0x263ab9727c708c507c2d88afe371d50e7dbdd50723938494525f54de583fa20"
+original_class_hash = "0x263ab9727c708c507c2d88afe371d50e7dbdd50723938494525f54de583fa20"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/release/deployment/abis/contracts/pixelaw-propose_actions-4ee7028a.json"
 reads = []
@@ -132,8 +132,8 @@ manifest_name = "pixelaw-propose_actions-4ee7028a"
 [[contracts]]
 kind = "DojoContract"
 address = "0x5e3d35ee4c47433f2550b295d68ec519124e027aeac31e9bbc2b8cf4a769c81"
-class_hash = "0x6f99e0edb3ddfed67f824d61714382477dc94678bfd666890ab4e039afe58b"
-original_class_hash = "0x6f99e0edb3ddfed67f824d61714382477dc94678bfd666890ab4e039afe58b"
+class_hash = "0x9f68df7e2c3f6d463c1f6dcca9f2ca3f2d444d5f98557d4c270baf3426fe3c"
+original_class_hash = "0x9f68df7e2c3f6d463c1f6dcca9f2ca3f2d444d5f98557d4c270baf3426fe3c"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/release/deployment/abis/contracts/pixelaw-voting_actions-6aab73ea.json"
 reads = []
