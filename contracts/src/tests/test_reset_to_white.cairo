@@ -10,7 +10,8 @@ use p_war::{
         propose::{propose_actions, IProposeDispatcher, IProposeDispatcherTrait},
         voting::{voting_actions, IVotingDispatcher, IVotingDispatcherTrait},
         guilds::{guild_actions, IGuildDispatcher, IGuildDispatcherTrait}
-    }
+    },
+    constants::{PROPOSAL_DURATION}
 };
 
 use pixelaw::core::{
@@ -99,7 +100,7 @@ fn test_reset_to_white() {
     print!("proposal.end: {}\n", proposal.end);
 
     // Fast-forward blocktime by 60 seconds
-    set_block_timestamp(get_block_timestamp() + 60);
+    set_block_timestamp(get_block_timestamp() + PROPOSAL_DURATION);
 
     // Activate the proposal
     propose.activate_proposal(game_id, proposal_id, array![GAME_PAINT_POSITION].into());
