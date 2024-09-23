@@ -4,7 +4,7 @@
     {
       "label": "Start Katana",
       "type": "shell",
-      "command": "katana --disable-fee --allowed-origins '*' --db-dir db",
+      "command": "katana --disable-fee --allowed-origins '*' --db-dir db/katana",
       "isBackground": true,
       "problemMatcher": [],
       "presentation": {
