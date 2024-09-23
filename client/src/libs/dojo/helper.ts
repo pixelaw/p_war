@@ -1,5 +1,5 @@
 import { Pixel, Board, Position } from "@/types";
-import { hexToRgba } from "@/utils";
+import { uint32ToRgba } from "@/utils";
 
 import { Entities, Entity, ToriiClient } from "@dojoengine/torii-client";
 
@@ -12,7 +12,7 @@ export const getPixelComponentValue = (entity: Entity): Pixel => {
   return {
     x: entity["pixelaw-Pixel"].x.value as number,
     y: entity["pixelaw-Pixel"].y.value as number,
-    color: hexToRgba(entity["pixelaw-Pixel"].color.value as number),
+    color: uint32ToRgba(entity["pixelaw-Pixel"].color.value as number),
   };
 };
 

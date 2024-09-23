@@ -672,7 +672,7 @@ export async function setupWorld(provider: DojoProvider) {
       account: Account;
       game_id: number;
       index: number;
-      clear_data: string[];
+      clear_data: models.Position[];
     }) => {
       try {
         return await provider.execute(

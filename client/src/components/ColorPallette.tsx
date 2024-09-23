@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { type Color } from "@/types";
-import { rgbaToHex } from "@/utils";
+import { rgbaToUint32 } from "@/utils";
 import { usePaletteColors } from "@/hooks/usePalleteColors";
 
 export const ColorPalette = ({
@@ -33,7 +33,7 @@ export const ColorPalette = ({
       console.log("pickedColor", pickedColor);
       console.log(
         "hex",
-        rgbaToHex({
+        rgbaToUint32({
           r: pickedColor.r,
           g: pickedColor.g,
           b: pickedColor.b,

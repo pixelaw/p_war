@@ -57,3 +57,21 @@ export interface Board {
   width: number;
   height: number;
 }
+export enum ProposalType {
+  Unknown,
+  // ToggleAllowedApp,
+  AddNewColor,
+  ResetToWhiteByColor,
+  ExtendGameEndTime,
+  ExpandArea,
+  // ChangeGameDuration,
+  // ChangePixelRecovery,
+  // ExpandArea,
+  // BanPlayerAddress,
+  // ChangeMaxPXConfig,
+  // ChangeWinnerConfig,
+  // ChangePaintCost,
+  // MakeADisasterByCoordinates,
+  // ResetToWhiteByCoordinates,
+  // MakeADisasterByColor,
+}

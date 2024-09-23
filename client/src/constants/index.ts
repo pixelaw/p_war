@@ -9,6 +9,7 @@ export const sounds = {
 
 export const DEFAULT_BOARD_SIZE = 50;
 export const DEFAULT_GAME_ID = 1;
+export const NEEDED_YES_PX = 1;
 export const DEFAULT_COLOR_PALLETTE = [
   { r: 1, g: 1, b: 1, a: 1 },
   { r: 0, g: 0, b: 0, a: 1 },

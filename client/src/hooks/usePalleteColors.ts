@@ -1,7 +1,7 @@
 import { useEntityQuery } from "@dojoengine/react";
 import { useDojo } from "./useDojo";
 import { getComponentValue, Has } from "@dojoengine/recs";
-import { hexToRgba } from "@/utils";
+import { uint32ToRgba } from "@/utils";
 import { useMemo } from "react";
 import { DEFAULT_COLOR_PALLETTE } from "@/constants";
 
@@ -18,7 +18,7 @@ export const usePaletteColors = () => {
       .map((entity) => {
         const value = getComponentValue(PaletteColors, entity);
         if (value) {
-          return hexToRgba(value.color);
+          return uint32ToRgba(value.color);
         }
       })
       .filter((color) => color !== undefined);
