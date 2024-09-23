@@ -55,7 +55,7 @@ const PxCounter = () => {
     >
       {currentPx}/{maxPx} PX
       {pxChange !== 0 && (
-        <div className="absolute top-5 left-[70%] -translate-x-[10%] bg-black bg-opacity-80 text-white px-2 py-1 rounded font-mono text-sm font-bold animate-[fadeInOut_1s_ease-in-out]">
+        <div className="absolute top-5 left-[70%] -translate-x-[10%] bg-black bg-opacity-80 text-white px-2 py-1 rounded font-mono text-sm font-bold animate-fade-in-out">
           {pxChange > 0 ? `+${pxChange}` : pxChange}
         </div>
       )}

@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
-import { type Pixel, type GridState, type Board, type Color, type Position } from "@/types";
+import { type Pixel, type GridState, type Board, type Color } from "@/types";
 
 const BLACK_COLOR: Color = { r: 0, g: 0, b: 0, a: 1 };
-
 
 import gridVsSource from "@/libs/webgl/shaders/grid.vs";
 import gridFsSource from "@/libs/webgl/shaders/grid.fs";
@@ -19,7 +18,6 @@ import {
   drawBufferInfo,
   resizeCanvasToDisplaySize,
   ProgramInfo,
-  createProgram,
 } from "twgl.js";
 
 import { BASE_CELL_SIZE, BASE_LINE_WIDTH, BUFFER_RATIO, DEFAULT_GRID_COLOR, MIN_SCALE } from "@/constants/webgl";
@@ -185,7 +183,6 @@ export const useWebGL = (canvasRef: React.RefObject<HTMLCanvasElement | null>, g
         return;
       }
 
-
       const { origin, width, height } = board;
       const borderPositions: number[] = [];
       const borderColors: number[] = [];
@@ -193,10 +190,14 @@ export const useWebGL = (canvasRef: React.RefObject<HTMLCanvasElement | null>, g
       // 上下の境界線
       for (let x = origin.x - 1; x <= origin.x + width; x++) {
         borderPositions.push(
-          x * BASE_CELL_SIZE, (origin.y - 1) * BASE_CELL_SIZE,
-          x * BASE_CELL_SIZE, origin.y * BASE_CELL_SIZE,
-          x * BASE_CELL_SIZE, (origin.y + height) * BASE_CELL_SIZE,
-          x * BASE_CELL_SIZE, (origin.y + height + 1) * BASE_CELL_SIZE
+          x * BASE_CELL_SIZE,
+          (origin.y - 1) * BASE_CELL_SIZE,
+          x * BASE_CELL_SIZE,
+          origin.y * BASE_CELL_SIZE,
+          x * BASE_CELL_SIZE,
+          (origin.y + height) * BASE_CELL_SIZE,
+          x * BASE_CELL_SIZE,
+          (origin.y + height + 1) * BASE_CELL_SIZE
         );
         for (let i = 0; i < 4; i++) {
           borderColors.push(BLACK_COLOR.r, BLACK_COLOR.g, BLACK_COLOR.b, BLACK_COLOR.a);
@@ -206,10 +207,14 @@ export const useWebGL = (canvasRef: React.RefObject<HTMLCanvasElement | null>, g
       // 左右の境界線
       for (let y = origin.y - 1; y <= origin.y + height; y++) {
         borderPositions.push(
-          (origin.x - 1) * BASE_CELL_SIZE, y * BASE_CELL_SIZE,
-          origin.x * BASE_CELL_SIZE, y * BASE_CELL_SIZE,
-          (origin.x + width) * BASE_CELL_SIZE, y * BASE_CELL_SIZE,
-          (origin.x + width + 1) * BASE_CELL_SIZE, y * BASE_CELL_SIZE
+          (origin.x - 1) * BASE_CELL_SIZE,
+          y * BASE_CELL_SIZE,
+          origin.x * BASE_CELL_SIZE,
+          y * BASE_CELL_SIZE,
+          (origin.x + width) * BASE_CELL_SIZE,
+          y * BASE_CELL_SIZE,
+          (origin.x + width + 1) * BASE_CELL_SIZE,
+          y * BASE_CELL_SIZE
         );
         for (let i = 0; i < 4; i++) {
           borderColors.push(BLACK_COLOR.r, BLACK_COLOR.g, BLACK_COLOR.b, BLACK_COLOR.a);
@@ -231,12 +236,13 @@ export const useWebGL = (canvasRef: React.RefObject<HTMLCanvasElement | null>, g
       setBuffersAndAttributes(gl, boardProgramInfo, borderBufferInfo);
       setUniforms(boardProgramInfo, borderUniforms);
       drawBufferInfo(gl, borderBufferInfo, gl.LINES);
-    }, [gridState]);
-  
+    },
+    [gridState]
+  );
 
   useEffect(() => {
     initWebGL();
   }, [initWebGL]);
 
-  return { glRef, drawGrid, drawPixels, drawBoard};
+  return { glRef, drawGrid, drawPixels, drawBoard };
 };

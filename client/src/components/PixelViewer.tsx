@@ -4,7 +4,7 @@ import { type Color } from "@/types";
 import { useDojo } from "@/hooks/useDojo";
 import { rgbaToHex } from "@/utils";
 import { useSound } from "use-sound";
-import { sounds } from "@/constants";
+import { DEFAULT_BOARD_SIZE, sounds } from "@/constants";
 import { usePixels } from "@/hooks/usePixels";
 import { useBoard } from "@/hooks/useBoard";
 import { useGridState } from "@/hooks/useGridState";
@@ -130,6 +130,7 @@ export const PixelViewer: React.FC = () => {
         setCurrentMousePos={setCurrentMousePos}
         gridState={gridState}
         setGridState={setGridState}
+        maxCellSize={DEFAULT_BOARD_SIZE}
       />
       <CoordinateFinder currentMousePos={currentMousePos} animateJumpToCell={animateJumpToCell} />
       <ColorPalette selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
