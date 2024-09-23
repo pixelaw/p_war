@@ -13,7 +13,7 @@ import { GameTimeCounter } from "./GameTimeCounter";
 import { useGame } from "@/hooks/useGame";
 import { HEADER_HEIGHT } from "@/constants";
 
-const Header = () => {
+export const Header = () => {
   const {
     account: { account },
     connectedAccount,
@@ -37,7 +37,7 @@ const Header = () => {
     <header
       className={cn(
         "bg-slate-900 w-full flex items-center justify-between p-4 fixed top-0 left-0 right-0 z-50",
-        `h-[${HEADER_HEIGHT}px]`
+        `h-[${HEADER_HEIGHT}px]`,
       )}
     >
       <div className="hidden md:flex items-center space-x-4">
@@ -75,5 +75,3 @@ const Header = () => {
     </header>
   );
 };
-
-export { Header };

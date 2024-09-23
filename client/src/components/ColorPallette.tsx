@@ -17,8 +17,8 @@ export const ColorPalette = ({
   return (
     <div
       className={cn(
-        "bg-slate-500 fixed mx-auto bottom-1 left-0 right-0 flex h-[50px] items-center justify-center shadow-md",
-        isOpen ? "rounded-md max-w-[310px] px-4" : "rounded-full w-fit p-3 active:bg-slate-400 hover:bg-slate-400"
+        "bg-slate-500 fixed mx-auto bottom-1 right-4 flex h-[50px] items-center justify-center shadow-md",
+        isOpen ? "rounded-md max-w-[310px] md:max-w-md px-4 shadow-lg" : "rounded-full w-fit p-3 active:bg-slate-400 hover:bg-slate-400"
       )}
       onClick={isOpen ? undefined : () => setIsOpen(true)}
     >

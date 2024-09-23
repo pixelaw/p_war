@@ -55,7 +55,7 @@ export const ProposalList = () => {
         </div>
 
         {/* Scrollable Proposal List */}
-        <div className="overflow-y-auto flex flex-col gap-y-4 flex-1 py-2">
+        <div className="overflow-y-auto flex flex-col gap-y-4 flex-1 py-2 md:min-w-[450px]">
           {filteredProposals.map((proposal) => (
             <ProposalItem proposal={proposal} key={proposal.index} />
           ))}

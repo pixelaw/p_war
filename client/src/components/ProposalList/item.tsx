@@ -12,26 +12,25 @@ import React, { useEffect, useMemo, useState } from "react";
 import { ActivateProposalButton } from "../ActivateButton";
 import { VoteButton } from "../VoteButton";
 
-const VotePercentage: React.FC<{ yes_px: number; no_px: number }> = ({ yes_px, no_px }) => {
+interface VotePercentageProps {
+  yes_px: number;
+  no_px: number;
+}
+
+export const VotePercentage: React.FC<VotePercentageProps> = ({ yes_px, no_px }) => {
+  const total = yes_px + no_px;
+  const yesPercentage = total > 0 ? (yes_px / total) * 100 : 0;
+  const noPercentage = total > 0 ? (no_px / total) * 100 : 0;
+
   return (
-    <div className="max-w-[70%]">
-      <div className="relative mb-1 flex h-2 rounded-full bg-gray-700">
-        <div
-          className="h-full rounded-l-full bg-green-500"
-          style={{
-            width: `${(yes_px / (yes_px + no_px)) * 100}%`,
-          }}
-        />
-        <div
-          className="h-full rounded-r-full bg-red-500"
-          style={{
-            width: `${(no_px / (yes_px + no_px)) * 100}%`,
-          }}
-        />
+    <div className="w-full max-w-[70%]">
+      <div className="relative mb-1 flex h-2 rounded-full bg-gray-700 w-full">
+        <div className="h-full rounded-l-full bg-green-500" style={{ width: `${yesPercentage}%` }} />
+        <div className="h-full rounded-r-full bg-red-500" style={{ width: `${noPercentage}%` }} />
       </div>
       <div className="flex justify-between text-xs text-gray-300 px-1">
         <p>For {yes_px} px</p>
-        <p>Against {no_px} pt</p>
+        <p>Against {no_px} px</p>
       </div>
     </div>
   );
@@ -48,7 +47,7 @@ export const ProposalItem: React.FC<ProposalItemProps> = ({ proposal }) => {
   const title = createProposalTitle(proposal.proposal_type, proposal.target_args_1, proposal.target_args_2);
   const canActivateProposal = useMemo(
     () => proposal.yes_px >= NEEDED_YES_PX && proposal.yes_px > proposal.no_px,
-    [proposal]
+    [proposal],
   );
 
   useEffect(() => {
@@ -72,10 +71,10 @@ export const ProposalItem: React.FC<ProposalItemProps> = ({ proposal }) => {
   return (
     <div
       className={cn(
-        "relative p-4 rounded-md border transition-colors duration-300",
+        "relative p-3 rounded-md border transition-colors duration-300",
         proposalStatus === "closed"
           ? "bg-gray-600 border-gray-700"
-          : "bg-gray-800 border-gray-700 hover:border-gray-600"
+          : "bg-gray-800 border-gray-700 hover:border-gray-600",
       )}
     >
       <div className="mb-1 flex items-center justify-between">
@@ -98,7 +97,7 @@ export const ProposalItem: React.FC<ProposalItemProps> = ({ proposal }) => {
       ) : proposal.is_activated ? (
         <button
           className={cn(
-            "absolute bottom-4 right-4 rounded-md px-4 py-2 text-sm transition duration-300 cursor-not-allowed bg-gray-500 text-green-300"
+            "absolute bottom-4 right-4 rounded-md px-2 md:px-4 py-2 text-xs md:text-sm transition duration-300 cursor-not-allowed bg-gray-500 text-green-300",
           )}
           disabled={true}
         >
@@ -110,7 +109,7 @@ export const ProposalItem: React.FC<ProposalItemProps> = ({ proposal }) => {
         ) : (
           <button
             className={cn(
-              "absolute bottom-4 right-4 rounded-md px-4 py-2 text-sm transition duration-300 cursor-not-allowed bg-gray-500 text-red-300"
+              "absolute bottom-4 right-4 rounded-md px-2 md:px-4 py-2 text-xs md:text-sm transition duration-300 cursor-not-allowed bg-gray-500 text-red-300",
             )}
             disabled={true}
           >

@@ -18,7 +18,7 @@ export const ActivateProposalButton = ({ proposal }: { proposal: Proposal }) => 
 
   // State
   const activeAccount = useMemo(() => connectedAccount || account, [connectedAccount, account]);
-  const targetPixelEntities = useEntityQuery([HasValue(Pixel, { color: proposal.target_args_2 })]);
+  const targetPixelEntities = useEntityQuery([HasValue(Pixel, { color: proposal.target_args_1 })]);
   const targetPixels = useMemo(
     () =>
       targetPixelEntities
@@ -31,10 +31,8 @@ export const ActivateProposalButton = ({ proposal }: { proposal: Proposal }) => 
           } as Position;
         })
         .filter((pixel) => pixel !== undefined),
-    [targetPixelEntities, Pixel]
+    [targetPixelEntities, Pixel],
   );
-
-  console.log(targetPixels);
 
   // Handler
   const handleActivateProposal = useCallback(async () => {
@@ -47,7 +45,7 @@ export const ActivateProposalButton = ({ proposal }: { proposal: Proposal }) => 
 
   return (
     <button
-      className="absolute bottom-4 right-4 rounded-md px-4 py-2 text-sm transition duration-300 bg-blue-600 text-white hover:bg-blue-500"
+      className="absolute bottom-4 right-4 rounded-md px-2 md:px-4 py-2 text-xs md:text-sm transition duration-300 bg-blue-600 text-white hover:bg-blue-500"
       onClick={handleActivateProposal}
     >
       Activate
