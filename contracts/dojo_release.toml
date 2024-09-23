@@ -13,6 +13,6 @@ mappings = {}
 
 [env]
 rpc_url = "https://api.cartridge.gg/x/pwar-dev/katana/"
-account_address = "0x647bdc96f98afe9f05fa645d8361f10b6d7f5d636627ccd199eb69afb72ba6e"
-private_key = "0x7903f8ca9b7154bda756282b20dd16d18e4d694af2e4d46937f50a08fc0c6f"
+account_address = "0xc8bf87d6b8194c295e53a08d8df64d23bf987525d790ba8d5415c717378a06"
+private_key = "0x3c9f3facdfc249265f5f096e8afa53adbdb371773be92ea4d1700d113861765"
 world_address = "0x263ae44e5414519a5c5a135cccaf3d9d7ee196d37e8de47a178da91f3de9b34"
