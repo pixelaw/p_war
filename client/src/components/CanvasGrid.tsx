@@ -180,7 +180,6 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
         const cellX = Math.floor(worldX / BASE_CELL_SIZE);
         const cellY = Math.floor(worldY / BASE_CELL_SIZE);
 
-        console.log("click");
         onCellClick?.(cellX, cellY);
       }
 
@@ -351,7 +350,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
     const { speedX, speedY, animationFrame } = inertiaRef.current;
 
     if (Math.abs(speedX) > INERTIA_STOP_THRESHOLD || Math.abs(speedY) > INERTIA_STOP_THRESHOLD) {
-      setGridState((prev) => ({
+      setLimitedGridState((prev) => ({
         ...prev,
         offsetX: Math.max(0, prev.offsetX - speedX / prev.scale),
         offsetY: Math.max(0, prev.offsetY - speedY / prev.scale),
@@ -367,7 +366,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
         inertiaRef.current.animationFrame = null;
       }
     }
-  }, [setGridState]);
+  }, [setLimitedGridState]);
 
   const handleTouchEnd = useCallback(
     (e: React.TouchEvent<HTMLCanvasElement>) => {
@@ -450,7 +449,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
       (e) => {
         e.preventDefault();
       },
-      { passive: false }
+      { passive: false },
     );
   }, [canvasRef]);
 
