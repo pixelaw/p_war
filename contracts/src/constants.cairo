@@ -57,7 +57,7 @@ const INITIAL_COLOR: u32 = 0xFFFFFFFF;
 const DEFAULT_AREA: u32 = 50; // changed from 5
 const DEFAULT_PX: u32 = 10;
 const MAX_COLOR_SIZE: usize = 9;
-const GAME_DURATION: u64 = 180000; // 3 mins in seconds for EthCC NOTE: oncreased temporal resolution
+const GAME_DURATION: u64 = 180000;
 const DEFAULT_RECOVERY_RATE: u64 = 5; // 5 secs to recover 1PX
 const BASE_COST: u32 = 1; // 1PX per pixel placement
 
