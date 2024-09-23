@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { extendTailwindMerge } from "tailwind-merge";
 import { withFluid } from "@fluid-tailwind/tailwind-merge";
-import { type Color } from "@/types";
+import { ProposalType, type Color } from "@/types";
 import { getComponentValue } from "@dojoengine/recs";
 import { App } from "@/types";
 import { shortString } from "starknet";
@@ -204,4 +204,21 @@ export const formatWalletAddressWithEmoji = (address: string) => {
     return avatar.emoji + " " + `${address.slice(0, 4)}...${address.slice(-4)}`;
   }
   return avatar.emoji + " " + address;
+};
+
+export const createProposalTitle = (proposalType: ProposalType, target_args_1: number, target_args_2: number) => {
+  switch (proposalType) {
+    case ProposalType.AddNewColor:
+      return `Adding A New Color: ${uint32ToHex(target_args_1).toUpperCase()}`;
+    case ProposalType.ResetToWhiteByColor:
+      return `Reset To White: ${uint32ToHex(target_args_1).toUpperCase()}`;
+    case ProposalType.ExtendGameEndTime:
+      return `Extend Game End Time: ${formatTimeRemainingForTitle(target_args_1)}`;
+    case ProposalType.ExpandArea:
+      return `Expand Area: x ${target_args_1} y ${target_args_2}`;
+    default: {
+      console.error("unhandled proposal type: ", proposalType);
+      return "";
+    }
+  }
 };

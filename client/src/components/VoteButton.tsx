@@ -30,14 +30,14 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ proposal, title }) => {
   const handleVote = useCallback(async () => {
     setIsVoting(true);
     try {
-      await vote(activeAccount, DEFAULT_GAME_ID, proposal.index, votePoints, voteType === "for");
-      setIsOpen(false);
+      vote(activeAccount, DEFAULT_GAME_ID, proposal.index, votePoints, voteType === "for");
       // Add any success handling here
     } catch (error) {
       // Handle error
       console.error(error);
     } finally {
       setIsVoting(false);
+      setIsOpen(false);
     }
   }, [activeAccount, proposal.index, voteType, votePoints, vote]);
 
@@ -54,7 +54,7 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ proposal, title }) => {
         <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/50">
           <div className="w-full max-w-md rounded-lg bg-gray-800 p-6 text-white shadow-lg flex flex-col space-y-4">
             <DialogTitle className="flex items-center font-bold space-x-3">
-              <p>{title}</p>
+              <p className="text-sm">{title}</p>
               {title && (
                 <div
                   className="size-6 rounded-md"

@@ -47,7 +47,7 @@ const PxCounter = () => {
 
   return (
     <div
-      className={`flex items-center gap-2 bg-white bg-opacity-10 rounded-xl px-4 py-2 font-mono text-sm text-white tracking-wider border border-yellow-400 shadow-[0_0_10px_rgba(255,215,0,0.5)] ${
+      className={`flex items-center gap-2 bg-white bg-opacity-10 rounded-xl px-4 py-2 font-mono text-xs md:text-sm text-white tracking-wider border border-yellow-400 shadow-[0_0_10px_rgba(255,215,0,0.5)] ${
         currentPx === 0
           ? "bg-red-500 bg-opacity-10 text-red-500 border-red-500 shadow-[0_0_10px_rgba(255,0,0,0.5)]"
           : ""

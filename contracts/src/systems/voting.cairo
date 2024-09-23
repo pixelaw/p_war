@@ -11,10 +11,23 @@ trait IVoting {
 mod voting_actions {
     use p_war::models::{player::{Player}, proposal::{PlayerVote, Proposal}};
     use p_war::systems::utils::{recover_px, update_max_px};
-    use starknet::{ContractAddress, get_caller_address};
+    use starknet::{ContractAddress, get_caller_address, get_block_timestamp};
     use super::IVoting;
 
-    // one px vote per person
+    #[derive(Drop, Serde, starknet::Event)]
+    pub struct Voted {
+        game_id: usize,
+        index: usize,
+        timestamp: u64,
+        voter: ContractAddress,
+        is_in_favor: bool
+    }
+
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    pub enum Event {
+        Voted: Voted
+    }
 
     #[abi(embed_v0)]
     impl VotingImpl of IVoting<ContractState> {
@@ -56,6 +69,19 @@ mod voting_actions {
             set!(world, (proposal, player_vote));
 
             update_max_px(world, game_id, player_address);
+
+            emit!(
+                world,
+                (Event::Voted(
+                    Voted {
+                        game_id,
+                        index,
+                        timestamp: get_block_timestamp(),
+                        voter: player_address,
+                        is_in_favor
+                    }
+                ))
+            );
         }
     }
 }

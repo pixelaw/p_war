@@ -1,13 +1,6 @@
 import { NEEDED_YES_PX } from "@/constants";
 import { Proposal } from "@/libs/dojo/typescript/models.gen";
-import { ProposalType } from "@/types";
-import {
-  cn,
-  formatTimeRemaining,
-  formatTimeRemainingForTitle,
-  formatWalletAddressWithEmoji,
-  uint32ToHex,
-} from "@/utils";
+import { cn, createProposalTitle, formatTimeRemaining, formatWalletAddressWithEmoji, uint32ToHex } from "@/utils";
 import React, { useEffect, useMemo, useState } from "react";
 import { ActivateProposalButton } from "../ActivateButton";
 import { VoteButton } from "../VoteButton";
@@ -121,23 +114,6 @@ export const ProposalItem: React.FC<ProposalItemProps> = ({ proposal }) => {
       )}
     </div>
   );
-};
-
-const createProposalTitle = (proposalType: ProposalType, target_args_1: number, target_args_2: number) => {
-  switch (proposalType) {
-    case ProposalType.AddNewColor:
-      return `Adding A New Color: ${uint32ToHex(target_args_1).toUpperCase()}`;
-    case ProposalType.ResetToWhiteByColor:
-      return `Reset To White: ${uint32ToHex(target_args_1).toUpperCase()}`;
-    case ProposalType.ExtendGameEndTime:
-      return `Extend Game End Time: ${formatTimeRemainingForTitle(target_args_1)}`;
-    case ProposalType.ExpandArea:
-      return `Expand Area: x ${target_args_1} y ${target_args_2}`;
-    default: {
-      console.error("unhandled proposal type: ", proposalType);
-      return "";
-    }
-  }
 };
 
 const getStatusColor = (status: string) => {
