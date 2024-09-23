@@ -4,6 +4,7 @@ import { type Color } from "@/types";
 import { getComponentValue } from "@dojoengine/recs";
 import { App } from "@/types";
 import { shortString } from "starknet";
+import { emojiAvatarForAddress } from "@/components/Avatar/emojiAvatarForAddress";
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -29,7 +30,7 @@ export const formatDate = (date: Date | string): string => {
     .padStart(2, "0")}`;
 };
 
-export const rgbaToHex = (color: Color): number => {
+export const rgbaToUint32 = (color: Color): number => {
   const r = Math.round(color.r * 255);
   const g = Math.round(color.g * 255);
   const b = Math.round(color.b * 255);
@@ -37,12 +38,26 @@ export const rgbaToHex = (color: Color): number => {
   return ((r << 24) | (g << 16) | (b << 8) | a) >>> 0; // Convert to unsigned 32-bit integer
 };
 
-export const hexToRgba = (hex: number): Color => {
-  const r = ((hex >>> 24) & 0xff) / 255;
-  const g = ((hex >>> 16) & 0xff) / 255;
-  const b = ((hex >>> 8) & 0xff) / 255;
-  const a = (hex & 0xff) / 255;
+export const uint32ToRgba = (uint32: number): Color => {
+  const r = ((uint32 >>> 24) & 0xff) / 255;
+  const g = ((uint32 >>> 16) & 0xff) / 255;
+  const b = ((uint32 >>> 8) & 0xff) / 255;
+  const a = (uint32 & 0xff) / 255;
   return { r, g, b, a };
+};
+
+// Converts the numeric RGBA to a normal hex color
+// @dev this removes the Alpha channel.
+// TODO: Eventually convert to rgb(255 0 153 / 80%)
+// ref: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value
+export const uint32ToHex = (uint32: number) => {
+  const color = uint32 >>> 8;
+  return "#" + color.toString(16).padStart(6, "0");
+};
+
+export const rgbaToHex = (rgba: Color) => {
+  const { r, g, b, a } = rgba;
+  return `rgba(${r * 255}, ${g * 255}, ${b * 255}, ${a})`;
 };
 
 export const handleTransactionError = (error: unknown) => {
@@ -94,4 +109,62 @@ export const fromComponent = (appComponent: ReturnType<typeof getComponentValue>
     system: appComponent.system,
     manifest: appComponent.manifest,
   };
+};
+
+export const formatTimeRemaining = (remainingSeconds: number): string => {
+  const days = Math.floor(remainingSeconds / 86400);
+  remainingSeconds %= 86400;
+  const hours = Math.floor(remainingSeconds / 3600);
+  remainingSeconds %= 3600;
+  const minutes = Math.floor(remainingSeconds / 60);
+  const seconds = remainingSeconds % 60;
+
+  let formattedTime = "";
+  if (days > 0) {
+    formattedTime += `${days}d`;
+  }
+  if (hours > 0) {
+    formattedTime += `${hours}h`;
+  }
+  if (minutes > 0) {
+    formattedTime += `${minutes}m`;
+  }
+  if (seconds > 0) {
+    formattedTime += `${seconds}s`;
+  }
+
+  return formattedTime || "0s";
+};
+
+export const formatTimeRemainingForTitle = (remainingSeconds: number): string => {
+  const days = Math.floor(remainingSeconds / 86400);
+  remainingSeconds %= 86400;
+  const hours = Math.floor(remainingSeconds / 3600);
+  remainingSeconds %= 3600;
+  const minutes = Math.floor(remainingSeconds / 60);
+  const seconds = remainingSeconds % 60;
+
+  let formattedTime = "";
+  if (days > 0) {
+    formattedTime += `${days}D`;
+  }
+  if (hours > 0) {
+    formattedTime += ` ${hours}H`;
+  }
+  if (minutes > 0) {
+    formattedTime += ` ${minutes}M`;
+  }
+  if (seconds > 0) {
+    formattedTime += ` ${seconds}S`;
+  }
+
+  return formattedTime || "0S";
+};
+
+export const formatWalletAddressWithEmoji = (address: string) => {
+  const avatar = emojiAvatarForAddress(address);
+  if (address.length > 10) {
+    return avatar.emoji + `${address.slice(0, 4)}...${address.slice(-4)}`;
+  }
+  return avatar.emoji + address;
 };

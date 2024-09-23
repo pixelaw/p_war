@@ -2035,7 +2035,18 @@
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "pixelaw-App",
+        "pixelaw-AppName",
+        "pixelaw-CoreActionsAddress",
+        "pixelaw-Pixel",
+        "pixelaw-Permissions",
+        "pixelaw-QueueItem",
+        "pixelaw-Instruction",
+        "pixelaw-PWarPixel",
+        "pixelaw-AllowedColor",
+        "pixelaw-PaletteColors"
+      ],
       "init_calldata": [],
       "tag": "pixelaw-actions",
       "systems": [
@@ -2353,7 +2364,9 @@
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "pixelaw-Guild"
+      ],
       "init_calldata": [],
       "tag": "pixelaw-guild_actions",
       "systems": [
@@ -2365,8 +2378,8 @@
     {
       "kind": "DojoContract",
       "address": "0x2045bbeab298c52664537ae151262ca5f2a4e41b07f221c4860879551c65cb5",
-      "class_hash": "0x806fe6e6de3d9ea410944be8e0bb9a6ea6aa22761a7e78dcf6080ecba54e",
-      "original_class_hash": "0x806fe6e6de3d9ea410944be8e0bb9a6ea6aa22761a7e78dcf6080ecba54e",
+      "class_hash": "0x27cb0ed43970c5111226c6909cea79d7980ccaa4f001cd8eff6fc9f03db1660",
+      "original_class_hash": "0x27cb0ed43970c5111226c6909cea79d7980ccaa4f001cd8eff6fc9f03db1660",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -2952,7 +2965,19 @@
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "pixelaw-AllowedApp",
+        "pixelaw-Board",
+        "pixelaw-AllowedColor",
+        "pixelaw-PaletteColors",
+        "pixelaw-PWarPixel",
+        "pixelaw-Game",
+        "pixelaw-GameId",
+        "pixelaw-GamePalette",
+        "pixelaw-InPalette",
+        "pixelaw-Player",
+        "pixelaw-PixelRecoveryRate"
+      ],
       "init_calldata": [],
       "tag": "pixelaw-p_war_actions",
       "systems": [
@@ -2970,8 +2995,8 @@
     {
       "kind": "DojoContract",
       "address": "0x11c9f67cb73eece3bcf998a0b351e3cb936e0e41a94bebe352d1c1e0b4e09ce",
-      "class_hash": "0xdfa69aecb748b5e097a5dc04b9cc1ed8b666a5cc72c725ee5f0ca1acca12d",
-      "original_class_hash": "0xdfa69aecb748b5e097a5dc04b9cc1ed8b666a5cc72c725ee5f0ca1acca12d",
+      "class_hash": "0x4f6cb32815c771fd8728929bc0d16cfbc4df41d0cc2e87a853d51c91241d70c",
+      "original_class_hash": "0x4f6cb32815c771fd8728929bc0d16cfbc4df41d0cc2e87a853d51c91241d70c",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3263,7 +3288,16 @@
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "pixelaw-AllowedColor",
+        "pixelaw-GamePalette",
+        "pixelaw-InPalette",
+        "pixelaw-PaletteColors",
+        "pixelaw-Proposal",
+        "pixelaw-Player",
+        "pixelaw-Game",
+        "pixelaw-Board"
+      ],
       "init_calldata": [],
       "tag": "pixelaw-propose_actions",
       "systems": [
@@ -3274,8 +3308,8 @@
     {
       "kind": "DojoContract",
       "address": "0x5e3d35ee4c47433f2550b295d68ec519124e027aeac31e9bbc2b8cf4a769c81",
-      "class_hash": "0x6f99e0edb3ddfed67f824d61714382477dc94678bfd666890ab4e039afe58b",
-      "original_class_hash": "0x6f99e0edb3ddfed67f824d61714382477dc94678bfd666890ab4e039afe58b",
+      "class_hash": "0x329e683523fce2230eb942a918a40f69eafee300bd3a417e3d0f0612b989d3a",
+      "original_class_hash": "0x329e683523fce2230eb942a918a40f69eafee300bd3a417e3d0f0612b989d3a",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3533,7 +3567,11 @@
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "pixelaw-PlayerVote",
+        "pixelaw-Proposal",
+        "pixelaw-Player"
+      ],
       "init_calldata": [],
       "tag": "pixelaw-voting_actions",
       "systems": [

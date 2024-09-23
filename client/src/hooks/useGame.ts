@@ -5,14 +5,14 @@ import { getEntityIdFromKeys } from "@dojoengine/utils";
 import { DEFAULT_GAME_ID } from "@/constants";
 
 // Always game is single and id = 1 for now
-export const useBoard = () => {
+export const useGame = () => {
   const {
     setup: {
-      clientComponents: { Board },
+      clientComponents: { Game },
     },
   } = useDojo();
 
-  const board = useComponentValue(Board, getEntityIdFromKeys([BigInt(DEFAULT_GAME_ID)]) as Entity);
+  const game = useComponentValue(Game, getEntityIdFromKeys([BigInt(DEFAULT_GAME_ID)]) as Entity);
 
-  return { board };
+  return { game };
 };

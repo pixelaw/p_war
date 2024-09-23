@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
-import { COLOR_PALETTE } from "@/constants/webgl";
 import { type Color } from "@/types";
-import { rgbaToHex } from "@/utils";
+import { rgbaToUint32 } from "@/utils";
+import { usePaletteColors } from "@/hooks/usePalleteColors";
 
 export const ColorPalette = ({
   selectedColor,
@@ -12,6 +12,8 @@ export const ColorPalette = ({
 }) => {
   const [customColors, setCustomColors] = useState<Color[]>([]);
   const [pickedColor, setPickedColor] = useState<Color | null>(null);
+
+  const paletteColors = usePaletteColors();
 
   const handleColorPickerChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -31,7 +33,7 @@ export const ColorPalette = ({
       console.log("pickedColor", pickedColor);
       console.log(
         "hex",
-        rgbaToHex({
+        rgbaToUint32({
           r: pickedColor.r,
           g: pickedColor.g,
           b: pickedColor.b,
@@ -49,7 +51,7 @@ export const ColorPalette = ({
     <div className="px-4 bg-slate-900 max-w-[310px] fixed mx-auto bottom-1 left-0 right-0 flex h-[50px] items-center justify-center shadow-md">
       <div className="flex items-center h-full w-full overflow-x-auto px-2">
         <div className="flex items-center space-x-2 h-full flex-grow">
-          {[...customColors, ...COLOR_PALETTE].map((color, index) => (
+          {[...customColors, ...paletteColors].map((color, index) => (
             <button
               key={index}
               className={`flex-shrink-0 w-8 h-8 rounded-full ${
