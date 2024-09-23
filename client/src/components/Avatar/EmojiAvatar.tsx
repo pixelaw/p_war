@@ -1,14 +1,6 @@
 import { emojiAvatarForAddress } from "./emojiAvatarForAddress";
 
-const EmojiAvatar = ({
-  address,
-  ensImage,
-  size,
-}: {
-  address: string;
-  ensImage?: string | null;
-  size: number;
-}) => {
+const EmojiAvatar = ({ address, ensImage, size }: { address: string; ensImage?: string | null; size: number }) => {
   const { color: backgroundColor, emoji } = emojiAvatarForAddress(address);
 
   return ensImage ? (

@@ -164,7 +164,7 @@ export const useWebGL = (canvasRef: React.RefObject<HTMLCanvasElement | null>, g
         console.error("WebGL error", error);
       }
     },
-    [gridState]
+    [gridState],
   );
 
   useEffect(() => {

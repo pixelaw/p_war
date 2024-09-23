@@ -11,13 +11,3 @@ export const BASE_LINE_WIDTH = 1.0;
 export const BUFFER_PIXEL_RANGE = 30;
 export const BUFFER_BOARD_RANGE = 10;
 export const MAX_UINT32 = 4294967295;
-
-export const COLOR_PALETTE: Color[] = [
-  { r: 0.8, g: 0.8, b: 0.8, a: 0.8 },
-  { r: 0.8, g: 0.8, b: 0.8, a: 0.8 },
-  { r: 0.8, g: 0.8, b: 0.8, a: 0.8 },
-  { r: 0.8, g: 0.8, b: 0.8, a: 0.8 },
-  { r: 0.8, g: 0.8, b: 0.8, a: 0.8 },
-  { r: 0.8, g: 0.8, b: 0.8, a: 0.8 },
-  { r: 0.8, g: 0.8, b: 0.8, a: 0.8 },
-];

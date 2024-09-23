@@ -40,7 +40,7 @@ export function createSystemCalls({ client }: { client: IWorld }, clientComponen
           ],
           () => {
             resolve();
-          }
+          },
         );
       });
     } catch (e) {
@@ -75,7 +75,7 @@ export function createSystemCalls({ client }: { client: IWorld }, clientComponen
           ],
           () => {
             resolve();
-          }
+          },
         );
       });
     } catch (e) {
@@ -87,7 +87,7 @@ export function createSystemCalls({ client }: { client: IWorld }, clientComponen
     account: Account,
     gameId: number,
     index: number,
-    clearData: { x: number; y: number }[]
+    clearData: { x: number; y: number }[],
   ) => {
     try {
       const { transaction_hash } = await client.propose_actions.activate_proposal({
@@ -114,7 +114,7 @@ export function createSystemCalls({ client }: { client: IWorld }, clientComponen
           ],
           () => {
             resolve();
-          }
+          },
         );
       });
     } catch (e) {
@@ -149,7 +149,7 @@ export function createSystemCalls({ client }: { client: IWorld }, clientComponen
           ],
           () => {
             resolve();
-          }
+          },
         );
       });
       console.log("Done");
