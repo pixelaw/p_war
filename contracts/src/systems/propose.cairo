@@ -18,6 +18,7 @@ trait IPropose {
 // dojo decorator
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod propose_actions {
+    use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL_FACTOR};
     use p_war::models::{
         game::{Game, Status, GameTrait}, proposal::{Proposal, PixelRecoveryRate},
         board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,
@@ -34,7 +35,6 @@ mod propose_actions {
         ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
     };
     use super::{IPropose};
-    use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL_FACTOR};
 
     #[derive(Drop, Serde, starknet::Event)]
     pub struct ProposalCreated {
