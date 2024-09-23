@@ -133,7 +133,7 @@ mod propose_actions {
                 ))
             );
 
-            game.proposal_idx
+            proposal.index
         }
 
 
