@@ -22,6 +22,8 @@ const SwipeControl = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
+    if (window.innerWidth > 768) return;
+    // NOTE: improve mobile scroll experience
     window.addEventListener(
       "wheel",
       (e) => {
