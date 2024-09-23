@@ -3,8 +3,6 @@
 // #########################
 const APP_KEY: felt252 = 'p_war';
 const APP_ICON: felt252 = 'U+2694';
-/// BASE means using the server's default manifest.json handler
-const APP_MANIFEST: felt252 = 'BASE/manifests/p_war';
 
 const OUT_OF_BOUNDS_GAME_ID: usize = 9999;
 // ####################################
@@ -56,10 +54,10 @@ const OUT_OF_BOUNDS_GAME_ID: usize = 9999;
 // // # Initial settings
 const GAME_ID: usize = 1;
 const INITIAL_COLOR: u32 = 0xFFFFFFFF;
-const DEFAULT_AREA: u32 = 10; // changed from 5
+const DEFAULT_AREA: u32 = 50; // changed from 5
 const DEFAULT_PX: u32 = 10;
 const MAX_COLOR_SIZE: usize = 9;
-const GAME_DURATION: u64 = 180; // 3 mins in seconds for EthCC
+const GAME_DURATION: u64 = 18000;
 const DEFAULT_RECOVERY_RATE: u64 = 5; // 5 secs to recover 1PX
 const BASE_COST: u32 = 1; // 1PX per pixel placement
 
@@ -70,4 +68,3 @@ const NEEDED_YES_PX: u32 = 1;
 
 // for additional rules
 const DISASTER_SIZE: u32 = 5;
-

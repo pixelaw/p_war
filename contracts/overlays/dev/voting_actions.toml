@@ -1,0 +1,2 @@
+tag = "pixelaw-voting_actions"
+writes = ["pixelaw-PlayerVote", "pixelaw-Proposal", "pixelaw-Player"]

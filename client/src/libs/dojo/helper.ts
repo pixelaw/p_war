@@ -1,13 +1,18 @@
-import { Pixel } from "@/types";
-import { hexToRgba } from "@/utils";
+import { Pixel, Board, Position } from "@/types";
+import { uint32ToRgba } from "@/utils";
 
 import { Entities, Entity, ToriiClient } from "@dojoengine/torii-client";
+
+// import { HasValue } from "@dojoengine/recs";
+
+// import { getComponentValue } from "@dojoengine/recs";
+// import { ClientComponents } from "./createClientComponents";
 
 export const getPixelComponentValue = (entity: Entity): Pixel => {
   return {
     x: entity["pixelaw-Pixel"].x.value as number,
     y: entity["pixelaw-Pixel"].y.value as number,
-    color: hexToRgba(entity["pixelaw-Pixel"].color.value as number),
+    color: uint32ToRgba(entity["pixelaw-Pixel"].color.value as number),
   };
 };
 
@@ -23,7 +28,7 @@ export const getPixelEntities = async (
     upperLeftY,
     lowerRightX,
     lowerRightY,
-  }: { upperLeftX: number; upperLeftY: number; lowerRightX: number; lowerRightY: number }
+  }: { upperLeftX: number; upperLeftY: number; lowerRightX: number; lowerRightY: number },
 ) => {
   const entities = await client.getEntities({
     limit,
@@ -69,5 +74,32 @@ export const getPixelEntities = async (
     },
   });
 
+  return entities;
+};
+
+export const getBoardComponentValue = (entity: Entity): Board | undefined => {
+  if (!entity["pixelaw-Board"]) {
+    return undefined;
+  }
+  return {
+    id: entity["pixelaw-Board"].id.value as number,
+    origin: entity["pixelaw-Board"].origin.value as unknown as Position,
+    width: entity["pixelaw-Board"].width.value as number,
+    height: entity["pixelaw-Board"].height.value as number,
+  };
+};
+
+export const getBoardComponentFromEntities = (entities: Entities): Board[] => {
+  return Object.values(entities)
+    .map(getBoardComponentValue)
+    .filter((board): board is Board => board !== undefined);
+};
+
+export const getBoardEntities = async (client: ToriiClient, limit: number) => {
+  const entities = await client.getEntities({
+    clause: undefined,
+    limit,
+    offset: 0,
+  });
   return entities;
 };

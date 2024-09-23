@@ -29,7 +29,18 @@ original_class_hash = "0x17d390af6c3b449b52da5a0969a00006a3b7935ffc08192dc8cefde
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/pixelaw-actions-16928a49.json"
 reads = []
-writes = []
+writes = [
+    "pixelaw-App",
+    "pixelaw-AppName",
+    "pixelaw-CoreActionsAddress",
+    "pixelaw-Pixel",
+    "pixelaw-Permissions",
+    "pixelaw-QueueItem",
+    "pixelaw-Instruction",
+    "pixelaw-PWarPixel",
+    "pixelaw-AllowedColor",
+    "pixelaw-PaletteColors",
+]
 init_calldata = []
 tag = "pixelaw-actions"
 systems = [
@@ -51,7 +62,7 @@ original_class_hash = "0x11472c33465ac19ee8fd27f6d901c6c4c68ec3b7aca25da683f9ada
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/pixelaw-guild_actions-4c9f5931.json"
 reads = []
-writes = []
+writes = ["pixelaw-Guild"]
 init_calldata = []
 tag = "pixelaw-guild_actions"
 systems = [
@@ -63,12 +74,24 @@ manifest_name = "pixelaw-guild_actions-4c9f5931"
 [[contracts]]
 kind = "DojoContract"
 address = "0x2045bbeab298c52664537ae151262ca5f2a4e41b07f221c4860879551c65cb5"
-class_hash = "0x317693d5c8f562ba5920e57218000c8839bf0624e9310f947068947e4e0c3fb"
-original_class_hash = "0x317693d5c8f562ba5920e57218000c8839bf0624e9310f947068947e4e0c3fb"
+class_hash = "0x27cb0ed43970c5111226c6909cea79d7980ccaa4f001cd8eff6fc9f03db1660"
+original_class_hash = "0x27cb0ed43970c5111226c6909cea79d7980ccaa4f001cd8eff6fc9f03db1660"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/pixelaw-p_war_actions-60819afd.json"
 reads = []
-writes = []
+writes = [
+    "pixelaw-AllowedApp",
+    "pixelaw-Board",
+    "pixelaw-AllowedColor",
+    "pixelaw-PaletteColors",
+    "pixelaw-PWarPixel",
+    "pixelaw-Game",
+    "pixelaw-GameId",
+    "pixelaw-GamePalette",
+    "pixelaw-InPalette",
+    "pixelaw-Player",
+    "pixelaw-PixelRecoveryRate",
+]
 init_calldata = []
 tag = "pixelaw-p_war_actions"
 systems = [
@@ -86,12 +109,21 @@ manifest_name = "pixelaw-p_war_actions-60819afd"
 [[contracts]]
 kind = "DojoContract"
 address = "0x11c9f67cb73eece3bcf998a0b351e3cb936e0e41a94bebe352d1c1e0b4e09ce"
-class_hash = "0xdfa69aecb748b5e097a5dc04b9cc1ed8b666a5cc72c725ee5f0ca1acca12d"
-original_class_hash = "0xdfa69aecb748b5e097a5dc04b9cc1ed8b666a5cc72c725ee5f0ca1acca12d"
+class_hash = "0x4f6cb32815c771fd8728929bc0d16cfbc4df41d0cc2e87a853d51c91241d70c"
+original_class_hash = "0x4f6cb32815c771fd8728929bc0d16cfbc4df41d0cc2e87a853d51c91241d70c"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/pixelaw-propose_actions-4ee7028a.json"
 reads = []
-writes = []
+writes = [
+    "pixelaw-AllowedColor",
+    "pixelaw-GamePalette",
+    "pixelaw-InPalette",
+    "pixelaw-PaletteColors",
+    "pixelaw-Proposal",
+    "pixelaw-Player",
+    "pixelaw-Game",
+    "pixelaw-Board",
+]
 init_calldata = []
 tag = "pixelaw-propose_actions"
 systems = ["activate_proposal"]
@@ -100,12 +132,16 @@ manifest_name = "pixelaw-propose_actions-4ee7028a"
 [[contracts]]
 kind = "DojoContract"
 address = "0x5e3d35ee4c47433f2550b295d68ec519124e027aeac31e9bbc2b8cf4a769c81"
-class_hash = "0x6f99e0edb3ddfed67f824d61714382477dc94678bfd666890ab4e039afe58b"
-original_class_hash = "0x6f99e0edb3ddfed67f824d61714382477dc94678bfd666890ab4e039afe58b"
+class_hash = "0x329e683523fce2230eb942a918a40f69eafee300bd3a417e3d0f0612b989d3a"
+original_class_hash = "0x329e683523fce2230eb942a918a40f69eafee300bd3a417e3d0f0612b989d3a"
 base_class_hash = "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2"
 abi = "manifests/dev/deployment/abis/contracts/pixelaw-voting_actions-6aab73ea.json"
 reads = []
-writes = []
+writes = [
+    "pixelaw-PlayerVote",
+    "pixelaw-Proposal",
+    "pixelaw-Player",
+]
 init_calldata = []
 tag = "pixelaw-voting_actions"
 systems = ["vote"]

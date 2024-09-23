@@ -1,24 +1,22 @@
-import { startTransition, useCallback, useMemo, useRef, useState } from "react";
-import { COLOR_PALETTE, BASE_CELL_SIZE } from "@/constants/webgl";
-import { type Color } from "@/types";
+import { startTransition, useCallback, useMemo, useRef, useState, useOptimistic } from "react";
+import { BASE_CELL_SIZE } from "@/constants/webgl";
+import { Pixel, type Color } from "@/types";
 import { useDojo } from "@/hooks/useDojo";
-import { rgbaToHex } from "@/utils";
+import { rgbaToUint32, uint32ToRgba } from "@/utils";
 import { useSound } from "use-sound";
-import { sounds } from "@/constants";
-import { usePixels } from "@/hooks/usePixels";
+import { DEFAULT_BOARD_SIZE, sounds } from "@/constants";
 import { useGridState } from "@/hooks/useGridState";
 import { useWebGL } from "@/hooks/useWebGL";
 import { CoordinateFinder } from "@/components/CoordinateFinder";
 import { ColorPalette } from "@/components/ColorPallette";
 import { CanvasGrid } from "@/components/CanvasGrid";
+import { usePaletteColors } from "@/hooks/usePalleteColors";
+import { useEntityQuery } from "@dojoengine/react";
+import { getComponentValue, Has } from "@dojoengine/recs";
 
 export const PixelViewer: React.FC = () => {
   // Refs
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  // States
-  const [selectedColor, setSelectedColor] = useState<Color>(COLOR_PALETTE[0]);
-  const [currentMousePos, setCurrentMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
   // Other Hooks
   const {
@@ -26,15 +24,35 @@ export const PixelViewer: React.FC = () => {
       systemCalls: { interact },
       account: { account },
       connectedAccount,
+      clientComponents: { Pixel },
     },
   } = useDojo();
-
   const { gridState, setGridState } = useGridState();
+  // NOTE: On the assumption that game_id is just 1, and there are any other related pixels other than p_war in the world
+  const pixelEntities = useEntityQuery([Has(Pixel)]);
+  const paletteColors = usePaletteColors();
   const { drawPixels } = useWebGL(canvasRef, gridState);
-  const { optimisticPixels, setOptimisticPixels, throttledFetchPixels } = usePixels(canvasRef, gridState);
-  const activeAccount = useMemo(() => connectedAccount || account, [connectedAccount, account]);
-
   const [play] = useSound(sounds.placeColor, { volume: 0.5 });
+
+  // States
+  const [selectedColor, setSelectedColor] = useState<Color>(paletteColors[0]);
+  const [currentMousePos, setCurrentMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const activeAccount = useMemo(() => connectedAccount || account, [connectedAccount, account]);
+  const visiblePixels = useMemo(
+    () =>
+      pixelEntities
+        .map((entity) => {
+          const pixel = getComponentValue(Pixel, entity);
+          if (!pixel) return;
+
+          return { x: pixel.x, y: pixel.y, color: uint32ToRgba(pixel.color) };
+        })
+        .filter((pixel) => pixel !== undefined),
+    [pixelEntities, Pixel],
+  );
+  const [optimisticPixels, setOptimisticPixels] = useOptimistic(visiblePixels, (pixels, newPixel: Pixel) => {
+    return [...pixels, newPixel];
+  });
 
   // Handlers
   const onCellClick = useCallback(
@@ -46,25 +64,16 @@ export const PixelViewer: React.FC = () => {
           for_player: 0n,
           for_system: 0n,
           position: { x, y },
-          color: rgbaToHex(selectedColor),
+          color: rgbaToUint32(selectedColor),
         });
       });
     },
-    [selectedColor, activeAccount, interact, setOptimisticPixels, play]
+    [selectedColor, activeAccount, interact, setOptimisticPixels, play],
   );
 
   const onDrawGrid = useCallback(() => {
     drawPixels(optimisticPixels);
   }, [optimisticPixels, drawPixels]);
-
-  const onPan = useCallback(
-    (dx: number, dy: number) => {
-      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
-        throttledFetchPixels();
-      }
-    },
-    [throttledFetchPixels]
-  );
 
   const animateJumpToCell = useCallback(
     (x: number, y: number, duration: number = 500) => {
@@ -105,7 +114,7 @@ export const PixelViewer: React.FC = () => {
 
       requestAnimationFrame(animateFrame);
     },
-    [gridState, setGridState, setCurrentMousePos]
+    [gridState, setGridState, setCurrentMousePos],
   );
 
   return (
@@ -114,13 +123,14 @@ export const PixelViewer: React.FC = () => {
         canvasRef={canvasRef}
         className="fixed inset-x-0 bottom top-[50px] h-[calc(100%-50px)] w-full bg-black/80"
         onCellClick={onCellClick}
-        onSwipe={onPan}
-        onPan={onPan}
-        // onTap={onCellClick} // NOTE: somehow tap and mouseup events are called duplicated
+        // onSwipe={onPan}
+        // onPan={onPan}
+        onTap={onCellClick} // NOTE: somehow tap and mouseup events are called duplicated (it might be depends on the environemnts??)
         onDrawGrid={onDrawGrid}
         setCurrentMousePos={setCurrentMousePos}
         gridState={gridState}
         setGridState={setGridState}
+        maxCellSize={DEFAULT_BOARD_SIZE}
       />
       <CoordinateFinder currentMousePos={currentMousePos} animateJumpToCell={animateJumpToCell} />
       <ColorPalette selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
