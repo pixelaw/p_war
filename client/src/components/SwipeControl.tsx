@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { useSwipeable } from "react-swipeable";
 
 const SwipeControl = ({ children }: { children: React.ReactNode }) => {
@@ -19,6 +19,18 @@ const SwipeControl = ({ children }: { children: React.ReactNode }) => {
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
+  }, []);
+
+  useEffect(() => {
+    if (window.innerWidth > 768) return;
+    // NOTE: improve mobile scroll experience
+    window.addEventListener(
+      "wheel",
+      (e) => {
+        e.preventDefault();
+      },
+      { passive: false },
+    );
   }, []);
 
   const handlers = useSwipeable({
