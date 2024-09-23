@@ -7,7 +7,8 @@ use p_war::{
         actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
         propose::{propose_actions, IProposeDispatcher, IProposeDispatcherTrait},
         voting::{voting_actions, IVotingDispatcher, IVotingDispatcherTrait}
-    }
+    },
+    constants::{PROPOSAL_DURATION}
 };
 
 use pixelaw::core::{
@@ -75,11 +76,13 @@ fn test_add_color() {
 
     let proposal = get!(world, (id, index), (Proposal));
 
-    println!("\n## PROPOSAL INFO ##\n");
-    println!("Proposal end: {}\n", proposal.end);
+    println!("\n## PROPOSAL INFO ##");
+    println!("Proposal end: {}", proposal.end);
 
     // should add cheat code to spend time
-    set_block_timestamp(proposal.end + 1); // NOTE: we need to set block timestamp forcely
+    set_block_timestamp(
+        proposal.end + PROPOSAL_DURATION
+    ); // NOTE: we need to set block timestamp forcely
     propose_system.activate_proposal(id, index, array![default_params.position].into());
 
     // call place_pixel
@@ -96,7 +99,7 @@ fn test_add_color() {
     let oldest_color_allowed = get!(world, (id, oldest_color_palette.color), (AllowedColor));
 
     println!(
-        "\n@@@@@ OLDEST_ALLOWED: {}, {} @@@@\n",
+        "@@@@@ OLDEST_ALLOWED: {}, {} @@@@",
         oldest_color_palette.color,
         oldest_color_allowed.is_allowed
     );

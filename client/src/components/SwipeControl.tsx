@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import { useSwipeable } from "react-swipeable";
 
 const SwipeControl = ({ children }: { children: React.ReactNode }) => {
@@ -19,16 +19,6 @@ const SwipeControl = ({ children }: { children: React.ReactNode }) => {
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener(
-      "wheel",
-      (e) => {
-        e.preventDefault();
-      },
-      { passive: false },
-    );
   }, []);
 
   const handlers = useSwipeable({

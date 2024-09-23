@@ -59,8 +59,10 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
   onZoom,
   setCurrentMousePos,
 }) => {
+  // Hooks
   const { glRef, drawGrid } = useWebGL(canvasRef, gridState);
 
+  // Refs
   const mouseDownPosRef = useRef<{ x: number; y: number } | null>(null);
   const isDraggingRef = useRef<boolean>(false);
   const lastTouchPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -84,6 +86,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
     animationFrame: null,
   });
 
+  // Handlers
   const setLimitedGridState = useCallback(
     (updater: (prev: GridState) => GridState) => {
       setGridState((prev) => {
@@ -180,7 +183,6 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
         const cellX = Math.floor(worldX / BASE_CELL_SIZE);
         const cellY = Math.floor(worldY / BASE_CELL_SIZE);
 
-        console.log("click");
         onCellClick?.(cellX, cellY);
       }
 
@@ -351,7 +353,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
     const { speedX, speedY, animationFrame } = inertiaRef.current;
 
     if (Math.abs(speedX) > INERTIA_STOP_THRESHOLD || Math.abs(speedY) > INERTIA_STOP_THRESHOLD) {
-      setGridState((prev) => ({
+      setLimitedGridState((prev) => ({
         ...prev,
         offsetX: Math.max(0, prev.offsetX - speedX / prev.scale),
         offsetY: Math.max(0, prev.offsetY - speedY / prev.scale),
@@ -367,7 +369,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
         inertiaRef.current.animationFrame = null;
       }
     }
-  }, [setGridState]);
+  }, [setLimitedGridState]);
 
   const handleTouchEnd = useCallback(
     (e: React.TouchEvent<HTMLCanvasElement>) => {
@@ -405,6 +407,8 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
     onDrawGrid?.();
   }, [drawGrid, onDrawGrid]);
 
+
+  // Effects
   useEffect(() => {
     const animationFrame = requestAnimationFrame(animate);
     return () => {
@@ -439,6 +443,20 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
       resizeObserver.disconnect();
     };
   }, [canvasRef, glRef, animate]);
+
+  // Prevent from browser back motion
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    canvas.addEventListener(
+      "wheel",
+      (e) => {
+        e.preventDefault();
+      },
+      { passive: false },
+    );
+  }, [canvasRef]);
 
   return (
     <canvas

@@ -1,5 +1,12 @@
 import { useCallback, useMemo, useState } from "react";
-import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogClose } from "@/components/ui/Dialog";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogClose,
+  DialogDescription,
+} from "@/components/ui/Dialog";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
@@ -7,7 +14,7 @@ import { ProposalType } from "@/types";
 import { useDojo } from "@/hooks/useDojo";
 import { DEFAULT_GAME_ID } from "@/constants";
 import { usePaletteColors } from "@/hooks/usePalleteColors";
-import { cn, rgbaToHex } from "@/utils";
+import { cn, formatColorToRGB, hexRGBtoNumber, rgbaToHex } from "@/utils";
 
 export const CreateProposalButton = ({ className }: { className?: string }) => {
   const [open, setOpen] = useState(false);
@@ -25,25 +32,34 @@ export const CreateProposalButton = ({ className }: { className?: string }) => {
 
   const handleSubmit = useCallback(async () => {
     if (!proposalType) return;
-    await createProposal(activeAccount, DEFAULT_GAME_ID, proposalType, color);
+
+    createProposal(
+      activeAccount,
+      DEFAULT_GAME_ID,
+      proposalType,
+      hexRGBtoNumber(formatColorToRGB(color).replace("#", "")),
+    );
     setOpen(false);
-  }, [proposalType, color, createProposal, activeAccount]);
+  }, [proposalType, color, activeAccount, createProposal]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>
-        <Button className={cn("mx-auto px-6 py-3 text-lg font-semibold", className)} variant="secondary">
-          Create A New Proposal
+      <DialogTrigger asChild>
+        <Button className={cn("mx-auto p-6 text-lg font-semibold", className)}>
+          <span className="text-xs md:text-sm">Create A New Proposal</span>
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogTitle>Create A New Proposal</DialogTitle>
+        <DialogDescription className="!text-xs md:text-sm">
+          You can create a proposal to add a new color to the canvas or to reset a color to white.
+        </DialogDescription>
         <div className="space-y-4">
-          <Select onValueChange={(value) => setProposalType(parseInt(value))}>
+          <Select onValueChange={(value) => setProposalType(Number(value))}>
             <SelectTrigger>
               <SelectValue placeholder="Select Proposal Type" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent aria-modal={false}>
               <SelectItem value="1">Add Color</SelectItem>
               <SelectItem value="2">Reset To White</SelectItem>
             </SelectContent>
@@ -53,14 +69,24 @@ export const CreateProposalButton = ({ className }: { className?: string }) => {
               <label htmlFor="color" className="block text-sm font-medium">
                 Choose a color to add to the canvas
               </label>
-              <Input
-                id="color"
-                type="color"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
-                placeholder="#FFFFFF"
-                className="cursor-pointer size-10 p-0"
-              />
+              <div className="flex items-center space-x-2">
+                <Input
+                  id="color"
+                  type="color"
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                  placeholder="#FFFFFF"
+                  className="cursor-pointer size-10 min-w-10 min-h-10 p-0"
+                />
+                <Input
+                  id="color"
+                  type="text"
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                  placeholder="#FFFFFF"
+                  className="max-w-fit"
+                />
+              </div>
             </div>
           )}
           {proposalType === ProposalType.ResetToWhiteByColor && (
@@ -68,11 +94,11 @@ export const CreateProposalButton = ({ className }: { className?: string }) => {
               <label htmlFor="reset-color" className="block text-sm font-medium">
                 Choose a color to turn white on the canvas
               </label>
-              <Select onValueChange={(value) => setProposalType(parseInt(value))}>
+              <Select onValueChange={(value) => setColor(value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select Proposal Type" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent aria-modal={false}>
                   {paletteColors.map((color, index) => (
                     <SelectItem key={index} value={rgbaToHex(color)}>
                       <div className="flex items-center space-x-4">

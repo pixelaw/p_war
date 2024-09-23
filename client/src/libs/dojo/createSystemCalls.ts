@@ -122,13 +122,13 @@ export function createSystemCalls({ client }: { client: IWorld }, clientComponen
     }
   };
 
-  const createProposal = async (account: Account, gameId: number, proposalType: ProposalType, color?: string) => {
+  const createProposal = async (account: Account, gameId: number, proposalType: ProposalType, color?: number) => {
     try {
       const { transaction_hash } = await client.propose_actions.create_proposal({
         account,
         game_id: gameId,
         proposal_type: proposalType,
-        target_args_1: color ? parseInt(color.replace("#", ""), 16) : 0,
+        target_args_1: color ? color : 0,
         target_args_2: 0,
       });
       console.log(transaction_hash);
@@ -152,6 +152,7 @@ export function createSystemCalls({ client }: { client: IWorld }, clientComponen
           },
         );
       });
+      console.log("Done");
     } catch (e) {
       handleError("createProposal", e);
     }

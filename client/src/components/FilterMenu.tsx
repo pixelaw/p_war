@@ -5,10 +5,10 @@ interface FilterMenuProps {
   setStatusFilter: (status: "All" | "Active" | "Closed") => void;
 }
 
-const FilterMenu: React.FC<FilterMenuProps> = ({ statusFilter, setStatusFilter }) => {
+export const FilterMenu: React.FC<FilterMenuProps> = ({ statusFilter, setStatusFilter }) => {
   return (
-    <div className="p-4">
-      <div className="mb-2 font-bold">Status Filter</div>
+    <div className="p-2 md:p-4">
+      <div className="mb-2 text-sm font-medium">Status Filter</div>
       <div className="space-y-2">
         <label className="flex items-center">
           <input
@@ -47,5 +47,3 @@ const FilterMenu: React.FC<FilterMenuProps> = ({ statusFilter, setStatusFilter }
     </div>
   );
 };
-
-export default FilterMenu;

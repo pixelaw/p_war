@@ -30,10 +30,8 @@ export const GameTimeCounter = ({ endTime }: { endTime?: number }) => {
   }, [endTime]);
 
   return (
-    <div className="bg-header-primary flex items-center px-4 relative">
-      <div className="font-roboto-mono text-xl font-bold text-yellow-500 absolute left-1/2 transform -translate-x-1/2 drop-shadow-lg">
-        {timeLeft}
-      </div>
+    <div className="bg-header-primary flex items-center px-4">
+      <p className="text-xl font-bold text-yellow-500 drop-shadow-lg">{timeLeft}</p>
     </div>
   );
 };
