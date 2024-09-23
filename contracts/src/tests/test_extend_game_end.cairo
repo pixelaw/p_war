@@ -53,8 +53,8 @@ fn test_extend_game_end() {
 
     let proposal = get!(world, (id, index), (Proposal));
 
-    println!("\n## PROPOSAL INFO ##\n");
-    println!("Proposal end: {}\n", proposal.end);
+    println!("## PROPOSAL INFO ##");
+    println!("Proposal end: {}", proposal.end);
 
     // should add cheat code to spend time
     set_block_timestamp(proposal.end + 1); // NOTE: we need to set block timestamp forcely

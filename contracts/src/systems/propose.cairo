@@ -1,6 +1,4 @@
-use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL_FACTOR};
-use p_war::models::{game::{Game, Status}, proposal::{Proposal}, board::Position};
-use starknet::{ContractAddress, get_caller_address, get_block_timestamp, contract_address_const};
+use p_war::models::{board::Position};
 
 // define the interface
 #[dojo::interface]
@@ -35,7 +33,8 @@ mod propose_actions {
     use starknet::{
         ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
     };
-    use super::{IPropose, NEEDED_YES_PX, PROPOSAL_DURATION, DISASTER_SIZE, PROPOSAL_FACTOR};
+    use super::{IPropose};
+    use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL_FACTOR};
 
     #[derive(Drop, Serde, starknet::Event)]
     pub struct ProposalCreated {

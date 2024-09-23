@@ -38,7 +38,7 @@ fn test_create_game() {
 
     let allowed_color = get!(world, (id, NEW_COLOR), (AllowedColor));
 
-    println!("\n allowed_color: {} \n", allowed_color.is_allowed);
+    println!("allowed_color: {}", allowed_color.is_allowed);
 
     let new_params = DefaultParameters {
         for_player: caller,
