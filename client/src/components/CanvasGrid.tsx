@@ -59,8 +59,10 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
   onZoom,
   setCurrentMousePos,
 }) => {
+  // Hooks
   const { glRef, drawGrid } = useWebGL(canvasRef, gridState);
 
+  // Refs
   const mouseDownPosRef = useRef<{ x: number; y: number } | null>(null);
   const isDraggingRef = useRef<boolean>(false);
   const lastTouchPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -84,6 +86,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
     animationFrame: null,
   });
 
+  // Handlers
   const setLimitedGridState = useCallback(
     (updater: (prev: GridState) => GridState) => {
       setGridState((prev) => {
@@ -404,6 +407,8 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
     onDrawGrid?.();
   }, [drawGrid, onDrawGrid]);
 
+
+  // Effects
   useEffect(() => {
     const animationFrame = requestAnimationFrame(animate);
     return () => {
