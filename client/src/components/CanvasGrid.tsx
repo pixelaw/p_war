@@ -440,6 +440,20 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
     };
   }, [canvasRef, glRef, animate]);
 
+  // Prevent from browser back motion
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    canvas.addEventListener(
+      "wheel",
+      (e) => {
+        e.preventDefault();
+      },
+      { passive: false }
+    );
+  }, [canvasRef]);
+
   return (
     <canvas
       ref={canvasRef}

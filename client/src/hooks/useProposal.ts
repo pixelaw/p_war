@@ -18,5 +18,5 @@ export const useProposals = (gameId: number) => {
       .filter((proposal) => proposal !== undefined);
   }, [proposalEntities, Proposal]);
 
-  return proposals;
+  return { proposals };
 };

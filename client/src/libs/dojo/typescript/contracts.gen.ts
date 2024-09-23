@@ -680,7 +680,7 @@ export async function setupWorld(provider: DojoProvider) {
           {
             contractName: contract_name,
             entrypoint: "activate_proposal",
-            calldata: [props.game_id, props.index, ...props.clear_data],
+            calldata: [props.game_id, props.index, props.clear_data],
           },
           "pixelaw"
         );

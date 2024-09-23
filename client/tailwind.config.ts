@@ -1,7 +1,12 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import fluid, { extract } from "fluid-tailwind";
+import tailwindcssAnimate from "tailwindcss-animate";
+
+export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: {
+    files: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+    extract,
+  },
   prefix: "",
   theme: {
     container: {
@@ -12,6 +17,15 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        silkscreen: {
+          DEFAULT: ["Silkscreen", "sans-serif"],
+        },
+        roboto: {
+          DEFAULT: ["Roboto", "sans-serif"],
+          mono: ["Roboto Mono", "monospace"],
+        },
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -75,13 +89,28 @@ module.exports = {
             transform: "translate(-50%, -10px)",
           },
         },
+        "slide-open": {
+          from: { transform: "scaleX(0)" },
+          to: { transform: "scaleX(1)" },
+        },
+        "slide-close": {
+          from: { transform: "scaleX(1)" },
+          to: { transform: "scaleX(0)" },
+        },
       },
       animation: {
         "fade-in-out": "fade-in-out 1s ease-in-out",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "slide-open": "slide-open 0.3s ease-out forwards",
+        "slide-close": "slide-close 0.3s ease-in forwards",
+      },
+      transformOrigin: {
+        center: "center",
+        left: "left",
+        right: "right",
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [fluid, tailwindcssAnimate],
 };

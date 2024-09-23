@@ -1,3 +1,4 @@
+export const APP_NAME = "p/war";
 export const ZERO_ADDRESS = "0x0";
 export const NAMESPACE = "pixelaw";
 
@@ -6,6 +7,8 @@ export const sounds = {
   success: "/assets/sounds/effects/success.mp3",
   error: "/assets/sounds/effects/error.mp3",
 };
+
+export const HEADER_HEIGHT = 50;
 
 export const DEFAULT_BOARD_SIZE = 50;
 export const DEFAULT_GAME_ID = 1;

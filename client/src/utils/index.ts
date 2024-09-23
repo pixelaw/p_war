@@ -1,10 +1,13 @@
 import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
+import { extendTailwindMerge } from "tailwind-merge";
+import { withFluid } from "@fluid-tailwind/tailwind-merge";
 import { type Color } from "@/types";
 import { getComponentValue } from "@dojoengine/recs";
 import { App } from "@/types";
 import { shortString } from "starknet";
 import { emojiAvatarForAddress } from "@/components/Avatar/emojiAvatarForAddress";
+
+const twMerge = extendTailwindMerge(withFluid);
 
 export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs));
@@ -55,9 +58,43 @@ export const uint32ToHex = (uint32: number) => {
   return "#" + color.toString(16).padStart(6, "0");
 };
 
-export const rgbaToHex = (rgba: Color) => {
-  const { r, g, b, a } = rgba;
-  return `rgba(${r * 255}, ${g * 255}, ${b * 255}, ${a})`;
+export const hexRGBtoNumber = (color: string) => {
+  return parseInt(`0x${color}FF`, 16);
+};
+
+export const hexRGBAtoNumber = (color: string) => {
+  return parseInt(`0x${color}`, 16);
+};
+
+export const rgbaToHex = (rgba: Color): string => {
+  const { r, g, b } = rgba;
+
+  const toHex = (c: number) => {
+    const hex = Math.round(c * 255).toString(16);
+    return hex.padStart(2, "0");
+  };
+
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+};
+
+export const formatColorToRGBA = (color: string) => {
+  if (color.length === 7 && color.startsWith("#")) {
+    return color + "00";
+  } else if (color.length === 9 && color.startsWith("#")) {
+    return color;
+  } else {
+    return color;
+  }
+};
+
+export const formatColorToRGB = (color: string) => {
+  if (color.length === 7 && color.startsWith("#")) {
+    return color;
+  } else if (color.length === 9 && color.startsWith("#")) {
+    return color.slice(0, -2);
+  } else {
+    return color;
+  }
 };
 
 export const handleTransactionError = (error: unknown) => {
@@ -164,7 +201,7 @@ export const formatTimeRemainingForTitle = (remainingSeconds: number): string =>
 export const formatWalletAddressWithEmoji = (address: string) => {
   const avatar = emojiAvatarForAddress(address);
   if (address.length > 10) {
-    return avatar.emoji + `${address.slice(0, 4)}...${address.slice(-4)}`;
+    return avatar.emoji + " " + `${address.slice(0, 4)}...${address.slice(-4)}`;
   }
-  return avatar.emoji + address;
+  return avatar.emoji + " " + address;
 };
