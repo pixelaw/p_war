@@ -44,7 +44,10 @@ And after moving into contracts directory, the versions for these libs are set i
 
 ## Running Locally
 
-If you use vscode, you can start katana and torii just press `⌘ + ⇧ + B` in your vscode.
+If you use vscode, you can start katana and torii just press `⌘ + ⇧ + B` in your vscode. This can be executed by selecting commands here:
+![image](./public/assets/start_katana_and_torii.png)
+
+If you use these shortcut, please check out if the contract was deployed.
 
 otherwise,
 
@@ -64,9 +67,6 @@ sozo build
 # Migrate the example
 sozo migrate apply
 
-# Initialize the pixelaw app
-scarb run init_auth
-
 # Start Torii
 torii --world 0x263ae44e5414519a5c5a135cccaf3d9d7ee196d37e8de47a178da91f3de9b34 --allowed-origins "*"
 ```
@@ -79,6 +79,15 @@ you can deploy your app to our katana testnet by running the following commands:
 # Deploy the pixelaw app
 sozo build -P release
 sozo migrate apply -P release
+```
+
+### Setup Client
+
+After finishing setup a contract side, you can run the client locally by following commands: 
+```bash
+cd ./client
+bun install
+bun run dev
 ```
 
 ## Troubleshooting

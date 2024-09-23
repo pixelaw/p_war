@@ -43,3 +43,35 @@ export interface GridHistory {
   present: Pixel[];
   future: Pixel[][];
 }
+
+// from libs/dojo/typescript/models.gen.ts
+
+export interface Position {
+  x: number;
+  y: number;
+}
+
+export interface Board {
+  id: number;
+  origin: Position;
+  width: number;
+  height: number;
+}
+export enum ProposalType {
+  Unknown,
+  // ToggleAllowedApp,
+  AddNewColor,
+  ResetToWhiteByColor,
+  ExtendGameEndTime,
+  ExpandArea,
+  // ChangeGameDuration,
+  // ChangePixelRecovery,
+  // ExpandArea,
+  // BanPlayerAddress,
+  // ChangeMaxPXConfig,
+  // ChangeWinnerConfig,
+  // ChangePaintCost,
+  // MakeADisasterByCoordinates,
+  // ResetToWhiteByCoordinates,
+  // MakeADisasterByColor,
+}

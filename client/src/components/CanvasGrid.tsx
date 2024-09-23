@@ -19,6 +19,7 @@ interface CanvasGridProps {
   initialOffset?: { x: number; y: number };
   maxZoom?: number;
   minZoom?: number;
+  maxCellSize?: number;
   damping?: boolean;
   setGridState: React.Dispatch<React.SetStateAction<GridState>>;
   onDrawGrid?: () => void;
@@ -40,6 +41,7 @@ interface CanvasGridProps {
 export const CanvasGrid: React.FC<CanvasGridProps> = ({
   maxZoom = MAX_SCALE,
   minZoom = MIN_SCALE,
+  maxCellSize,
   damping = true,
   gridState,
   canvasRef,
@@ -57,8 +59,10 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
   onZoom,
   setCurrentMousePos,
 }) => {
+  // Hooks
   const { glRef, drawGrid } = useWebGL(canvasRef, gridState);
 
+  // Refs
   const mouseDownPosRef = useRef<{ x: number; y: number } | null>(null);
   const isDraggingRef = useRef<boolean>(false);
   const lastTouchPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -82,6 +86,32 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
     animationFrame: null,
   });
 
+  // Handlers
+  const setLimitedGridState = useCallback(
+    (updater: (prev: GridState) => GridState) => {
+      setGridState((prev) => {
+        const newState = updater(prev);
+        if (maxCellSize) {
+          const maxOffsetX = Math.max(
+            0,
+            maxCellSize * BASE_CELL_SIZE - (canvasRef.current?.width || 0) / newState.scale,
+          );
+          const maxOffsetY = Math.max(
+            0,
+            maxCellSize * BASE_CELL_SIZE - (canvasRef.current?.height || 0) / newState.scale,
+          );
+          return {
+            ...newState,
+            offsetX: Math.min(Math.max(0, newState.offsetX), maxOffsetX),
+            offsetY: Math.min(Math.max(0, newState.offsetY), maxOffsetY),
+          };
+        }
+        return newState;
+      });
+    },
+    [setGridState, maxCellSize, canvasRef],
+  );
+
   const updateCurrentMousePos = useCallback(
     (canvasX: number, canvasY: number) => {
       const worldX = gridState.offsetX + canvasX / gridState.scale;
@@ -93,7 +123,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
       setCurrentMousePos?.({ x: cellX, y: cellY });
       onCellHover?.(cellX, cellY);
     },
-    [gridState, onCellHover, setCurrentMousePos]
+    [gridState, onCellHover, setCurrentMousePos],
   );
 
   const handleMouseDown = useCallback(
@@ -105,7 +135,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
       mouseDownPosRef.current = { x, y };
       isDraggingRef.current = false;
     },
-    [canvasRef]
+    [canvasRef],
   );
 
   const handleMouseMove = useCallback(
@@ -125,7 +155,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
       }
 
       if (isDraggingRef.current) {
-        setGridState((prev) => ({
+        setLimitedGridState((prev) => ({
           ...prev,
           offsetX: Math.max(0, prev.offsetX - dx / prev.scale),
           offsetY: Math.max(0, prev.offsetY - dy / prev.scale),
@@ -136,7 +166,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
         mouseDownPosRef.current = { x, y };
       }
     },
-    [canvasRef, updateCurrentMousePos, onSwipe, setGridState]
+    [canvasRef, updateCurrentMousePos, onSwipe, setLimitedGridState],
   );
 
   const handleMouseUp = useCallback(
@@ -153,14 +183,13 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
         const cellX = Math.floor(worldX / BASE_CELL_SIZE);
         const cellY = Math.floor(worldY / BASE_CELL_SIZE);
 
-        console.log("click");
         onCellClick?.(cellX, cellY);
       }
 
       mouseDownPosRef.current = null;
       isDraggingRef.current = false;
     },
-    [canvasRef, gridState, onCellClick]
+    [canvasRef, gridState, onCellClick],
   );
 
   const handleWheel = useCallback(
@@ -170,7 +199,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
       if (e.ctrlKey) {
         // TrackPad pinch gesture
         const delta = -e.deltaY * 0.01;
-        setGridState((prev) => {
+        setLimitedGridState((prev) => {
           const newScale = Math.max(minZoom, Math.min(maxZoom, prev.scale * (1 + delta)));
           const worldX = prev.offsetX + x / prev.scale;
           const worldY = prev.offsetY + y / prev.scale;
@@ -183,7 +212,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
         });
       } else {
         // Regular mouse wheel or swipe
-        setGridState((prev) => ({
+        setLimitedGridState((prev) => ({
           ...prev,
           offsetX: Math.max(0, prev.offsetX + e.deltaX / prev.scale),
           offsetY: Math.max(0, prev.offsetY + e.deltaY / prev.scale),
@@ -193,7 +222,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
 
       updateCurrentMousePos(x, y);
     },
-    [canvasRef, minZoom, maxZoom, updateCurrentMousePos, onZoom, setGridState, onPan]
+    [canvasRef, minZoom, maxZoom, updateCurrentMousePos, onZoom, setLimitedGridState, onPan],
   );
 
   const handleTouchStart = useCallback(
@@ -220,7 +249,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
         }
       }
     },
-    [canvasRef, updateCurrentMousePos]
+    [canvasRef, updateCurrentMousePos],
   );
 
   const handleTouchMove = useCallback(
@@ -251,7 +280,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
         }
 
         if (gestureRef.current.gestureType === "pinch") {
-          setGridState((prev) => {
+          setLimitedGridState((prev) => {
             const zoomFactor = currentDistance / (gestureRef.current.lastPinchDistance || currentDistance);
             const newScale = Math.max(minZoom, Math.min(maxZoom, prev.scale * zoomFactor));
 
@@ -277,7 +306,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
             };
           });
         } else {
-          setGridState((prev) => ({
+          setLimitedGridState((prev) => ({
             ...prev,
             offsetX: Math.max(0, prev.offsetX - moveDelta.x / prev.scale),
             offsetY: Math.max(0, prev.offsetY - moveDelta.y / prev.scale),
@@ -307,7 +336,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
           inertiaRef.current.speedY = (dy / deltaTime) * 15;
           inertiaRef.current.lastTime = currentTime;
 
-          setGridState((prev) => ({
+          setLimitedGridState((prev) => ({
             ...prev,
             offsetX: Math.max(0, prev.offsetX - dx / prev.scale),
             offsetY: Math.max(0, prev.offsetY - dy / prev.scale),
@@ -317,14 +346,14 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
         }
       }
     },
-    [canvasRef, minZoom, maxZoom, updateCurrentMousePos, setGridState, onPinch, onSwipe]
+    [canvasRef, minZoom, maxZoom, updateCurrentMousePos, setLimitedGridState, onPinch, onSwipe],
   );
 
   const handleInertia = useCallback(() => {
     const { speedX, speedY, animationFrame } = inertiaRef.current;
 
     if (Math.abs(speedX) > INERTIA_STOP_THRESHOLD || Math.abs(speedY) > INERTIA_STOP_THRESHOLD) {
-      setGridState((prev) => ({
+      setLimitedGridState((prev) => ({
         ...prev,
         offsetX: Math.max(0, prev.offsetX - speedX / prev.scale),
         offsetY: Math.max(0, prev.offsetY - speedY / prev.scale),
@@ -340,7 +369,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
         inertiaRef.current.animationFrame = null;
       }
     }
-  }, [setGridState]);
+  }, [setLimitedGridState]);
 
   const handleTouchEnd = useCallback(
     (e: React.TouchEvent<HTMLCanvasElement>) => {
@@ -370,7 +399,7 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
 
       isDraggingRef.current = false;
     },
-    [canvasRef, damping, gridState, handleInertia, onTap]
+    [canvasRef, damping, gridState, handleInertia, onTap],
   );
 
   const animate = useCallback(() => {
@@ -378,6 +407,8 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
     onDrawGrid?.();
   }, [drawGrid, onDrawGrid]);
 
+
+  // Effects
   useEffect(() => {
     const animationFrame = requestAnimationFrame(animate);
     return () => {
@@ -412,6 +443,20 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
       resizeObserver.disconnect();
     };
   }, [canvasRef, glRef, animate]);
+
+  // Prevent from browser back motion
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    canvas.addEventListener(
+      "wheel",
+      (e) => {
+        e.preventDefault();
+      },
+      { passive: false },
+    );
+  }, [canvasRef]);
 
   return (
     <canvas

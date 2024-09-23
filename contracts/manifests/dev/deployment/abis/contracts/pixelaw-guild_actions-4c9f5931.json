@@ -284,12 +284,98 @@
   },
   {
     "type": "event",
+    "name": "p_war::systems::guilds::guild_actions::GuildCreated",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "game_id",
+        "type": "core::integer::u32",
+        "kind": "data"
+      },
+      {
+        "name": "guild_id",
+        "type": "core::integer::u32",
+        "kind": "data"
+      },
+      {
+        "name": "guild_name",
+        "type": "core::felt252",
+        "kind": "data"
+      },
+      {
+        "name": "creator",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "p_war::systems::guilds::guild_actions::MemberAdded",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "game_id",
+        "type": "core::integer::u32",
+        "kind": "data"
+      },
+      {
+        "name": "guild_id",
+        "type": "core::integer::u32",
+        "kind": "data"
+      },
+      {
+        "name": "member",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "p_war::systems::guilds::guild_actions::MemberRemoved",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "game_id",
+        "type": "core::integer::u32",
+        "kind": "data"
+      },
+      {
+        "name": "guild_id",
+        "type": "core::integer::u32",
+        "kind": "data"
+      },
+      {
+        "name": "member",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
     "name": "p_war::systems::guilds::guild_actions::Event",
     "kind": "enum",
     "variants": [
       {
         "name": "UpgradeableEvent",
         "type": "dojo::contract::upgradeable::upgradeable::Event",
+        "kind": "nested"
+      },
+      {
+        "name": "GuildCreated",
+        "type": "p_war::systems::guilds::guild_actions::GuildCreated",
+        "kind": "nested"
+      },
+      {
+        "name": "MemberAdded",
+        "type": "p_war::systems::guilds::guild_actions::MemberAdded",
+        "kind": "nested"
+      },
+      {
+        "name": "MemberRemoved",
+        "type": "p_war::systems::guilds::guild_actions::MemberRemoved",
         "kind": "nested"
       }
     ]

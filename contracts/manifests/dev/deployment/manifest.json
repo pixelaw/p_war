@@ -2035,7 +2035,18 @@
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "pixelaw-App",
+        "pixelaw-AppName",
+        "pixelaw-CoreActionsAddress",
+        "pixelaw-Pixel",
+        "pixelaw-Permissions",
+        "pixelaw-QueueItem",
+        "pixelaw-Instruction",
+        "pixelaw-PWarPixel",
+        "pixelaw-AllowedColor",
+        "pixelaw-PaletteColors"
+      ],
       "init_calldata": [],
       "tag": "pixelaw-actions",
       "systems": [
@@ -2052,8 +2063,8 @@
     {
       "kind": "DojoContract",
       "address": "0x138243b2aeb794df3c6a1b9fb9f834591b3e99c0d73cb59441a6e7cac15c7a",
-      "class_hash": "0x11472c33465ac19ee8fd27f6d901c6c4c68ec3b7aca25da683f9ada76edf5ff",
-      "original_class_hash": "0x11472c33465ac19ee8fd27f6d901c6c4c68ec3b7aca25da683f9ada76edf5ff",
+      "class_hash": "0x4e3183f1ff771f4f3936e2c5d13ce3198da5ea3a1ec05b6deeb01d70e9cd977",
+      "original_class_hash": "0x4e3183f1ff771f4f3936e2c5d13ce3198da5ea3a1ec05b6deeb01d70e9cd977",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -2341,6 +2352,77 @@
         },
         {
           "type": "event",
+          "name": "p_war::systems::guilds::guild_actions::GuildCreated",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "guild_id",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "guild_name",
+              "type": "core::felt252",
+              "kind": "data"
+            },
+            {
+              "name": "creator",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "p_war::systems::guilds::guild_actions::MemberAdded",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "guild_id",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "member",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "p_war::systems::guilds::guild_actions::MemberRemoved",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "guild_id",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "member",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
           "name": "p_war::systems::guilds::guild_actions::Event",
           "kind": "enum",
           "variants": [
@@ -2348,12 +2430,29 @@
               "name": "UpgradeableEvent",
               "type": "dojo::contract::upgradeable::upgradeable::Event",
               "kind": "nested"
+            },
+            {
+              "name": "GuildCreated",
+              "type": "p_war::systems::guilds::guild_actions::GuildCreated",
+              "kind": "nested"
+            },
+            {
+              "name": "MemberAdded",
+              "type": "p_war::systems::guilds::guild_actions::MemberAdded",
+              "kind": "nested"
+            },
+            {
+              "name": "MemberRemoved",
+              "type": "p_war::systems::guilds::guild_actions::MemberRemoved",
+              "kind": "nested"
             }
           ]
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "pixelaw-Guild"
+      ],
       "init_calldata": [],
       "tag": "pixelaw-guild_actions",
       "systems": [
@@ -2365,8 +2464,8 @@
     {
       "kind": "DojoContract",
       "address": "0x2045bbeab298c52664537ae151262ca5f2a4e41b07f221c4860879551c65cb5",
-      "class_hash": "0x317693d5c8f562ba5920e57218000c8839bf0624e9310f947068947e4e0c3fb",
-      "original_class_hash": "0x317693d5c8f562ba5920e57218000c8839bf0624e9310f947068947e4e0c3fb",
+      "class_hash": "0x7422dc7dc14aae5c3a5af4e4cad0588dfa8f2f6bc62c3fcf4e92ec464362710",
+      "original_class_hash": "0x7422dc7dc14aae5c3a5af4e4cad0588dfa8f2f6bc62c3fcf4e92ec464362710",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -2952,7 +3051,19 @@
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "pixelaw-AllowedApp",
+        "pixelaw-Board",
+        "pixelaw-AllowedColor",
+        "pixelaw-PaletteColors",
+        "pixelaw-PWarPixel",
+        "pixelaw-Game",
+        "pixelaw-GameId",
+        "pixelaw-GamePalette",
+        "pixelaw-InPalette",
+        "pixelaw-Player",
+        "pixelaw-PixelRecoveryRate"
+      ],
       "init_calldata": [],
       "tag": "pixelaw-p_war_actions",
       "systems": [
@@ -2970,8 +3081,8 @@
     {
       "kind": "DojoContract",
       "address": "0x11c9f67cb73eece3bcf998a0b351e3cb936e0e41a94bebe352d1c1e0b4e09ce",
-      "class_hash": "0xdfa69aecb748b5e097a5dc04b9cc1ed8b666a5cc72c725ee5f0ca1acca12d",
-      "original_class_hash": "0xdfa69aecb748b5e097a5dc04b9cc1ed8b666a5cc72c725ee5f0ca1acca12d",
+      "class_hash": "0x263ab9727c708c507c2d88afe371d50e7dbdd50723938494525f54de583fa20",
+      "original_class_hash": "0x263ab9727c708c507c2d88afe371d50e7dbdd50723938494525f54de583fa20",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3251,6 +3362,70 @@
         },
         {
           "type": "event",
+          "name": "p_war::systems::propose::propose_actions::ProposalCreated",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "index",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "proposal_type",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "target_args_1",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "target_args_2",
+              "type": "core::integer::u32",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "p_war::systems::propose::propose_actions::ProposalActivated",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "index",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "proposal_type",
+              "type": "core::integer::u8",
+              "kind": "data"
+            },
+            {
+              "name": "target_args_1",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "target_args_2",
+              "type": "core::integer::u32",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
           "name": "p_war::systems::propose::propose_actions::Event",
           "kind": "enum",
           "variants": [
@@ -3258,12 +3433,31 @@
               "name": "UpgradeableEvent",
               "type": "dojo::contract::upgradeable::upgradeable::Event",
               "kind": "nested"
+            },
+            {
+              "name": "ProposalCreated",
+              "type": "p_war::systems::propose::propose_actions::ProposalCreated",
+              "kind": "nested"
+            },
+            {
+              "name": "ProposalActivated",
+              "type": "p_war::systems::propose::propose_actions::ProposalActivated",
+              "kind": "nested"
             }
           ]
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "pixelaw-AllowedColor",
+        "pixelaw-GamePalette",
+        "pixelaw-InPalette",
+        "pixelaw-PaletteColors",
+        "pixelaw-Proposal",
+        "pixelaw-Player",
+        "pixelaw-Game",
+        "pixelaw-Board"
+      ],
       "init_calldata": [],
       "tag": "pixelaw-propose_actions",
       "systems": [
@@ -3274,8 +3468,8 @@
     {
       "kind": "DojoContract",
       "address": "0x5e3d35ee4c47433f2550b295d68ec519124e027aeac31e9bbc2b8cf4a769c81",
-      "class_hash": "0x6f99e0edb3ddfed67f824d61714382477dc94678bfd666890ab4e039afe58b",
-      "original_class_hash": "0x6f99e0edb3ddfed67f824d61714382477dc94678bfd666890ab4e039afe58b",
+      "class_hash": "0x9f68df7e2c3f6d463c1f6dcca9f2ca3f2d444d5f98557d4c270baf3426fe3c",
+      "original_class_hash": "0x9f68df7e2c3f6d463c1f6dcca9f2ca3f2d444d5f98557d4c270baf3426fe3c",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3521,6 +3715,38 @@
         },
         {
           "type": "event",
+          "name": "p_war::systems::voting::voting_actions::Voted",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "index",
+              "type": "core::integer::u32",
+              "kind": "data"
+            },
+            {
+              "name": "timestamp",
+              "type": "core::integer::u64",
+              "kind": "data"
+            },
+            {
+              "name": "voter",
+              "type": "core::starknet::contract_address::ContractAddress",
+              "kind": "data"
+            },
+            {
+              "name": "is_in_favor",
+              "type": "core::bool",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
           "name": "p_war::systems::voting::voting_actions::Event",
           "kind": "enum",
           "variants": [
@@ -3528,12 +3754,21 @@
               "name": "UpgradeableEvent",
               "type": "dojo::contract::upgradeable::upgradeable::Event",
               "kind": "nested"
+            },
+            {
+              "name": "Voted",
+              "type": "p_war::systems::voting::voting_actions::Voted",
+              "kind": "nested"
             }
           ]
         }
       ],
       "reads": [],
-      "writes": [],
+      "writes": [
+        "pixelaw-PlayerVote",
+        "pixelaw-Proposal",
+        "pixelaw-Player"
+      ],
       "init_calldata": [],
       "tag": "pixelaw-voting_actions",
       "systems": [

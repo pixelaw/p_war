@@ -30,4 +30,4 @@ build-external-contracts = [
 sort-module-level-items = true
 
 [scripts]
-init_auth = "./scripts/init_auth.sh"
+init = "./scripts/init.sh"

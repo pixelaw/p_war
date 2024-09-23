@@ -22,7 +22,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "world",
             calldata: [],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing world:", error);
@@ -40,7 +40,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "init",
             calldata: [],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing init:", error);
@@ -66,7 +66,7 @@ export async function setupWorld(provider: DojoProvider) {
               props.permission.action,
             ],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing update_permission:", error);
@@ -104,7 +104,7 @@ export async function setupWorld(provider: DojoProvider) {
               props.pixel_update,
             ],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing has_write_access:", error);
@@ -129,7 +129,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "process_queue",
             calldata: [props.id, props.timestamp, props.called_system, props.selector, ...props.calldata],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing process_queue:", error);
@@ -153,7 +153,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "schedule_queue",
             calldata: [props.timestamp, props.called_system, props.selector, ...props.calldata],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing schedule_queue:", error);
@@ -176,7 +176,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "update_pixel",
             calldata: [props.for_player, props.for_system, props.pixel_update],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing update_pixel:", error);
@@ -194,7 +194,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "new_app",
             calldata: [props.system, props.name, props.icon],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing new_app:", error);
@@ -212,7 +212,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "get_system_address",
             calldata: [props.for_system],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing get_system_address:", error);
@@ -230,7 +230,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "get_player_address",
             calldata: [props.for_player],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing get_player_address:", error);
@@ -253,7 +253,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "alert_player",
             calldata: [props.position.x, props.position.y, props.player, props.message],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing alert_player:", error);
@@ -271,7 +271,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "set_instruction",
             calldata: [props.selector, props.instruction],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing set_instruction:", error);
@@ -309,7 +309,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "world",
             calldata: [],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing world:", error);
@@ -327,7 +327,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "create_guild",
             calldata: [props.game_id, props.guild_name],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing create_guild:", error);
@@ -345,7 +345,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "add_member",
             calldata: [props.game_id, props.guild_id, props.new_member],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing add_member:", error);
@@ -363,7 +363,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "remove_member",
             calldata: [props.game_id, props.guild_id, props.member],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing remove_member:", error);
@@ -374,15 +374,11 @@ export async function setupWorld(provider: DojoProvider) {
     // Call the `get_guild_points` system with the specified Account and calldata
     const get_guild_points = async (props: { account: Account; game_id: number; guild_id: number }) => {
       try {
-        return await provider.execute(
-          props.account,
-          {
-            contractName: contract_name,
-            entrypoint: "get_guild_points",
-            calldata: [props.game_id, props.guild_id],
-          },
-          "pixelaw"
-        );
+        return await provider.call("pixelaw", {
+          contractName: contract_name,
+          entrypoint: "get_guild_points",
+          calldata: [props.game_id, props.guild_id],
+        });
       } catch (error) {
         console.error("Error executing get_guild_points:", error);
         throw error;
@@ -412,7 +408,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "world",
             calldata: [],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing world:", error);
@@ -442,7 +438,7 @@ export async function setupWorld(provider: DojoProvider) {
               props.player_caller,
             ],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing on_pre_update:", error);
@@ -472,7 +468,7 @@ export async function setupWorld(provider: DojoProvider) {
               props.player_caller,
             ],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing on_post_update:", error);
@@ -490,7 +486,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "set_pixel",
             calldata: [props.default_params],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing set_pixel:", error);
@@ -508,7 +504,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "init",
             calldata: [],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing init:", error);
@@ -526,7 +522,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "interact",
             calldata: [props.default_params],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing interact:", error);
@@ -544,7 +540,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "create_game",
             calldata: [props.origin.x, props.origin.y],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing create_game:", error);
@@ -562,7 +558,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "get_game_id",
             calldata: [props.position.x, props.position.y],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing get_game_id:", error);
@@ -580,7 +576,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "place_pixel",
             calldata: [props.app, props.default_params],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing place_pixel:", error);
@@ -598,7 +594,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "update_pixel",
             calldata: [props.pixel_update],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing update_pixel:", error);
@@ -616,7 +612,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "end_game",
             calldata: [props.game_id],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing end_game:", error);
@@ -659,7 +655,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "create_proposal",
             calldata: [props.game_id, props.proposal_type, props.target_args_1, props.target_args_2],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing create_proposal:", error);
@@ -672,7 +668,7 @@ export async function setupWorld(provider: DojoProvider) {
       account: Account;
       game_id: number;
       index: number;
-      clear_data: string[];
+      clear_data: models.Position[];
     }) => {
       try {
         return await provider.execute(
@@ -680,9 +676,9 @@ export async function setupWorld(provider: DojoProvider) {
           {
             contractName: contract_name,
             entrypoint: "activate_proposal",
-            calldata: [props.game_id, props.index, ...props.clear_data],
+            calldata: [props.game_id, props.index, props.clear_data],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing activate_proposal:", error);
@@ -700,7 +696,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "world",
             calldata: [],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing world:", error);
@@ -729,7 +725,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "world",
             calldata: [],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing world:", error);
@@ -753,7 +749,7 @@ export async function setupWorld(provider: DojoProvider) {
             entrypoint: "vote",
             calldata: [props.game_id, props.index, props.use_px, props.is_in_favor],
           },
-          "pixelaw"
+          "pixelaw",
         );
       } catch (error) {
         console.error("Error executing vote:", error);

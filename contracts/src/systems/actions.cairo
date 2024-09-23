@@ -1,9 +1,4 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-
-use p_war::constants::{
-    GAME_DURATION, DEFAULT_AREA, DEFAULT_RECOVERY_RATE, APP_KEY, APP_ICON, APP_MANIFEST,
-    INITIAL_COLOR, BASE_COST, DEFAULT_PX
-};
 use p_war::models::board::Position;
 use p_war::systems::guilds::{IGuildDispatcher, IGuildDispatcherTrait};
 use pixelaw::core::models::pixel::PixelUpdate;
@@ -29,7 +24,10 @@ trait IActions {
 // dojo decorator
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod p_war_actions {
-    use p_war::constants::{GAME_ID, OUT_OF_BOUNDS_GAME_ID};
+    use p_war::constants::{
+        APP_KEY, APP_ICON, GAME_ID, OUT_OF_BOUNDS_GAME_ID, DEFAULT_RECOVERY_RATE, INITIAL_COLOR,
+        GAME_DURATION, DEFAULT_AREA, BASE_COST, DEFAULT_PX
+    };
     use p_war::models::{
         game::{Game, Status, GameTrait}, board::{Board, GameId, PWarPixel}, player::{Player},
         proposal::{PixelRecoveryRate},
@@ -50,11 +48,7 @@ mod p_war_actions {
         ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info,
         contract_address_const,
     };
-    use super::{
-        APP_KEY, APP_ICON, APP_MANIFEST, IActions, IActionsDispatcher, IActionsDispatcherTrait,
-        GAME_DURATION, DEFAULT_AREA, BASE_COST, DEFAULT_PX
-    };
-    use super::{DEFAULT_RECOVERY_RATE, INITIAL_COLOR};
+    use super::{IActions, IActionsDispatcher, IActionsDispatcherTrait};
 
     #[event]
     #[derive(Drop, starknet::Event)]

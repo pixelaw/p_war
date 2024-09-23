@@ -5,6 +5,8 @@ import gridVsSource from "@/libs/webgl/shaders/grid.vs";
 import gridFsSource from "@/libs/webgl/shaders/grid.fs";
 import pixelVsSource from "@/libs/webgl/shaders/pixel.vs";
 import pixelFsSource from "@/libs/webgl/shaders/pixel.fs";
+import boardVsSource from "@/libs/webgl/shaders/board.vs";
+import boardFsSource from "@/libs/webgl/shaders/board.fs";
 
 import {
   createProgramInfo,
@@ -15,6 +17,7 @@ import {
   resizeCanvasToDisplaySize,
   ProgramInfo,
 } from "twgl.js";
+
 import { BASE_CELL_SIZE, BASE_LINE_WIDTH, BUFFER_RATIO, DEFAULT_GRID_COLOR, MIN_SCALE } from "@/constants/webgl";
 import { getVisibleArea } from "@/utils/canvas";
 
@@ -22,6 +25,7 @@ export const useWebGL = (canvasRef: React.RefObject<HTMLCanvasElement | null>, g
   const glRef = useRef<WebGLRenderingContext | null>(null);
   const gridProgramInfoRef = useRef<ProgramInfo | null>(null);
   const pixelProgramInfoRef = useRef<ProgramInfo | null>(null);
+  const boardProgramInfoRef = useRef<ProgramInfo | null>(null);
 
   const initWebGL = useCallback(() => {
     const canvas = canvasRef.current;
@@ -38,6 +42,7 @@ export const useWebGL = (canvasRef: React.RefObject<HTMLCanvasElement | null>, g
     resizeCanvasToDisplaySize(canvas);
     gridProgramInfoRef.current = createProgramInfo(gl, [gridVsSource, gridFsSource]);
     pixelProgramInfoRef.current = createProgramInfo(gl, [pixelVsSource, pixelFsSource]);
+    boardProgramInfoRef.current = createProgramInfo(gl, [boardVsSource, boardFsSource]);
 
     gl.clearColor(0, 0, 0, 0.8);
     gl.clear(gl.COLOR_BUFFER_BIT);
@@ -159,7 +164,7 @@ export const useWebGL = (canvasRef: React.RefObject<HTMLCanvasElement | null>, g
         console.error("WebGL error", error);
       }
     },
-    [gridState]
+    [gridState],
   );
 
   useEffect(() => {

@@ -445,7 +445,7 @@ export function defineContractComponents(world: World) {
             types: ["u32", "ContractAddress", "bool"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -465,7 +465,7 @@ export function defineContractComponents(world: World) {
             types: ["u32", "u32", "bool"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -486,7 +486,7 @@ export function defineContractComponents(world: World) {
             types: ["ContractAddress", "felt252", "felt252", "felt252"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -505,7 +505,7 @@ export function defineContractComponents(world: World) {
             types: ["felt252", "ContractAddress"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -525,7 +525,7 @@ export function defineContractComponents(world: World) {
             types: ["ContractAddress", "ContractAddress", "felt252"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -546,7 +546,7 @@ export function defineContractComponents(world: World) {
             types: ["u32", "u32", "u32"],
             customTypes: ["Position"],
           },
-        }
+        },
       );
     })(),
 
@@ -565,7 +565,7 @@ export function defineContractComponents(world: World) {
             types: ["felt252", "ContractAddress"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -594,7 +594,7 @@ export function defineContractComponents(world: World) {
             types: ["u32", "u64", "u64", "u32", "u32", "u32", "u32", "u32", "u32", "ContractAddress", "array", "u32"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -614,7 +614,7 @@ export function defineContractComponents(world: World) {
             types: ["u32", "u32", "u32"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -633,7 +633,7 @@ export function defineContractComponents(world: World) {
             types: ["u32", "u32"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -656,7 +656,7 @@ export function defineContractComponents(world: World) {
             types: ["u32", "u32", "felt252", "ContractAddress", "array", "u32"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -676,7 +676,7 @@ export function defineContractComponents(world: World) {
             types: ["u32", "u32", "bool"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -696,7 +696,7 @@ export function defineContractComponents(world: World) {
             types: ["ContractAddress", "felt252", "felt252"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -715,7 +715,7 @@ export function defineContractComponents(world: World) {
             types: ["ContractAddress"],
             customTypes: ["Position"],
           },
-        }
+        },
       );
     })(),
 
@@ -735,7 +735,7 @@ export function defineContractComponents(world: World) {
             types: ["u32", "u32", "u32"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -755,7 +755,7 @@ export function defineContractComponents(world: World) {
             types: ["ContractAddress", "ContractAddress"],
             customTypes: ["Permission"],
           },
-        }
+        },
       );
     })(),
 
@@ -793,7 +793,7 @@ export function defineContractComponents(world: World) {
             ],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -812,7 +812,7 @@ export function defineContractComponents(world: World) {
             types: ["u32", "u64"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -836,7 +836,7 @@ export function defineContractComponents(world: World) {
             types: ["ContractAddress", "u32", "u32", "u32", "u32", "u64", "bool"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -858,7 +858,7 @@ export function defineContractComponents(world: World) {
             types: ["ContractAddress", "u32", "u32", "bool", "u32"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -886,7 +886,7 @@ export function defineContractComponents(world: World) {
             types: ["u32", "u32", "ContractAddress", "u8", "u32", "u32", "u64", "u64", "u32", "u32", "bool"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
 
@@ -905,7 +905,7 @@ export function defineContractComponents(world: World) {
             types: ["felt252", "bool"],
             customTypes: [],
           },
-        }
+        },
       );
     })(),
   };
