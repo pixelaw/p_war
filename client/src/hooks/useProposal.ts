@@ -27,8 +27,8 @@ export const useProposals = (gameId: number) => {
         [
           {
             Keys: {
-              keys: [gameId.toString()],
-              pattern_matching: "FixedLen",
+              keys: [],
+              pattern_matching: "VariableLen",
               models: ["pixelaw-Proposal"],
             },
           },
@@ -46,7 +46,7 @@ export const useProposals = (gameId: number) => {
     return () => {
       sub.then((sub) => sub.cancel());
     };
-  }, [toriiClient, gameId]);
+  }, [toriiClient]);
 
   return { proposals };
 };

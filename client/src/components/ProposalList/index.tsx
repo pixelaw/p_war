@@ -29,10 +29,10 @@ export const ProposalList = () => {
   return (
     <section
       className={cn(
-        "z-10 absolute",
+        "z-10 fixed",
         `top-[${HEADER_HEIGHT + 10}px]`,
         isOpen
-          ? "rounded-md inset-x-4 md:left-4 md:right-auto bottom-4"
+          ? "rounded-md inset-x-4 md:left-4 md:right-auto bottom-4 overflow-y-auto"
           : "rounded-full active:bg-slate-400 hover:bg-slate-400 left-4 cursor-pointer",
       )}
       onClick={isOpen ? undefined : () => setIsOpen(true)}

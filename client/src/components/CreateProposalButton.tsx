@@ -51,10 +51,8 @@ export const CreateProposalButton = ({ className }: { className?: string }) => {
       </DialogTrigger>
       <DialogContent>
         <DialogTitle>Create A New Proposal</DialogTitle>
-        <DialogDescription>
-          <p className="!text-xs md:text-sm">
-            You can create a proposal to add a new color to the canvas or to reset a color to white.
-          </p>
+        <DialogDescription className="!text-xs md:text-sm">
+          You can create a proposal to add a new color to the canvas or to reset a color to white.
         </DialogDescription>
         <div className="space-y-4">
           <Select onValueChange={(value) => setProposalType(Number(value))}>

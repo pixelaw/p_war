@@ -1,7 +1,7 @@
 import { DEFAULT_GAME_ID } from "@/constants";
 import { useDojo } from "@/hooks/useDojo";
 import { Proposal } from "@/libs/dojo/typescript/models.gen";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/Dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/Dialog";
 import { useCallback, useMemo, useState } from "react";
 
 interface VoteButtonProps {
@@ -30,12 +30,14 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ proposal, title }) => {
   const handleVote = useCallback(async () => {
     setIsVoting(true);
     try {
-      vote(activeAccount, DEFAULT_GAME_ID, proposal.index, votePoints, voteType === "for");
-      setIsVoting(false);
+      await vote(activeAccount, DEFAULT_GAME_ID, proposal.index, votePoints, voteType === "for");
+      setIsOpen(false);
       // Add any success handling here
     } catch (error) {
       // Handle error
       console.error(error);
+    } finally {
+      setIsVoting(false);
     }
   }, [activeAccount, proposal.index, voteType, votePoints, vote]);
 
@@ -51,7 +53,7 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ proposal, title }) => {
       <DialogContent>
         <div className="fixed inset-0 z-30 flex items-center justify-center bg-black/50">
           <div className="w-full max-w-md rounded-lg bg-gray-800 p-6 text-white shadow-lg flex flex-col space-y-4">
-            <div className="flex items-center font-bold space-x-3">
+            <DialogTitle className="flex items-center font-bold space-x-3">
               <p>{title}</p>
               {title && (
                 <div
@@ -61,7 +63,8 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ proposal, title }) => {
                   }}
                 />
               )}
-            </div>
+            </DialogTitle>
+
             <div className="flex items-center justify-between">
               <button
                 className={`w-full rounded-md p-2 ${voteType === "for" ? "bg-blue-600" : "bg-gray-600"}`}
