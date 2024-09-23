@@ -1,6 +1,5 @@
-use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL_FACTOR};
-use p_war::models::{game::{Game, Status}, proposal::{Proposal}, board::Position};
-use starknet::{ContractAddress, get_caller_address, get_block_timestamp, contract_address_const};
+use p_war::models::{board::Position};
+use starknet::{ContractAddress};
 
 // define the interface
 #[dojo::interface]
@@ -35,7 +34,34 @@ mod propose_actions {
     use starknet::{
         ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
     };
-    use super::{IPropose, NEEDED_YES_PX, PROPOSAL_DURATION, DISASTER_SIZE, PROPOSAL_FACTOR};
+    use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL_FACTOR};
+    use super::{IPropose};
+
+
+    #[derive(Drop, Serde, starknet::Event)]
+    pub struct ProposalCreated {
+        game_id: usize,
+        index: usize,
+        proposal_type: u8,
+        target_args_1: u32,
+        target_args_2: u32
+    }
+
+    #[derive(Drop, Serde, starknet::Event)]
+    pub struct ProposalActivated {
+        game_id: usize,
+        index: usize,
+        proposal_type: u8,
+        target_args_1: u32,
+        target_args_2: u32
+    }
+
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    pub enum Event {
+        ProposalCreated: ProposalCreated,
+        ProposalActivated: ProposalActivated
+    }
 
 
     #[abi(embed_v0)]
@@ -95,6 +121,19 @@ mod propose_actions {
                     last_date: get_block_timestamp(),
                     is_banned: false,
                 }),
+            );
+
+            emit!(
+                world,
+                (Event::ProposalCreated(
+                    ProposalCreated {
+                        game_id,
+                        index: proposal.index,
+                        proposal_type: proposal.proposal_type,
+                        target_args_1,
+                        target_args_2
+                    }
+                ))
             );
 
             proposal.index
@@ -267,6 +306,19 @@ mod propose_actions {
             proposal.is_activated = true;
 
             set!(world, (proposal));
+
+            emit!(
+                world,
+                (Event::ProposalActivated(
+                    ProposalActivated {
+                        game_id,
+                        index,
+                        proposal_type: proposal.proposal_type,
+                        target_args_1: proposal.target_args_1,
+                        target_args_2: proposal.target_args_2
+                    }
+                ))
+            );
             // // Qustion: should we panish the author if the proposal is denied?
         // // add author's commitment points
         // let mut author = get!(

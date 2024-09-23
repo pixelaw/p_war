@@ -1,7 +1,4 @@
-use p_war::models::game::Game;
-use p_war::models::guilds::Guild;
-use p_war::models::player::Player;
-use starknet::{ContractAddress, get_caller_address};
+use starknet::{ContractAddress};
 
 #[dojo::interface]
 trait IGuild {
@@ -28,6 +25,36 @@ mod guild_actions {
     };
 
     use super::{IGuild};
+
+    #[derive(Drop, Serde, starknet::Event)]
+    pub struct GuildCreated {
+        game_id: usize,
+        guild_id: usize,
+        guild_name: felt252,
+        creator: ContractAddress,
+    }
+
+    #[derive(Drop, Serde, starknet::Event)]
+    pub struct MemberAdded {
+        game_id: usize,
+        guild_id: usize,
+        member: ContractAddress,
+    }
+
+    #[derive(Drop, Serde, starknet::Event)]
+    pub struct MemberRemoved {
+        game_id: usize,
+        guild_id: usize,
+        member: ContractAddress,
+    }
+
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    pub enum Event {
+        GuildCreated: GuildCreated,
+        MemberAdded: MemberAdded,
+        MemberRemoved: MemberRemoved,
+    }
 
     #[abi(embed_v0)]
     impl GuildImpl of IGuild<ContractState> {
@@ -76,6 +103,14 @@ mod guild_actions {
             // Save the guild and update the game
             set!(world, (new_guild, game));
             println!("set guild");
+
+            emit!(
+                world,
+                (Event::GuildCreated(
+                    GuildCreated { game_id, guild_id, guild_name, creator: caller, }
+                ))
+            );
+
             guild_id
         }
 
@@ -130,6 +165,10 @@ mod guild_actions {
 
             // Save the updated guild
             set!(world, (guild));
+
+            emit!(
+                world, (Event::MemberAdded(MemberAdded { game_id, guild_id, member: new_member }))
+            );
         }
 
         fn remove_member(
@@ -175,6 +214,8 @@ mod guild_actions {
 
             // Save the updated guild
             set!(world, (guild));
+
+            emit!(world, (Event::MemberRemoved(MemberRemoved { game_id, guild_id, member })));
         }
 
         // //this function is very inefficient. better implementation is updating guild points when
