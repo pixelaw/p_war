@@ -18,7 +18,9 @@ trait IPropose {
 // dojo decorator
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod propose_actions {
-    use p_war::constants::{PROPOSAL_DURATION, DISASTER_SIZE, PROPOSAL_FACTOR, NEEDED_YES_VOTING_POWER};
+    use p_war::constants::{
+        PROPOSAL_DURATION, DISASTER_SIZE, PROPOSAL_FACTOR, NEEDED_YES_VOTING_POWER
+    };
     use p_war::models::{
         game::{Game, Status, GameTrait}, proposal::{Proposal, PixelRecoveryRate},
         board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,
@@ -135,7 +137,9 @@ mod propose_actions {
             let game = get!(world, (game_id), (Game));
             let current_timestamp = get_block_timestamp();
             assert(current_timestamp >= proposal.end, 'proposal period has not ended');
-            assert(proposal.yes_voting_power >= NEEDED_YES_VOTING_POWER, 'did not reach minimum yes');
+            assert(
+                proposal.yes_voting_power >= NEEDED_YES_VOTING_POWER, 'did not reach minimum yes'
+            );
             assert(proposal.yes_voting_power > proposal.no_voting_power, 'yes is not more than no');
             assert(proposal.is_activated == false, 'this is already activated');
             assert(check_game_status(game.status()), 'game is not ongoing');

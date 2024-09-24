@@ -23,14 +23,14 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ proposal, title }) => {
   const activeAccount = useMemo(() => connectedAccount || account, [connectedAccount, account]);
   const [isVoting, setIsVoting] = useState(false);
   const [voteType, setVoteType] = useState<"for" | "against">("for");
-  const [votePoints, setVotePoints] = useState<number>(1);
+  // const [votePoints, setVotePoints] = useState<number>(1);
   const [isOpen, setIsOpen] = useState(false);
 
   // Handlers
   const handleVote = useCallback(async () => {
     setIsVoting(true);
     try {
-      vote(activeAccount, DEFAULT_GAME_ID, proposal.index, votePoints, voteType === "for");
+      vote(activeAccount, DEFAULT_GAME_ID, proposal.index, voteType === "for");
       // Add any success handling here
     } catch (error) {
       // Handle error
@@ -41,9 +41,9 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ proposal, title }) => {
     }
   }, [activeAccount, proposal.index, voteType, votePoints, vote]);
 
-  const handleVotePointsChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setVotePoints(Number(e.target.value));
-  }, []);
+  // const handleVotePointsChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setVotePoints(Number(e.target.value));
+  // }, []);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -86,14 +86,7 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ proposal, title }) => {
               </button>
             </div>
             <div>
-              <label className="mb-2 block">Voting Power (PX)</label>
-              <input
-                type="number"
-                value={votePoints}
-                onChange={handleVotePointsChange}
-                className="w-full rounded-md border bg-gray-700 p-2 text-white"
-                min={1}
-              />
+              <label className="mb-2 block">Voting Power: 1</label>
             </div>
             <div className="flex justify-end">
               <button className="mr-2 rounded-md bg-gray-600 px-4 py-2 text-white" onClick={() => setIsOpen(false)}>

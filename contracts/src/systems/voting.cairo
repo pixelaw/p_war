@@ -1,9 +1,7 @@
 // define the interface
 #[dojo::interface]
 trait IVoting {
-    fn vote(
-        ref world: IWorldDispatcher, game_id: usize, index: usize, is_in_favor: bool
-    );
+    fn vote(ref world: IWorldDispatcher, game_id: usize, index: usize, is_in_favor: bool);
 }
 
 // dojo decorator
@@ -30,12 +28,7 @@ mod voting_actions {
 
     #[abi(embed_v0)]
     impl VotingImpl of IVoting<ContractState> {
-        fn vote(
-            ref world: IWorldDispatcher,
-            game_id: usize,
-            index: usize,
-            is_in_favor: bool
-        ) {
+        fn vote(ref world: IWorldDispatcher, game_id: usize, index: usize, is_in_favor: bool) {
             let player_address = get_caller_address();
             let mut proposal = get!(world, (game_id, index), (Proposal));
             let mut player_vote = get!(world, (player_address, game_id, index), (PlayerVote));

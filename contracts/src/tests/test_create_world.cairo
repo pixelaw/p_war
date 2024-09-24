@@ -49,6 +49,5 @@ fn test_create_game() {
     p_war_actions.interact(new_params);
 
     let player = get!(world, (get_tx_info().unbox().account_contract_address), (Player));
-
     // assert(player.current_px == 9, 'current px should be 9');
 }
