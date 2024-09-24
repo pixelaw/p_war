@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x249aaae81a4275050c7d9f959c5b09c1babbd39b47697bb895adc72cf7965c5"
-original_class_hash = "0x249aaae81a4275050c7d9f959c5b09c1babbd39b47697bb895adc72cf7965c5"
+class_hash = "0x4b76f6971c93c77d96a22ac7ba0268c452d13538f05b64138a6382e18babb00"
+original_class_hash = "0x4b76f6971c93c77d96a22ac7ba0268c452d13538f05b64138a6382e18babb00"
 abi = "manifests/release/base/abis/models/pixelaw-PlayerVote-326c17c6.json"
 tag = "pixelaw-PlayerVote"
 qualified_path = "p_war::models::proposal::player_vote"
@@ -27,6 +27,6 @@ type = "bool"
 key = false
 
 [[members]]
-name = "px"
+name = "voting_power"
 type = "u32"
 key = false

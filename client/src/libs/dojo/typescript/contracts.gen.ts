@@ -734,20 +734,14 @@ export async function setupWorld(provider: DojoProvider) {
     };
 
     // Call the `vote` system with the specified Account and calldata
-    const vote = async (props: {
-      account: Account;
-      game_id: number;
-      index: number;
-      use_px: number;
-      is_in_favor: boolean;
-    }) => {
+    const vote = async (props: { account: Account; game_id: number; index: number; is_in_favor: boolean }) => {
       try {
         return await provider.execute(
           props.account,
           {
             contractName: contract_name,
             entrypoint: "vote",
-            calldata: [props.game_id, props.index, props.use_px, props.is_in_favor],
+            calldata: [props.game_id, props.index, props.is_in_favor],
           },
           "pixelaw",
         );

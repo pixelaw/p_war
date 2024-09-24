@@ -48,13 +48,12 @@ export function createSystemCalls({ client }: { client: IWorld }, clientComponen
     }
   };
 
-  const vote = async (account: Account, game_id: number, index: number, use_px: number, is_in_favor: boolean) => {
+  const vote = async (account: Account, game_id: number, index: number, is_in_favor: boolean) => {
     try {
       const { transaction_hash } = await client.voting_actions.vote({
         account,
         game_id,
         index,
-        use_px,
         is_in_favor,
       });
       console.log(transaction_hash);
