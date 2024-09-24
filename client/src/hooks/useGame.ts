@@ -13,7 +13,6 @@ export const useGame = () => {
   } = useDojo();
 
   const game = useComponentValue(Game, getEntityIdFromKeys([BigInt(DEFAULT_GAME_ID)]) as Entity);
-  console.log(game);
 
   return { game };
 };
