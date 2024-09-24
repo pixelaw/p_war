@@ -49,7 +49,7 @@ const Main = () => {
           >
             <DojoProvider value={setupResult}>
               <App />
-              <Toaster position="top-right" closeButton />
+              <Toaster position="top-right" closeButton richColors />
             </DojoProvider>
           </StarknetConfig>
         </ThemeProvider>

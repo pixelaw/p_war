@@ -1235,8 +1235,8 @@
       }
     ],
     "address": "0x263ae44e5414519a5c5a135cccaf3d9d7ee196d37e8de47a178da91f3de9b34",
-    "transaction_hash": "0x335b56f86db4aa652d6b29a392802453aa913d003731339bbd27b3fc32d6808",
-    "block_number": 7,
+    "transaction_hash": "0x507cd13b0e34b357d25bd0ddafa527c8caf0729f894e57ad9129c1f29311768",
+    "block_number": 3,
     "seed": "pixelaw",
     "metadata": {
       "profile_name": "dev",
@@ -2464,8 +2464,8 @@
     {
       "kind": "DojoContract",
       "address": "0x2045bbeab298c52664537ae151262ca5f2a4e41b07f221c4860879551c65cb5",
-      "class_hash": "0x57fc45834e63ea7a2662733f7143a07879a40661c84fd6a08c5c9804d68ae76",
-      "original_class_hash": "0x57fc45834e63ea7a2662733f7143a07879a40661c84fd6a08c5c9804d68ae76",
+      "class_hash": "0x482ba3227b4facdfa257177a3ea6c1c17f5b7574dc7404549ee12f285d1691c",
+      "original_class_hash": "0x482ba3227b4facdfa257177a3ea6c1c17f5b7574dc7404549ee12f285d1691c",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {

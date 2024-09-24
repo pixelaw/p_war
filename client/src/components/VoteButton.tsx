@@ -1,7 +1,7 @@
 import { DEFAULT_GAME_ID } from "@/constants";
 import { useDojo } from "@/hooks/useDojo";
 import { Proposal } from "@/libs/dojo/typescript/models.gen";
-import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/Dialog";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogDescription } from "@/components/ui/Dialog";
 import { useCallback, useMemo, useState } from "react";
 
 interface VoteButtonProps {
@@ -65,7 +65,7 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ proposal, title }) => {
               )}
             </DialogTitle>
 
-            <div className="flex items-center justify-between">
+            <DialogDescription className="flex items-center justify- text-white">
               <button
                 className={`w-full rounded-md p-2 ${voteType === "for" ? "bg-blue-600" : "bg-gray-600"}`}
                 onClick={(e) => {
@@ -84,7 +84,7 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ proposal, title }) => {
               >
                 Against
               </button>
-            </div>
+            </DialogDescription>
             <div>
               <label className="mb-2 block">Voting Power: 1</label>
             </div>
