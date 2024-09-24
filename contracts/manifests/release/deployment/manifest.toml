@@ -4,14 +4,14 @@ class_hash = "0x6f4515274ee23404789c3351a77107d0ec07508530119822046600ca6948d6e"
 original_class_hash = "0x6f4515274ee23404789c3351a77107d0ec07508530119822046600ca6948d6e"
 abi = "manifests/release/deployment/abis/dojo-world.json"
 address = "0x263ae44e5414519a5c5a135cccaf3d9d7ee196d37e8de47a178da91f3de9b34"
-transaction_hash = "0x771e35b8e477a954343bae439feb3cbbd24e2673cc8c247121c24a562c1e6da"
+transaction_hash = "0x2686985b1f75cb1d4e21fc4b33c2db298c31fbfac2b113a14a11591e82a3e2d"
 block_number = 3
 seed = "pixelaw"
 manifest_name = "dojo-world"
 
 [world.metadata]
 profile_name = "release"
-rpc_url = "https://api.cartridge.gg/x/pwar-dev/katana/"
+rpc_url = "https://api.cartridge.gg/x/pwar-dev-2/katana/"
 
 [base]
 kind = "Class"
