@@ -19,7 +19,7 @@ export const truncateAddress = (address: string) => {
   if (!match || match.length < 3) return address;
   const part1 = match[1] || "";
   const part2 = match[2] || "";
-  return `0x${part1}…${part2}`;
+  return `${part1}…${part2}`;
 };
 
 export const formatDate = (date: Date | string): string => {

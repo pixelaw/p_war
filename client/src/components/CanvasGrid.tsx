@@ -9,6 +9,8 @@ import { resizeCanvasToDisplaySize } from "twgl.js";
 export const INERTIA_DAMPING = 0.97;
 export const INERTIA_STOP_THRESHOLD = 0.05;
 
+const PINCH_COOLDOWN = 300; // ミリ秒
+
 interface CanvasGridProps {
   canvasRef: React.RefObject<HTMLCanvasElement | null>;
   width?: number;
@@ -67,12 +69,20 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
   const isDraggingRef = useRef<boolean>(false);
   const lastTouchPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const touchStartPosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
-  const gestureRef = useRef({
-    lastPinchDistance: null as number | null,
-    lastTouchPositions: null as { x: number; y: number }[] | null,
+  const gestureRef = useRef<{
+    gestureType: string | null;
+    isGesture: boolean;
+    gestureStartTime: number | null;
+    lastPinchDistance: number | null;
+    lastTouchPositions: { x: number; y: number }[] | null;
+    lastPinchEndTime: number;
+  }>({
+    gestureType: null,
     isGesture: false,
-    gestureType: null as string | null,
-    gestureStartTime: null as number | null,
+    gestureStartTime: null,
+    lastPinchDistance: null,
+    lastTouchPositions: null,
+    lastPinchEndTime: 0,
   });
   const inertiaRef = useRef<{
     speedX: number;
@@ -186,6 +196,10 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
         onCellClick?.(cellX, cellY);
       }
 
+      // Reset gesture states after mouse up
+      gestureRef.current.isGesture = false;
+      gestureRef.current.gestureType = null;
+
       mouseDownPosRef.current = null;
       isDraggingRef.current = false;
     },
@@ -248,6 +262,9 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
           cancelAnimationFrame(inertiaRef.current.animationFrame);
         }
       }
+
+      // 慣性スクロールのための時間をリセット
+      inertiaRef.current.lastTime = performance.now();
     },
     [canvasRef, updateCurrentMousePos],
   );
@@ -332,8 +349,13 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
         if (isDraggingRef.current) {
           const currentTime = performance.now();
           const deltaTime = currentTime - inertiaRef.current.lastTime;
-          inertiaRef.current.speedX = (dx / deltaTime) * 15;
-          inertiaRef.current.speedY = (dy / deltaTime) * 15;
+
+          // deltaTimeが0の場合を防ぐ
+          if (deltaTime > 0) {
+            inertiaRef.current.speedX = (dx / deltaTime) * 15;
+            inertiaRef.current.speedY = (dy / deltaTime) * 15;
+          }
+
           inertiaRef.current.lastTime = currentTime;
 
           setLimitedGridState((prev) => ({
@@ -350,7 +372,9 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
   );
 
   const handleInertia = useCallback(() => {
-    const { speedX, speedY, animationFrame } = inertiaRef.current;
+    inertiaRef.current.animationFrame = null;
+
+    const { speedX, speedY } = inertiaRef.current;
 
     if (Math.abs(speedX) > INERTIA_STOP_THRESHOLD || Math.abs(speedY) > INERTIA_STOP_THRESHOLD) {
       setLimitedGridState((prev) => ({
@@ -363,11 +387,6 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
       inertiaRef.current.speedY *= INERTIA_DAMPING;
 
       inertiaRef.current.animationFrame = requestAnimationFrame(handleInertia);
-    } else {
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-        inertiaRef.current.animationFrame = null;
-      }
     }
   }, [setLimitedGridState]);
 
@@ -375,29 +394,42 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
     (e: React.TouchEvent<HTMLCanvasElement>) => {
       e.preventDefault();
       e.stopPropagation();
+
       const wasPinchGesture = gestureRef.current.isGesture;
       gestureRef.current.isGesture = false;
       gestureRef.current.gestureType = null;
 
-      if (isDraggingRef.current && damping) {
+      if (wasPinchGesture) {
+        gestureRef.current.lastPinchEndTime = Date.now();
+      }
+
+      if (isDraggingRef.current && damping && !wasPinchGesture) {
         if (inertiaRef.current.animationFrame) {
           cancelAnimationFrame(inertiaRef.current.animationFrame);
         }
         inertiaRef.current.animationFrame = requestAnimationFrame(handleInertia);
       } else if (!isDraggingRef.current && !wasPinchGesture && e.changedTouches.length === 1) {
-        const touch = e.changedTouches[0];
-        const { x, y } = convertClientPosToCanvasPos(canvasRef, touch.clientX, touch.clientY);
+        const currentTime = Date.now();
+        if (currentTime - gestureRef.current.lastPinchEndTime > PINCH_COOLDOWN) {
+          const touch = e.changedTouches[0];
+          const { x, y } = convertClientPosToCanvasPos(canvasRef, touch.clientX, touch.clientY);
 
-        const worldX = gridState.offsetX + x / gridState.scale;
-        const worldY = gridState.offsetY + y / gridState.scale;
+          const worldX = gridState.offsetX + x / gridState.scale;
+          const worldY = gridState.offsetY + y / gridState.scale;
 
-        const cellX = Math.floor(worldX / BASE_CELL_SIZE);
-        const cellY = Math.floor(worldY / BASE_CELL_SIZE);
+          const cellX = Math.floor(worldX / BASE_CELL_SIZE);
+          const cellY = Math.floor(worldY / BASE_CELL_SIZE);
 
-        onTap?.(cellX, cellY);
+          onTap?.(cellX, cellY);
+        }
       }
 
+      // reset state
       isDraggingRef.current = false;
+      touchStartPosRef.current = { x: 0, y: 0 };
+
+      // reset time for inertia scroll
+      inertiaRef.current.lastTime = 0;
     },
     [canvasRef, damping, gridState, handleInertia, onTap],
   );
@@ -406,7 +438,6 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
     drawGrid();
     onDrawGrid?.();
   }, [drawGrid, onDrawGrid]);
-
 
   // Effects
   useEffect(() => {
