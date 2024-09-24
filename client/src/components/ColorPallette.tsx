@@ -17,14 +17,17 @@ export const ColorPalette = ({
   return (
     <div
       className={cn(
-        "bg-slate-500 fixed mx-auto bottom-1 right-4 flex h-[50px] items-center justify-center shadow-md",
-        isOpen
-          ? "rounded-md max-w-[310px] md:max-w-md px-4 shadow-lg"
-          : "rounded-full w-fit p-3 active:bg-slate-400 hover:bg-slate-400",
+        "bg-slate-500 fixed mx-auto bottom-1 right-4 flex items-center justify-center shadow-md transition-all duration-800 ease-in-out h-[50px] rounded-full",
+        isOpen ? "max-w-[320px] md:max-w-md px-4 shadow-lg" : "w-fit p-3 active:bg-slate-400 hover:bg-slate-400",
       )}
       onClick={isOpen ? undefined : () => setIsOpen(true)}
     >
-      <div className={cn("items-center h-full w-full overflow-x-auto px-2", isOpen ? "flex" : "hidden")}>
+      <div
+        className={cn(
+          "items-center h-full w-full overflow-x-auto px-2 transition-opacity duration-800 ease-in-out",
+          isOpen ? "flex opacity-100" : "hidden opacity-0",
+        )}
+      >
         <div className="flex items-center space-x-2 h-full flex-grow">
           {[...paletteColors].map((color, index) => (
             <button
@@ -41,7 +44,7 @@ export const ColorPalette = ({
         </div>
       </div>
       <Palette
-        className="min-w-8 min-h-8 flex items-center justify-center relative cursor-pointer"
+        className="min-w-8 min-h-8 flex items-center justify-center relative cursor-pointer transition-transform duration-800 ease-in-out"
         onClick={() => setIsOpen((prev) => !prev)}
       />
     </div>
