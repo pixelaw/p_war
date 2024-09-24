@@ -374,15 +374,11 @@ export async function setupWorld(provider: DojoProvider) {
     // Call the `get_guild_points` system with the specified Account and calldata
     const get_guild_points = async (props: { account: Account; game_id: number; guild_id: number }) => {
       try {
-        return await provider.execute(
-          props.account,
-          {
-            contractName: contract_name,
-            entrypoint: "get_guild_points",
-            calldata: [props.game_id, props.guild_id],
-          },
-          "pixelaw",
-        );
+        return await provider.call("pixelaw", {
+          contractName: contract_name,
+          entrypoint: "get_guild_points",
+          calldata: [props.game_id, props.guild_id],
+        });
       } catch (error) {
         console.error("Error executing get_guild_points:", error);
         throw error;
