@@ -43,8 +43,7 @@ fn test_expand_area() {
         .create_proposal(game_id: id, proposal_type: 4, target_args_1: 20, target_args_2: 30,);
 
     // let index = propose_system.toggle_allowed_color(id, NEW_COLOR);
-    let vote_px = 3;
-    voting_system.vote(id, index, vote_px, true);
+    voting_system.vote(id, index, true);
 
     let proposal = get!(world, (id, index), (Proposal));
 

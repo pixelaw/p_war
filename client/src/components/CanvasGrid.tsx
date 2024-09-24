@@ -407,7 +407,6 @@ export const CanvasGrid: React.FC<CanvasGridProps> = ({
     onDrawGrid?.();
   }, [drawGrid, onDrawGrid]);
 
-
   // Effects
   useEffect(() => {
     const animationFrame = requestAnimationFrame(animate);

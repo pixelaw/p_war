@@ -341,19 +341,16 @@ export const PixelRecoveryRateDefinition = {
 // Type definition for `p_war::models::player::Player` struct
 export interface Player {
   address: bigint;
-  max_px: number;
   num_owns: number;
   num_commit: number;
-  current_px: number;
   last_date: number;
   is_banned: boolean;
 }
+
 export const PlayerDefinition = {
   address: RecsType.BigInt,
-  max_px: RecsType.Number,
   num_owns: RecsType.Number,
   num_commit: RecsType.Number,
-  current_px: RecsType.Number,
   last_date: RecsType.Number,
   is_banned: RecsType.Boolean,
 };
@@ -364,14 +361,15 @@ export interface PlayerVote {
   game_id: number;
   index: number;
   is_in_favor: boolean;
-  px: number;
+  voting_power: number;
 }
+
 export const PlayerVoteDefinition = {
   player: RecsType.BigInt,
   game_id: RecsType.Number,
   index: RecsType.Number,
   is_in_favor: RecsType.Boolean,
-  px: RecsType.Number,
+  voting_power: RecsType.Number,
 };
 
 // Type definition for `p_war::models::proposal::Proposal` struct
@@ -384,8 +382,8 @@ export interface Proposal {
   target_args_2: number;
   start: number;
   end: number;
-  yes_px: number;
-  no_px: number;
+  yes_voting_power: number;
+  no_voting_power: number;
   is_activated: boolean;
 }
 export const ProposalDefinition = {
@@ -397,8 +395,8 @@ export const ProposalDefinition = {
   target_args_2: RecsType.Number,
   start: RecsType.Number,
   end: RecsType.Number,
-  yes_px: RecsType.Number,
-  no_px: RecsType.Number,
+  yes_voting_power: RecsType.Number,
+  no_voting_power: RecsType.Number,
   is_activated: RecsType.Boolean,
 };
 
@@ -822,10 +820,8 @@ export function defineContractComponents(world: World) {
         world,
         {
           address: RecsType.BigInt,
-          max_px: RecsType.Number,
           num_owns: RecsType.Number,
           num_commit: RecsType.Number,
-          current_px: RecsType.Number,
           last_date: RecsType.Number,
           is_banned: RecsType.Boolean,
         },
@@ -833,7 +829,7 @@ export function defineContractComponents(world: World) {
           metadata: {
             namespace: "pixelaw",
             name: "Player",
-            types: ["ContractAddress", "u32", "u32", "u32", "u32", "u64", "bool"],
+            types: ["ContractAddress", "u32", "u32", "u64", "bool"],
             customTypes: [],
           },
         },
@@ -849,7 +845,7 @@ export function defineContractComponents(world: World) {
           game_id: RecsType.Number,
           index: RecsType.Number,
           is_in_favor: RecsType.Boolean,
-          px: RecsType.Number,
+          voting_power: RecsType.Number,
         },
         {
           metadata: {
@@ -875,8 +871,8 @@ export function defineContractComponents(world: World) {
           target_args_2: RecsType.Number,
           start: RecsType.Number,
           end: RecsType.Number,
-          yes_px: RecsType.Number,
-          no_px: RecsType.Number,
+          yes_voting_power: RecsType.Number,
+          no_voting_power: RecsType.Number,
           is_activated: RecsType.Boolean,
         },
         {

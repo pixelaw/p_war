@@ -8,7 +8,6 @@ import { useControllerUsername } from "@/hooks/useControllerUserName";
 import { useDisconnect } from "@starknet-react/core";
 import { Button } from "./ui/Button";
 import { useMemo } from "react";
-import PxCounter from "./PxCounter";
 import { GameTimeCounter } from "./GameTimeCounter";
 import { useGame } from "@/hooks/useGame";
 import { HEADER_HEIGHT } from "@/constants";
@@ -49,7 +48,6 @@ export const Header = () => {
       <GameTimeCounter endTime={game?.end} />
 
       <div className="flex items-center space-x-4">
-        <PxCounter />
         <div className="flex items-center md:space-x-4 md:border-2 border-slate-600 rounded-sm p-1 md:px-3">
           <div
             className="md:block hidden text-white cursor-pointer text-xs md:text-base"

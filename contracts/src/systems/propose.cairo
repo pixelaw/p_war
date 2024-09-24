@@ -18,13 +18,15 @@ trait IPropose {
 // dojo decorator
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod propose_actions {
-    use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL_FACTOR};
+    use p_war::constants::{
+        PROPOSAL_DURATION, DISASTER_SIZE, PROPOSAL_FACTOR, NEEDED_YES_VOTING_POWER
+    };
     use p_war::models::{
         game::{Game, Status, GameTrait}, proposal::{Proposal, PixelRecoveryRate},
         board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,
         allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette}
     };
-    use p_war::systems::utils::{recover_px, check_game_status};
+    use p_war::systems::utils::{check_game_status};
     use pixelaw::core::actions::{
         IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
@@ -76,14 +78,7 @@ mod propose_actions {
 
             let player_address = get_tx_info().unbox().account_contract_address;
 
-            // recover px
-            recover_px(world, game_id, player_address);
-
-            // if this is first time for the caller, let's set initial px.
             let mut player = get!(world, (player_address), (Player));
-
-            // check the current px is eq or larger than cost_paint
-            assert(player.current_px >= game.base_cost * PROPOSAL_FACTOR, 'not enough PX');
 
             // check the player is banned or not
             assert(player.is_banned == false, 'you are banned');
@@ -97,8 +92,8 @@ mod propose_actions {
                 target_args_2: target_args_2,
                 start: get_block_timestamp(),
                 end: get_block_timestamp() + PROPOSAL_DURATION,
-                yes_px: 0,
-                no_px: 0,
+                yes_voting_power: 0,
+                no_voting_power: 0,
                 is_activated: false
             };
 
@@ -106,16 +101,13 @@ mod propose_actions {
 
             set!(world, (proposal, game));
 
-            // consume px
             set!(
                 world,
                 (Player {
                     address: player.address,
-                    max_px: player.max_px,
                     num_owns: player.num_owns,
-                    num_commit: player.num_commit + (game.base_cost * PROPOSAL_FACTOR),
-                    current_px: player.current_px - (game.base_cost * PROPOSAL_FACTOR),
                     last_date: get_block_timestamp(),
+                    num_commit: player.num_commit + 1,
                     is_banned: false,
                 }),
             );
@@ -145,8 +137,10 @@ mod propose_actions {
             let game = get!(world, (game_id), (Game));
             let current_timestamp = get_block_timestamp();
             assert(current_timestamp >= proposal.end, 'proposal period has not ended');
-            assert(proposal.yes_px >= NEEDED_YES_PX, 'did not reach minimum yes_px');
-            assert(proposal.yes_px > proposal.no_px, 'yes_px is not more than no_px');
+            assert(
+                proposal.yes_voting_power >= NEEDED_YES_VOTING_POWER, 'did not reach minimum yes'
+            );
+            assert(proposal.yes_voting_power > proposal.no_voting_power, 'yes is not more than no');
             assert(proposal.is_activated == false, 'this is already activated');
             assert(check_game_status(game.status()), 'game is not ongoing');
 

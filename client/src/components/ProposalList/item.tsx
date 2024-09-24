@@ -1,4 +1,4 @@
-import { NEEDED_YES_PX } from "@/constants";
+import { NEEDED_YES_VOTING_POWER } from "@/constants";
 import { Proposal } from "@/libs/dojo/typescript/models.gen";
 import { cn, createProposalTitle, formatTimeRemaining, formatWalletAddressWithEmoji, uint32ToHex } from "@/utils";
 import React, { useEffect, useMemo, useState } from "react";
@@ -6,14 +6,14 @@ import { ActivateProposalButton } from "../ActivateButton";
 import { VoteButton } from "../VoteButton";
 
 interface VotePercentageProps {
-  yes_px: number;
-  no_px: number;
+  yes_voting_power: number;
+  no_voting_power: number;
 }
 
-export const VotePercentage: React.FC<VotePercentageProps> = ({ yes_px, no_px }) => {
-  const total = yes_px + no_px;
-  const yesPercentage = total > 0 ? (yes_px / total) * 100 : 0;
-  const noPercentage = total > 0 ? (no_px / total) * 100 : 0;
+export const VotePercentage: React.FC<VotePercentageProps> = ({ yes_voting_power, no_voting_power }) => {
+  const total = yes_voting_power + no_voting_power;
+  const yesPercentage = total > 0 ? (yes_voting_power / total) * 100 : 0;
+  const noPercentage = total > 0 ? (no_voting_power / total) * 100 : 0;
 
   return (
     <div className="w-full max-w-[70%]">
@@ -22,8 +22,8 @@ export const VotePercentage: React.FC<VotePercentageProps> = ({ yes_px, no_px })
         <div className="h-full rounded-r-full bg-red-500" style={{ width: `${noPercentage}%` }} />
       </div>
       <div className="flex justify-between text-xs text-gray-300 px-1">
-        <p>For {yes_px} px</p>
-        <p>Against {no_px} px</p>
+        <p>For {yes_voting_power}</p>
+        <p>Against {no_voting_power}</p>
       </div>
     </div>
   );
@@ -39,7 +39,7 @@ export const ProposalItem: React.FC<ProposalItemProps> = ({ proposal }) => {
   const hexColor = uint32ToHex(proposal.target_args_1);
   const title = createProposalTitle(proposal.proposal_type, proposal.target_args_1, proposal.target_args_2);
   const canActivateProposal = useMemo(
-    () => proposal.yes_px >= NEEDED_YES_PX && proposal.yes_px > proposal.no_px,
+    () => proposal.yes_voting_power >= NEEDED_YES_VOTING_POWER && proposal.yes_voting_power > proposal.no_voting_power,
     [proposal],
   );
 
@@ -83,7 +83,7 @@ export const ProposalItem: React.FC<ProposalItemProps> = ({ proposal }) => {
         proposed by {formatWalletAddressWithEmoji("0x" + proposal.author.toString(16))}
       </div>
 
-      <VotePercentage yes_px={proposal.yes_px} no_px={proposal.no_px} />
+      <VotePercentage yes_voting_power={proposal.yes_voting_power} no_voting_power={proposal.no_voting_power} />
 
       {proposalStatus === "" ? (
         "..."
@@ -128,9 +128,9 @@ const getStatusColor = (status: string) => {
 
 // doesn't work correctly...
 const getTextColor = (proposalStatus: string, proposal: Proposal) => {
-  if (proposalStatus === "closed" && proposal.yes_px > proposal.no_px) {
+  if (proposalStatus === "closed" && proposal.yes_voting_power > proposal.no_voting_power) {
     return "text-green-300";
-  } else if (proposalStatus === "closed" && proposal.yes_px <= proposal.no_px) {
+  } else if (proposalStatus === "closed" && proposal.yes_voting_power <= proposal.no_voting_power) {
     return "text-red-300";
   } else {
     return "text-white";

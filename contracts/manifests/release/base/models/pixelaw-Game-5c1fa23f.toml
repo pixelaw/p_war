@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x794c64750ec570c0678f6afd54210e88f6da106ba0172f2ec03405c3c0ad70e"
-original_class_hash = "0x794c64750ec570c0678f6afd54210e88f6da106ba0172f2ec03405c3c0ad70e"
+class_hash = "0x4eb28e2e4c9f69487e5479cacac150e52666d072315dc8e3547b32f977976e0"
+original_class_hash = "0x4eb28e2e4c9f69487e5479cacac150e52666d072315dc8e3547b32f977976e0"
 abi = "manifests/release/base/abis/models/pixelaw-Game-5c1fa23f.json"
 tag = "pixelaw-Game"
 qualified_path = "p_war::models::game::game"
@@ -24,16 +24,6 @@ key = false
 [[members]]
 name = "proposal_idx"
 type = "usize"
-key = false
-
-[[members]]
-name = "base_cost"
-type = "u32"
-key = false
-
-[[members]]
-name = "const_val"
-type = "u32"
 key = false
 
 [[members]]

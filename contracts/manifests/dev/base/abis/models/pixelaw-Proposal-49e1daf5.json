@@ -417,11 +417,11 @@
         "type": "core::integer::u64"
       },
       {
-        "name": "yes_px",
+        "name": "yes_voting_power",
         "type": "core::integer::u32"
       },
       {
-        "name": "no_px",
+        "name": "no_voting_power",
         "type": "core::integer::u32"
       },
       {

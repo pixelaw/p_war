@@ -1235,8 +1235,8 @@
       }
     ],
     "address": "0x263ae44e5414519a5c5a135cccaf3d9d7ee196d37e8de47a178da91f3de9b34",
-    "transaction_hash": "0x507cd13b0e34b357d25bd0ddafa527c8caf0729f894e57ad9129c1f29311768",
-    "block_number": 3,
+    "transaction_hash": "0x335b56f86db4aa652d6b29a392802453aa913d003731339bbd27b3fc32d6808",
+    "block_number": 7,
     "seed": "pixelaw",
     "metadata": {
       "profile_name": "dev",
@@ -2063,8 +2063,8 @@
     {
       "kind": "DojoContract",
       "address": "0x138243b2aeb794df3c6a1b9fb9f834591b3e99c0d73cb59441a6e7cac15c7a",
-      "class_hash": "0x4e3183f1ff771f4f3936e2c5d13ce3198da5ea3a1ec05b6deeb01d70e9cd977",
-      "original_class_hash": "0x4e3183f1ff771f4f3936e2c5d13ce3198da5ea3a1ec05b6deeb01d70e9cd977",
+      "class_hash": "0x63080ea2cfae99d4b773b06c7d1cb893c197ba5e431afeba8909eac874d038e",
+      "original_class_hash": "0x63080ea2cfae99d4b773b06c7d1cb893c197ba5e431afeba8909eac874d038e",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -2464,8 +2464,8 @@
     {
       "kind": "DojoContract",
       "address": "0x2045bbeab298c52664537ae151262ca5f2a4e41b07f221c4860879551c65cb5",
-      "class_hash": "0x7422dc7dc14aae5c3a5af4e4cad0588dfa8f2f6bc62c3fcf4e92ec464362710",
-      "original_class_hash": "0x7422dc7dc14aae5c3a5af4e4cad0588dfa8f2f6bc62c3fcf4e92ec464362710",
+      "class_hash": "0x57fc45834e63ea7a2662733f7143a07879a40661c84fd6a08c5c9804d68ae76",
+      "original_class_hash": "0x57fc45834e63ea7a2662733f7143a07879a40661c84fd6a08c5c9804d68ae76",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3081,8 +3081,8 @@
     {
       "kind": "DojoContract",
       "address": "0x11c9f67cb73eece3bcf998a0b351e3cb936e0e41a94bebe352d1c1e0b4e09ce",
-      "class_hash": "0x263ab9727c708c507c2d88afe371d50e7dbdd50723938494525f54de583fa20",
-      "original_class_hash": "0x263ab9727c708c507c2d88afe371d50e7dbdd50723938494525f54de583fa20",
+      "class_hash": "0x76a41721719a58f3dd43429eecfff5ed72ff993d653f417bdb337418ec8e589",
+      "original_class_hash": "0x76a41721719a58f3dd43429eecfff5ed72ff993d653f417bdb337418ec8e589",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3468,8 +3468,8 @@
     {
       "kind": "DojoContract",
       "address": "0x5e3d35ee4c47433f2550b295d68ec519124e027aeac31e9bbc2b8cf4a769c81",
-      "class_hash": "0x9f68df7e2c3f6d463c1f6dcca9f2ca3f2d444d5f98557d4c270baf3426fe3c",
-      "original_class_hash": "0x9f68df7e2c3f6d463c1f6dcca9f2ca3f2d444d5f98557d4c270baf3426fe3c",
+      "class_hash": "0x5e87a338c9ee6d9d72281883bd04133f0d91e4d5ecebcfbbf281319ce877b2a",
+      "original_class_hash": "0x5e87a338c9ee6d9d72281883bd04133f0d91e4d5ecebcfbbf281319ce877b2a",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {
@@ -3632,10 +3632,6 @@
                 },
                 {
                   "name": "index",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "use_px",
                   "type": "core::integer::u32"
                 },
                 {
@@ -6896,16 +6892,6 @@
           "key": false
         },
         {
-          "name": "base_cost",
-          "type": "u32",
-          "key": false
-        },
-        {
-          "name": "const_val",
-          "type": "u32",
-          "key": false
-        },
-        {
           "name": "coeff_own_pixels",
           "type": "u32",
           "key": false
@@ -6936,8 +6922,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x794c64750ec570c0678f6afd54210e88f6da106ba0172f2ec03405c3c0ad70e",
-      "original_class_hash": "0x794c64750ec570c0678f6afd54210e88f6da106ba0172f2ec03405c3c0ad70e",
+      "class_hash": "0x4eb28e2e4c9f69487e5479cacac150e52666d072315dc8e3547b32f977976e0",
+      "original_class_hash": "0x4eb28e2e4c9f69487e5479cacac150e52666d072315dc8e3547b32f977976e0",
       "abi": [
         {
           "type": "impl",
@@ -7334,14 +7320,6 @@
             },
             {
               "name": "proposal_idx",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "base_cost",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "const_val",
               "type": "core::integer::u32"
             },
             {
@@ -11913,22 +11891,12 @@
           "key": true
         },
         {
-          "name": "max_px",
-          "type": "u32",
-          "key": false
-        },
-        {
           "name": "num_owns",
           "type": "u32",
           "key": false
         },
         {
           "name": "num_commit",
-          "type": "u32",
-          "key": false
-        },
-        {
-          "name": "current_px",
           "type": "u32",
           "key": false
         },
@@ -11943,8 +11911,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x73f4c14a1b7cfadff6bdad338ebacc61fa1c429a6610fd00480312ec6f37180",
-      "original_class_hash": "0x73f4c14a1b7cfadff6bdad338ebacc61fa1c429a6610fd00480312ec6f37180",
+      "class_hash": "0x71a6f6188f355d1337561c8d68538b18ec4be4c493d01be5eee753759246848",
+      "original_class_hash": "0x71a6f6188f355d1337561c8d68538b18ec4be4c493d01be5eee753759246848",
       "abi": [
         {
           "type": "impl",
@@ -12336,19 +12304,11 @@
               "type": "core::starknet::contract_address::ContractAddress"
             },
             {
-              "name": "max_px",
-              "type": "core::integer::u32"
-            },
-            {
               "name": "num_owns",
               "type": "core::integer::u32"
             },
             {
               "name": "num_commit",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "current_px",
               "type": "core::integer::u32"
             },
             {
@@ -12414,13 +12374,13 @@
           "key": false
         },
         {
-          "name": "px",
+          "name": "voting_power",
           "type": "u32",
           "key": false
         }
       ],
-      "class_hash": "0x249aaae81a4275050c7d9f959c5b09c1babbd39b47697bb895adc72cf7965c5",
-      "original_class_hash": "0x249aaae81a4275050c7d9f959c5b09c1babbd39b47697bb895adc72cf7965c5",
+      "class_hash": "0x4b76f6971c93c77d96a22ac7ba0268c452d13538f05b64138a6382e18babb00",
+      "original_class_hash": "0x4b76f6971c93c77d96a22ac7ba0268c452d13538f05b64138a6382e18babb00",
       "abi": [
         {
           "type": "impl",
@@ -12824,7 +12784,7 @@
               "type": "core::bool"
             },
             {
-              "name": "px",
+              "name": "voting_power",
               "type": "core::integer::u32"
             }
           ]
@@ -12902,12 +12862,12 @@
           "key": false
         },
         {
-          "name": "yes_px",
+          "name": "yes_voting_power",
           "type": "u32",
           "key": false
         },
         {
-          "name": "no_px",
+          "name": "no_voting_power",
           "type": "u32",
           "key": false
         },
@@ -12917,8 +12877,8 @@
           "key": false
         }
       ],
-      "class_hash": "0x404d31fa774f450e44ff386730f3f43c2932d7cfcc55251e2a0ef2c77f5dc96",
-      "original_class_hash": "0x404d31fa774f450e44ff386730f3f43c2932d7cfcc55251e2a0ef2c77f5dc96",
+      "class_hash": "0x76c0a4827cc62be7367ab6fac605335bb5a2d01a7edc3f2dd89e58accafca02",
+      "original_class_hash": "0x76c0a4827cc62be7367ab6fac605335bb5a2d01a7edc3f2dd89e58accafca02",
       "abi": [
         {
           "type": "impl",
@@ -13338,11 +13298,11 @@
               "type": "core::integer::u64"
             },
             {
-              "name": "yes_px",
+              "name": "yes_voting_power",
               "type": "core::integer::u32"
             },
             {
-              "name": "no_px",
+              "name": "no_voting_power",
               "type": "core::integer::u32"
             },
             {
