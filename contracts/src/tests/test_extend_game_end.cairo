@@ -48,8 +48,7 @@ fn test_extend_game_end() {
         );
 
     // let index = propose_system.toggle_allowed_color(id, NEW_COLOR);
-    let vote_px = 3;
-    voting_system.vote(id, index, vote_px, true);
+    voting_system.vote(id, index, true);
 
     let proposal = get!(world, (id, index), (Proposal));
 

@@ -23,7 +23,7 @@ trait IActions {
 mod p_war_actions {
     use p_war::constants::{
         APP_KEY, APP_ICON, GAME_ID, OUT_OF_BOUNDS_GAME_ID, DEFAULT_RECOVERY_RATE, INITIAL_COLOR,
-        GAME_DURATION, DEFAULT_AREA, BASE_COST, DEFAULT_PX
+        GAME_DURATION, DEFAULT_AREA,
     };
     use p_war::models::{
         game::{Game, Status, GameTrait}, board::{Board, GameId, PWarPixel}, player::{Player},
@@ -32,7 +32,7 @@ mod p_war_actions {
         allowed_app::AllowedApp
     };
     use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
-    use p_war::systems::utils::{recover_px, update_max_px, check_game_status};
+    use p_war::systems::utils::{check_game_status};
     use pixelaw::core::actions::{
         IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
@@ -163,7 +163,7 @@ mod p_war_actions {
 
             let start = get_block_timestamp();
             // let core_actions = get_core_actions(world);
-            let player = get_caller_address();
+            // let player = get_caller_address();
             // let system = get_contract_address();
 
             let game = Game {
@@ -171,8 +171,6 @@ mod p_war_actions {
                 start,
                 end: start + GAME_DURATION,
                 proposal_idx: 0,
-                base_cost: BASE_COST,
-                const_val: DEFAULT_PX, // Default is 10.
                 coeff_own_pixels: 0,
                 coeff_commits: 0,
                 winner_config: 0,
@@ -182,48 +180,6 @@ mod p_war_actions {
             };
 
             let board = Board { id, origin, width: DEFAULT_AREA, height: DEFAULT_AREA, };
-
-            // To make a bigger area, we deleted this part.
-            // // make sure that game board has been set with game id
-            // let mut y = origin.y;
-            // loop {
-            //     if y >= origin.y + DEFAULT_AREA {
-            //         break;
-            //     };
-            //     let mut x = origin.x;
-            //     loop {
-            //         if x >= origin.x + DEFAULT_AREA {
-            //             break;
-            //         };
-            //         core_actions
-            //             .update_pixel(
-            //                 player,
-            //                 system,
-            //                 PixelUpdate {
-            //                     x,
-            //                     y,
-            //                     color: Option::Some(INITIAL_COLOR),
-            //                     timestamp: Option::None,
-            //                     text: Option::None,
-            //                     app: Option::Some(system),
-            //                     owner: Option::None,
-            //                     action: Option::None
-            //                 }
-            //             );
-            //         set!(
-            //             world,
-            //             (
-            //                 GameId {
-            //                     x,
-            //                     y,
-            //                     value: id
-            //                 }
-            //             )
-            //         );
-            //         x += 1;
-            //     };
-            //     y += 1;
-            // };
 
             set!(world, (game, board));
             println!("create_game 1");
@@ -266,8 +222,6 @@ mod p_war_actions {
             );
 
             println!("create_game 2.1");
-            // recover px
-            recover_px(world, id, player);
 
             id
             // emit event that game has started
@@ -302,17 +256,10 @@ mod p_war_actions {
 
             let player_address = get_tx_info().unbox().account_contract_address;
 
-            // recover px
-            recover_px(world, game_id, player_address);
-
-            // if this is first time for the caller, let's set initial px.
             let mut player = get!(world, (player_address), (Player));
 
             // get the game info
             let game = get!(world, (game_id), (Game));
-
-            // check the current px is eq or larger than cost_paint
-            assert(player.current_px >= game.base_cost, 'not enough PX');
 
             // check the player is banned or not
             assert(player.is_banned == false, 'you are banned');
@@ -326,11 +273,9 @@ mod p_war_actions {
                 world,
                 (Player {
                     address: player.address,
-                    max_px: player.max_px,
                     num_owns: player.num_owns + 1,
-                    num_commit: player.num_commit + game.base_cost,
-                    current_px: player.current_px - game.base_cost,
                     last_date: get_block_timestamp(),
+                    num_commit: player.num_commit + 1,
                     is_banned: false,
                 }),
             );
@@ -351,8 +296,6 @@ mod p_war_actions {
 
             // set the new owner of PWarPixel
             set!(world, (PWarPixel { position: position, owner: player.address }),);
-
-            update_max_px(world, game_id, player.address);
         }
 
         // only use for expand areas.
