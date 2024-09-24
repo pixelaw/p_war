@@ -39,7 +39,7 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ proposal, title }) => {
       setIsVoting(false);
       setIsOpen(false);
     }
-  }, [activeAccount, proposal.index, voteType, votePoints, vote]);
+  }, [activeAccount, proposal.index, voteType, vote]);
 
   // const handleVotePointsChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
   //   setVotePoints(Number(e.target.value));
