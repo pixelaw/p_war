@@ -13,6 +13,8 @@ import { CanvasGrid } from "@/components/CanvasGrid";
 import { usePaletteColors } from "@/hooks/usePalleteColors";
 import { useEntityQuery } from "@dojoengine/react";
 import { getComponentValue, Has } from "@dojoengine/recs";
+import { detectMobile } from "@/utils/devices";
+import { useHaptic } from "use-haptic";
 
 export const PixelViewer: React.FC = () => {
   // Refs
@@ -33,8 +35,10 @@ export const PixelViewer: React.FC = () => {
   const paletteColors = usePaletteColors();
   const { drawPixels } = useWebGL(canvasRef, gridState);
   const [play] = useSound(sounds.placeColor, { volume: 0.5 });
+  const { vibe } = useHaptic();
 
   // States
+  const isMobile = detectMobile();
   const [selectedColor, setSelectedColor] = useState<Color>(paletteColors[0]);
   const [currentMousePos, setCurrentMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const activeAccount = useMemo(() => connectedAccount || account, [connectedAccount, account]);
@@ -69,6 +73,14 @@ export const PixelViewer: React.FC = () => {
       });
     },
     [selectedColor, activeAccount, interact, setOptimisticPixels, play],
+  );
+
+  const onTap = useCallback(
+    (x: number, y: number) => {
+      vibe();
+      onCellClick(x, y);
+    },
+    [onCellClick, vibe],
   );
 
   const onDrawGrid = useCallback(() => {
@@ -122,10 +134,8 @@ export const PixelViewer: React.FC = () => {
       <CanvasGrid
         canvasRef={canvasRef}
         className="fixed inset-x-0 bottom top-[50px] h-[calc(100%-50px)] w-full bg-black/80"
-        onCellClick={onCellClick}
-        // onSwipe={onPan}
-        // onPan={onPan}
-        // onTap={onCellClick} // NOTE: somehow tap and mouseup events are called duplicated (it might be depends on the environemnts??)
+        onCellClick={isMobile ? undefined : onCellClick}
+        onTap={isMobile ? onTap : undefined} // NOTE: somehow tap and mouseup events are called duplicated (it might be depends on the environemnts??)
         onDrawGrid={onDrawGrid}
         setCurrentMousePos={setCurrentMousePos}
         gridState={gridState}
