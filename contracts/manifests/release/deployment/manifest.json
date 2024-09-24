@@ -1235,12 +1235,12 @@
       }
     ],
     "address": "0x263ae44e5414519a5c5a135cccaf3d9d7ee196d37e8de47a178da91f3de9b34",
-    "transaction_hash": "0x54f4921984efcfe6490bbda1d91d7008e62bff6bdf695053e157b3910aeb42e",
+    "transaction_hash": "0x59905ef512ac097c7f9a4d28bebdcfeaa95d9fcb682151d670a220242f0a63a",
     "block_number": 3,
     "seed": "pixelaw",
     "metadata": {
       "profile_name": "release",
-      "rpc_url": "https://api.cartridge.gg/x/pwar-dev/katana/"
+      "rpc_url": "https://api.cartridge.gg/x/p-war-dev/katana/"
     },
     "manifest_name": "dojo-world"
   },

@@ -1,6 +1,6 @@
 kind = "DojoContract"
-class_hash = "0x482ba3227b4facdfa257177a3ea6c1c17f5b7574dc7404549ee12f285d1691c"
-original_class_hash = "0x482ba3227b4facdfa257177a3ea6c1c17f5b7574dc7404549ee12f285d1691c"
+class_hash = "0x38db4138d34279431e859f0e0a779834c98fe8500ecf791e026778918257eb4"
+original_class_hash = "0x38db4138d34279431e859f0e0a779834c98fe8500ecf791e026778918257eb4"
 base_class_hash = "0x0"
 abi = "manifests/dev/base/abis/contracts/pixelaw-p_war_actions-60819afd.json"
 reads = []
