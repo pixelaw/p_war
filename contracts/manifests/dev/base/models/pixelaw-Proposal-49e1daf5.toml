@@ -1,0 +1,62 @@
+kind = "DojoModel"
+class_hash = "0x76c0a4827cc62be7367ab6fac605335bb5a2d01a7edc3f2dd89e58accafca02"
+original_class_hash = "0x76c0a4827cc62be7367ab6fac605335bb5a2d01a7edc3f2dd89e58accafca02"
+abi = "manifests/dev/base/abis/models/pixelaw-Proposal-49e1daf5.json"
+tag = "pixelaw-Proposal"
+qualified_path = "p_war::models::proposal::proposal"
+manifest_name = "pixelaw-Proposal-49e1daf5"
+
+[[members]]
+name = "game_id"
+type = "usize"
+key = true
+
+[[members]]
+name = "index"
+type = "usize"
+key = true
+
+[[members]]
+name = "author"
+type = "ContractAddress"
+key = false
+
+[[members]]
+name = "proposal_type"
+type = "u8"
+key = false
+
+[[members]]
+name = "target_args_1"
+type = "u32"
+key = false
+
+[[members]]
+name = "target_args_2"
+type = "u32"
+key = false
+
+[[members]]
+name = "start"
+type = "u64"
+key = false
+
+[[members]]
+name = "end"
+type = "u64"
+key = false
+
+[[members]]
+name = "yes_voting_power"
+type = "u32"
+key = false
+
+[[members]]
+name = "no_voting_power"
+type = "u32"
+key = false
+
+[[members]]
+name = "is_activated"
+type = "bool"
+key = false
