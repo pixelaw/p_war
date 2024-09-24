@@ -1,4 +1,5 @@
-import { Pixel, ProposalType } from "@/types";
+import { Pixel } from "@/types";
+import { ProposalType } from "@/libs/dojo/typescript/models.gen";
 import { uint32ToRgba } from "@/utils";
 
 import { Entities, Entity, ToriiClient } from "@dojoengine/torii-client";

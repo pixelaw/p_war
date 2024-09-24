@@ -394,6 +394,25 @@ export const ProposalDefinition = {
   is_activated: RecsType.Boolean,
 };
 
+export enum ProposalType {
+  Unknown,
+  // ToggleAllowedApp,
+  AddNewColor,
+  ResetToWhiteByColor,
+  ExtendGameEndTime,
+  ExpandArea,
+  // ChangeGameDuration,
+  // ChangePixelRecovery,
+  // ExpandArea,
+  // BanPlayerAddress,
+  // ChangeMaxPXConfig,
+  // ChangeWinnerConfig,
+  // ChangePaintCost,
+  // MakeADisasterByCoordinates,
+  // ResetToWhiteByCoordinates,
+  // MakeADisasterByColor,
+}
+
 // Type definition for `pixelaw::core::models::queue::QueueItem` struct
 export interface QueueItem {
   id: bigint;

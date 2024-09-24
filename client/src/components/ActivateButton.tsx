@@ -16,6 +16,8 @@ export const ActivateProposalButton = ({ proposal }: { proposal: Proposal }) => 
     connectedAccount,
   } = useDojo();
 
+  console.log(proposal.target_args_1);
+
   // State
   const activeAccount = useMemo(() => connectedAccount || account, [connectedAccount, account]);
   const targetPixelEntities = useEntityQuery([HasValue(Pixel, { color: proposal.target_args_1 })]);
@@ -33,6 +35,7 @@ export const ActivateProposalButton = ({ proposal }: { proposal: Proposal }) => 
         .filter((pixel) => pixel !== undefined),
     [targetPixelEntities, Pixel],
   );
+  console.log(targetPixels);
 
   // Handler
   const handleActivateProposal = useCallback(async () => {

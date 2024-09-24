@@ -2,10 +2,9 @@ import { defineSystem, Has, HasValue, World } from "@dojoengine/recs";
 import { ClientComponents } from "./createClientComponents";
 import type { IWorld } from "./typescript/contracts.gen";
 import { Account } from "starknet";
-import { DefaultParameters } from "./typescript/models.gen";
+import { DefaultParameters, Position, ProposalType } from "./typescript/models.gen";
 import { handleTransactionError } from "@/utils";
 import { toast } from "sonner";
-import { ProposalType } from "@/types";
 
 const handleError = (action: string, error: unknown) => {
   console.error(`Error executing ${action}:`, error);
@@ -82,12 +81,7 @@ export function createSystemCalls({ client }: { client: IWorld }, clientComponen
     }
   };
 
-  const activateProposal = async (
-    account: Account,
-    gameId: number,
-    index: number,
-    clearData: { x: number; y: number }[],
-  ) => {
+  const activateProposal = async (account: Account, gameId: number, index: number, clearData: Position[]) => {
     try {
       const { transaction_hash } = await client.propose_actions.activate_proposal({
         account,

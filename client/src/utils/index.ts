@@ -1,7 +1,8 @@
 import { type ClassValue, clsx } from "clsx";
 import { extendTailwindMerge } from "tailwind-merge";
 import { withFluid } from "@fluid-tailwind/tailwind-merge";
-import { ProposalType, type Color } from "@/types";
+import { type Color } from "@/types";
+import { ProposalType } from "@/libs/dojo/typescript/models.gen";
 import { getComponentValue } from "@dojoengine/recs";
 import { App } from "@/types";
 import { shortString } from "starknet";
