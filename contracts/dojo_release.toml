@@ -12,7 +12,7 @@ default = "pixelaw"
 mappings = {}
 
 [env]
-rpc_url = "https://api.cartridge.gg/x/p-war-dev/katana/"
-account_address = "0x1c6289fe4a0eeee86b5f6ef0f8d38056983b4a001cf1e0a812d6127c50866e4"
-private_key = "0x6312f565a8634612a0c5a0032e2937645d06633ab3878bc15e67e07b6e3517c"
+rpc_url = "https://api.cartridge.gg/x/pwar-dev/katana/"
+account_address = "0x486e6aa0d971ca556782ac8cebf4d75e5c4635c4c5209e3f1eaea773cb154a7"
+private_key = "0x1dfc2b3a9a6524f0177de5ce22d87d40d5a4f28d21e5f2f306f85fcd945a265"
 world_address = "0x263ae44e5414519a5c5a135cccaf3d9d7ee196d37e8de47a178da91f3de9b34"

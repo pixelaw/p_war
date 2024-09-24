@@ -1235,12 +1235,12 @@
       }
     ],
     "address": "0x263ae44e5414519a5c5a135cccaf3d9d7ee196d37e8de47a178da91f3de9b34",
-    "transaction_hash": "0x59905ef512ac097c7f9a4d28bebdcfeaa95d9fcb682151d670a220242f0a63a",
+    "transaction_hash": "0x771e35b8e477a954343bae439feb3cbbd24e2673cc8c247121c24a562c1e6da",
     "block_number": 3,
     "seed": "pixelaw",
     "metadata": {
       "profile_name": "release",
-      "rpc_url": "https://api.cartridge.gg/x/p-war-dev/katana/"
+      "rpc_url": "https://api.cartridge.gg/x/pwar-dev/katana/"
     },
     "manifest_name": "dojo-world"
   },
@@ -2464,8 +2464,8 @@
     {
       "kind": "DojoContract",
       "address": "0x2045bbeab298c52664537ae151262ca5f2a4e41b07f221c4860879551c65cb5",
-      "class_hash": "0x482ba3227b4facdfa257177a3ea6c1c17f5b7574dc7404549ee12f285d1691c",
-      "original_class_hash": "0x482ba3227b4facdfa257177a3ea6c1c17f5b7574dc7404549ee12f285d1691c",
+      "class_hash": "0x121b6dbe4e601a2d06856e92fc198299dd8bb540481c741898ce68cf9c9c57",
+      "original_class_hash": "0x121b6dbe4e601a2d06856e92fc198299dd8bb540481c741898ce68cf9c9c57",
       "base_class_hash": "0x2427dd10a58850ac9a5ca6ce04b7771b05330fd18f2e481831ad903b969e6b2",
       "abi": [
         {

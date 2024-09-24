@@ -51,7 +51,7 @@ const GAME_ID: usize = 1;
 const INITIAL_COLOR: u32 = 0xFFFFFFFF;
 const DEFAULT_AREA: u32 = 50; // changed from 5
 const MAX_COLOR_SIZE: usize = 9;
-const GAME_DURATION: u64 = 60 * 60 * 24 * 10; // 10 days
+const GAME_DURATION: u64 = 60 * 60 * 24 * 30 * 12; // 12 months
 const DEFAULT_RECOVERY_RATE: u64 = 5; // 5 secs to recover 1PX
 
 // # For Governance
