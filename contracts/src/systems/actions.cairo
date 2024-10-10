@@ -12,7 +12,8 @@ trait IActions {
     fn init(ref world: IWorldDispatcher);
     fn interact(ref world: IWorldDispatcher, default_params: DefaultParameters);
     fn create_game(ref world: IWorldDispatcher, origin: Position) -> usize;
-    fn create_game_guilds(ref world: IWorldDispatcher, game: Game);
+    fn set_guild_contract_address(ref world: IWorldDispatcher, game_id: usize, address: ContractAddress);
+    fn create_game_guilds(ref world: IWorldDispatcher, game_id: usize);
     fn get_game_id(world: @IWorldDispatcher, position: Position) -> usize;
     fn place_pixel(
         ref world: IWorldDispatcher, app: ContractAddress, default_params: DefaultParameters
@@ -55,6 +56,15 @@ mod p_war_actions {
     enum Event {
         StartedGame: StartedGame,
         EndedGame: EndedGame
+    }
+
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::event]
+    #[dojo::model]
+    struct GuildContractAddress {
+        #[key]
+        game_id: usize,
+        address: ContractAddress,
     }
 
     #[derive(Drop, Serde, starknet::Event)]
@@ -149,6 +159,12 @@ mod p_war_actions {
                 return OUT_OF_BOUNDS_GAME_ID; // OUT_OF_BOUNDS_GAME_ID for out of bounds
             };
             return 1;
+        }
+
+        fn set_guild_contract_address(ref world: IWorldDispatcher, game_id: usize, address: ContractAddress) {
+            // Only allow the contract owner or an authorized address to set this
+            //assert(get_caller_address() == world.get_owner(), 'Unauthorized');
+            set!(world, (GuildContractAddress { game_id, address }));
         }
 
         fn create_game(ref world: IWorldDispatcher, origin: Position) -> usize {
@@ -273,19 +289,25 @@ mod p_war_actions {
             // recover px
             recover_px(world, id, player);
 
-            self.create_game_guilds(game);
+            self.create_game_guilds(id);           
 
             id
             // emit event that game has started
         }
 
         // initialize guilds for the game
-        fn create_game_guilds(ref world: IWorldDispatcher, game: Game) {
-            let guild_dispatcher = IGuildDispatcher { contract_address: world.contract_address };
-            guild_dispatcher.create_guild(game.id, 'Fire');
-            guild_dispatcher.create_guild(game.id, 'Water');
-            guild_dispatcher.create_guild(game.id, 'Earth');
-            guild_dispatcher.create_guild(game.id, 'Air');
+        fn create_game_guilds(ref world: IWorldDispatcher, game_id: usize) {
+            let guild_address = get!(world, game_id, GuildContractAddress).address;
+            let guild_dispatcher = IGuildDispatcher { contract_address: guild_address };
+            
+            guild_dispatcher.create_guild(game_id, 'Fire');
+            guild_dispatcher.create_guild(game_id, 'Water');
+            guild_dispatcher.create_guild(game_id, 'Earth');
+            guild_dispatcher.create_guild(game_id, 'Air');
+            // when initilaising pwar it needs a guild contract
+            // setter for guild contract
+            // secure pwar to not call the wrong  for guild contract
+            // modify initialising steps
         }
 
         // To paint, basically use this function.

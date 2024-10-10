@@ -1,0 +1,22 @@
+kind = "DojoModel"
+class_hash = "0x661de232e8fd024ceef7e099030347690f4e8280bc50840982c6cab3298da54"
+original_class_hash = "0x661de232e8fd024ceef7e099030347690f4e8280bc50840982c6cab3298da54"
+abi = "manifests/dev/base/abis/models/pixelaw-AllowedColor-22c1a796.json"
+tag = "pixelaw-AllowedColor"
+qualified_path = "p_war::models::allowed_color::allowed_color"
+manifest_name = "pixelaw-AllowedColor-22c1a796"
+
+[[members]]
+name = "game_id"
+type = "usize"
+key = true
+
+[[members]]
+name = "color"
+type = "u32"
+key = true
+
+[[members]]
+name = "is_allowed"
+type = "bool"
+key = false

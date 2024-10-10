@@ -1,0 +1,22 @@
+kind = "DojoModel"
+class_hash = "0x22a02c0555eedefbbf217bf90fa1796bd4e113b4ee5f79007ea3d271181c2f4"
+original_class_hash = "0x22a02c0555eedefbbf217bf90fa1796bd4e113b4ee5f79007ea3d271181c2f4"
+abi = "manifests/dev/base/abis/models/pixelaw-GameId-1ee8756e.json"
+tag = "pixelaw-GameId"
+qualified_path = "p_war::models::board::game_id"
+manifest_name = "pixelaw-GameId-1ee8756e"
+
+[[members]]
+name = "x"
+type = "u32"
+key = true
+
+[[members]]
+name = "y"
+type = "u32"
+key = true
+
+[[members]]
+name = "value"
+type = "usize"
+key = false

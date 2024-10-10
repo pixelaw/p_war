@@ -1,0 +1,22 @@
+kind = "DojoModel"
+class_hash = "0x37fca9c9d7ab57dda36b03416d16bfc625e9b0e6187c8f7f73030225c9b5444"
+original_class_hash = "0x37fca9c9d7ab57dda36b03416d16bfc625e9b0e6187c8f7f73030225c9b5444"
+abi = "manifests/dev/base/abis/models/pixelaw-PaletteColors-39a92a0a.json"
+tag = "pixelaw-PaletteColors"
+qualified_path = "p_war::models::allowed_color::palette_colors"
+manifest_name = "pixelaw-PaletteColors-39a92a0a"
+
+[[members]]
+name = "game_id"
+type = "usize"
+key = true
+
+[[members]]
+name = "idx"
+type = "u32"
+key = true
+
+[[members]]
+name = "color"
+type = "u32"
+key = false

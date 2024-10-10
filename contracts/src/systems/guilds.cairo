@@ -15,6 +15,7 @@ trait IGuild {
     fn remove_member(
         ref world: IWorldDispatcher, game_id: usize, guild_id: usize, member: ContractAddress
     );
+    fn get_guild_contract_address(world: @IWorldDispatcher) -> ContractAddress;
     fn get_guild_points(world: @IWorldDispatcher, game_id: usize, guild_id: usize) -> usize;
 }
 
@@ -208,6 +209,12 @@ mod guild_actions {
             set!(world, (guild));
 
             emit!(world, (Event::MemberRemoved(MemberRemoved { game_id, guild_id, member })));
+        }
+
+        fn get_guild_contract_address(world: @IWorldDispatcher) -> ContractAddress {
+            let guild_contract_address = get_contract_address();
+            
+            guild_contract_address
         }
 
         fn get_guild_points(world: @IWorldDispatcher, game_id: usize, guild_id: usize) -> usize {

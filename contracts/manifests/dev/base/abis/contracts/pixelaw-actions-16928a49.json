@@ -128,8 +128,98 @@
   },
   {
     "type": "impl",
-    "name": "ActionsInteroperability",
-    "interface_name": "pixelaw::core::traits::IInteroperability"
+    "name": "ActionsImpl",
+    "interface_name": "pixelaw::core::actions::IActions"
+  },
+  {
+    "type": "enum",
+    "name": "core::bool",
+    "variants": [
+      {
+        "name": "False",
+        "type": "()"
+      },
+      {
+        "name": "True",
+        "type": "()"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "pixelaw::core::models::permissions::Permission",
+    "members": [
+      {
+        "name": "app",
+        "type": "core::bool"
+      },
+      {
+        "name": "color",
+        "type": "core::bool"
+      },
+      {
+        "name": "owner",
+        "type": "core::bool"
+      },
+      {
+        "name": "text",
+        "type": "core::bool"
+      },
+      {
+        "name": "timestamp",
+        "type": "core::bool"
+      },
+      {
+        "name": "action",
+        "type": "core::bool"
+      }
+    ]
+  },
+  {
+    "type": "struct",
+    "name": "pixelaw::core::models::pixel::Pixel",
+    "members": [
+      {
+        "name": "x",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "y",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "app",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "color",
+        "type": "core::integer::u32"
+      },
+      {
+        "name": "created_at",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "updated_at",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "timestamp",
+        "type": "core::integer::u64"
+      },
+      {
+        "name": "owner",
+        "type": "core::starknet::contract_address::ContractAddress"
+      },
+      {
+        "name": "text",
+        "type": "core::felt252"
+      },
+      {
+        "name": "action",
+        "type": "core::felt252"
+      }
+    ]
   },
   {
     "type": "enum",
@@ -227,6 +317,16 @@
   },
   {
     "type": "struct",
+    "name": "core::array::Span::<core::felt252>",
+    "members": [
+      {
+        "name": "snapshot",
+        "type": "@core::array::Array::<core::felt252>"
+      }
+    ]
+  },
+  {
+    "type": "struct",
     "name": "pixelaw::core::models::registry::App",
     "members": [
       {
@@ -248,57 +348,6 @@
     ]
   },
   {
-    "type": "interface",
-    "name": "pixelaw::core::traits::IInteroperability",
-    "items": [
-      {
-        "type": "function",
-        "name": "on_pre_update",
-        "inputs": [
-          {
-            "name": "pixel_update",
-            "type": "pixelaw::core::models::pixel::PixelUpdate"
-          },
-          {
-            "name": "app_caller",
-            "type": "pixelaw::core::models::registry::App"
-          },
-          {
-            "name": "player_caller",
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "external"
-      },
-      {
-        "type": "function",
-        "name": "on_post_update",
-        "inputs": [
-          {
-            "name": "pixel_update",
-            "type": "pixelaw::core::models::pixel::PixelUpdate"
-          },
-          {
-            "name": "app_caller",
-            "type": "pixelaw::core::models::registry::App"
-          },
-          {
-            "name": "player_caller",
-            "type": "core::starknet::contract_address::ContractAddress"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "external"
-      }
-    ]
-  },
-  {
-    "type": "impl",
-    "name": "AllowedAppImpl",
-    "interface_name": "p_war::systems::apps::IAllowedApp"
-  },
-  {
     "type": "struct",
     "name": "pixelaw::core::utils::Position",
     "members": [
@@ -313,53 +362,8 @@
     ]
   },
   {
-    "type": "struct",
-    "name": "pixelaw::core::utils::DefaultParameters",
-    "members": [
-      {
-        "name": "for_player",
-        "type": "core::starknet::contract_address::ContractAddress"
-      },
-      {
-        "name": "for_system",
-        "type": "core::starknet::contract_address::ContractAddress"
-      },
-      {
-        "name": "position",
-        "type": "pixelaw::core::utils::Position"
-      },
-      {
-        "name": "color",
-        "type": "core::integer::u32"
-      }
-    ]
-  },
-  {
     "type": "interface",
-    "name": "p_war::systems::apps::IAllowedApp",
-    "items": [
-      {
-        "type": "function",
-        "name": "set_pixel",
-        "inputs": [
-          {
-            "name": "default_params",
-            "type": "pixelaw::core::utils::DefaultParameters"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "view"
-      }
-    ]
-  },
-  {
-    "type": "impl",
-    "name": "ActionsImpl",
-    "interface_name": "p_war::systems::actions::IActions"
-  },
-  {
-    "type": "interface",
-    "name": "p_war::systems::actions::IActions",
+    "name": "pixelaw::core::actions::IActions",
     "items": [
       {
         "type": "function",
@@ -370,11 +374,15 @@
       },
       {
         "type": "function",
-        "name": "interact",
+        "name": "update_permission",
         "inputs": [
           {
-            "name": "default_params",
-            "type": "pixelaw::core::utils::DefaultParameters"
+            "name": "app_key",
+            "type": "core::felt252"
+          },
+          {
+            "name": "permission",
+            "type": "pixelaw::core::models::permissions::Permission"
           }
         ],
         "outputs": [],
@@ -382,31 +390,55 @@
       },
       {
         "type": "function",
-        "name": "create_game",
+        "name": "has_write_access",
         "inputs": [
           {
-            "name": "origin",
-            "type": "pixelaw::core::utils::Position"
+            "name": "for_player",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "for_system",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "pixel",
+            "type": "pixelaw::core::models::pixel::Pixel"
+          },
+          {
+            "name": "pixel_update",
+            "type": "pixelaw::core::models::pixel::PixelUpdate"
           }
         ],
         "outputs": [
           {
-            "type": "core::integer::u32"
+            "type": "core::bool"
           }
         ],
         "state_mutability": "external"
       },
       {
         "type": "function",
-        "name": "set_guild_contract_address",
+        "name": "process_queue",
         "inputs": [
           {
-            "name": "game_id",
-            "type": "core::integer::u32"
+            "name": "id",
+            "type": "core::felt252"
           },
           {
-            "name": "address",
+            "name": "timestamp",
+            "type": "core::integer::u64"
+          },
+          {
+            "name": "called_system",
             "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "selector",
+            "type": "core::felt252"
+          },
+          {
+            "name": "calldata",
+            "type": "core::array::Span::<core::felt252>"
           }
         ],
         "outputs": [],
@@ -414,43 +446,23 @@
       },
       {
         "type": "function",
-        "name": "create_game_guilds",
+        "name": "schedule_queue",
         "inputs": [
           {
-            "name": "game_id",
-            "type": "core::integer::u32"
-          }
-        ],
-        "outputs": [],
-        "state_mutability": "external"
-      },
-      {
-        "type": "function",
-        "name": "get_game_id",
-        "inputs": [
+            "name": "timestamp",
+            "type": "core::integer::u64"
+          },
           {
-            "name": "position",
-            "type": "pixelaw::core::utils::Position"
-          }
-        ],
-        "outputs": [
-          {
-            "type": "core::integer::u32"
-          }
-        ],
-        "state_mutability": "view"
-      },
-      {
-        "type": "function",
-        "name": "place_pixel",
-        "inputs": [
-          {
-            "name": "app",
+            "name": "called_system",
             "type": "core::starknet::contract_address::ContractAddress"
           },
           {
-            "name": "default_params",
-            "type": "pixelaw::core::utils::DefaultParameters"
+            "name": "selector",
+            "type": "core::felt252"
+          },
+          {
+            "name": "calldata",
+            "type": "core::array::Span::<core::felt252>"
           }
         ],
         "outputs": [],
@@ -461,6 +473,14 @@
         "name": "update_pixel",
         "inputs": [
           {
+            "name": "for_player",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "for_system",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
             "name": "pixel_update",
             "type": "pixelaw::core::models::pixel::PixelUpdate"
           }
@@ -470,11 +490,91 @@
       },
       {
         "type": "function",
-        "name": "end_game",
+        "name": "new_app",
         "inputs": [
           {
-            "name": "game_id",
-            "type": "core::integer::u32"
+            "name": "system",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "name",
+            "type": "core::felt252"
+          },
+          {
+            "name": "icon",
+            "type": "core::felt252"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "pixelaw::core::models::registry::App"
+          }
+        ],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "get_system_address",
+        "inputs": [
+          {
+            "name": "for_system",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "get_player_address",
+        "inputs": [
+          {
+            "name": "for_player",
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "outputs": [
+          {
+            "type": "core::starknet::contract_address::ContractAddress"
+          }
+        ],
+        "state_mutability": "view"
+      },
+      {
+        "type": "function",
+        "name": "alert_player",
+        "inputs": [
+          {
+            "name": "position",
+            "type": "pixelaw::core::utils::Position"
+          },
+          {
+            "name": "player",
+            "type": "core::starknet::contract_address::ContractAddress"
+          },
+          {
+            "name": "message",
+            "type": "core::felt252"
+          }
+        ],
+        "outputs": [],
+        "state_mutability": "external"
+      },
+      {
+        "type": "function",
+        "name": "set_instruction",
+        "inputs": [
+          {
+            "name": "selector",
+            "type": "core::felt252"
+          },
+          {
+            "name": "instruction",
+            "type": "core::felt252"
           }
         ],
         "outputs": [],
@@ -485,11 +585,11 @@
   {
     "type": "impl",
     "name": "IDojoInitImpl",
-    "interface_name": "p_war::systems::actions::p_war_actions::IDojoInit"
+    "interface_name": "pixelaw::core::actions::actions::IDojoInit"
   },
   {
     "type": "interface",
-    "name": "p_war::systems::actions::p_war_actions::IDojoInit",
+    "name": "pixelaw::core::actions::actions::IDojoInit",
     "items": [
       {
         "type": "function",
@@ -549,46 +649,100 @@
   },
   {
     "type": "event",
-    "name": "p_war::systems::actions::p_war_actions::StartedGame",
+    "name": "pixelaw::core::actions::actions::QueueScheduled",
     "kind": "struct",
     "members": [
       {
         "name": "id",
-        "type": "core::integer::u32",
+        "type": "core::felt252",
         "kind": "data"
       },
       {
         "name": "timestamp",
-        "type": "core::integer::u128",
+        "type": "core::integer::u64",
         "kind": "data"
       },
       {
-        "name": "creator",
+        "name": "called_system",
         "type": "core::starknet::contract_address::ContractAddress",
         "kind": "data"
+      },
+      {
+        "name": "selector",
+        "type": "core::felt252",
+        "kind": "data"
+      },
+      {
+        "name": "calldata",
+        "type": "core::array::Span::<core::felt252>",
+        "kind": "data"
       }
     ]
   },
   {
     "type": "event",
-    "name": "p_war::systems::actions::p_war_actions::EndedGame",
+    "name": "pixelaw::core::actions::actions::QueueProcessed",
     "kind": "struct",
     "members": [
       {
         "name": "id",
-        "type": "core::integer::u32",
-        "kind": "data"
-      },
-      {
-        "name": "timestamp",
-        "type": "core::integer::u128",
+        "type": "core::felt252",
         "kind": "data"
       }
     ]
   },
   {
     "type": "event",
-    "name": "p_war::systems::actions::p_war_actions::Event",
+    "name": "pixelaw::core::actions::actions::AppNameUpdated",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "app",
+        "type": "pixelaw::core::models::registry::App",
+        "kind": "data"
+      },
+      {
+        "name": "caller",
+        "type": "core::felt252",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "pixelaw::core::actions::actions::Alert",
+    "kind": "struct",
+    "members": [
+      {
+        "name": "position",
+        "type": "pixelaw::core::utils::Position",
+        "kind": "data"
+      },
+      {
+        "name": "caller",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      {
+        "name": "player",
+        "type": "core::starknet::contract_address::ContractAddress",
+        "kind": "data"
+      },
+      {
+        "name": "message",
+        "type": "core::felt252",
+        "kind": "data"
+      },
+      {
+        "name": "timestamp",
+        "type": "core::integer::u64",
+        "kind": "data"
+      }
+    ]
+  },
+  {
+    "type": "event",
+    "name": "pixelaw::core::actions::actions::Event",
     "kind": "enum",
     "variants": [
       {
@@ -597,13 +751,23 @@
         "kind": "nested"
       },
       {
-        "name": "StartedGame",
-        "type": "p_war::systems::actions::p_war_actions::StartedGame",
+        "name": "QueueScheduled",
+        "type": "pixelaw::core::actions::actions::QueueScheduled",
         "kind": "nested"
       },
       {
-        "name": "EndedGame",
-        "type": "p_war::systems::actions::p_war_actions::EndedGame",
+        "name": "QueueProcessed",
+        "type": "pixelaw::core::actions::actions::QueueProcessed",
+        "kind": "nested"
+      },
+      {
+        "name": "AppNameUpdated",
+        "type": "pixelaw::core::actions::actions::AppNameUpdated",
+        "kind": "nested"
+      },
+      {
+        "name": "Alert",
+        "type": "pixelaw::core::actions::actions::Alert",
         "kind": "nested"
       }
     ]
