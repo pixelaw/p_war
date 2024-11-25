@@ -1,5 +1,5 @@
 [package]
-cairo-version = "=2.7.0"
+cairo-version = "=2.8.4"
 name = "p_war"
 version = "0.3.54"
 
@@ -7,23 +7,22 @@ version = "0.3.54"
 sierra-replace-ids = true
 
 [dependencies]
-pixelaw = { git = "https://github.com/pixelaw/core", branch = "main" }
-# Added explicitly for https://github.com/dojoengine/dojo/issues/2430
-dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-alpha.11" }
+pixelaw = { git = "https://github.com/pixelaw/core", tag = "v0.5.7" }
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.1" }
 
-[[target.dojo]]
+[[target.starknet-contract]]
 build-external-contracts = [
-    "pixelaw::core::models::pixel::pixel",
+    "dojo::world::world_contract::world",
+    "pixelaw::core::models::pixel::Pixel",
     "pixelaw::core::models::pixel::PixelUpdate",
-    "pixelaw::core::models::queue::queue_item",
-    "pixelaw::core::models::registry::app",
-    "pixelaw::core::models::registry::app_name",
-    "pixelaw::core::models::registry::app_user",
-    "pixelaw::core::models::registry::app_instruction",
-    "pixelaw::core::models::registry::instruction",
-    "pixelaw::core::models::registry::core_actions_address",
-    "pixelaw::core::models::permissions::permissions",
+    "pixelaw::core::models::queue::QueueItem",
+    "pixelaw::core::models::registry::App",
+    "pixelaw::core::models::registry::AppName",
+    "pixelaw::core::utils::get_core_actions",
+    "pixelaw::core::models::registry::CoreActionsAddress",
     "pixelaw::core::actions::actions",
+    "pixelaw::core::actions::IActionsDispatcher",
+    "pixelaw::core::actions::IActionsDispatcherTrait"
 ]
 
 [tool.fmt]

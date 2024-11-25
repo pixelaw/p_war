@@ -38,7 +38,8 @@ pub fn setup() -> (
     IActionsDispatcher,
     IProposeDispatcher,
     IVotingDispatcher,
-    IGuildDispatcher
+    IGuildDispatcher,
+    ContractAddress
 ) {
     let mut models = array![
         allowed_app::TEST_CLASS_HASH,
@@ -128,5 +129,5 @@ pub fn setup() -> (
 
     println!("grants done");
 
-    (world, core_actions, p_war_actions, propose, voting, guild)
+    (world, core_actions, p_war_actions, propose, voting, guild, guild_address)
 }

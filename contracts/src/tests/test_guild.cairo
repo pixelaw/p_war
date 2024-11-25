@@ -20,9 +20,10 @@ use starknet::{
 };
 
 const WHITE_COLOR: u32 = 0xFFFFFFFF;
+const RED_COLOR: u32 = 0xFF000000;
 const GAME_ORIGIN_POSITION: Position = Position { x: 0, y: 0 };
 const GAME_PAINT_POSITION: Position = Position { x: 1, y: 1 };
-
+const GAME_PAINT_POSITION_2: Position = Position { x: 2, y: 2 };
 #[test]
 #[available_gas(999_999_999)]
 fn test_guild_operations() {
@@ -31,7 +32,7 @@ fn test_guild_operations() {
     let ZERO_ADDRESS: ContractAddress = contract_address_const::<0>();
 
     // Initialize the world and the actions
-    let (world, _core_actions, p_war_actions, _propose, _voting, guild_actions) =
+    let (world, _core_actions, p_war_actions, _propose, _voting, guild_actions, _guild_contract_address) =
         p_war::tests::utils::setup();
 
     println!("setup");
@@ -93,22 +94,116 @@ fn test_guild_operations() {
     assert(final_guild.member_count == 1, 'remove, should be 1');
 
     println!("guild operations passed");
-    // Test guild points
-// paint a color inside of the grid
-// set_account_contract_address(PLAYER_1);
-// set_contract_address(PLAYER_1);
-// p_war_actions
-//     .interact(
-//         DefaultParameters {
-//             for_player: ZERO_ADDRESS, // Leave this 0 if not processing the Queue
-//             for_system: ZERO_ADDRESS, // Leave this 0 if not processing the Queue
-//             position: GAME_PAINT_POSITION,
-//             color: WHITE_COLOR
-//         }
-//     );
-// let action_game_id = p_war_actions.get_game_id(GAME_ORIGIN_POSITION);
-// assert(action_game_id == game_id, 'game id mismatch');
-// let guild_points = guild_actions.get_guild_points(game_id, guild_id);
-// println!("test: guild_points: {}", guild_points);
-// assert(guild_points == 1, 'Guild points mismatch');
+}
+
+#[test]
+#[available_gas(999_999_999)]
+#[should_panic(expected: 'Guild points mismatch')]
+fn test_guild_points() {
+
+    // Initialize the world and the actions
+    let (_world, _core_actions, p_war_actions, _propose, _voting, guild_actions, _guild_contract_address) =
+    p_war::tests::utils::setup();
+    println!("setup");
+
+    let ZERO_ADDRESS: ContractAddress = contract_address_const::<0>();
+    let PLAYER_1 = contract_address_const::<0x1337>();
+    set_account_contract_address(PLAYER_1);
+    set_contract_address(PLAYER_1);
+    p_war_actions
+        .interact(
+            DefaultParameters {
+                for_player: ZERO_ADDRESS, // Leave this 0 if not processing the Queue
+                for_system: ZERO_ADDRESS, // Leave this 0 if not processing the Queue
+                position: GAME_ORIGIN_POSITION,
+                color: WHITE_COLOR
+            }
+        );
+    let game_id = p_war_actions.get_game_id(GAME_ORIGIN_POSITION);
+    println!("game created: game_id = {}", game_id);
+
+    //was not able to import set_call from core::helpers
+    set_account_contract_address(PLAYER_1);
+    set_contract_address(PLAYER_1);
+    let guild_id = guild_actions.create_guild(game_id, 'Test Guild');
+    println!("guild created: guild_id = {}", guild_id);
+    //place a pixel
+    p_war_actions
+        .interact(
+            DefaultParameters {
+                for_player: ZERO_ADDRESS, // Leave this 0 if not processing the Queue
+                for_system: ZERO_ADDRESS, // Leave this 0 if not processing the Queue
+                position: GAME_PAINT_POSITION,
+                color: WHITE_COLOR
+            }
+        );
+    p_war_actions
+        .interact(
+            DefaultParameters {
+                for_player: ZERO_ADDRESS, // Leave this 0 if not processing the Queue
+                for_system: ZERO_ADDRESS, // Leave this 0 if not processing the Queue
+                position: GAME_PAINT_POSITION_2,
+                color: WHITE_COLOR
+            }
+        );
+    let guild_points = guild_actions.get_guild_points(game_id, guild_id);
+    println!("test: guild_points: {}", guild_points);
+    assert(guild_points == 1, 'Guild points mismatch');
+}
+
+#[test]
+#[available_gas(999_999_999)]
+fn test_guild_creation() {
+    // Initialize the world and the actions
+    let (world, _core_actions, p_war_actions, _propose, _voting, _guild_actions, guild_contract_address) =
+        p_war::tests::utils::setup();
+
+    // Setup players
+    let PLAYER_1 = contract_address_const::<0x1337>();
+    let ZERO_ADDRESS: ContractAddress = contract_address_const::<0>();
+
+    // Impersonate player1
+    set_account_contract_address(PLAYER_1);
+
+    // Create a game
+    p_war_actions
+        .interact(
+            DefaultParameters {
+                for_player: ZERO_ADDRESS,
+                for_system: ZERO_ADDRESS,
+                position: GAME_ORIGIN_POSITION,
+                color: WHITE_COLOR
+            }
+        );
+
+    let game_id: u32 = p_war_actions.get_game_id(GAME_ORIGIN_POSITION);
+
+    //p_war_actions.set_guild_contract_address(game_id, guild_contract_address);
+
+    set_account_contract_address(PLAYER_1);
+    set_contract_address(PLAYER_1);
+    // Create guilds for the game
+    let guild_ids: Array<u32> = p_war_actions.create_game_guilds(game_id, guild_contract_address);
+    
+    // Create a guild
+    let guild_id: u32 = *guild_ids.at(0);
+    println!("guild_id: {}", guild_id);
+    let guild = get!(world, (game_id, guild_id), (Guild));
+    assert(guild.guild_name == 'Fire', 'Guild name mismatch');
+    
+    let guild_id_2 = *guild_ids.at(1);
+    println!("guild_id_2: {}", guild_id_2);
+    let guild = get!(world, (game_id, guild_id_2), (Guild));
+    assert(guild.guild_name == 'Water', 'Guild name mismatch');
+    
+    let guild_id_3 = *guild_ids.at(2);
+    println!("guild_id_3: {}", guild_id_3);
+    let guild = get!(world, (game_id, guild_id_3), (Guild));
+    assert(guild.guild_name == 'Earth', 'Guild name mismatch');
+    
+    let guild_id_4 = *guild_ids.at(3);
+    println!("guild_id_4: {}", guild_id_4);
+    let guild = get!(world, (game_id, guild_id_4), (Guild));
+    assert(guild.guild_name == 'Air', 'Guild name mismatch');
+    println!("Guild creation tests passed successfully");
 }

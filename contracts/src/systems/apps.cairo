@@ -1,6 +1,6 @@
 use pixelaw::core::utils::DefaultParameters;
 
-#[dojo::interface]
+#[starknet::interface]
 trait IAllowedApp {
     fn set_pixel(default_params: DefaultParameters);
 }

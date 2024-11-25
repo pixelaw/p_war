@@ -1,17 +1,17 @@
 use p_war::models::{board::Position};
 
 // define the interface
-#[dojo::interface]
-trait IPropose {
+#[starknet::interface]
+pub trait IPropose<T> {
     fn create_proposal(
-        ref world: IWorldDispatcher,
+        ref self: T,
         game_id: usize,
         proposal_type: u8,
         target_args_1: u32,
         target_args_2: u32
     ) -> usize;
     fn activate_proposal(
-        ref world: IWorldDispatcher, game_id: usize, index: usize, clear_data: Span<Position>
+        ref self: T, game_id: usize, index: usize, clear_data: Span<Position>
     );
 }
 
@@ -64,23 +64,24 @@ mod propose_actions {
     #[abi(embed_v0)]
     impl ProposeImpl of IPropose<ContractState> {
         fn create_proposal(
-            ref world: IWorldDispatcher,
+            ref self: ContractState,
             game_id: usize,
             proposal_type: u8,
             target_args_1: u32,
             target_args_2: u32
         ) -> usize {
-            // get the game
-            let mut game = get!(world, game_id, (Game));
+            //get world
+            let mut world = self.world(@"pixelaw");
+            // get models
+            let mut game: Game = world.read_model(game_id);
             assert(check_game_status(game.status()), 'game is not ongoing');
-
             let player_address = get_tx_info().unbox().account_contract_address;
 
             // recover px
             recover_px(world, game_id, player_address);
 
             // if this is first time for the caller, let's set initial px.
-            let mut player = get!(world, (player_address), (Player));
+            let mut player: Player = world.read_model(player_address);
 
             // check the current px is eq or larger than cost_paint
             assert(player.current_px >= game.base_cost * PROPOSAL_FACTOR, 'not enough PX');
@@ -88,7 +89,7 @@ mod propose_actions {
             // check the player is banned or not
             assert(player.is_banned == false, 'you are banned');
 
-            let proposal = Proposal {
+            let new_proposal = Proposal {
                 game_id: game_id,
                 index: game.proposal_idx,
                 author: get_caller_address(),
@@ -104,197 +105,59 @@ mod propose_actions {
 
             game.proposal_idx += 1;
 
-            set!(world, (proposal, game));
+            world.write_model(@new_proposal);
+            world.write_model(@game);
+
+            player.player.num_commit + (game.base_cost * PROPOSAL_FACTOR);
+            player.current_px - (game.base_cost * PROPOSAL_FACTOR);
+            world.write_model(@player);
 
             // consume px
-            set!(
-                world,
-                (Player {
-                    address: player.address,
-                    max_px: player.max_px,
-                    num_owns: player.num_owns,
-                    num_commit: player.num_commit + (game.base_cost * PROPOSAL_FACTOR),
-                    current_px: player.current_px - (game.base_cost * PROPOSAL_FACTOR),
-                    last_date: get_block_timestamp(),
-                    is_banned: false,
-                }),
-            );
+            // set!(
+            //     world,
+            //     (Player {
+            //         address: player.address,
+            //         max_px: player.max_px,
+            //         num_owns: player.num_owns,
+            //         num_commit: player.num_commit + (game.base_cost * PROPOSAL_FACTOR),
+            //         current_px: player.current_px - (game.base_cost * PROPOSAL_FACTOR),
+            //         last_date: get_block_timestamp(),
+            //         is_banned: false,
+            //     }),
+            // );
 
-            emit!(
-                world,
-                (Event::ProposalCreated(
-                    ProposalCreated {
-                        game_id,
-                        index: game.proposal_idx,
-                        proposal_type: proposal.proposal_type,
-                        target_args_1,
-                        target_args_2
-                    }
-                ))
-            );
-
+            world.emit_event(ProposalCreated { game_id, game.proposal_idx, proposal_type, target_args_1, target_args_2 });
             proposal.index
         }
 
-
         fn activate_proposal(
-            ref world: IWorldDispatcher, game_id: usize, index: usize, clear_data: Span<Position>
+            ref self: ContractState, game_id: usize, index: usize, clear_data: Span<Position>
         ) {
             // get the proposal
-            let mut proposal = get!(world, (game_id, index), (Proposal));
-            let game = get!(world, (game_id), (Game));
+            let mut world = self.world(@"pixelaw");
+            let mut proposal: Proposal = world.read_model(game_id, index);
+            let mut game: Game = world.read_model(game_id);
             let current_timestamp = get_block_timestamp();
             assert(current_timestamp >= proposal.end, 'proposal period has not ended');
             assert(proposal.yes_px >= NEEDED_YES_PX, 'did not reach minimum yes_px');
             assert(proposal.yes_px > proposal.no_px, 'yes_px is not more than no_px');
             assert(proposal.is_activated == false, 'this is already activated');
             assert(check_game_status(game.status()), 'game is not ongoing');
-
+            
             // activate the proposal.
             if proposal.proposal_type == 1 {
-                // AddNewColor
-                // new feature: if the color is added, the oldest color become unusable.
-
-                let new_color: u32 = proposal.target_args_1;
-                let mut new_color_allowed = get!(world, (game_id, new_color), (AllowedColor));
-
-                // only change it if it's not allowed
-                if !new_color_allowed.is_allowed {
-                    new_color_allowed.is_allowed = !new_color_allowed.is_allowed;
-
-                    set!(world, (new_color_allowed));
-
-                    // check if color already is in the palette
-                    let is_in_palette = get!(world, (game_id, new_color), (InPalette));
-
-                    // if aready in the palette early return
-                    if is_in_palette.value {
-                        return;
-                    }
-
-                    let mut game_palette = get!(world, (game_id), (GamePalette));
-
-                    // check if there's less colors in place
-                    if game_palette.length < 9 {
-                        set!(
-                            world,
-                            (
-                                PaletteColors {
-                                    game_id, idx: game_palette.length, color: new_color
-                                },
-                                InPalette { game_id, color: new_color, value: true },
-                                GamePalette { game_id, length: game_palette.length + 1 }
-                            )
-                        );
-                    } else {
-                        // get 0 idx
-                        let oldest_color = get!(world, (game_id, 0), (PaletteColors));
-
-                        let mut idx = 1;
-
-                        loop {
-                            let palette_color = get!(world, (game_id, idx), (PaletteColors));
-
-                            set!(
-                                world,
-                                (PaletteColors {
-                                    game_id, idx: idx - 1, color: palette_color.color
-                                })
-                            );
-
-                            idx = idx + 1;
-
-                            if idx == 9 {
-                                break;
-                            };
-                        };
-
-                        set!(
-                            world,
-                            (
-                                InPalette { game_id, color: oldest_color.color, value: false },
-                                InPalette { game_id, color: new_color, value: true },
-                                PaletteColors { game_id, idx: 8, color: new_color },
-                                // make it unusable
-                                AllowedColor {
-                                    game_id, color: oldest_color.color, is_allowed: false
-                                },
-                            )
-                        );
-                    };
-                };
+                add_new_color(world, game_id, index, game, proposal);
             } else if proposal.proposal_type == 2 {
-                // Reset to white by color
-                let core_actions = get_core_actions(
-                    world
-                ); // TODO: should we use p_war_actions insted of core_actions???
-                let system = get_caller_address();
-
-                let target_args_1: u32 = proposal.target_args_1;
-
-                let mut idx: usize = 0;
-
-                loop {
-                    let pixel_to_clear = clear_data.get(idx);
-
-                    if let Option::None = pixel_to_clear {
-                        break;
-                    }
-
-                    let pixel_to_clear = *clear_data.at(idx);
-
-                    let pixel_info = get!(world, (pixel_to_clear.x, pixel_to_clear.y), (Pixel));
-
-                    if pixel_info.color == target_args_1 {
-                        // make it white
-                        core_actions
-                            .update_pixel(
-                                get_caller_address(), // is it okay?
-                                system,
-                                PixelUpdate {
-                                    x: pixel_to_clear.x,
-                                    y: pixel_to_clear.y,
-                                    color: Option::Some(0xffffffff),
-                                    timestamp: Option::None,
-                                    text: Option::None,
-                                    app: Option::Some(system),
-                                    owner: Option::None,
-                                    action: Option::None
-                                }
-                            );
-
-                        // decrease the previous owner's num_owns
-                        let position = Position { x: pixel_to_clear.x, y: pixel_to_clear.y };
-                        let previous_pwarpixel = get!(world, (position), (PWarPixel));
-
-                        if (previous_pwarpixel.owner != starknet::contract_address_const::<0x0>()) {
-                            // get the previous player's info
-                            let mut previous_player = get!(
-                                world, (previous_pwarpixel.owner), (Player)
-                            );
-
-                            previous_player.num_owns -= 1;
-                            set!(world, (previous_player));
-                        };
-                    };
-                    idx += 1;
-                };
+                reset_to_white(world, game_id, index, game, proposal, clear_data)
             } else if proposal.proposal_type == 3 { // ProposalType::ExtendGameEndTime
-                let mut game = get!(world, (game_id), (Game));
-                // let mut board = get!(
-                //     world,
-                //     (game_id),
-                //     (Board)
-                // );
-
+                let mut game: Game = world.read_model(game_id);
                 game.end += proposal.target_args_1.into();
-
-                set!(world, (game,));
+                world.write_model(@game);
             } else if proposal.proposal_type == 4 { // ProposalType::ExpandArea
-                let mut board = get!(world, (game_id), (Board));
+                let mut board: Board = world.read_model(game_id);
                 board.width += proposal.target_args_1.try_into().unwrap();
                 board.height += proposal.target_args_2.try_into().unwrap();
-                set!(world, (board,));
+                world.write_model(@board);
             } else {
                 return;
             };
@@ -302,20 +165,8 @@ mod propose_actions {
             // make it activated.
             proposal.is_activated = true;
 
-            set!(world, (proposal));
-
-            emit!(
-                world,
-                (Event::ProposalActivated(
-                    ProposalActivated {
-                        game_id,
-                        index,
-                        proposal_type: proposal.proposal_type,
-                        target_args_1: proposal.target_args_1,
-                        target_args_2: proposal.target_args_2
-                    }
-                ))
-            );
+            world.write_model(@proposal);
+            world.emit_event(@ProposalActivated {game_id, index, proposal.proposal_type, proposal.target_args_1, proposal.target_args_2})
             // // Qustion: should we panish the author if the proposal is denied?
         // // add author's commitment points
         // let mut author = get!(
@@ -329,6 +180,134 @@ mod propose_actions {
         //     world,
         //     (author)
         // );
+        }
+
+        // add new color to the palette, if the color is added, the oldest color become unusable.
+        fn add_new_color(
+            ref self: ContractState, game_id: usize, index: usize, game: Game, proposal: Proposal
+        ) {
+            assert(proposal.proposal_type == 1, 'this is not add new color proposal');
+            let mut world = self.world(@"pixelaw");
+            let new_color: u32 = proposal.target_args_1;
+            let mut new_color_allowed: AllowedColor = world.read_model(game_id, new_color);
+            // only change it if it's not allowed
+            if !new_color_allowed.is_allowed {
+                new_color_allowed.is_allowed = !new_color_allowed.is_allowed;
+                world.write_model(@new_color_allowed);
+
+                // check if color already is in the palette
+                let mut is_in_palette: InPalette = world.read_model(game_id, new_color);
+                // if aready in the palette early return
+                if is_in_palette.value {
+                    return;
+                }
+
+                let mut game_palette: GamePalette = world.read_model(game_id);
+
+                // check if there's less colors in place
+                if game_palette.length < 9 {
+                    is_in_palette.value = true;
+                    world.write_model(@is_in_palette);
+
+                    let mut palette_color: PaletteColors = world.read_model(game_id, game_palette.length);
+                    palette_color.color = new_color;
+                    world.write_model(@palette_color);
+
+                    game_palette.length += 1;
+                    world.write_model(@game_palette);
+                } else {
+                    // get 0 idx
+                    let oldest_color: PaletteColors = world.read_model(game_id, 0);
+                    let mut idx = 1;
+
+                    loop {
+                        let palette_color: PaletteColors = world.read_model(game_id, idx);
+                        palette_color.idx = idx - 1;
+                        palette_color.color = palette_color.color;
+                        world.write_model(@palette_color);
+
+                        idx = idx + 1;
+                        if idx == 9 {
+                            break;
+                        };
+                    };
+
+                    let mut old_in_pallet: InPalette = world.read_model(game_id, oldest_color.color);
+                    old_in_pallet.value = false;
+                    world.write_model(@old_in_pallet);
+
+                    is_in_palette.value = true;
+                    world.write_model(@is_in_palette);
+
+                    let mut old_color_allowed: AllowedColor = world.read_model(game_id, oldest_color.color);
+                    old_color_allowed.is_allowed = false;
+                    world.write_model(@old_color_allowed);
+
+
+                    //feel like the below is not needed
+                    //PaletteColors { game_id, idx: 8, color: new_color }
+                };
+            };
+        }
+
+        fn reset_to_white(
+            ref self: ContractState, game_id: usize, index: usize, game: Game, proposal: Proposal, clear_data: Span<Position>
+        ) {
+            assert(proposal.proposal_type == 2, 'this is not reset to white proposal');
+            let mut world = self.world(@"pixelaw");
+            // Reset to white by color
+            let core_actions = get_core_actions(
+                world
+            ); // TODO: should we use p_war_actions insted of core_actions???
+            let system = get_caller_address();
+
+            let target_args_1: u32 = proposal.target_args_1;
+
+            let mut idx: usize = 0;
+
+            loop {
+                let pixel_to_clear = clear_data.get(idx);
+
+                if let Option::None = pixel_to_clear {
+                    break;
+                }
+
+                let pixel_to_clear = *clear_data.at(idx);
+
+                let pixel_info: Pixel = world.read_model(pixel_to_clear.x, pixel_to_clear.y);
+
+                if pixel_info.color == target_args_1 {
+                    // make it white
+                    core_actions
+                        .update_pixel(
+                            get_caller_address(), // is it okay?
+                            system,
+                            PixelUpdate {
+                                x: pixel_to_clear.x,
+                                y: pixel_to_clear.y,
+                                color: Option::Some(0xffffffff),
+                                timestamp: Option::None,
+                                text: Option::None,
+                                app: Option::Some(system),
+                                owner: Option::None,
+                                action: Option::None
+                            }
+                        );
+
+                    // decrease the previous owner's num_owns
+                    let position = Position { x: pixel_to_clear.x, y: pixel_to_clear.y };
+                    let previous_pwarpixel: PWarPixel = world.read_model(position);
+
+                    if (previous_pwarpixel.owner != starknet::contract_address_const::<0x0>()) {
+                        // get the previous player's info
+                        let mut previous_player: Player = world.read_model(previous_pwarpixel.owner);
+
+                        previous_player.num_owns -= 1;
+                        world.write_model(@previous_player);
+                    };
+                };
+                idx += 1;
+            };
         }
     }
 }

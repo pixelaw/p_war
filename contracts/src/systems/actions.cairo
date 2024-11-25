@@ -7,19 +7,18 @@ use pixelaw::core::utils::DefaultParameters;
 use starknet::ContractAddress;
 
 // define the interface
-#[dojo::interface]
-trait IActions {
-    fn init(ref world: IWorldDispatcher);
-    fn interact(ref world: IWorldDispatcher, default_params: DefaultParameters);
-    fn create_game(ref world: IWorldDispatcher, origin: Position) -> usize;
-    fn set_guild_contract_address(ref world: IWorldDispatcher, game_id: usize, address: ContractAddress);
-    fn create_game_guilds(ref world: IWorldDispatcher, game_id: usize);
-    fn get_game_id(world: @IWorldDispatcher, position: Position) -> usize;
+#[starknet::interface]
+pub trait IActions<T> {
+    fn init(ref self: T);
+    fn interact(ref self: T, default_params: DefaultParameters);
+    fn create_game(ref self: T, origin: Position) -> usize;
+    fn create_game_guilds(ref self: T, game_id: usize, guild_address: ContractAddress) -> Array<usize>;
+    fn get_game_id(self: @T, position: Position) -> usize;
     fn place_pixel(
-        ref world: IWorldDispatcher, app: ContractAddress, default_params: DefaultParameters
+        ref self: T, app: ContractAddress, default_params: DefaultParameters
     );
-    fn update_pixel(ref world: IWorldDispatcher, pixel_update: PixelUpdate);
-    fn end_game(ref world: IWorldDispatcher, game_id: usize);
+    fn update_pixel(ref self: T, pixel_update: PixelUpdate);
+    fn end_game(ref self: T, game_id: usize);
 }
 
 // dojo decorator
@@ -58,15 +57,6 @@ mod p_war_actions {
         EndedGame: EndedGame
     }
 
-    #[derive(Copy, Drop, Serde)]
-    #[dojo::event]
-    #[dojo::model]
-    struct GuildContractAddress {
-        #[key]
-        game_id: usize,
-        address: ContractAddress,
-    }
-
     #[derive(Drop, Serde, starknet::Event)]
     struct StartedGame {
         id: usize,
@@ -82,31 +72,8 @@ mod p_war_actions {
     }
 
     #[abi(embed_v0)]
-    impl ActionsInteroperability of IInteroperability<ContractState> {
-        fn on_pre_update(
-            ref world: IWorldDispatcher,
-            pixel_update: PixelUpdate,
-            app_caller: App,
-            player_caller: ContractAddress
-        ) {
-            // do nothing
-            let _world = world;
-        }
-
-        fn on_post_update(
-            ref world: IWorldDispatcher,
-            pixel_update: PixelUpdate,
-            app_caller: App,
-            player_caller: ContractAddress
-        ) {
-            // do nothing
-            let _world = world;
-        }
-    }
-
-    #[abi(embed_v0)]
     impl AllowedAppImpl of IAllowedApp<ContractState> {
-        fn set_pixel(default_params: DefaultParameters) {
+        fn set_pixel(ref self: ContractState, default_params: DefaultParameters) {
             let actions = IActionsDispatcher { contract_address: get_contract_address() };
             actions
                 .update_pixel(
@@ -126,12 +93,13 @@ mod p_war_actions {
 
     #[abi(embed_v0)]
     impl ActionsImpl of IActions<ContractState> {
-        fn init(ref world: IWorldDispatcher) {
-            let core_actions = get_core_actions(world);
+        fn init(ref self: ContractState) {
+            let mut world = self.world(@"pixelaw");
+            let core_actions = self.get_core_actions();
             core_actions.new_app(contract_address_const::<0>(), APP_KEY, APP_ICON);
         }
 
-        fn interact(ref world: IWorldDispatcher, default_params: DefaultParameters) {
+        fn interact(ref self: ContractState, default_params: DefaultParameters) {
             let position = Position { x: default_params.position.x, y: default_params.position.y };
             let game_id = self.get_game_id(position);
             if game_id == 0 {
@@ -144,14 +112,16 @@ mod p_war_actions {
             };
         }
 
-        fn get_game_id(world: @IWorldDispatcher, position: Position) -> usize {
+        fn get_game_id(self: @ContractState, position: Position) -> usize {
+            let mut world = self.world(@"pixelaw");
             let mut id = world.uuid();
             if id == 0 {
                 return 0;
             };
 
             // set id as GAME_ID=1
-            let board = get!(world, (GAME_ID), (Board));
+            // let board = get!(world, (GAME_ID), (Board)); this is the pre-dojo 1.0.0 implementation
+            let board = world.read_model(GAME_ID);
 
             if position.x < board.origin.x || position.x >= board.origin.x
                 + board.width || position.y < board.origin.y || position.y >= board.origin.y
@@ -161,13 +131,8 @@ mod p_war_actions {
             return 1;
         }
 
-        fn set_guild_contract_address(ref world: IWorldDispatcher, game_id: usize, address: ContractAddress) {
-            // Only allow the contract owner or an authorized address to set this
-            //assert(get_caller_address() == world.get_owner(), 'Unauthorized');
-            set!(world, (GuildContractAddress { game_id, address }));
-        }
-
-        fn create_game(ref world: IWorldDispatcher, origin: Position) -> usize {
+        fn create_game(ref self: ContractState, origin: Position) -> usize {
+            let mut world = self.world(@"pixelaw");
             println!("create_game BEGIN");
 
             // check if a game exists
@@ -203,49 +168,7 @@ mod p_war_actions {
 
             let board = Board { id, origin, width: DEFAULT_AREA, height: DEFAULT_AREA, };
 
-            // To make a bigger area, we deleted this part.
-            // // make sure that game board has been set with game id
-            // let mut y = origin.y;
-            // loop {
-            //     if y >= origin.y + DEFAULT_AREA {
-            //         break;
-            //     };
-            //     let mut x = origin.x;
-            //     loop {
-            //         if x >= origin.x + DEFAULT_AREA {
-            //             break;
-            //         };
-            //         core_actions
-            //             .update_pixel(
-            //                 player,
-            //                 system,
-            //                 PixelUpdate {
-            //                     x,
-            //                     y,
-            //                     color: Option::Some(INITIAL_COLOR),
-            //                     timestamp: Option::None,
-            //                     text: Option::None,
-            //                     app: Option::Some(system),
-            //                     owner: Option::None,
-            //                     action: Option::None
-            //                 }
-            //             );
-            //         set!(
-            //             world,
-            //             (
-            //                 GameId {
-            //                     x,
-            //                     y,
-            //                     value: id
-            //                 }
-            //             )
-            //         );
-            //         x += 1;
-            //     };
-            //     y += 1;
-            // };
-
-            set!(world, (game, board));
+            world.write_model(@game);
             println!("create_game 1");
             // add default colors (changed these to RGBA)
             let mut color_idx = 0;
@@ -264,69 +187,74 @@ mod p_war_actions {
                 if color_idx > 8 {
                     break;
                 };
-                set!(
-                    world,
-                    (
-                        AllowedColor { game_id: id, color: *a.at(color_idx), is_allowed: true, },
-                        PaletteColors { game_id: id, idx: color_idx, color: *a.at(color_idx), },
-                        InPalette { game_id: id, color: *a.at(color_idx), value: true }
-                    )
-                );
+                let allowed_color = AllowedColor { game_id: id, color: *a.at(color_idx), is_allowed: true };
+                let palette_colors = PaletteColors { game_id: id, idx: color_idx, color: *a.at(color_idx) };
+                let in_palette = InPalette { game_id: id, color: *a.at(color_idx), value: true };
+                world.write_model(@allowed_color);
+                world.write_model(@palette_colors);
+                world.write_model(@in_palette);
+
+                //is the above the correct implementation of the below?
+                // set!(
+                //     world,
+                //     (
+                //         AllowedColor { game_id: id, color: *a.at(color_idx), is_allowed: true, },
+                //         PaletteColors { game_id: id, idx: color_idx, color: *a.at(color_idx), },
+                //         InPalette { game_id: id, color: *a.at(color_idx), value: true }
+                //     )
+                // );
                 color_idx += 1;
             };
 
             println!("create_game 2");
             // set default recovery_rate
-            set!(
-                world,
-                (
-                    PixelRecoveryRate { game_id: id, rate: DEFAULT_RECOVERY_RATE, },
-                    GamePalette { game_id: id, length: 9 }
-                )
-            );
+            let pixel_recovery_rate = PixelRecoveryRate { game_id: id, rate: DEFAULT_RECOVERY_RATE };
+            let game_palette = GamePalette { game_id: id, length: 9 };
+            world.write_model(@pixel_recovery_rate);
+            world.write_model(@game_palette);
+            // set!(
+            //     world,
+            //     (
+            //         PixelRecoveryRate { game_id: id, rate: DEFAULT_RECOVERY_RATE, },
+            //         GamePalette { game_id: id, length: 9 }
+            //     )
+            // );
 
             println!("create_game 2.1");
             // recover px
-            recover_px(world, id, player);
-
-            self.create_game_guilds(id);           
+            recover_px(world, id, player);        
 
             id
             // emit event that game has started
         }
 
         // initialize guilds for the game
-        fn create_game_guilds(ref world: IWorldDispatcher, game_id: usize) {
-            let guild_address = get!(world, game_id, GuildContractAddress).address;
+        fn create_game_guilds(ref self: ContractState, game_id: usize, guild_address: ContractAddress) -> Array<usize> {
+            //let guild_address = get!(world, game_id, GuildContractAddress).address;
             let guild_dispatcher = IGuildDispatcher { contract_address: guild_address };
-            
-            guild_dispatcher.create_guild(game_id, 'Fire');
-            guild_dispatcher.create_guild(game_id, 'Water');
-            guild_dispatcher.create_guild(game_id, 'Earth');
-            guild_dispatcher.create_guild(game_id, 'Air');
-            // when initilaising pwar it needs a guild contract
-            // setter for guild contract
-            // secure pwar to not call the wrong  for guild contract
-            // modify initialising steps
+            let mut guild_ids = ArrayTrait::new();
+            guild_ids.append(guild_dispatcher.create_guild(game_id, 'Fire'));
+            guild_ids.append(guild_dispatcher.create_guild(game_id, 'Water'));
+            guild_ids.append(guild_dispatcher.create_guild(game_id, 'Earth'));
+            guild_ids.append(guild_dispatcher.create_guild(game_id, 'Air'));
+            guild_ids
         }
 
         // To paint, basically use this function.
         fn place_pixel(
-            ref world: IWorldDispatcher, app: ContractAddress, default_params: DefaultParameters
+            ref self: ContractState, app: ContractAddress, default_params: DefaultParameters
         ) {
+            let mut world = self.world(@"pixelaw");
             let position = Position { x: default_params.position.x, y: default_params.position.y };
-
-            // let game_id = get!(world, (default_params.position.x, default_params.position.y),
-            // GameId);
             let game_id = self.get_game_id(position);
             assert(game_id != 0, 'this game does not exist');
 
-            let allowed_color = get!(world, (game_id, default_params.color), (AllowedColor));
+            let allowed_color: AllowedColor = world.read_model((game_id, default_params.color));
             assert(
                 allowed_color.is_allowed, 'color is not allowed'
             ); // cannot test correctly without cheatcodes.
 
-            let allowed_app = get!(world, (game_id, app), (AllowedApp));
+            let allowed_app: AllowedApp = world.read_model((game_id, app));
             assert(app.is_zero() || allowed_app.is_allowed, 'app is not allowed');
 
             let contract_address = if app.is_zero() {
@@ -343,10 +271,10 @@ mod p_war_actions {
             recover_px(world, game_id, player_address);
 
             // if this is first time for the caller, let's set initial px.
-            let mut player = get!(world, (player_address), (Player));
+            let mut player: Player = world.read_model(player_address);
 
             // get the game info
-            let game = get!(world, (game_id), (Game));
+            let game: Game = world.read_model(game_id);
 
             // check the current px is eq or larger than cost_paint
             assert(player.current_px >= game.base_cost, 'not enough PX');
@@ -359,53 +287,48 @@ mod p_war_actions {
 
             app.set_pixel(default_params);
 
-            set!(
-                world,
-                (Player {
-                    address: player.address,
-                    max_px: player.max_px,
-                    num_owns: player.num_owns + 1,
-                    num_commit: player.num_commit + game.base_cost,
-                    current_px: player.current_px - game.base_cost,
-                    last_date: get_block_timestamp(),
-                    is_banned: false,
-                }),
-            );
+            player.num_owns += 1;
+            player.num_commit += game.base_cost;
+            player.current_px -= game.base_cost;
+            player.last_date = get_block_timestamp();
+            world.write_model(@player);
 
             // get the previous owner of PWarPixel
             let position = Position { x: default_params.position.x, y: default_params.position.y };
-            let previous_pwarpixel = get!(world, (position), (PWarPixel));
+            let mut previous_pwarpixel: PWarPixel = world.read_model(position);
 
             if (previous_pwarpixel.owner != contract_address_const::<0x0>()
                 && previous_pwarpixel.owner != player.address) {
                 // get the previous player's info
-                let mut previous_player = get!(world, (previous_pwarpixel.owner), (Player));
-
+                let mut previous_player: Player = world.read_model(previous_pwarpixel.owner);
                 // decrease the previous player's num_owns
                 previous_player.num_owns -= 1;
-                set!(world, (previous_player));
+                world.write_model(@previous_player);
             }
 
             // set the new owner of PWarPixel
-            set!(world, (PWarPixel { position: position, owner: player.address }),);
+            previous_pwarpixel.owner = player.address;
+            world.write_model(@previous_pwarpixel);
+            //set!(world, (PWarPixel { position: position, owner: player.address }),);
 
-            update_max_px(world, game_id, player.address);
+            self.update_max_px(game_id, player.address);
         }
 
         // only use for expand areas.
-        fn update_pixel(ref world: IWorldDispatcher, pixel_update: PixelUpdate) {
+        fn update_pixel(ref self: ContractState, pixel_update: PixelUpdate) {
+            let mut world = self.world(@"pixelaw");
             assert(get_caller_address() == get_contract_address(), 'invalid caller');
-
             let player_address = get_tx_info().unbox().account_contract_address;
             let system = get_contract_address();
-            let core_actions = get_core_actions(world);
+            let core_actions = self.get_core_actions();
 
             core_actions.update_pixel(player_address, system, pixel_update);
         }
 
-        fn end_game(ref world: IWorldDispatcher, game_id: usize) {
+        fn end_game(ref self: ContractState, game_id: usize) {
             // check if the time is expired.
-            let mut game = get!(world, (game_id), (Game));
+            let mut world = self.world(@"pixelaw");
+            let mut game: Game = world.read_model(game_id);
             assert(get_block_timestamp() >= game.end, 'game is not ended');
 
             // TODO: emit the status??
@@ -434,7 +357,7 @@ mod p_war_actions {
 
             game.winner = winner;
 
-            set!(world, (game));
+            world.write_model(@game);
             // TODO: emit the winner!
         }
     }

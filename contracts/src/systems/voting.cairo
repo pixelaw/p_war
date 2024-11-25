@@ -1,5 +1,5 @@
 // define the interface
-#[dojo::interface]
+#[starknet::interface]
 trait IVoting {
     fn vote(
         ref world: IWorldDispatcher, game_id: usize, index: usize, use_px: u32, is_in_favor: bool
