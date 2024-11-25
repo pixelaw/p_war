@@ -10,10 +10,11 @@ use starknet::{
     ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
 };
 
-fn update_max_px(world: IWorldDispatcher, game_id: usize, player_address: ContractAddress) {
-    let mut player = get!(world, (player_address), (Player));
+fn update_max_px(ref self: ContractState, game_id: usize, player_address: ContractAddress) {
+    let mut world = self.world(@"pixelaw");
+    let mut player: Player = world.read_model(player_address);
 
-    let game = get!(world, (game_id), (Game));
+    let game: Game = world.read_model(game_id);
 
     let mut max_px = game.const_val
         + game.coeff_own_pixels * player.num_owns
@@ -34,13 +35,14 @@ fn update_max_px(world: IWorldDispatcher, game_id: usize, player_address: Contra
 
     player.max_px = max_px;
 
-    set!(world, (player));
+    world.write_model(@player);
 }
 
-fn recover_px(world: IWorldDispatcher, game_id: usize, player_address: ContractAddress) {
+fn recover_px(ref self: ContractState, game_id: usize, player_address: ContractAddress) {
+    let mut world = self.world(@"pixelaw");
     update_max_px(world, game_id, player_address);
 
-    let mut player = get!(world, (player_address), (Player));
+    let mut player: Player = world.read_model(player_address);
 
     println!("create_game 3");
     let recovery_rate = get!(world, (game_id), (PixelRecoveryRate));
@@ -65,15 +67,16 @@ fn recover_px(world: IWorldDispatcher, game_id: usize, player_address: ContractA
     print!("## RECOVER_PXS: {} ##\n", recover_pxs);
     print!("## CURRENT PX: {} ##\n", player.current_px);
 
-    set!(world, (player));
+    world.write_model(@player);
 }
 
 fn check_game_status(status: Status) -> bool {
     status == Status::Pending || status == Status::Ongoing
 }
 
-fn is_member(world: IWorldDispatcher, game_id: usize, guild_id: usize, member: ContractAddress) -> bool {
-    let guild = get!(world, (game_id, guild_id), (Guild));
+fn is_member(ref self: ContractState, game_id: usize, guild_id: usize, member: ContractAddress) -> bool {
+    let mut world = self.world(@"pixelaw");
+    let guild: Guild = world.read_model(game_id, guild_id);
     let mut is_member = false;
     let mut i = 0;
     loop {
