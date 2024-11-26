@@ -15,6 +15,9 @@ pub trait IPayments<T> {
 mod payments {
     // use super::*;
 
+    use dojo::model::{ModelStorage, ModelValueStorage};
+    use dojo::event::EventStorage;
+
     const PRIZE_POOL_PERCENTAGE: u256 = 90;
     const TREASURY_PERCENTAGE: u256 = 10;
 

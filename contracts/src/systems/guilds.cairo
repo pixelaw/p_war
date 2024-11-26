@@ -15,6 +15,7 @@ pub trait IGuild<T> {
     fn remove_member(
         ref self: T, game_id: usize, guild_id: usize, member: ContractAddress
     );
+    fn is_member(ref self: T, game_id: usize, guild_id: usize, member: ContractAddress) -> bool;
     fn get_guild_contract_address(ref self: T) -> ContractAddress;
     fn get_guild_points(ref self: T, game_id: usize, guild_id: usize) -> usize;
 }
@@ -28,8 +29,8 @@ mod guild_actions {
     use starknet::{
         ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
     };
-    use p_war::systems::utils::{is_member};
-
+    use dojo::model::{ModelStorage, ModelValueStorage};
+    use dojo::event::EventStorage;
     use super::{IGuild};
 
     #[derive(Drop, Serde, starknet::Event)]
@@ -109,9 +110,10 @@ mod guild_actions {
             println!("new_guild.guild_id: {}", new_guild.guild_id);
 
             // Save the guild and update the game
-            world.write_model(@guild);
+            world.write_model(@new_guild);
             println!("set guild");
-            world.emit_event(GuildCreated {game_id, guild_id, guild_name, caller});
+            let caller = get_caller_address();
+            world.emit_event(@GuildCreated {game_id, guild_id, guild_name, creator: caller});
             guild_id
         }
 
@@ -125,13 +127,13 @@ mod guild_actions {
             let caller = get_caller_address();
 
             // Get the guild
-            let mut guild: Guild = world.read_model(game_id, guild_id);
+            let mut guild: Guild = world.read_model((game_id, guild_id));
 
             // Check if the caller is the creator
             assert(guild.creator == caller, 'Only creator can add members');
 
             // Check if the member is not already in the guild
-            let is_member = self.is_member(game_id, guild_id, new_member);
+            let is_member = self.is_member((game_id, guild_id, new_member));
             assert(is_member == false, 'New Member already in guild');
 
             // Create a new Array and populate it with existing guild_ids
@@ -156,7 +158,7 @@ mod guild_actions {
 
             // Save the updated guild
             world.write_model(@guild);
-            world.emit_event(@MemberAdded { game_id, guild_id, new_member });
+            world.emit_event(@MemberAdded { game_id, guild_id, member: new_member });
         }
 
         fn join_guild(ref self: ContractState, game_id: usize, guild_id: usize) {
@@ -173,7 +175,7 @@ mod guild_actions {
             let caller = get_caller_address();
 
             // Get the guild
-            let mut guild: Guild = world.read_model(game_id, guild_id);
+            let mut guild: Guild = world.read_model((game_id, guild_id));
 
             // Check if the caller is the creator
             assert(guild.creator == caller, 'Only creator can remove members');
@@ -204,6 +206,24 @@ mod guild_actions {
             world.emit_event(@MemberRemoved {game_id, guild_id, member})
         }
 
+        fn is_member(ref self: ContractState, game_id: usize, guild_id: usize, member: ContractAddress) -> bool {
+            let mut world = self.world(@"pixelaw");
+            let guild: Guild = world.read_model((game_id, guild_id));
+            let mut is_member = false;
+            let mut i = 0;
+            loop {
+                if i == guild.members.len() {
+                    break;
+                }
+                if guild.members.at(i) == @member {
+                    is_member = true;
+                    break;
+                }
+                i += 1;
+            };
+            is_member
+        }
+
         fn get_guild_contract_address(ref self: ContractState) -> ContractAddress {
             let guild_contract_address = get_contract_address();
             
@@ -213,7 +233,7 @@ mod guild_actions {
         fn get_guild_points(ref self: ContractState , game_id: usize, guild_id: usize) -> usize {
             // Get the guild
             let mut world = self.world(@"pixelaw");
-            let mut guild: Guild = world.read_model(game_id, guild_id);
+            let mut guild: Guild = world.read_model((game_id, guild_id));
 
             let mut guild_total_points = 0;
             let mut i = 0;
@@ -222,7 +242,7 @@ mod guild_actions {
                 if i >= guild.member_count {
                     break;
                 }
-                let mut player: Player = world.read_model(*guild.members.at(i), game_id);
+                let mut player: Player = world.read_model((*guild.members.at(i), game_id));
                 println!("player.num_commit: {}", player.num_commit);
                 guild_total_points += player.num_commit;
                 i += 1;

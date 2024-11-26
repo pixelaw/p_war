@@ -1,4 +1,8 @@
-use p_war::models::{board::Position};
+use p_war::models::{
+    game::{Game, Status, GameTrait}, proposal::{Proposal, PixelRecoveryRate},
+    board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,
+    allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette}
+};
 
 // define the interface
 #[starknet::interface]
@@ -13,17 +17,14 @@ pub trait IPropose<T> {
     fn activate_proposal(
         ref self: T, game_id: usize, index: usize, clear_data: Span<Position>
     );
+    fn add_new_color(ref self: T, game_id: usize, index: usize, game: Game, proposal: Proposal);
+    fn reset_to_white(ref self: T, game_id: usize, index: usize, game: Game, proposal: Proposal, clear_data: Span<Position>);
 }
 
 // dojo decorator
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod propose_actions {
     use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_PX, DISASTER_SIZE, PROPOSAL_FACTOR};
-    use p_war::models::{
-        game::{Game, Status, GameTrait}, proposal::{Proposal, PixelRecoveryRate},
-        board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,
-        allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette}
-    };
     use p_war::systems::utils::{recover_px, check_game_status};
     use pixelaw::core::actions::{
         IActionsDispatcher as ICoreActionsDispatcher,
@@ -35,6 +36,13 @@ mod propose_actions {
         ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
     };
     use super::{IPropose};
+    use dojo::model::{ModelStorage, ModelValueStorage};
+    use dojo::event::EventStorage;
+    use p_war::models::{
+        game::{Game, Status, GameTrait}, proposal::{Proposal, PixelRecoveryRate},
+        board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,
+        allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette}
+    };
 
     #[derive(Drop, Serde, starknet::Event)]
     pub struct ProposalCreated {
@@ -78,7 +86,7 @@ mod propose_actions {
             let player_address = get_tx_info().unbox().account_contract_address;
 
             // recover px
-            recover_px(world, game_id, player_address);
+            recover_px(ref world, game_id, player_address);
 
             // if this is first time for the caller, let's set initial px.
             let mut player: Player = world.read_model(player_address);
@@ -108,7 +116,7 @@ mod propose_actions {
             world.write_model(@new_proposal);
             world.write_model(@game);
 
-            player.player.num_commit + (game.base_cost * PROPOSAL_FACTOR);
+            player.num_commit + (game.base_cost * PROPOSAL_FACTOR);
             player.current_px - (game.base_cost * PROPOSAL_FACTOR);
             world.write_model(@player);
 
@@ -126,8 +134,8 @@ mod propose_actions {
             //     }),
             // );
 
-            world.emit_event(ProposalCreated { game_id, game.proposal_idx, proposal_type, target_args_1, target_args_2 });
-            proposal.index
+            world.emit_event(@ProposalCreated { game_id, index: game.proposal_idx, proposal_type, target_args_1, target_args_2 });
+            new_proposal.index
         }
 
         fn activate_proposal(
@@ -135,7 +143,7 @@ mod propose_actions {
         ) {
             // get the proposal
             let mut world = self.world(@"pixelaw");
-            let mut proposal: Proposal = world.read_model(game_id, index);
+            let mut proposal: Proposal = world.read_model((game_id, index));
             let mut game: Game = world.read_model(game_id);
             let current_timestamp = get_block_timestamp();
             assert(current_timestamp >= proposal.end, 'proposal period has not ended');
@@ -166,7 +174,7 @@ mod propose_actions {
             proposal.is_activated = true;
 
             world.write_model(@proposal);
-            world.emit_event(@ProposalActivated {game_id, index, proposal.proposal_type, proposal.target_args_1, proposal.target_args_2})
+            world.emit_event(@ProposalActivated {game_id, index, proposal_type: proposal.proposal_type, target_args_1: proposal.target_args_1, target_args_2: proposal.target_args_2})
             // // Qustion: should we panish the author if the proposal is denied?
         // // add author's commitment points
         // let mut author = get!(
@@ -189,14 +197,14 @@ mod propose_actions {
             assert(proposal.proposal_type == 1, 'this is not add new color proposal');
             let mut world = self.world(@"pixelaw");
             let new_color: u32 = proposal.target_args_1;
-            let mut new_color_allowed: AllowedColor = world.read_model(game_id, new_color);
+            let mut new_color_allowed: AllowedColor = world.read_model((game_id, new_color));
             // only change it if it's not allowed
             if !new_color_allowed.is_allowed {
                 new_color_allowed.is_allowed = !new_color_allowed.is_allowed;
                 world.write_model(@new_color_allowed);
 
                 // check if color already is in the palette
-                let mut is_in_palette: InPalette = world.read_model(game_id, new_color);
+                let mut is_in_palette: InPalette = world.read_model((game_id, new_color));
                 // if aready in the palette early return
                 if is_in_palette.value {
                     return;
@@ -209,7 +217,7 @@ mod propose_actions {
                     is_in_palette.value = true;
                     world.write_model(@is_in_palette);
 
-                    let mut palette_color: PaletteColors = world.read_model(game_id, game_palette.length);
+                    let mut palette_color: PaletteColors = world.read_model((game_id, game_palette.length));
                     palette_color.color = new_color;
                     world.write_model(@palette_color);
 
@@ -217,13 +225,13 @@ mod propose_actions {
                     world.write_model(@game_palette);
                 } else {
                     // get 0 idx
-                    let oldest_color: PaletteColors = world.read_model(game_id, 0);
+                    let oldest_color: PaletteColors = world.read_model((game_id, 0));
                     let mut idx = 1;
 
                     loop {
-                        let palette_color: PaletteColors = world.read_model(game_id, idx);
+                        let current_palette_color: PaletteColors = world.read_model((game_id, idx));
                         palette_color.idx = idx - 1;
-                        palette_color.color = palette_color.color;
+                        palette_color.color = current_palette_color.color;
                         world.write_model(@palette_color);
 
                         idx = idx + 1;
@@ -232,14 +240,14 @@ mod propose_actions {
                         };
                     };
 
-                    let mut old_in_pallet: InPalette = world.read_model(game_id, oldest_color.color);
+                    let mut old_in_pallet: InPalette = world.read_model((game_id, oldest_color.color));
                     old_in_pallet.value = false;
                     world.write_model(@old_in_pallet);
 
                     is_in_palette.value = true;
                     world.write_model(@is_in_palette);
 
-                    let mut old_color_allowed: AllowedColor = world.read_model(game_id, oldest_color.color);
+                    let mut old_color_allowed: AllowedColor = world.read_model((game_id, oldest_color.color));
                     old_color_allowed.is_allowed = false;
                     world.write_model(@old_color_allowed);
 
@@ -256,9 +264,7 @@ mod propose_actions {
             assert(proposal.proposal_type == 2, 'this is not reset to white proposal');
             let mut world = self.world(@"pixelaw");
             // Reset to white by color
-            let core_actions = get_core_actions(
-                world
-            ); // TODO: should we use p_war_actions insted of core_actions???
+            let core_actions = get_core_actions(ref world); // TODO: should we use p_war_actions insted of core_actions???
             let system = get_caller_address();
 
             let target_args_1: u32 = proposal.target_args_1;
@@ -274,7 +280,7 @@ mod propose_actions {
 
                 let pixel_to_clear = *clear_data.at(idx);
 
-                let pixel_info: Pixel = world.read_model(pixel_to_clear.x, pixel_to_clear.y);
+                let pixel_info: Pixel = world.read_model((pixel_to_clear.x, pixel_to_clear.y));
 
                 if pixel_info.color == target_args_1 {
                     // make it white

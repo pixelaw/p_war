@@ -35,20 +35,23 @@ mod p_war_actions {
         allowed_app::AllowedApp
     };
     use p_war::systems::guilds::{IGuildDispatcher, IGuildDispatcherTrait};
-    use p_war::systems::apps::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
     use p_war::systems::utils::{recover_px, update_max_px, check_game_status};
     use pixelaw::core::actions::{
         IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
     use pixelaw::core::models::{pixel::PixelUpdate, registry::App};
-    use pixelaw::core::traits::IInteroperability;
-    use pixelaw::core::utils::{get_core_actions, DefaultParameters, Position};
     use starknet::{
         ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info,
         contract_address_const,
     };
     use super::{IActions, IActionsDispatcher, IActionsDispatcherTrait};
+    use dojo::model::{ModelStorage, ModelValueStorage};
+    use dojo::world::WorldStorageTrait;
+    use dojo::event::EventStorage;
+    use pixelaw::core::utils::{
+        get_callers, get_core_actions, Direction, Position, DefaultParameters
+    };
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -95,7 +98,7 @@ mod p_war_actions {
     impl ActionsImpl of IActions<ContractState> {
         fn init(ref self: ContractState) {
             let mut world = self.world(@"pixelaw");
-            let core_actions = self.get_core_actions();
+            let core_actions = get_core_actions(ref world);
             core_actions.new_app(contract_address_const::<0>(), APP_KEY, APP_ICON);
         }
 
@@ -121,11 +124,11 @@ mod p_war_actions {
 
             // set id as GAME_ID=1
             // let board = get!(world, (GAME_ID), (Board)); this is the pre-dojo 1.0.0 implementation
-            let board = world.read_model(GAME_ID);
+            let board: Board = world.read_model(GAME_ID);
 
             if position.x < board.origin.x || position.x >= board.origin.x
-                + board.width || position.y < board.origin.y || position.y >= board.origin.y
-                + board.height {
+                + board.width.into() || position.y < board.origin.y || position.y >= board.origin.y
+                + board.height.into() {
                 return OUT_OF_BOUNDS_GAME_ID; // OUT_OF_BOUNDS_GAME_ID for out of bounds
             };
             return 1;
@@ -147,9 +150,7 @@ mod p_war_actions {
             let mut id = GAME_ID; // set as a constant for now.
 
             let start = get_block_timestamp();
-            // let core_actions = get_core_actions(world);
             let player = get_caller_address();
-            // let system = get_contract_address();
 
             let game = Game {
                 id,
@@ -222,7 +223,7 @@ mod p_war_actions {
 
             println!("create_game 2.1");
             // recover px
-            recover_px(world, id, player);        
+            recover_px(ref world, id, player);        
 
             id
             // emit event that game has started
@@ -268,7 +269,7 @@ mod p_war_actions {
             let player_address = get_tx_info().unbox().account_contract_address;
 
             // recover px
-            recover_px(world, game_id, player_address);
+            recover_px(ref world, game_id, player_address);
 
             // if this is first time for the caller, let's set initial px.
             let mut player: Player = world.read_model(player_address);
@@ -320,9 +321,9 @@ mod p_war_actions {
             assert(get_caller_address() == get_contract_address(), 'invalid caller');
             let player_address = get_tx_info().unbox().account_contract_address;
             let system = get_contract_address();
-            let core_actions = self.get_core_actions();
+            let core_actions = get_core_actions(ref world);
 
-            core_actions.update_pixel(player_address, system, pixel_update);
+            core_actions.update_pixel(player_address, system, pixel_update, Option::None, false);
         }
 
         fn end_game(ref self: ContractState, game_id: usize) {

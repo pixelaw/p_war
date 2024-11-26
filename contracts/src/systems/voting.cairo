@@ -1,8 +1,8 @@
 // define the interface
 #[starknet::interface]
-trait IVoting {
+pub trait IVoting<T> {
     fn vote(
-        ref world: IWorldDispatcher, game_id: usize, index: usize, use_px: u32, is_in_favor: bool
+        ref self: T, game_id: usize, index: usize, use_px: u32, is_in_favor: bool
     );
 }
 
@@ -13,6 +13,8 @@ mod voting_actions {
     use p_war::systems::utils::{recover_px, update_max_px};
     use starknet::{ContractAddress, get_caller_address, get_block_timestamp};
     use super::IVoting;
+    use dojo::model::{ModelStorage, ModelValueStorage};
+    use dojo::event::EventStorage;
 
     #[derive(Drop, Serde, starknet::Event)]
     pub struct Voted {
@@ -40,11 +42,11 @@ mod voting_actions {
         ) {
             let mut world = self.world(@"pixelaw");
             let player_address = get_caller_address();
-            let mut proposal: Proposal = world.read_model(game_id, index);
-            let mut player_vote: PlayerVote = world.read_model(player_address, game_id, index);
+            let mut proposal: Proposal = world.read_model((game_id, index));
+            let mut player_vote: PlayerVote = world.read_model((player_address, game_id, index));
             assert(player_vote.px == 0, 'player already voted');
 
-            recover_px(world, game_id, player_address);
+            recover_px(ref world, game_id, player_address);
 
             let mut player: Player = world.read_model(player_address);
 
@@ -72,7 +74,7 @@ mod voting_actions {
 
             self.update_max_px(game_id, player_address);
 
-            world.emit_event(Voted {game_id, index, get_block_timestamp(), player_address, is_in_favor});
+            world.emit_event(@Voted {game_id, index, timestamp: get_block_timestamp(), voter: player_address, is_in_favor});
         }
     }
 }

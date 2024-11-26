@@ -9,6 +9,8 @@ use p_war::models::{
 use starknet::{
     ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
 };
+use dojo::model::{ModelStorage, ModelValueStorage};
+use dojo::event::EventStorage;
 
 fn update_max_px(ref self: ContractState, game_id: usize, player_address: ContractAddress) {
     let mut world = self.world(@"pixelaw");
@@ -40,12 +42,12 @@ fn update_max_px(ref self: ContractState, game_id: usize, player_address: Contra
 
 fn recover_px(ref self: ContractState, game_id: usize, player_address: ContractAddress) {
     let mut world = self.world(@"pixelaw");
-    update_max_px(world, game_id, player_address);
+    update_max_px(ref world, game_id, player_address);
 
     let mut player: Player = world.read_model(player_address);
 
     println!("create_game 3");
-    let recovery_rate = get!(world, (game_id), (PixelRecoveryRate));
+    let recovery_rate: PixelRecoveryRate = world.read_model(game_id);
 
     println!("create_game 4");
     let current_time = get_block_timestamp();
@@ -72,22 +74,4 @@ fn recover_px(ref self: ContractState, game_id: usize, player_address: ContractA
 
 fn check_game_status(status: Status) -> bool {
     status == Status::Pending || status == Status::Ongoing
-}
-
-fn is_member(ref self: ContractState, game_id: usize, guild_id: usize, member: ContractAddress) -> bool {
-    let mut world = self.world(@"pixelaw");
-    let guild: Guild = world.read_model(game_id, guild_id);
-    let mut is_member = false;
-    let mut i = 0;
-    loop {
-        if i == guild.members.len() {
-            break;
-        }
-        if guild.members.at(i) == @member {
-            is_member = true;
-            break;
-        }
-        i += 1;
-    };
-    is_member
 }
