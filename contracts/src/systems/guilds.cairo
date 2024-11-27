@@ -30,39 +30,37 @@ mod guild_actions {
         ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
     };
     use dojo::model::{ModelStorage, ModelValueStorage};
+    use dojo::world::WorldStorageTrait;
     use dojo::event::EventStorage;
     use super::{IGuild};
-
-    #[derive(Drop, Serde, starknet::Event)]
-    pub struct GuildCreated {
+    
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::event]
+    struct GuildCreated {
+        #[key]
         game_id: usize,
         guild_id: usize,
         guild_name: felt252,
-        creator: ContractAddress,
+        creator: ContractAddress
     }
-
-    #[derive(Drop, Serde, starknet::Event)]
-    pub struct MemberAdded {
+    
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::event]
+    struct MemberAdded {
+        #[key]
         game_id: usize,
         guild_id: usize,
-        member: ContractAddress,
+        member: ContractAddress
     }
-
-    #[derive(Drop, Serde, starknet::Event)]
-    pub struct MemberRemoved {
+    
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::event]
+    struct MemberRemoved {
+        #[key]
         game_id: usize,
         guild_id: usize,
-        member: ContractAddress,
+        member: ContractAddress
     }
-
-    #[event]
-    #[derive(Drop, starknet::Event)]
-    pub enum Event {
-        GuildCreated: GuildCreated,
-        MemberAdded: MemberAdded,
-        MemberRemoved: MemberRemoved,
-    }
-
 
     #[abi(embed_v0)]
     impl GuildImpl of IGuild<ContractState> {
@@ -133,7 +131,7 @@ mod guild_actions {
             assert(guild.creator == caller, 'Only creator can add members');
 
             // Check if the member is not already in the guild
-            let is_member = self.is_member((game_id, guild_id, new_member));
+            let is_member = self.is_member(game_id, guild_id, new_member);
             assert(is_member == false, 'New Member already in guild');
 
             // Create a new Array and populate it with existing guild_ids

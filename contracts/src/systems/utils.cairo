@@ -11,9 +11,9 @@ use starknet::{
 };
 use dojo::model::{ModelStorage, ModelValueStorage};
 use dojo::event::EventStorage;
+use dojo::world::storage::WorldStorage;
 
-fn update_max_px(ref self: ContractState, game_id: usize, player_address: ContractAddress) {
-    let mut world = self.world(@"pixelaw");
+pub fn update_max_px(ref world: WorldStorage, game_id: usize, player_address: ContractAddress) {
     let mut player: Player = world.read_model(player_address);
 
     let game: Game = world.read_model(game_id);
@@ -40,8 +40,7 @@ fn update_max_px(ref self: ContractState, game_id: usize, player_address: Contra
     world.write_model(@player);
 }
 
-fn recover_px(ref self: ContractState, game_id: usize, player_address: ContractAddress) {
-    let mut world = self.world(@"pixelaw");
+pub fn recover_px(ref world: WorldStorage, game_id: usize, player_address: ContractAddress) {
     update_max_px(ref world, game_id, player_address);
 
     let mut player: Player = world.read_model(player_address);
@@ -72,6 +71,6 @@ fn recover_px(ref self: ContractState, game_id: usize, player_address: ContractA
     world.write_model(@player);
 }
 
-fn check_game_status(status: Status) -> bool {
+pub fn check_game_status(status: Status) -> bool {
     status == Status::Pending || status == Status::Ongoing
 }

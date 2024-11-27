@@ -52,6 +52,7 @@ mod p_war_actions {
     use pixelaw::core::utils::{
         get_callers, get_core_actions, Direction, Position, DefaultParameters
     };
+    use p_war::systems::app::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
 
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -72,26 +73,6 @@ mod p_war_actions {
         id: usize,
         timestamp: u128,
         // should we emit here the states of the pixel as well?
-    }
-
-    #[abi(embed_v0)]
-    impl AllowedAppImpl of IAllowedApp<ContractState> {
-        fn set_pixel(ref self: ContractState, default_params: DefaultParameters) {
-            let actions = IActionsDispatcher { contract_address: get_contract_address() };
-            actions
-                .update_pixel(
-                    PixelUpdate {
-                        x: default_params.position.x,
-                        y: default_params.position.y,
-                        color: Option::Some(default_params.color),
-                        timestamp: Option::None,
-                        text: Option::None,
-                        app: Option::None,
-                        owner: Option::None,
-                        action: Option::None
-                    }
-                );
-        }
     }
 
     #[abi(embed_v0)]
@@ -117,18 +98,14 @@ mod p_war_actions {
 
         fn get_game_id(self: @ContractState, position: Position) -> usize {
             let mut world = self.world(@"pixelaw");
-            let mut id = world.uuid();
-            if id == 0 {
-                return 0;
-            };
 
             // set id as GAME_ID=1
             // let board = get!(world, (GAME_ID), (Board)); this is the pre-dojo 1.0.0 implementation
             let board: Board = world.read_model(GAME_ID);
 
             if position.x < board.origin.x || position.x >= board.origin.x
-                + board.width.into() || position.y < board.origin.y || position.y >= board.origin.y
-                + board.height.into() {
+                + (board.width.try_into().unwrap()) || position.y < board.origin.y || position.y >= board.origin.y
+                + (board.height.try_into().unwrap()) {
                 return OUT_OF_BOUNDS_GAME_ID; // OUT_OF_BOUNDS_GAME_ID for out of bounds
             };
             return 1;
@@ -169,6 +146,7 @@ mod p_war_actions {
 
             let board = Board { id, origin, width: DEFAULT_AREA, height: DEFAULT_AREA, };
 
+            world.write_model(@board); //not sure
             world.write_model(@game);
             println!("create_game 1");
             // add default colors (changed these to RGBA)
@@ -312,7 +290,7 @@ mod p_war_actions {
             world.write_model(@previous_pwarpixel);
             //set!(world, (PWarPixel { position: position, owner: player.address }),);
 
-            self.update_max_px(game_id, player.address);
+            update_max_px(ref world, game_id, player.address);
         }
 
         // only use for expand areas.

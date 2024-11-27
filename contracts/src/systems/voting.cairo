@@ -14,21 +14,18 @@ mod voting_actions {
     use starknet::{ContractAddress, get_caller_address, get_block_timestamp};
     use super::IVoting;
     use dojo::model::{ModelStorage, ModelValueStorage};
+    use dojo::world::WorldStorageTrait;
     use dojo::event::EventStorage;
-
-    #[derive(Drop, Serde, starknet::Event)]
-    pub struct Voted {
+    
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::event]
+    struct Voted {
+        #[key]
         game_id: usize,
         index: usize,
         timestamp: u64,
         voter: ContractAddress,
         is_in_favor: bool
-    }
-
-    #[event]
-    #[derive(Drop, starknet::Event)]
-    pub enum Event {
-        Voted: Voted
     }
 
     #[abi(embed_v0)]
@@ -72,7 +69,7 @@ mod voting_actions {
             world.write_model(@proposal);
             world.write_model(@player_vote);
 
-            self.update_max_px(game_id, player_address);
+            update_max_px(ref world, game_id, player_address);
 
             world.emit_event(@Voted {game_id, index, timestamp: get_block_timestamp(), voter: player_address, is_in_favor});
         }

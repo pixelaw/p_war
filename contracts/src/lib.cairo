@@ -1,6 +1,7 @@
 mod constants;
 mod systems {
     mod actions;
+    mod app;
     mod guilds;
     mod propose;
     mod utils;
