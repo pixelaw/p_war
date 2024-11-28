@@ -1,5 +1,5 @@
 // import test utils
-use dojo::utils::test::{spawn_test_world, deploy_contract};
+use dojo::test_utils::{spawn_test_world, deploy_contract};
 // import world dispatcher
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 // import test utils
@@ -30,7 +30,8 @@ use pixelaw::core::{
     utils::{DefaultParameters, Position}
 };
 use starknet::{class_hash::Felt252TryIntoClassHash, ContractAddress};
-
+use dojo::model::Model;
+use dojo::database::schema::{SchemaIntrospection, TypeTag};
 
 pub fn setup() -> (
     IWorldDispatcher,
@@ -67,7 +68,8 @@ pub fn setup() -> (
     ];
 
     // deploy world with models
-    let world = spawn_test_world(["pixelaw"].span(), models.into());
+    //let world = spawn_test_world(["pixelaw"].span(), models.into());
+    let world = spawn_test_world(models);
 
     println!("world deployed");
 
@@ -92,6 +94,10 @@ pub fn setup() -> (
     let guild_address = world
         .deploy_contract('salty3', guild_actions::TEST_CLASS_HASH.try_into().unwrap());
     let guild = IGuildDispatcher { contract_address: guild_address };
+
+    let allowed_app_address = world
+        .deploy_contract('salty4', allowed_app_actions::TEST_CLASS_HASH.try_into().unwrap());
+    let allowed_app = IAllowedAppDispatcher { contract_address: allowed_app_address };
 
     println!("contracts deployed");
 
@@ -125,6 +131,7 @@ pub fn setup() -> (
     world.grant_writer(selector_from_tag!("pixelaw-Guild"), guild_address);
     world.grant_writer(selector_from_tag!("pixelaw-Game"), guild_address);
     world.grant_writer(selector_from_tag!("pixelaw-Player"), guild_address);
+    world.grant_writer(selector_from_tag!("pixelaw-AllowedApp"), allowed_app_address);
     core_actions.init();
 
     println!("grants done");

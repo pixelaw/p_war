@@ -51,7 +51,7 @@ fn test_extend_game_end() {
     let vote_px = 3;
     voting_system.vote(id, index, vote_px, true);
 
-    let proposal = get!(world, (id, index), (Proposal));
+    let proposal: Proposal = world.read_model(id, index);
 
     println!("## PROPOSAL INFO ##");
     println!("Proposal end: {}", proposal.end);
@@ -73,7 +73,7 @@ fn test_extend_game_end() {
 
     // p_war_actions.interact(new_params);
 
-    let game = get!(world, (id), (Game));
+    let game: Game = world.read_model(id);
 
     assert(game.end > GAME_DURATION + 60 * 60 - 1, 'game end extended');
 }

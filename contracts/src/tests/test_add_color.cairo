@@ -68,13 +68,13 @@ fn test_add_color() {
     //     (Game)
     // );
 
-    let oldest_color_palette = get!(world, (id, 0), (PaletteColors));
+    let oldest_color_pallette: PaletteColors = world.read_model(id, 0);
 
     // let index = propose_system.toggle_allowed_color(id, NEW_COLOR);
     let vote_px = 3;
     voting_system.vote(id, index, vote_px, true);
 
-    let proposal = get!(world, (id, index), (Proposal));
+    let proposal: Proposal = world.read_model(id, index);
 
     println!("\n## PROPOSAL INFO ##");
     println!("Proposal end: {}", proposal.end);
@@ -96,11 +96,11 @@ fn test_add_color() {
     p_war_actions.interact(new_params);
 
     // check if the oldest color is unusable
-    let oldest_color_allowed = get!(world, (id, oldest_color_palette.color), (AllowedColor));
+    let oldest_color_allowed: AllowedColor = world.read_model(id, oldest_color_pallette.color);
 
     println!(
         "@@@@@ OLDEST_ALLOWED: {}, {} @@@@",
-        oldest_color_palette.color,
+        oldest_color_pallette.color,
         oldest_color_allowed.is_allowed
     );
 

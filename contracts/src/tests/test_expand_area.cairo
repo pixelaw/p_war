@@ -46,7 +46,7 @@ fn test_expand_area() {
     let vote_px = 3;
     voting_system.vote(id, index, vote_px, true);
 
-    let proposal = get!(world, (id, index), (Proposal));
+    let proposal: Proposal = world.read_model(id, index);
 
     print!("\n## PROPOSAL INFO ##\n");
     print!("Proposal end: {}\n", proposal.end);
@@ -54,7 +54,7 @@ fn test_expand_area() {
     // should add cheat code to spend time
     propose_system.activate_proposal(id, index);
 
-    let board = get!(world, (id), (Board));
+    let board: Board = world.read_model(id);
 
     assert(board.width == DEFAULT_AREA + 20, 'game area extended');
     assert(board.height == DEFAULT_AREA + 30, 'game area extended');

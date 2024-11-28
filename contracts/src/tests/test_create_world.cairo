@@ -36,7 +36,7 @@ fn test_create_game() {
     // call place_pixel
     let NEW_COLOR: u32 = 0xFFFFFFFF;
 
-    let allowed_color = get!(world, (id, NEW_COLOR), (AllowedColor));
+    let allowed_color: AllowedColor = world.read_model(id, NEW_COLOR);
 
     println!("allowed_color: {}", allowed_color.is_allowed);
 
@@ -48,7 +48,7 @@ fn test_create_game() {
     };
     p_war_actions.interact(new_params);
 
-    let player = get!(world, (get_tx_info().unbox().account_contract_address), (Player));
+    let player: Player = world.read_model(get_tx_info().unbox().account_contract_address);
 
     assert(player.current_px == 9, 'current px should be 9');
 }

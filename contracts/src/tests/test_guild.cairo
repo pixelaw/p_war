@@ -70,7 +70,7 @@ fn test_guild_operations() {
     println!("guild created: guild_id = {}", guild_id);
 
     // Check if the guild was created
-    let guild = get!(world, (game_id, guild_id), (Guild));
+    let guild: Guild = world.read_model(game_id, guild_id);
     assert(guild.guild_name == 'Test Guild', 'Guild name mismatch');
     assert(guild.creator == PLAYER_1, 'Guild creator mismatch');
     assert(guild.member_count == 1, 'create, should be 1');
@@ -83,14 +83,14 @@ fn test_guild_operations() {
     guild_actions.add_member(game_id, guild_id, PLAYER_2);
 
     // Check if the member was added
-    let updated_guild = get!(world, (game_id, guild_id), (Guild));
+    let updated_guild: Guild = world.read_model(game_id, guild_id);
     assert(updated_guild.member_count == 2, 'Member count should be 2');
 
     // Remove a member
     guild_actions.remove_member(game_id, guild_id, PLAYER_2);
 
     // Check if the member was removed
-    let final_guild = get!(world, (game_id, guild_id), (Guild));
+    let final_guild: Guild = world.read_model(game_id, guild_id);
     assert(final_guild.member_count == 1, 'remove, should be 1');
 
     println!("guild operations passed");
@@ -188,22 +188,22 @@ fn test_guild_creation() {
     // Create a guild
     let guild_id: u32 = *guild_ids.at(0);
     println!("guild_id: {}", guild_id);
-    let guild = get!(world, (game_id, guild_id), (Guild));
+    let guild: Guild = world.read_model(game_id, guild_id);
     assert(guild.guild_name == 'Fire', 'Guild name mismatch');
     
     let guild_id_2 = *guild_ids.at(1);
     println!("guild_id_2: {}", guild_id_2);
-    let guild = get!(world, (game_id, guild_id_2), (Guild));
+    let guild: Guild = world.read_model(game_id, guild_id_2);
     assert(guild.guild_name == 'Water', 'Guild name mismatch');
     
     let guild_id_3 = *guild_ids.at(2);
     println!("guild_id_3: {}", guild_id_3);
-    let guild = get!(world, (game_id, guild_id_3), (Guild));
+    let guild: Guild = world.read_model(game_id, guild_id_3);
     assert(guild.guild_name == 'Earth', 'Guild name mismatch');
     
     let guild_id_4 = *guild_ids.at(3);
     println!("guild_id_4: {}", guild_id_4);
-    let guild = get!(world, (game_id, guild_id_4), (Guild));
+    let guild: Guild = world.read_model(game_id, guild_id_4);
     assert(guild.guild_name == 'Air', 'Guild name mismatch');
     println!("Guild creation tests passed successfully");
 }

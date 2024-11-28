@@ -95,7 +95,7 @@ fn test_reset_to_white() {
 
     voting.vote(game_id, proposal_id, VOTE_PIXEL_COUNT, true);
 
-    let proposal = get!(world, (game_id, proposal_id), (Proposal));
+    let proposal: Proposal = world.read_model(game_id, proposal_id);
 
     print!("proposal.end: {}\n", proposal.end);
 
