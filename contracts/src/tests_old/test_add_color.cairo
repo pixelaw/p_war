@@ -1,12 +1,6 @@
-use p_war::tests::utils::{deploy_p_war};
-use dojo::model::{ModelStorage, ModelValueStorage};
-use dojo::world::{WorldStorage, WorldStorageTrait};
-use dojo::event::EventStorage;
-use pixelaw_test_helpers::{setup_core_initialized};
-use starknet::{class_hash::Felt252TryIntoClassHash, ContractAddress, testing::{set_block_timestamp}};
 use p_war::{
     models::{
-        game::{Game}, board::{Board, GameId, Position}, proposal::{Proposal},
+        game::{Game, game}, board::{Board, GameId, Position, board, game_id}, proposal::{Proposal},
         allowed_app::AllowedApp, allowed_color::{AllowedColor, PaletteColors},
     },
     systems::{
@@ -16,9 +10,11 @@ use p_war::{
     },
     constants::{PROPOSAL_DURATION}
 };
+
 use pixelaw::core::{
     models::{
-        pixel::{Pixel, PixelUpdate},
+        permissions::permissions, pixel::{pixel, Pixel, PixelUpdate}, queue::queue_item,
+        registry::{app, app_user, app_name, core_actions_address, instruction}
     },
     actions::{
         actions as core_actions, IActionsDispatcher as ICoreActionsDispatcher,
@@ -26,21 +22,22 @@ use pixelaw::core::{
     },
     utils::{DefaultParameters, Position as PixelawPosition}
 };
+use starknet::{
+    class_hash::Felt252TryIntoClassHash, ContractAddress, testing::{set_block_timestamp},
+};
 
 const COLOR: u32 = 0xAAAAAAFF;
 
 #[test]
 #[available_gas(999_999_999)]
 fn test_add_color() {
-    let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
-    let (_world, p_war_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_p_war(ref world);
     // caller
     let caller = starknet::contract_address_const::<0x0>();
+    let (world, _, p_war_actions, propose_system, voting_system, _) = p_war::tests::utils::setup();
 
     let default_params = DefaultParameters {
-        player_override: Option::None,
-        system_override: Option::None,
-        area_hint: Option::None,
+        for_player: caller,
+        for_system: caller,
         position: PixelawPosition { x: 0, y: 0 },
         color: COLOR
     };
@@ -60,7 +57,7 @@ fn test_add_color() {
     //     arg2: 0,
     // };
 
-    let index = propose_action
+    let index = propose_system
         .create_proposal(
             game_id: id, proposal_type: 1, target_args_1: NEW_COLOR, target_args_2: 0,
         );
@@ -71,13 +68,13 @@ fn test_add_color() {
     //     (Game)
     // );
 
-    let oldest_color_pallette: PaletteColors = world.read_model((id, 0));
+    let oldest_color_pallette: PaletteColors = world.read_model(id, 0);
 
     // let index = propose_system.toggle_allowed_color(id, NEW_COLOR);
     let vote_px = 3;
-    voting_action.vote(id, index, vote_px, true);
+    voting_system.vote(id, index, vote_px, true);
 
-    let proposal: Proposal = world.read_model((id, index));
+    let proposal: Proposal = world.read_model(id, index);
 
     println!("\n## PROPOSAL INFO ##");
     println!("Proposal end: {}", proposal.end);
@@ -86,13 +83,12 @@ fn test_add_color() {
     set_block_timestamp(
         proposal.end + PROPOSAL_DURATION
     ); // NOTE: we need to set block timestamp forcely
-    propose_action.activate_proposal(id, index, array![default_params.position].into());
+    propose_system.activate_proposal(id, index, array![default_params.position].into());
 
     // call place_pixel
     let new_params = DefaultParameters {
-        player_override: Option::None,
-        system_override: Option::None,
-        area_hint: Option::None,
+        for_player: caller,
+        for_system: caller,
         position: PixelawPosition { x: 1, y: 1 },
         color: NEW_COLOR
     };
@@ -100,7 +96,7 @@ fn test_add_color() {
     p_war_actions.interact(new_params);
 
     // check if the oldest color is unusable
-    let oldest_color_allowed: AllowedColor = world.read_model((id, oldest_color_pallette.color));
+    let oldest_color_allowed: AllowedColor = world.read_model(id, oldest_color_pallette.color);
 
     println!(
         "@@@@@ OLDEST_ALLOWED: {}, {} @@@@",
