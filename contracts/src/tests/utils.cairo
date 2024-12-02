@@ -12,8 +12,11 @@ use dojo::world::{
 // import test utils
 use p_war::{
     models::{
-        player::{Player, m_Player}, game::{Game, m_Game}, board::{Board, m_Board, GameId, m_GameId, PWarPixel, m_PWarPixel},
-        proposal::{Proposal, m_Proposal}, guilds::{Guild, m_Guild},
+        player::{Player, m_Player},
+        game::{Game, m_Game},
+        board::{Board, m_Board, GameId, m_GameId, PWarPixel, m_PWarPixel},
+        proposal::{Proposal, m_Proposal, PixelRecoveryRate, m_PixelRecoveryRate, PlayerVote, m_PlayerVote},
+        guilds::{Guild, m_Guild},
         allowed_app::{AllowedApp, m_AllowedApp},
         allowed_color::{AllowedColor, m_AllowedColor, PaletteColors, m_PaletteColors, InPalette, m_InPalette, GamePalette, m_GamePalette},
     },
@@ -23,7 +26,7 @@ use p_war::{
         voting::{voting_actions, IVotingDispatcher, IVotingDispatcherTrait},
         guilds::{guild_actions, IGuildDispatcher, IGuildDispatcherTrait},
         app::{allowed_app_actions, IAllowedAppDispatcher, IAllowedAppDispatcherTrait}
-    }
+    },
 };
 
 use pixelaw::core::utils::{
@@ -65,6 +68,16 @@ pub fn namespace_def() -> NamespaceDef {
             TestResource::Model(m_GamePalette::TEST_CLASS_HASH),
             TestResource::Model(m_PWarPixel::TEST_CLASS_HASH),
             TestResource::Model(m_Proposal::TEST_CLASS_HASH),
+            TestResource::Model(m_PixelRecoveryRate::TEST_CLASS_HASH),
+            TestResource::Model(m_PlayerVote::TEST_CLASS_HASH),
+            TestResource::Event(p_war_actions::e_StartedGame::TEST_CLASS_HASH),
+            TestResource::Event(p_war_actions::e_EndedGame::TEST_CLASS_HASH),
+            TestResource::Event(propose_actions::e_ProposalCreated::TEST_CLASS_HASH),
+            TestResource::Event(propose_actions::e_ProposalActivated::TEST_CLASS_HASH),
+            TestResource::Event(guild_actions::e_GuildCreated::TEST_CLASS_HASH),
+            TestResource::Event(guild_actions::e_MemberAdded::TEST_CLASS_HASH),
+            TestResource::Event(guild_actions::e_MemberRemoved::TEST_CLASS_HASH),
+            TestResource::Event(voting_actions::e_Voted::TEST_CLASS_HASH),
             TestResource::Contract(p_war_actions::TEST_CLASS_HASH),
             TestResource::Contract(propose_actions::TEST_CLASS_HASH),
             TestResource::Contract(voting_actions::TEST_CLASS_HASH),
@@ -122,6 +135,23 @@ pub fn setup_pwar_apps_initialized(
     // allowed_app_actions.init();
 
     (p_war_actions, propose_actions, voting_actions, guild_actions, allowed_app_actions)
+}
+
+pub fn print_all_colors(ref world: WorldStorage, id: u32) {
+    let mut i = 0;
+    loop {
+        let color: PaletteColors = world.read_model((id, i));
+        let allowed_color: AllowedColor = world.read_model((id, color.color));
+        println!(
+            "@@@@@ COLOR: {}, {} @@@@",
+            color.color,
+            allowed_color.is_allowed
+        );
+        i += 1;
+        if i == 9 {
+            break;
+        }
+    }
 }
 
 // pub fn setup() -> (

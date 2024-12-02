@@ -36,7 +36,7 @@ mod guild_actions {
     
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
-    struct GuildCreated {
+    pub struct GuildCreated {
         #[key]
         game_id: usize,
         guild_id: usize,
@@ -46,7 +46,7 @@ mod guild_actions {
     
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
-    struct MemberAdded {
+    pub struct MemberAdded {
         #[key]
         game_id: usize,
         guild_id: usize,
@@ -55,7 +55,7 @@ mod guild_actions {
     
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
-    struct MemberRemoved {
+    pub struct MemberRemoved {
         #[key]
         game_id: usize,
         guild_id: usize,

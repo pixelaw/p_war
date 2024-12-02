@@ -14,7 +14,7 @@ use p_war::{
         propose::{propose_actions, IProposeDispatcher, IProposeDispatcherTrait},
         voting::{voting_actions, IVotingDispatcher, IVotingDispatcherTrait}
     },
-    constants::{PROPOSAL_DURATION}
+    constants::{GAME_DURATION}
 };
 use pixelaw::core::{
     models::{
@@ -31,8 +31,7 @@ const COLOR: u32 = 0xAAAAAAFF;
 
 #[test]
 #[available_gas(999_999_999)]
-
-fn test_add_color() {
+fn test_extend_game_end() {
     let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
     let (_world, p_war_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_p_war(ref world);
 
@@ -51,73 +50,27 @@ fn test_add_color() {
         .get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
     println!("id = {}", id);
 
-    let NEW_COLOR: u32 = 0xAABBCCFF;
-
-    // let args = Args{
-    //     address: starknet::contract_address_const::<0x0>(),
-    //     arg1: NEW_COLOR.into(),
-    //     arg2: 0,
-    // };
-
     let index = propose_action
         .create_proposal(
-            game_id: id, proposal_type: 1, target_args_1: NEW_COLOR, target_args_2: 0,
+            game_id: id,
+            proposal_type: 3,
+            target_args_1: 60 * 60, // extend the game for 1 hour
+            target_args_2: 0,
         );
 
-    // let game = get!(
-    //     world,
-    //     (id),
-    //     (Game)
-    // );
-
-    let oldest_color_pallette: PaletteColors = world.read_model((id, 0));
-
-    // let index = propose_system.toggle_allowed_color(id, NEW_COLOR);
     let vote_px = 3;
     voting_action.vote(id, index, vote_px, true);
 
     let proposal: Proposal = world.read_model((id, index));
 
-    println!("\n## PROPOSAL INFO ##");
+    println!("## PROPOSAL INFO ##");
     println!("Proposal end: {}", proposal.end);
 
     // should add cheat code to spend time
-    set_block_timestamp(
-        proposal.end + PROPOSAL_DURATION
-    ); // NOTE: we need to set block timestamp forcely
+    set_block_timestamp(proposal.end + 1); // NOTE: we need to set block timestamp forcely
     propose_action.activate_proposal(id, index, array![default_params.position].into());
 
-    // call place_pixel
-    let new_params = DefaultParameters {
-        player_override: Option::None,
-        system_override: Option::None,
-        area_hint: Option::None,
-        position: PixelawPosition { x: 1, y: 1 },
-        color: NEW_COLOR
-    };
+    let game: Game = world.read_model(id);
 
-    p_war_actions.interact(new_params);
-
-    // check if the oldest color is unusable
-    let oldest_color_allowed: AllowedColor = world.read_model((id, oldest_color_pallette.color));
-
-    println!(
-        "@@@@@ OLDEST_ALLOWED: {}, {} @@@@",
-        oldest_color_pallette.color,
-        oldest_color_allowed.is_allowed
-    );
-
-    let newest_color: PaletteColors = world.read_model((id, 8));
-    let newest_color_allowed: AllowedColor = world.read_model((id, newest_color.color));
-
-    println!(
-        "@@@@@ NEWEST_ALLOWED: {}, {} @@@@",
-        newest_color.color,
-        newest_color_allowed.is_allowed
-    );
-
-    assert(oldest_color_allowed.is_allowed == false, 'the oldest became unusable');
-    //print_all_colors(ref world, id);
-    assert(newest_color.color == NEW_COLOR, 'newest_color is the new color');
-    assert(newest_color_allowed.is_allowed == true, 'the newest is usable');
+    assert(game.end > GAME_DURATION + 60 * 60 - 1, 'game end extended');
 }

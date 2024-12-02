@@ -12,7 +12,7 @@ pub trait IActions<T> {
     fn init(ref self: T);
     fn interact(ref self: T, default_params: DefaultParameters);
     fn create_game(ref self: T, origin: Position) -> usize;
-    fn create_game_guilds(ref self: T, game_id: usize, guild_address: ContractAddress) -> Array<usize>;
+    fn create_game_guilds(ref self: T, game_id: usize, guild_dispatcher: IGuildDispatcher) -> Array<usize>;
     fn get_game_id(self: @T, position: Position) -> usize;
     fn place_pixel(
         ref self: T, app: ContractAddress, default_params: DefaultParameters
@@ -53,26 +53,23 @@ mod p_war_actions {
         get_callers, get_core_actions, Direction, Position, DefaultParameters
     };
     use p_war::systems::app::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
+    use dojo::world::{IWorldDispatcherTrait};
 
-    #[event]
-    #[derive(Drop, starknet::Event)]
-    enum Event {
-        StartedGame: StartedGame,
-        EndedGame: EndedGame
-    }
-
-    #[derive(Drop, Serde, starknet::Event)]
-    struct StartedGame {
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::event]
+    pub struct StartedGame {
+        #[key]
         id: usize,
         timestamp: u128,
         creator: ContractAddress
     }
 
-    #[derive(Drop, Serde, starknet::Event)]
-    struct EndedGame {
+    #[derive(Copy, Drop, Serde)]
+    #[dojo::event]
+    pub struct EndedGame {
+        #[key]
         id: usize,
         timestamp: u128,
-        // should we emit here the states of the pixel as well?
     }
 
     #[abi(embed_v0)]
@@ -85,7 +82,9 @@ mod p_war_actions {
 
         fn interact(ref self: ContractState, default_params: DefaultParameters) {
             let position = Position { x: default_params.position.x, y: default_params.position.y };
+            println!("position x{}, y{}.", default_params.position.x, default_params.position.y);
             let game_id = self.get_game_id(position);
+            println!("game id: {}", game_id);
             if game_id == 0 {
                 self.create_game(position);
             } else if game_id == OUT_OF_BOUNDS_GAME_ID {
@@ -99,10 +98,17 @@ mod p_war_actions {
         fn get_game_id(self: @ContractState, position: Position) -> usize {
             let mut world = self.world(@"pixelaw");
 
+            let mut id = world.dispatcher.uuid();
+            if id == 0 {
+                return 0;
+            }
+
             // set id as GAME_ID=1
-            // let board = get!(world, (GAME_ID), (Board)); this is the pre-dojo 1.0.0 implementation
             let board: Board = world.read_model(GAME_ID);
 
+            println!("board origin x{}, y{}.", board.origin.x, board.origin.y);
+            println!("board width{}, height{}.", board.width, board.height);
+            println!("position x{}, y{}.", position.x, position.y);
             if position.x < board.origin.x || position.x >= board.origin.x
                 + (board.width.try_into().unwrap()) || position.y < board.origin.y || position.y >= board.origin.y
                 + (board.height.try_into().unwrap()) {
@@ -208,9 +214,9 @@ mod p_war_actions {
         }
 
         // initialize guilds for the game
-        fn create_game_guilds(ref self: ContractState, game_id: usize, guild_address: ContractAddress) -> Array<usize> {
+        fn create_game_guilds(ref self: ContractState, game_id: usize, guild_dispatcher: IGuildDispatcher) -> Array<usize> {
             //let guild_address = get!(world, game_id, GuildContractAddress).address;
-            let guild_dispatcher = IGuildDispatcher { contract_address: guild_address };
+            // let guild_dispatcher = IGuildDispatcher { contract_address: guild_address };
             let mut guild_ids = ArrayTrait::new();
             guild_ids.append(guild_dispatcher.create_guild(game_id, 'Fire'));
             guild_ids.append(guild_dispatcher.create_guild(game_id, 'Water'));
@@ -224,9 +230,12 @@ mod p_war_actions {
             ref self: ContractState, app: ContractAddress, default_params: DefaultParameters
         ) {
             let mut world = self.world(@"pixelaw");
+            let core_actions = get_core_actions(ref world); //new
+            let system = get_contract_address(); //new
             let position = Position { x: default_params.position.x, y: default_params.position.y };
             let game_id = self.get_game_id(position);
             assert(game_id != 0, 'this game does not exist');
+            println!("color: {}", default_params.color);
 
             let allowed_color: AllowedColor = world.read_model((game_id, default_params.color));
             assert(
@@ -236,13 +245,14 @@ mod p_war_actions {
             let allowed_app: AllowedApp = world.read_model((game_id, app));
             assert(app.is_zero() || allowed_app.is_allowed, 'app is not allowed');
 
-            let contract_address = if app.is_zero() {
-                get_contract_address()
-            } else {
-                app
-            };
+            // let contract_address = if app.is_zero() {
+            //     get_contract_address()
+            // } else {
+            //     app
+            // };
 
-            let app = IAllowedAppDispatcher { contract_address };
+            //let app = IAllowedAppDispatcher { contract_address }; old
+            // println!("app: {}", app);
 
             let player_address = get_tx_info().unbox().account_contract_address;
 
@@ -262,9 +272,27 @@ mod p_war_actions {
             assert(player.is_banned == false, 'you are banned');
 
             // check if the game is ongoing
-            assert(check_game_status(game.status()), 'game is not ongoing');
+            assert(check_game_status(game.status()), 'game is not ongoing: actions1');
 
-            app.set_pixel(default_params);
+            println!("set_pixel BEGIN");
+            core_actions.update_pixel( //new
+                player_address,
+                system,
+                PixelUpdate {
+                    x: default_params.position.x,
+                    y: default_params.position.y,
+                    color: Option::Some(default_params.color),
+                    timestamp: Option::None,
+                    text: Option::None,
+                    app: Option::None,
+                    owner: Option::None,
+                    action: Option::None
+                },
+                Option::None,
+                false
+            );
+            // app.set_pixel(default_params); old
+            println!("set_pixel END");
 
             player.num_owns += 1;
             player.num_commit += game.base_cost;

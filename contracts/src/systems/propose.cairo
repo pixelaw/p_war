@@ -47,7 +47,7 @@ mod propose_actions {
     
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
-    struct ProposalCreated {
+    pub struct ProposalCreated {
         #[key]
         game_id: usize,
         index: usize,
@@ -58,7 +58,7 @@ mod propose_actions {
     
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
-    struct ProposalActivated {
+    pub struct ProposalActivated {
         #[key]
         game_id: usize,
         index: usize,
@@ -80,7 +80,8 @@ mod propose_actions {
             let mut world = self.world(@"pixelaw");
             // get models
             let mut game: Game = world.read_model(game_id);
-            assert(check_game_status(game.status()), 'game is not ongoing');
+            // println!("game status: {}", game.status());
+            assert(check_game_status(game.status()), 'game is not ongoing: propose1');
             let player_address = get_tx_info().unbox().account_contract_address;
 
             // recover px
@@ -148,7 +149,7 @@ mod propose_actions {
             assert(proposal.yes_px >= NEEDED_YES_PX, 'did not reach minimum yes_px');
             assert(proposal.yes_px > proposal.no_px, 'yes_px is not more than no_px');
             assert(proposal.is_activated == false, 'this is already activated');
-            assert(check_game_status(game.status()), 'game is not ongoing');
+            assert(check_game_status(game.status()), 'game is not ongoing: propose2');
             
             // activate the proposal.
             if proposal.proposal_type == 1 {
@@ -228,8 +229,9 @@ mod propose_actions {
 
                     loop {
                         let mut palette_color: PaletteColors = world.read_model((game_id, idx));
+                        let prev_color: PaletteColors = world.read_model((game_id, idx));
                         palette_color.idx = idx - 1;
-                        palette_color.color = palette_color.color;
+                        palette_color.color = prev_color.color;
                         world.write_model(@palette_color);
 
                         idx = idx + 1;
@@ -237,6 +239,11 @@ mod propose_actions {
                             break;
                         };
                     };
+
+                    // Set the new color in the last position
+                    let mut last_palette_color: PaletteColors = world.read_model((game_id, 8));
+                    last_palette_color.color = new_color;
+                    world.write_model(@last_palette_color);
 
                     let mut old_in_pallet: InPalette = world.read_model((game_id, oldest_color.color));
                     old_in_pallet.value = false;
