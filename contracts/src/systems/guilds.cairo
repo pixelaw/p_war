@@ -109,6 +109,7 @@ mod guild_actions {
 
             // Save the guild and update the game
             world.write_model(@new_guild);
+            world.write_model(@game);
             println!("set guild");
             let caller = get_caller_address();
             world.emit_event(@GuildCreated {game_id, guild_id, guild_name, creator: caller});
@@ -240,10 +241,10 @@ mod guild_actions {
                 if i >= guild.member_count {
                     break;
                 }
-                let mut player: Player = world.read_model((*guild.members.at(i), game_id));
-                println!("player.num_commit: {}", player.num_commit);
+                let mut player: Player = world.read_model(*guild.members.at(i));
                 guild_total_points += player.num_commit;
                 i += 1;
+                println!("player.num_commit: {}", player.num_commit);
             };
             println!("contract: guild_total_points: {}", guild_total_points);
             guild_total_points

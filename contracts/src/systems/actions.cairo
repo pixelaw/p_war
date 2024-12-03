@@ -106,9 +106,6 @@ mod p_war_actions {
             // set id as GAME_ID=1
             let board: Board = world.read_model(GAME_ID);
 
-            println!("board origin x{}, y{}.", board.origin.x, board.origin.y);
-            println!("board width{}, height{}.", board.width, board.height);
-            println!("position x{}, y{}.", position.x, position.y);
             if position.x < board.origin.x || position.x >= board.origin.x
                 + (board.width.try_into().unwrap()) || position.y < board.origin.y || position.y >= board.origin.y
                 + (board.height.try_into().unwrap()) {
@@ -178,16 +175,6 @@ mod p_war_actions {
                 world.write_model(@allowed_color);
                 world.write_model(@palette_colors);
                 world.write_model(@in_palette);
-
-                //is the above the correct implementation of the below?
-                // set!(
-                //     world,
-                //     (
-                //         AllowedColor { game_id: id, color: *a.at(color_idx), is_allowed: true, },
-                //         PaletteColors { game_id: id, idx: color_idx, color: *a.at(color_idx), },
-                //         InPalette { game_id: id, color: *a.at(color_idx), value: true }
-                //     )
-                // );
                 color_idx += 1;
             };
 
@@ -197,13 +184,6 @@ mod p_war_actions {
             let game_palette = GamePalette { game_id: id, length: 9 };
             world.write_model(@pixel_recovery_rate);
             world.write_model(@game_palette);
-            // set!(
-            //     world,
-            //     (
-            //         PixelRecoveryRate { game_id: id, rate: DEFAULT_RECOVERY_RATE, },
-            //         GamePalette { game_id: id, length: 9 }
-            //     )
-            // );
 
             println!("create_game 2.1");
             // recover px
@@ -215,8 +195,6 @@ mod p_war_actions {
 
         // initialize guilds for the game
         fn create_game_guilds(ref self: ContractState, game_id: usize, guild_dispatcher: IGuildDispatcher) -> Array<usize> {
-            //let guild_address = get!(world, game_id, GuildContractAddress).address;
-            // let guild_dispatcher = IGuildDispatcher { contract_address: guild_address };
             let mut guild_ids = ArrayTrait::new();
             guild_ids.append(guild_dispatcher.create_guild(game_id, 'Fire'));
             guild_ids.append(guild_dispatcher.create_guild(game_id, 'Water'));
@@ -234,6 +212,7 @@ mod p_war_actions {
             let system = get_contract_address(); //new
             let position = Position { x: default_params.position.x, y: default_params.position.y };
             let game_id = self.get_game_id(position);
+            let player_address = get_caller_address();
             assert(game_id != 0, 'this game does not exist');
             println!("color: {}", default_params.color);
 
@@ -253,9 +232,6 @@ mod p_war_actions {
 
             //let app = IAllowedAppDispatcher { contract_address }; old
             // println!("app: {}", app);
-
-            let player_address = get_tx_info().unbox().account_contract_address;
-
             // recover px
             recover_px(ref world, game_id, player_address);
 
@@ -296,6 +272,7 @@ mod p_war_actions {
 
             player.num_owns += 1;
             player.num_commit += game.base_cost;
+            println!("player.num_commit: {}", player.num_commit);
             player.current_px -= game.base_cost;
             player.last_date = get_block_timestamp();
             world.write_model(@player);
@@ -316,7 +293,6 @@ mod p_war_actions {
             // set the new owner of PWarPixel
             previous_pwarpixel.owner = player.address;
             world.write_model(@previous_pwarpixel);
-            //set!(world, (PWarPixel { position: position, owner: player.address }),);
 
             update_max_px(ref world, game_id, player.address);
         }
