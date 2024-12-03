@@ -1,25 +1,40 @@
-import { useLayoutEffect } from "react";
+import { detectMobile } from "@/utils/devices";
+import { useEffect, useLayoutEffect } from "react";
 import { useSwipeable } from "react-swipeable";
 
 const SwipeControl = ({ children }: { children: React.ReactNode }) => {
+  const isMobile = detectMobile();
+
   useLayoutEffect(() => {
-    // ブラウザの履歴にダミーのエントリを追加
+    // add dummy entry to browser history
     window.history.pushState(null, "", window.location.pathname);
 
-    // popstateイベントのリスナーを追加
+    // add listener for popstate event
     const handlePopState = (e: PopStateEvent) => {
       e.stopImmediatePropagation();
-      // ブラウザバックを防止
+      // prevent browser back motion
       window.history.pushState(null, "", window.location.pathname);
     };
 
     window.addEventListener("popstate", handlePopState);
 
-    // コンポーネントのアンマウント時にリスナーを削除
+    // remove listener when component unmounts
     return () => {
       window.removeEventListener("popstate", handlePopState);
     };
   }, []);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    // NOTE: improve mobile scroll experience
+    window.addEventListener(
+      "wheel",
+      (e) => {
+        e.preventDefault();
+      },
+      { passive: false },
+    );
+  }, [isMobile]);
 
   const handlers = useSwipeable({
     preventScrollOnSwipe: true,

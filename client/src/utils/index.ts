@@ -1,7 +1,8 @@
 import { type ClassValue, clsx } from "clsx";
 import { extendTailwindMerge } from "tailwind-merge";
 import { withFluid } from "@fluid-tailwind/tailwind-merge";
-import { ProposalType, type Color } from "@/types";
+import { type Color } from "@/types";
+import { ProposalType } from "@/libs/dojo/typescript/models.gen";
 import { getComponentValue } from "@dojoengine/recs";
 import { App } from "@/types";
 import { shortString } from "starknet";
@@ -19,7 +20,7 @@ export const truncateAddress = (address: string) => {
   if (!match || match.length < 3) return address;
   const part1 = match[1] || "";
   const part2 = match[2] || "";
-  return `0x${part1}…${part2}`;
+  return `${part1}…${part2}`;
 };
 
 export const formatDate = (date: Date | string): string => {

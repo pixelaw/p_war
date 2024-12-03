@@ -51,8 +51,8 @@ struct Proposal {
     target_args_2: u32,
     start: u64,
     end: u64,
-    yes_px: u32,
-    no_px: u32,
+    yes_voting_power: u32,
+    no_voting_power: u32,
     is_activated: bool, // added: check if the proposal is activated
 }
 
@@ -67,7 +67,7 @@ struct PlayerVote {
     #[key]
     index: usize,
     is_in_favor: bool,
-    px: u32
+    voting_power: u32
 }
 
 #[derive(Copy, Drop, Serde)]

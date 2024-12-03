@@ -1,6 +1,6 @@
 kind = "DojoModel"
-class_hash = "0x404d31fa774f450e44ff386730f3f43c2932d7cfcc55251e2a0ef2c77f5dc96"
-original_class_hash = "0x404d31fa774f450e44ff386730f3f43c2932d7cfcc55251e2a0ef2c77f5dc96"
+class_hash = "0x76c0a4827cc62be7367ab6fac605335bb5a2d01a7edc3f2dd89e58accafca02"
+original_class_hash = "0x76c0a4827cc62be7367ab6fac605335bb5a2d01a7edc3f2dd89e58accafca02"
 abi = "manifests/release/base/abis/models/pixelaw-Proposal-49e1daf5.json"
 tag = "pixelaw-Proposal"
 qualified_path = "p_war::models::proposal::proposal"
@@ -47,12 +47,12 @@ type = "u64"
 key = false
 
 [[members]]
-name = "yes_px"
+name = "yes_voting_power"
 type = "u32"
 key = false
 
 [[members]]
-name = "no_px"
+name = "no_voting_power"
 type = "u32"
 key = false
 

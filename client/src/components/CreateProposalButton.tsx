@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
-import { ProposalType } from "@/types";
+import { ProposalType } from "@/libs/dojo/typescript/models.gen";
 import { useDojo } from "@/hooks/useDojo";
 import { DEFAULT_GAME_ID } from "@/constants";
 import { usePaletteColors } from "@/hooks/usePalleteColors";

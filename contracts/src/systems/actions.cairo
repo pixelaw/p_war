@@ -26,7 +26,7 @@ pub trait IActions<T> {
 mod p_war_actions {
     use p_war::constants::{
         APP_KEY, APP_ICON, GAME_ID, OUT_OF_BOUNDS_GAME_ID, DEFAULT_RECOVERY_RATE, INITIAL_COLOR,
-        GAME_DURATION, DEFAULT_AREA, BASE_COST, DEFAULT_PX
+        GAME_DURATION, DEFAULT_AREA,
     };
     use p_war::models::{
         game::{Game, Status, GameTrait}, board::{Board, GameId, PWarPixel}, player::{Player},
@@ -35,7 +35,7 @@ mod p_war_actions {
         allowed_app::AllowedApp
     };
     use p_war::systems::guilds::{IGuildDispatcher, IGuildDispatcherTrait};
-    use p_war::systems::utils::{recover_px, update_max_px, check_game_status};
+    use p_war::systems::utils::{check_game_status};
     use pixelaw::core::actions::{
         IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
@@ -130,15 +130,12 @@ mod p_war_actions {
             let mut id = GAME_ID; // set as a constant for now.
 
             let start = get_block_timestamp();
-            let player = get_caller_address();
 
             let game = Game {
                 id,
                 start,
                 end: start + GAME_DURATION,
                 proposal_idx: 0,
-                base_cost: BASE_COST,
-                const_val: DEFAULT_PX, // Default is 10.
                 coeff_own_pixels: 0,
                 coeff_commits: 0,
                 winner_config: 0,
@@ -152,6 +149,7 @@ mod p_war_actions {
             world.write_model(@board); //not sure
             world.write_model(@game);
             println!("create_game 1");
+
             // add default colors (changed these to RGBA)
             let mut color_idx = 0;
             let mut a = ArrayTrait::new();
@@ -185,9 +183,7 @@ mod p_war_actions {
             world.write_model(@pixel_recovery_rate);
             world.write_model(@game_palette);
 
-            println!("create_game 2.1");
-            // recover px
-            recover_px(ref world, id, player);        
+            println!("create_game 2.1");   
 
             id
             // emit event that game has started
@@ -233,16 +229,13 @@ mod p_war_actions {
             //let app = IAllowedAppDispatcher { contract_address }; old
             // println!("app: {}", app);
             // recover px
-            recover_px(ref world, game_id, player_address);
+            //recover_px(ref world, game_id, player_address);
 
             // if this is first time for the caller, let's set initial px.
             let mut player: Player = world.read_model(player_address);
 
             // get the game info
             let game: Game = world.read_model(game_id);
-
-            // check the current px is eq or larger than cost_paint
-            assert(player.current_px >= game.base_cost, 'not enough PX');
 
             // check the player is banned or not
             assert(player.is_banned == false, 'you are banned');
@@ -267,13 +260,11 @@ mod p_war_actions {
                 Option::None,
                 false
             );
-            // app.set_pixel(default_params); old
             println!("set_pixel END");
 
             player.num_owns += 1;
-            player.num_commit += game.base_cost;
+            player.num_commit += 1;
             println!("player.num_commit: {}", player.num_commit);
-            player.current_px -= game.base_cost;
             player.last_date = get_block_timestamp();
             world.write_model(@player);
 
@@ -293,8 +284,6 @@ mod p_war_actions {
             // set the new owner of PWarPixel
             previous_pwarpixel.owner = player.address;
             world.write_model(@previous_pwarpixel);
-
-            update_max_px(ref world, game_id, player.address);
         }
 
         // only use for expand areas.

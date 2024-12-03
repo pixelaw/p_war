@@ -9,8 +9,6 @@ struct Game {
     start: u64,
     end: u64,
     proposal_idx: usize,
-    base_cost: u32,
-    const_val: u32,
     coeff_own_pixels: u32,
     coeff_commits: u32,
     winner_config: u32, // optimally, set by contract address.

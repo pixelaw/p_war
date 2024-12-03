@@ -29,15 +29,3 @@ struct GameId {
     y: u32,
     value: usize
 }
-
-// trait BoardTrait {
-//     fn is_in_board(self: Board, position: Position) -> bool;
-// }
-
-// impl BoardImpl of BoardTrait {
-//     fn is_in_board(self: Board, position: Position) -> bool {
-//         position.x >= self.origin.x && position.x <= self.origin.x
-//             + self.width && position.y >= self.origin.y && position.y <= self.origin.y
-//             + self.height
-//     }
-// }

@@ -1,12 +1,24 @@
-import { Pixel, Board, Position } from "@/types";
+import { Pixel } from "@/types";
+import { ProposalType } from "@/libs/dojo/typescript/models.gen";
 import { uint32ToRgba } from "@/utils";
 
 import { Entities, Entity, ToriiClient } from "@dojoengine/torii-client";
 
-// import { HasValue } from "@dojoengine/recs";
-
-// import { getComponentValue } from "@dojoengine/recs";
-// import { ClientComponents } from "./createClientComponents";
+export const getProposalFromEntity = (entity: Entity) => {
+  return {
+    author: BigInt(entity["pixelaw-Proposal"].author.value as string),
+    start: entity["pixelaw-Proposal"].start.value as number,
+    proposal_type: entity["pixelaw-Proposal"].proposal_type.value as ProposalType,
+    target_args_2: entity["pixelaw-Proposal"].target_args_2.value as number,
+    end: entity["pixelaw-Proposal"].end.value as number,
+    index: entity["pixelaw-Proposal"].index.value as number,
+    yes_voting_power: entity["pixelaw-Proposal"].yes_voting_power.value as number,
+    no_voting_power: entity["pixelaw-Proposal"].no_voting_power.value as number,
+    target_args_1: entity["pixelaw-Proposal"].target_args_1.value as number,
+    game_id: entity["pixelaw-Proposal"].game_id.value as number,
+    is_activated: entity["pixelaw-Proposal"].is_activated.value as boolean,
+  };
+};
 
 export const getPixelComponentValue = (entity: Entity): Pixel => {
   return {
@@ -42,7 +54,7 @@ export const getPixelEntities = async (
               model: "pixelaw-Pixel",
               member: "x",
               operator: "Gte",
-              value: { U32: upperLeftX },
+              value: { Primitive: { U32: upperLeftX } },
             },
           },
           {
@@ -50,7 +62,7 @@ export const getPixelEntities = async (
               model: "pixelaw-Pixel",
               member: "y",
               operator: "Gte",
-              value: { U32: upperLeftY },
+              value: { Primitive: { U32: upperLeftY } },
             },
           },
           {
@@ -58,7 +70,7 @@ export const getPixelEntities = async (
               model: "pixelaw-Pixel",
               member: "x",
               operator: "Lte",
-              value: { U32: lowerRightX },
+              value: { Primitive: { U32: lowerRightX } },
             },
           },
           {
@@ -66,7 +78,7 @@ export const getPixelEntities = async (
               model: "pixelaw-Pixel",
               member: "y",
               operator: "Lte",
-              value: { U32: lowerRightY },
+              value: { Primitive: { U32: lowerRightY } },
             },
           },
         ],
@@ -74,32 +86,5 @@ export const getPixelEntities = async (
     },
   });
 
-  return entities;
-};
-
-export const getBoardComponentValue = (entity: Entity): Board | undefined => {
-  if (!entity["pixelaw-Board"]) {
-    return undefined;
-  }
-  return {
-    id: entity["pixelaw-Board"].id.value as number,
-    origin: entity["pixelaw-Board"].origin.value as unknown as Position,
-    width: entity["pixelaw-Board"].width.value as number,
-    height: entity["pixelaw-Board"].height.value as number,
-  };
-};
-
-export const getBoardComponentFromEntities = (entities: Entities): Board[] => {
-  return Object.values(entities)
-    .map(getBoardComponentValue)
-    .filter((board): board is Board => board !== undefined);
-};
-
-export const getBoardEntities = async (client: ToriiClient, limit: number) => {
-  const entities = await client.getEntities({
-    clause: undefined,
-    limit,
-    offset: 0,
-  });
   return entities;
 };
