@@ -3,3 +3,4 @@ target
 generated
 .idea
 manifests
+sepolia.deployer.keystore.json

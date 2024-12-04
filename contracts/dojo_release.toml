@@ -16,3 +16,41 @@ rpc_url = "https://api.cartridge.gg/x/pwar-dev-2/katana/"
 account_address = "0x8cecdb74164f073793942ddd1c477a6549d43a5ce57f4640eadefe0a6dd8bf"
 private_key = "0x422f174dedd139c6cad1c535b1a7d43a6cf224f71cb4a67e1070347a952b9d0"
 world_address = "0x263ae44e5414519a5c5a135cccaf3d9d7ee196d37e8de47a178da91f3de9b34"
+
+[writers]
+# CORE
+"pixelaw-App" = ["pixelaw-actions"]
+"pixelaw-AppName" = ["pixelaw-actions"]
+"pixelaw-AppUser" = ["pixelaw-actions"]
+"pixelaw-CoreActionsAddress" = ["pixelaw-actions"]
+"pixelaw-QueueScheduled" = ["pixelaw-actions"]
+"pixelaw-QueueProcessed" = ["pixelaw-actions"]
+"pixelaw-Alert" = ["pixelaw-actions"]
+"pixelaw-Pixel" = [
+  "pixelaw-actions",
+  "pixelaw-paint_actions",
+  "pixelaw-snake_actions",
+]
+"pixelaw-QueueItem" = ["pixelaw-actions"]
+"pixelaw-Snake" = ["pixelaw-actions", "pixelaw-snake_actions"]
+"pixelaw-RTree" = ["pixelaw-actions"]
+"pixelaw-Area" = ["pixelaw-actions"]
+"pixelaw-SnakeSegment" = ["pixelaw-snake_actions"]
+# GUILD
+"pixelaw-Guild" = ["pixelaw-guild_actions"]
+# P-WAR
+"pixelaw-AllowedApp" = ["pixelaw-p_war_actions"]
+"pixelaw-Board" = ["pixelaw-p_war_actions", "pixelaw-propose_actions"]
+"pixelaw-AllowedColor" = ["pixelaw-p_war_actions", "pixelaw-propose_actions"]
+"pixelaw-PaletteColors" = ["pixelaw-p_war_actions", "pixelaw-propose_actions"]
+"pixelaw-PWarPixel" = ["pixelaw-p_war_actions"]
+"pixelaw-Game" = ["pixelaw-p_war_actions"]
+"pixelaw-GameId" = ["pixelaw-p_war_actions"]
+"pixelaw-GamePalette" = ["pixelaw-p_war_actions", "pixelaw-propose_actions"]
+"pixelaw-InPalette" = ["pixelaw-p_war_actions", "pixelaw-propose_actions"]
+"pixelaw-Player" = ["pixelaw-p_war_actions", "pixelaw-propose_actions", "pixelaw-voting_actions"]
+"pixelaw-PixelRecoveryRate" = ["pixelaw-p_war_actions"]
+# PROPOSE
+"pixelaw-Proposal" = ["pixelaw-propose_actions", "pixelaw-voting_actions"]
+# VOTING
+"pixelaw-PlayerVote" = ["pixelaw-voting_actions"]
