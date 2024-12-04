@@ -8,23 +8,34 @@ use p_war::models::{
 #[starknet::interface]
 pub trait IPropose<T> {
     fn create_proposal(
+        ref self: T, game_id: usize, proposal_type: u8, target_args_1: u32, target_args_2: u32
+    ) -> usize;
+    fn activate_proposal(ref self: T, game_id: usize, index: usize, clear_data: Span<Position>);
+    fn add_new_color(ref self: T, game_id: usize, index: usize, game: Game, proposal: Proposal);
+    fn reset_to_white(
         ref self: T,
         game_id: usize,
-        proposal_type: u8,
-        target_args_1: u32,
-        target_args_2: u32
-    ) -> usize;
-    fn activate_proposal(
-        ref self: T, game_id: usize, index: usize, clear_data: Span<Position>
+        index: usize,
+        game: Game,
+        proposal: Proposal,
+        clear_data: Span<Position>
     );
-    fn add_new_color(ref self: T, game_id: usize, index: usize, game: Game, proposal: Proposal);
-    fn reset_to_white(ref self: T, game_id: usize, index: usize, game: Game, proposal: Proposal, clear_data: Span<Position>);
 }
 
 // dojo decorator
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod propose_actions {
-    use p_war::constants::{PROPOSAL_DURATION, NEEDED_YES_VOTING_POWER, DISASTER_SIZE, PROPOSAL_FACTOR};
+    use dojo::event::EventStorage;
+    use dojo::model::{ModelStorage, ModelValueStorage};
+    use dojo::world::WorldStorageTrait;
+    use p_war::constants::{
+        PROPOSAL_DURATION, NEEDED_YES_VOTING_POWER, DISASTER_SIZE, PROPOSAL_FACTOR
+    };
+    use p_war::models::{
+        game::{Game, Status, GameTrait}, proposal::{Proposal, PixelRecoveryRate},
+        board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,
+        allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette}
+    };
     use p_war::systems::utils::{check_game_status};
     use pixelaw::core::actions::{
         IActionsDispatcher as ICoreActionsDispatcher,
@@ -36,15 +47,7 @@ mod propose_actions {
         ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
     };
     use super::{IPropose};
-    use dojo::model::{ModelStorage, ModelValueStorage};
-    use dojo::world::WorldStorageTrait;
-    use dojo::event::EventStorage;
-    use p_war::models::{
-        game::{Game, Status, GameTrait}, proposal::{Proposal, PixelRecoveryRate},
-        board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,
-        allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette}
-    };
-    
+
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
     pub struct ProposalCreated {
@@ -55,7 +58,7 @@ mod propose_actions {
         target_args_1: u32,
         target_args_2: u32
     }
-    
+
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
     pub struct ProposalActivated {
@@ -112,7 +115,16 @@ mod propose_actions {
             player.num_commit = player.num_commit + 1;
             world.write_model(@player);
 
-            world.emit_event(@ProposalCreated { game_id, index: game.proposal_idx, proposal_type, target_args_1, target_args_2 });
+            world
+                .emit_event(
+                    @ProposalCreated {
+                        game_id,
+                        index: game.proposal_idx,
+                        proposal_type,
+                        target_args_1,
+                        target_args_2
+                    }
+                );
             new_proposal.index
         }
 
@@ -131,7 +143,7 @@ mod propose_actions {
             assert(proposal.yes_voting_power > proposal.no_voting_power, 'yes is not more than no');
             assert(proposal.is_activated == false, 'this is already activated');
             assert(check_game_status(game.status()), 'game is not ongoing: propose2');
-            
+
             // activate the proposal.
             if proposal.proposal_type == 1 {
                 self.add_new_color(game_id, index, game, proposal);
@@ -154,7 +166,16 @@ mod propose_actions {
             proposal.is_activated = true;
 
             world.write_model(@proposal);
-            world.emit_event(@ProposalActivated {game_id, index, proposal_type: proposal.proposal_type, target_args_1: proposal.target_args_1, target_args_2: proposal.target_args_2})
+            world
+                .emit_event(
+                    @ProposalActivated {
+                        game_id,
+                        index,
+                        proposal_type: proposal.proposal_type,
+                        target_args_1: proposal.target_args_1,
+                        target_args_2: proposal.target_args_2
+                    }
+                )
         }
 
         // add new color to the palette, if the color is added, the oldest color become unusable.
@@ -184,7 +205,8 @@ mod propose_actions {
                     is_in_palette.value = true;
                     world.write_model(@is_in_palette);
 
-                    let mut palette_color: PaletteColors = world.read_model((game_id, game_palette.length));
+                    let mut palette_color: PaletteColors = world
+                        .read_model((game_id, game_palette.length));
                     palette_color.color = new_color;
                     world.write_model(@palette_color);
 
@@ -213,14 +235,16 @@ mod propose_actions {
                     last_palette_color.color = new_color;
                     world.write_model(@last_palette_color);
 
-                    let mut old_in_pallet: InPalette = world.read_model((game_id, oldest_color.color));
+                    let mut old_in_pallet: InPalette = world
+                        .read_model((game_id, oldest_color.color));
                     old_in_pallet.value = false;
                     world.write_model(@old_in_pallet);
 
                     is_in_palette.value = true;
                     world.write_model(@is_in_palette);
 
-                    let mut old_color_allowed: AllowedColor = world.read_model((game_id, oldest_color.color));
+                    let mut old_color_allowed: AllowedColor = world
+                        .read_model((game_id, oldest_color.color));
                     old_color_allowed.is_allowed = false;
                     world.write_model(@old_color_allowed);
                 };
@@ -228,12 +252,19 @@ mod propose_actions {
         }
 
         fn reset_to_white(
-            ref self: ContractState, game_id: usize, index: usize, game: Game, proposal: Proposal, clear_data: Span<Position>
+            ref self: ContractState,
+            game_id: usize,
+            index: usize,
+            game: Game,
+            proposal: Proposal,
+            clear_data: Span<Position>
         ) {
             assert(proposal.proposal_type == 2, 'not reset to white proposal');
             let mut world = self.world(@"pixelaw");
             // Reset to white by color
-            let core_actions = get_core_actions(ref world); // TODO: should we use p_war_actions insted of core_actions???
+            let core_actions = get_core_actions(
+                ref world
+            ); // TODO: should we use p_war_actions insted of core_actions???
             let system = get_caller_address();
 
             let target_args_1: u32 = proposal.target_args_1;
@@ -277,7 +308,8 @@ mod propose_actions {
 
                     if (previous_pwarpixel.owner != starknet::contract_address_const::<0x0>()) {
                         // get the previous player's info
-                        let mut previous_player: Player = world.read_model(previous_pwarpixel.owner);
+                        let mut previous_player: Player = world
+                            .read_model(previous_pwarpixel.owner);
 
                         previous_player.num_owns -= 1;
                         world.write_model(@previous_player);

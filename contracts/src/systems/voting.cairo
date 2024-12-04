@@ -1,21 +1,19 @@
 // define the interface
 #[starknet::interface]
 pub trait IVoting<T> {
-    fn vote(
-        ref self: T, game_id: usize, index: usize, use_px: u32, is_in_favor: bool
-    );
+    fn vote(ref self: T, game_id: usize, index: usize, use_px: u32, is_in_favor: bool);
 }
 
 // dojo decorator
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod voting_actions {
+    use dojo::event::EventStorage;
+    use dojo::model::{ModelStorage, ModelValueStorage};
+    use dojo::world::WorldStorageTrait;
     use p_war::models::{player::{Player}, proposal::{PlayerVote, Proposal}};
     use starknet::{ContractAddress, get_caller_address, get_block_timestamp};
     use super::IVoting;
-    use dojo::model::{ModelStorage, ModelValueStorage};
-    use dojo::world::WorldStorageTrait;
-    use dojo::event::EventStorage;
-    
+
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
     struct Voted {
@@ -30,11 +28,7 @@ mod voting_actions {
     #[abi(embed_v0)]
     impl VotingImpl of IVoting<ContractState> {
         fn vote(
-            ref self: ContractState,
-            game_id: usize,
-            index: usize,
-            use_px: u32,
-            is_in_favor: bool
+            ref self: ContractState, game_id: usize, index: usize, use_px: u32, is_in_favor: bool
         ) {
             let mut world = self.world(@"pixelaw");
             let player_address = get_caller_address();
@@ -63,7 +57,16 @@ mod voting_actions {
             world.write_model(@proposal);
             world.write_model(@player_vote);
 
-            world.emit_event(@Voted {game_id, index, timestamp: get_block_timestamp(), voter: player_address, is_in_favor});
+            world
+                .emit_event(
+                    @Voted {
+                        game_id,
+                        index,
+                        timestamp: get_block_timestamp(),
+                        voter: player_address,
+                        is_in_favor
+                    }
+                );
         }
     }
 }
