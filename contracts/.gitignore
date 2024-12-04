@@ -4,3 +4,4 @@ generated
 .idea
 manifests
 sepolia.deployer.keystore.json
+sepolia.deployer.keystore.jsonc
