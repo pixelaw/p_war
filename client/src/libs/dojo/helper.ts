@@ -45,6 +45,7 @@ export const getPixelEntities = async (
   const entities = await client.getEntities({
     limit,
     offset: 0,
+    dont_include_hashed_keys: true,
     clause: {
       Composite: {
         operator: "And",

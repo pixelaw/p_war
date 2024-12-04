@@ -34,7 +34,7 @@ export async function setup({ ...config }: DojoConfig) {
   const eventSync = await getSyncEvents(toriiClient, contractComponents as any, undefined, []);
 
   // Sync all entities
-  const sync = await getSyncEntities(toriiClient, contractComponents as any, []);
+  const sync = await getSyncEntities(toriiClient, contractComponents as any, undefined, []);
 
   // setup world
   const client = await setupWorld(dojoProvider);
@@ -68,7 +68,7 @@ export async function setup({ ...config }: DojoConfig) {
     contractComponents,
     systemCalls: createSystemCalls({ client }, clientComponents, world),
     publish: (typedData: string, signature: ArraySignatureType) => {
-      toriiClient.publishMessage(typedData, signature);
+      toriiClient.publishMessage(typedData, signature, true);
     },
     config,
     dojoProvider,
