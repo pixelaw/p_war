@@ -8,8 +8,45 @@ default = "pixelaw"
 mappings = {}
 
 [env]
-rpc_url = "https://starknet-sepolia.public.blastapi.io/rpc/v0_7"
-keystore_path = "accounts/sepolia.deployer.keystore.json"
-world_address = "0x6f130c8e150882e39cbe878c650c8f35c86579180dbc77d0c1cbe169449b5f6"
+rpc_url = "https://api.cartridge.gg/x/starknet/sepolia"
+account_address = "0x02107b2bcC750F51E70cFb9c53583a54eAf86DaC60C6EFBDECf18F7eE398Cb89"
+private_key = "0x01ef15f865960b993c0bd1c5e00b94ebd55485e39c4e68a57b08b72f0885682f"
+world_address = "0x2bf4d3aa0dced89d37d8c3b4ff6a05895c0af32ff3baf9b02abf8504e53eaad"
 
-account_address = "YOUR_ACCOUNT"
+[writers]
+# CORE
+"pixelaw-App" = ["pixelaw-actions"]
+"pixelaw-AppName" = ["pixelaw-actions"]
+"pixelaw-AppUser" = ["pixelaw-actions"]
+"pixelaw-CoreActionsAddress" = ["pixelaw-actions"]
+"pixelaw-QueueScheduled" = ["pixelaw-actions"]
+"pixelaw-QueueProcessed" = ["pixelaw-actions"]
+"pixelaw-Alert" = ["pixelaw-actions"]
+"pixelaw-Pixel" = [
+  "pixelaw-actions",
+  "pixelaw-paint_actions",
+  "pixelaw-snake_actions",
+]
+"pixelaw-QueueItem" = ["pixelaw-actions"]
+"pixelaw-Snake" = ["pixelaw-actions", "pixelaw-snake_actions"]
+"pixelaw-RTree" = ["pixelaw-actions"]
+"pixelaw-Area" = ["pixelaw-actions"]
+"pixelaw-SnakeSegment" = ["pixelaw-snake_actions"]
+# GUILD
+"pixelaw-Guild" = ["pixelaw-guild_actions"]
+# P-WAR
+"pixelaw-AllowedApp" = ["pixelaw-p_war_actions"]
+"pixelaw-Board" = ["pixelaw-p_war_actions", "pixelaw-propose_actions"]
+"pixelaw-AllowedColor" = ["pixelaw-p_war_actions", "pixelaw-propose_actions"]
+"pixelaw-PaletteColors" = ["pixelaw-p_war_actions", "pixelaw-propose_actions"]
+"pixelaw-PWarPixel" = ["pixelaw-p_war_actions"]
+"pixelaw-Game" = ["pixelaw-p_war_actions"]
+"pixelaw-GameId" = ["pixelaw-p_war_actions"]
+"pixelaw-GamePalette" = ["pixelaw-p_war_actions", "pixelaw-propose_actions"]
+"pixelaw-InPalette" = ["pixelaw-p_war_actions", "pixelaw-propose_actions"]
+"pixelaw-Player" = ["pixelaw-p_war_actions", "pixelaw-propose_actions", "pixelaw-voting_actions"]
+"pixelaw-PixelRecoveryRate" = ["pixelaw-p_war_actions"]
+# PROPOSE
+"pixelaw-Proposal" = ["pixelaw-propose_actions", "pixelaw-voting_actions"]
+# VOTING
+"pixelaw-PlayerVote" = ["pixelaw-voting_actions"]

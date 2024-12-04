@@ -1,24 +1,25 @@
 // import test utils
+// import world dispatcher
+use debug::PrintTrait;
+use dojo::model::{ModelStorage};
+use dojo::world::{world, IWorldDispatcher, IWorldDispatcherTrait, WorldStorageTrait, WorldStorage};
 use dojo_cairo_test::{
     spawn_test_world, NamespaceDef, TestResource, ContractDefTrait, ContractDef,
     WorldStorageTestTrait
 };
-// import world dispatcher
-use debug::PrintTrait;
-use dojo::model::{ModelStorage};
-use dojo::world::{
-    world, IWorldDispatcher, IWorldDispatcherTrait, WorldStorageTrait, WorldStorage
-};
 // import test utils
 use p_war::{
     models::{
-        player::{Player, m_Player},
-        game::{Game, m_Game},
+        player::{Player, m_Player}, game::{Game, m_Game},
         board::{Board, m_Board, GameId, m_GameId, PWarPixel, m_PWarPixel},
-        proposal::{Proposal, m_Proposal, PixelRecoveryRate, m_PixelRecoveryRate, PlayerVote, m_PlayerVote},
-        guilds::{Guild, m_Guild},
-        allowed_app::{AllowedApp, m_AllowedApp},
-        allowed_color::{AllowedColor, m_AllowedColor, PaletteColors, m_PaletteColors, InPalette, m_InPalette, GamePalette, m_GamePalette},
+        proposal::{
+            Proposal, m_Proposal, PixelRecoveryRate, m_PixelRecoveryRate, PlayerVote, m_PlayerVote
+        },
+        guilds::{Guild, m_Guild}, allowed_app::{AllowedApp, m_AllowedApp},
+        allowed_color::{
+            AllowedColor, m_AllowedColor, PaletteColors, m_PaletteColors, InPalette, m_InPalette,
+            GamePalette, m_GamePalette
+        },
     },
     systems::{
         actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
@@ -40,7 +41,16 @@ use starknet::class_hash::Felt252TryIntoClassHash;
 
 use zeroable::Zeroable;
 
-pub fn deploy_p_war(ref world: WorldStorage) -> (WorldStorage, IActionsDispatcher, IProposeDispatcher, IVotingDispatcher, IGuildDispatcher, IAllowedAppDispatcher) {
+pub fn deploy_p_war(
+    ref world: WorldStorage
+) -> (
+    WorldStorage,
+    IActionsDispatcher,
+    IProposeDispatcher,
+    IVotingDispatcher,
+    IGuildDispatcher,
+    IAllowedAppDispatcher
+) {
     let ndef = namespace_def();
     let cdefs = contract_defs();
 
@@ -105,7 +115,15 @@ pub fn contract_defs() -> Span<ContractDef> {
     cdefs
 }
 
-pub fn setup_pwar_apps(world: WorldStorage) -> (IActionsDispatcher, IProposeDispatcher, IVotingDispatcher, IGuildDispatcher, IAllowedAppDispatcher) {    
+pub fn setup_pwar_apps(
+    world: WorldStorage
+) -> (
+    IActionsDispatcher,
+    IProposeDispatcher,
+    IVotingDispatcher,
+    IGuildDispatcher,
+    IAllowedAppDispatcher
+) {
     let (p_war_actions_address, _) = world.dns(@"p_war_actions").unwrap();
     let p_war_actions = IActionsDispatcher { contract_address: p_war_actions_address };
 
@@ -118,7 +136,7 @@ pub fn setup_pwar_apps(world: WorldStorage) -> (IActionsDispatcher, IProposeDisp
     let (guild_address, _) = world.dns(@"guild_actions").unwrap();
     let guild_actions = IGuildDispatcher { contract_address: guild_address };
 
-    let (allowed_app_address, _) = world.dns(@"allowed_app_actions").unwrap();  
+    let (allowed_app_address, _) = world.dns(@"allowed_app_actions").unwrap();
     let allowed_app_actions = IAllowedAppDispatcher { contract_address: allowed_app_address };
 
     (p_war_actions, propose_actions, voting_actions, guild_actions, allowed_app_actions)
@@ -126,8 +144,25 @@ pub fn setup_pwar_apps(world: WorldStorage) -> (IActionsDispatcher, IProposeDisp
 
 pub fn setup_pwar_apps_initialized(
     world: WorldStorage
-) -> (IActionsDispatcher, IProposeDispatcher, IVotingDispatcher, IGuildDispatcher, IAllowedAppDispatcher) {
-    let (p_war_actions, propose_actions, voting_actions, guild_actions, allowed_app_actions): (IActionsDispatcher, IProposeDispatcher, IVotingDispatcher, IGuildDispatcher, IAllowedAppDispatcher) = setup_pwar_apps(world);
+) -> (
+    IActionsDispatcher,
+    IProposeDispatcher,
+    IVotingDispatcher,
+    IGuildDispatcher,
+    IAllowedAppDispatcher
+) {
+    let (
+        p_war_actions, propose_actions, voting_actions, guild_actions, allowed_app_actions
+    ): (
+        IActionsDispatcher,
+        IProposeDispatcher,
+        IVotingDispatcher,
+        IGuildDispatcher,
+        IAllowedAppDispatcher
+    ) =
+        setup_pwar_apps(
+        world
+    );
     p_war_actions.init();
     // propose_actions.init();
     // voting_actions.init();
@@ -142,11 +177,7 @@ pub fn print_all_colors(ref world: WorldStorage, id: u32) {
     loop {
         let color: PaletteColors = world.read_model((id, i));
         let allowed_color: AllowedColor = world.read_model((id, color.color));
-        println!(
-            "@@@@@ COLOR: {}, {} @@@@",
-            color.color,
-            allowed_color.is_allowed
-        );
+        println!("@@@@@ COLOR: {}, {} @@@@", color.color, allowed_color.is_allowed);
         i += 1;
         if i == 9 {
             break;

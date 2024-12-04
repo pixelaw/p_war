@@ -1,8 +1,8 @@
 import { createDojoConfig } from "@dojoengine/core";
-import manifestDev from "../contracts/manifests/dev/deployment/manifest.json";
-import manifestRelease from "../contracts/manifests/release/deployment/manifest.json";
+import manifestDev from "../contracts/manifest_dev.json";
+// import manifestSepolia from "../contracts/manifest_sepolia.json";
 
-export const manifest = import.meta.env.VITE_PUBLIC_PROFILE === "dev" ? manifestDev : manifestRelease;
+export const manifest = manifestDev;
 
 export const dojoConfig = createDojoConfig({
   toriiUrl: import.meta.env.VITE_PUBLIC_TORII_URL,

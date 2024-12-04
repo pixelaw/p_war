@@ -1,3 +1,6 @@
+use dojo::event::EventStorage;
+use dojo::model::{ModelStorage, ModelValueStorage};
+use dojo::world::storage::WorldStorage;
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 
 use p_war::models::{
@@ -8,9 +11,6 @@ use p_war::models::{
 use starknet::{
     ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
 };
-use dojo::model::{ModelStorage, ModelValueStorage};
-use dojo::event::EventStorage;
-use dojo::world::storage::WorldStorage;
 
 pub fn check_game_status(status: Status) -> bool {
     status == Status::Pending || status == Status::Ongoing

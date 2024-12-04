@@ -1,7 +1,7 @@
-use starknet::{ContractAddress, get_caller_address};
-use p_war::models::payments::{GamePayments, PlayerPayment, TreasuryInfo};
 use p_war::models::game::Game;
 use p_war::models::guilds::Guild;
+use p_war::models::payments::{GamePayments, PlayerPayment, TreasuryInfo};
+use starknet::{ContractAddress, get_caller_address};
 
 #[starknet::interface]
 pub trait IPayments<T> {
@@ -15,8 +15,8 @@ pub trait IPayments<T> {
 mod payments {
     // use super::*;
 
-    use dojo::model::{ModelStorage, ModelValueStorage};
     use dojo::event::EventStorage;
+    use dojo::model::{ModelStorage, ModelValueStorage};
 
     const PRIZE_POOL_PERCENTAGE: u256 = 90;
     const TREASURY_PERCENTAGE: u256 = 10;
@@ -44,7 +44,9 @@ mod payments {
 
     #[abi(embed_v0)]
     impl PaymentsImpl of IPayments<ContractState> {
-        fn initialize_game_payments(ref self: ContractState, game_id: u32, participation_fee: u256) {
+        fn initialize_game_payments(
+            ref self: ContractState, game_id: u32, participation_fee: u256
+        ) {
             let game_payments = GamePayments {
                 game_id: game_id,
                 participation_fee: participation_fee,
@@ -69,9 +71,7 @@ mod payments {
             game_payments.treasury_balance += treasury_amount;
 
             let player_payment = PlayerPayment {
-                game_id: game_id,
-                player: caller,
-                amount_paid: fee
+                game_id: game_id, player: caller, amount_paid: fee
             };
 
             set!(world, (game_payments, player_payment));
@@ -82,7 +82,7 @@ mod payments {
         fn payout_winning_guild(ref self: ContractState, game_id: u32, winning_guild_id: u32) {
             let mut game_payments = get!(world, game_id, (GamePayments));
             let guild = get!(world, (game_id, winning_guild_id), (Guild));
-            
+
             let total_payout = game_payments.prize_pool;
             let members_count = guild.member_count;
             let payout_per_member = total_payout / members_count.into();
@@ -106,14 +106,16 @@ mod payments {
             game_payments.prize_pool = 0;
             set!(world, (game_payments));
 
-            emit!(world, WinningGuildPaidOut { game_id: game_id, guild_id: winning_guild_id, total_amount: total_payout });
+            emit!(
+                world,
+                WinningGuildPaidOut {
+                    game_id: game_id, guild_id: winning_guild_id, total_amount: total_payout
+                }
+            );
         }
 
         fn set_treasury_address(ref self: ContractState, treasury_address: ContractAddress) {
-            let treasury_info = TreasuryInfo {
-                dummy_key: 0,
-                treasury_address: treasury_address
-            };
+            let treasury_info = TreasuryInfo { dummy_key: 0, treasury_address: treasury_address };
             set!(world, (treasury_info));
         }
     }

@@ -1,13 +1,10 @@
-use p_war::tests::utils::{deploy_p_war};
+use dojo::event::EventStorage;
 use dojo::model::{ModelStorage, ModelValueStorage};
 use dojo::world::{WorldStorage, WorldStorageTrait};
-use dojo::event::EventStorage;
-use pixelaw_test_helpers::{setup_core_initialized};
-use starknet::{class_hash::Felt252TryIntoClassHash, ContractAddress, testing::{set_block_timestamp}, get_tx_info, get_block_timestamp};
+use p_war::tests::utils::{deploy_p_war};
 use p_war::{
     models::{
-        game::{Game}, board::{Board, GameId, Position}, proposal::{Proposal},
-        player::{Player},
+        game::{Game}, board::{Board, GameId, Position}, proposal::{Proposal}, player::{Player},
         allowed_app::AllowedApp, allowed_color::{AllowedColor, PaletteColors},
     },
     systems::{
@@ -18,14 +15,17 @@ use p_war::{
     constants::{DEFAULT_AREA, PROPOSAL_DURATION, GAME_DURATION}
 };
 use pixelaw::core::{
-    models::{
-        pixel::{Pixel, PixelUpdate},
-    },
+    models::{pixel::{Pixel, PixelUpdate},},
     actions::{
         actions as core_actions, IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     },
     utils::{DefaultParameters, Position as PixelawPosition, is_pixel_color}
+};
+use pixelaw_test_helpers::{setup_core_initialized};
+use starknet::{
+    class_hash::Felt252TryIntoClassHash, ContractAddress, testing::{set_block_timestamp},
+    get_tx_info, get_block_timestamp
 };
 
 const WHITE_COLOR: u32 = 0xFFFFFFFF;
@@ -43,7 +43,9 @@ const VOTE_PIXEL_COUNT: u32 = 3;
 #[available_gas(999_999_999)]
 fn test_add_color() {
     let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
-    let (_world, p_war_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_p_war(ref world);
+    let (_world, p_war_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_p_war(
+        ref world
+    );
 
     let default_params = DefaultParameters {
         player_override: Option::None,
@@ -105,9 +107,7 @@ fn test_add_color() {
     let newest_color_allowed: AllowedColor = world.read_model((id, newest_color.color));
 
     println!(
-        "@@@@@ NEWEST_ALLOWED: {}, {} @@@@",
-        newest_color.color,
-        newest_color_allowed.is_allowed
+        "@@@@@ NEWEST_ALLOWED: {}, {} @@@@", newest_color.color, newest_color_allowed.is_allowed
     );
 
     assert(oldest_color_allowed.is_allowed == false, 'the oldest became unusable');
@@ -120,7 +120,9 @@ fn test_add_color() {
 #[available_gas(999_999_999)]
 fn test_reset_to_white() {
     let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
-    let (_world, p_war_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_p_war(ref world);
+    let (_world, p_war_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_p_war(
+        ref world
+    );
 
     // Create a game.
     // This creates a 10x10 grid to the bottom-right of the start_position
@@ -173,7 +175,8 @@ fn test_reset_to_white() {
 
     // Retrieve the pixel that was reset
     assert(
-        is_pixel_color(ref world, GAME_PAINT_POSITION, WHITE_COLOR), 'Pixel should be entirely white'
+        is_pixel_color(ref world, GAME_PAINT_POSITION, WHITE_COLOR),
+        'Pixel should be entirely white'
     );
 
     // Now try to paint on it again
@@ -188,7 +191,9 @@ fn test_reset_to_white() {
             }
         );
 
-    assert(is_pixel_color(ref world, GAME_PAINT_POSITION, RED_COLOR), 'Pixel should be entirely red');
+    assert(
+        is_pixel_color(ref world, GAME_PAINT_POSITION, RED_COLOR), 'Pixel should be entirely red'
+    );
 
     // Now try to paint on it again
     p_war_actions
@@ -203,7 +208,8 @@ fn test_reset_to_white() {
         );
 
     assert(
-        is_pixel_color(ref world, GAME_PAINT_POSITION, WHITE_COLOR), 'Pixel should be entirely white'
+        is_pixel_color(ref world, GAME_PAINT_POSITION, WHITE_COLOR),
+        'Pixel should be entirely white'
     );
 }
 
@@ -211,7 +217,9 @@ fn test_reset_to_white() {
 #[available_gas(999_999_999)]
 fn test_expand_area() {
     let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
-    let (_world, p_war_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_p_war(ref world);
+    let (_world, p_war_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_p_war(
+        ref world
+    );
 
     let default_params = DefaultParameters {
         player_override: Option::None,
@@ -253,7 +261,9 @@ fn test_expand_area() {
 #[available_gas(999_999_999)]
 fn test_extend_game_end() {
     let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
-    let (_world, p_war_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_p_war(ref world);
+    let (_world, p_war_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_p_war(
+        ref world
+    );
 
     let default_params = DefaultParameters {
         player_override: Option::None,

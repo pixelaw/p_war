@@ -1,8 +1,8 @@
 use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
 use p_war::models::board::Position;
+use p_war::models::game::Game;
 use p_war::systems::guilds::{IGuildDispatcher, IGuildDispatcherTrait};
 use pixelaw::core::models::pixel::PixelUpdate;
-use p_war::models::game::Game;
 use pixelaw::core::utils::DefaultParameters;
 use starknet::ContractAddress;
 
@@ -12,11 +12,11 @@ pub trait IActions<T> {
     fn init(ref self: T);
     fn interact(ref self: T, default_params: DefaultParameters);
     fn create_game(ref self: T, origin: Position) -> usize;
-    fn create_game_guilds(ref self: T, game_id: usize, guild_dispatcher: IGuildDispatcher) -> Array<usize>;
+    fn create_game_guilds(
+        ref self: T, game_id: usize, guild_dispatcher: IGuildDispatcher
+    ) -> Array<usize>;
     fn get_game_id(self: @T, position: Position) -> usize;
-    fn place_pixel(
-        ref self: T, app: ContractAddress, default_params: DefaultParameters
-    );
+    fn place_pixel(ref self: T, app: ContractAddress, default_params: DefaultParameters);
     fn update_pixel(ref self: T, pixel_update: PixelUpdate);
     fn end_game(ref self: T, game_id: usize);
 }
@@ -24,6 +24,10 @@ pub trait IActions<T> {
 // dojo decorator
 #[dojo::contract(namespace: "pixelaw", nomapping: true)]
 mod p_war_actions {
+    use dojo::event::EventStorage;
+    use dojo::model::{ModelStorage, ModelValueStorage};
+    use dojo::world::WorldStorageTrait;
+    use dojo::world::{IWorldDispatcherTrait};
     use p_war::constants::{
         APP_KEY, APP_ICON, GAME_ID, OUT_OF_BOUNDS_GAME_ID, DEFAULT_RECOVERY_RATE, INITIAL_COLOR,
         GAME_DURATION, DEFAULT_AREA,
@@ -34,6 +38,7 @@ mod p_war_actions {
         allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette},
         allowed_app::AllowedApp
     };
+    use p_war::systems::app::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
     use p_war::systems::guilds::{IGuildDispatcher, IGuildDispatcherTrait};
     use p_war::systems::utils::{check_game_status};
     use pixelaw::core::actions::{
@@ -41,19 +46,14 @@ mod p_war_actions {
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
     use pixelaw::core::models::{pixel::PixelUpdate, registry::App};
+    use pixelaw::core::utils::{
+        get_callers, get_core_actions, Direction, Position, DefaultParameters
+    };
     use starknet::{
         ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info,
         contract_address_const,
     };
     use super::{IActions, IActionsDispatcher, IActionsDispatcherTrait};
-    use dojo::model::{ModelStorage, ModelValueStorage};
-    use dojo::world::WorldStorageTrait;
-    use dojo::event::EventStorage;
-    use pixelaw::core::utils::{
-        get_callers, get_core_actions, Direction, Position, DefaultParameters
-    };
-    use p_war::systems::app::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
-    use dojo::world::{IWorldDispatcherTrait};
 
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
@@ -107,7 +107,9 @@ mod p_war_actions {
             let board: Board = world.read_model(GAME_ID);
 
             if position.x < board.origin.x || position.x >= board.origin.x
-                + (board.width.try_into().unwrap()) || position.y < board.origin.y || position.y >= board.origin.y
+                + (board.width.try_into().unwrap())
+                    || position.y < board.origin.y
+                    || position.y >= board.origin.y
                 + (board.height.try_into().unwrap()) {
                 return OUT_OF_BOUNDS_GAME_ID; // OUT_OF_BOUNDS_GAME_ID for out of bounds
             };
@@ -167,8 +169,12 @@ mod p_war_actions {
                 if color_idx > 8 {
                     break;
                 };
-                let allowed_color = AllowedColor { game_id: id, color: *a.at(color_idx), is_allowed: true };
-                let palette_colors = PaletteColors { game_id: id, idx: color_idx, color: *a.at(color_idx) };
+                let allowed_color = AllowedColor {
+                    game_id: id, color: *a.at(color_idx), is_allowed: true
+                };
+                let palette_colors = PaletteColors {
+                    game_id: id, idx: color_idx, color: *a.at(color_idx)
+                };
                 let in_palette = InPalette { game_id: id, color: *a.at(color_idx), value: true };
                 world.write_model(@allowed_color);
                 world.write_model(@palette_colors);
@@ -178,19 +184,23 @@ mod p_war_actions {
 
             println!("create_game 2");
             // set default recovery_rate
-            let pixel_recovery_rate = PixelRecoveryRate { game_id: id, rate: DEFAULT_RECOVERY_RATE };
+            let pixel_recovery_rate = PixelRecoveryRate {
+                game_id: id, rate: DEFAULT_RECOVERY_RATE
+            };
             let game_palette = GamePalette { game_id: id, length: 9 };
             world.write_model(@pixel_recovery_rate);
             world.write_model(@game_palette);
 
-            println!("create_game 2.1");   
+            println!("create_game 2.1");
 
             id
             // emit event that game has started
         }
 
         // initialize guilds for the game
-        fn create_game_guilds(ref self: ContractState, game_id: usize, guild_dispatcher: IGuildDispatcher) -> Array<usize> {
+        fn create_game_guilds(
+            ref self: ContractState, game_id: usize, guild_dispatcher: IGuildDispatcher
+        ) -> Array<usize> {
             let mut guild_ids = ArrayTrait::new();
             guild_ids.append(guild_dispatcher.create_guild(game_id, 'Fire'));
             guild_ids.append(guild_dispatcher.create_guild(game_id, 'Water'));
@@ -244,22 +254,23 @@ mod p_war_actions {
             assert(check_game_status(game.status()), 'game is not ongoing: actions1');
 
             println!("set_pixel BEGIN");
-            core_actions.update_pixel( //new
-                player_address,
-                system,
-                PixelUpdate {
-                    x: default_params.position.x,
-                    y: default_params.position.y,
-                    color: Option::Some(default_params.color),
-                    timestamp: Option::None,
-                    text: Option::None,
-                    app: Option::None,
-                    owner: Option::None,
-                    action: Option::None
-                },
-                Option::None,
-                false
-            );
+            core_actions
+                .update_pixel( //new
+                    player_address,
+                    system,
+                    PixelUpdate {
+                        x: default_params.position.x,
+                        y: default_params.position.y,
+                        color: Option::Some(default_params.color),
+                        timestamp: Option::None,
+                        text: Option::None,
+                        app: Option::None,
+                        owner: Option::None,
+                        action: Option::None
+                    },
+                    Option::None,
+                    false
+                );
             println!("set_pixel END");
 
             player.num_owns += 1;

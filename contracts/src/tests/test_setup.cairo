@@ -1,5 +1,5 @@
-use p_war::tests::utils::{deploy_p_war};
 use dojo::world::WorldStorage;
+use p_war::tests::utils::{deploy_p_war};
 use pixelaw_test_helpers::{setup_core_initialized};
 
 #[test]

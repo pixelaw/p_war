@@ -1,9 +1,7 @@
-use p_war::tests::utils::{deploy_p_war};
+use dojo::event::EventStorage;
 use dojo::model::{ModelStorage, ModelValueStorage};
 use dojo::world::{WorldStorage, WorldStorageTrait};
-use dojo::event::EventStorage;
-use pixelaw_test_helpers::{setup_core_initialized};
-use starknet::{class_hash::Felt252TryIntoClassHash, ContractAddress, testing::{set_block_timestamp}};
+use p_war::tests::utils::{deploy_p_war};
 use p_war::{
     models::{
         game::{Game}, board::{Board, GameId, Position}, proposal::{Proposal},
@@ -17,14 +15,16 @@ use p_war::{
     constants::{PROPOSAL_DURATION}
 };
 use pixelaw::core::{
-    models::{
-        pixel::{Pixel, PixelUpdate},
-    },
+    models::{pixel::{Pixel, PixelUpdate},},
     actions::{
         actions as core_actions, IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     },
     utils::{DefaultParameters, Position as PixelawPosition}
+};
+use pixelaw_test_helpers::{setup_core_initialized};
+use starknet::{
+    class_hash::Felt252TryIntoClassHash, ContractAddress, testing::{set_block_timestamp}
 };
 
 const COLOR: u32 = 0x000000ff;
@@ -33,7 +33,10 @@ const COLOR: u32 = 0x000000ff;
 #[available_gas(999_999_999)]
 fn test_game_created() {
     let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
-    let (_world, p_war_actions, _propose_action, _voting_action, _guild, _allowed_app) = deploy_p_war(ref world);
+    let (_world, p_war_actions, _propose_action, _voting_action, _guild, _allowed_app) =
+        deploy_p_war(
+        ref world
+    );
     // caller
     let _caller = starknet::contract_address_const::<0x0>();
 
