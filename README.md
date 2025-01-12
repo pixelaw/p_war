@@ -55,7 +55,7 @@ otherwise,
 
 ```bash
 # Run Katana
-katana --disable-fee --allowed-origins "*" --db-dir katana
+katana --allowed-origins "*" --db-dir katana
 ```
 
 #### Terminal two
@@ -68,7 +68,7 @@ sozo build
 sozo migrate apply
 
 # Start Torii
-torii --world 0x263ae44e5414519a5c5a135cccaf3d9d7ee196d37e8de47a178da91f3de9b34 --allowed-origins "*"
+torii --world 0x2bf4d3aa0dced89d37d8c3b4ff6a05895c0af32ff3baf9b02abf8504e53eaad --allowed-origins "*"
 ```
 
 ### How to deploy
