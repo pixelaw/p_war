@@ -1,3 +1,8 @@
+# dev
+src/assets/tiles
+coverage/
+.env
+
 # Logs
 logs
 *.log
@@ -10,10 +15,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-*.tsbuildinfo
-bun.lockb
-
-.env.production
+*.local
 
 # Editor directories and files
 .vscode/*
@@ -25,3 +27,4 @@ bun.lockb
 *.njsproj
 *.sln
 *.sw?
+/.run/dev.run.xml
