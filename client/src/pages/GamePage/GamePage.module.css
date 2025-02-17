@@ -11,7 +11,7 @@
     position: absolute;
     top: calc(50px + 1rem);
     left: 1rem;
-    width: 300px;
+    width: 100px;
     display: flex;
     justify-content: center;
     background-color: transparent;

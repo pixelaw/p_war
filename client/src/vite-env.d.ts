@@ -8,7 +8,7 @@ type ImportMetaEnv = {
   DEV: boolean
   PROD: boolean
   DEFAULT_WORLD: string
-  WORLDS_URL: string
+  WORLDS_REGISTRY_URL: string
   // @user-defined-start
     /*
      * Here you can define your own special variables

@@ -9,25 +9,9 @@ import { Route, Routes } from "react-router-dom"
 import styles from "./Main.module.css"
 
 function Main() {
-    //<editor-fold desc="State">
-
-    //</editor-fold>
-
-    //<editor-fold desc="Hooks">
 
     const { coreStatus } = usePixelawProvider()
 
-    //</editor-fold>
-
-    //<editor-fold desc="Handlers">
-
-    //</editor-fold>
-
-    //<editor-fold desc="Custom behavior">
-
-    //</editor-fold>
-
-    //<editor-fold desc="Output">
     if (["uninitialized", "initializing", "loadConfig"].includes(coreStatus)) {
         document.title = "PixeLAW: Loading"
         return <Loading />
@@ -66,7 +50,6 @@ function Main() {
             </div>
         </div>
     )
-    //</editor-fold>
 }
 
 export default Main

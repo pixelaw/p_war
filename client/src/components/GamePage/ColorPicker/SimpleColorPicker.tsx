@@ -1,5 +1,5 @@
-import { usePixelawProvider } from "../../../../../react-dojo/src/hooks/PixelawProvider.tsx"
 import styles from "./SimpleColorPicker.module.css"
+import {hexRGBtoNumber, numberToHexRGB} from "@/utils.ts";
 
 const colors = [
     "#FF0000",
@@ -14,11 +14,13 @@ const colors = [
 ]
 
 export interface ColorPickerProps {
-    onColorSelect: (color: string) => void
-    color: string
+    onColorSelect: (color: number) => void
+    color: number
 }
 
 const SimpleColorPicker: React.FC<ColorPickerProps> = ({ onColorSelect, color: selectedColor }) => {
+    const selectedColorHex = numberToHexRGB(selectedColor)
+
     return (
         <div className={styles.inner}>
             {colors.map((color) => (
@@ -27,11 +29,13 @@ const SimpleColorPicker: React.FC<ColorPickerProps> = ({ onColorSelect, color: s
                     key={color}
                     style={{
                         backgroundColor: color,
-                        outline: selectedColor === color ? "4px solid black" : "none",
+                        outline: selectedColorHex === color ? "4px solid black" : "none",
                     }}
                     className={`${styles.button} ${color === "#FFFFFF" ? styles["button-white"] : ""}`}
                     aria-label={`Color ${color}`}
-                    onClick={() => onColorSelect(color)}
+                    onClick={() => {
+                        onColorSelect(hexRGBtoNumber(color))
+                    }}
                 />
             ))}
         </div>

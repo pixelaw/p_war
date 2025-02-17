@@ -2,8 +2,6 @@ import App from "@/components/GamePage/App/App.tsx"
 import { usePixelawProvider } from "@pixelaw/react"
 import styles from "./Apps.module.css"
 
-
-
 const Apps: React.FC = () => {
     const { pixelawCore: {appStore}, setApp, app: selectedApp } = usePixelawProvider()
 
@@ -16,8 +14,8 @@ const Apps: React.FC = () => {
                 // biome-ignore lint/a11y/useKeyWithClickEvents: TODO keyboard support later
                 <div
                     key={app.name}
-                    onClick={() => setApp(app)}
-                    className={app === selectedApp ? styles.selected : ""}
+                    onClick={() => setApp(app.name)}
+                    className={app.name === selectedApp ? styles.selected : ""}
                 >
                     <App icon={app.icon} name={app.name} />
                 </div>

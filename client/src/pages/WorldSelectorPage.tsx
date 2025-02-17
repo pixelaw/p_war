@@ -1,14 +1,15 @@
-import worldsConfig from "@/config/worlds.json"
-import useSettingStore from "@/hooks/SettingStore.ts"
+
 import { useNavigate } from "react-router-dom"
 import styles from "./WorldSelectorPage.module.css"
+import {usePixelawProvider} from "@pixelaw/react";
 
 const WorldSelectorPage = () => {
-    const { setWorld, world } = useSettingStore()
+    const { pixelawCore, world, setWorld } = usePixelawProvider()
+
     const navigate = useNavigate()
 
-    const handleWorldChange = (worldKey: string) => {
-        setWorld(worldKey)
+    const handleWorldChange = (newWorld: string) => {
+        setWorld(newWorld)
         navigate("/")
     }
 
@@ -16,7 +17,7 @@ const WorldSelectorPage = () => {
         <div className={styles.inner}>
             <h1>World Selector: {world}</h1>
             <ul className={styles.list}>
-                {Object.entries(worldsConfig).map(([worldKey, worldConfig]) => {
+                {Object.entries(pixelawCore.getWorldsRegistry()).map(([worldKey, worldConfig]) => {
                     return (
                         <li
                             key={worldKey}

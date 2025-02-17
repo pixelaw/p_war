@@ -20,9 +20,11 @@
         "noFallthroughCasesInSwitch": true,
         "noUncheckedSideEffectImports": true,
         "paths": {
-            "@pixelaw/core": ["../core/src"],
-            "@pixelaw/core-dojo": ["../core-dojo/src"],
-            "@pixelaw/react": ["../react/src"],
+            "@pixelaw/core": ["pixelaw.js/packages/core/src"],
+            "@pixelaw/core-dojo": ["pixelaw.js/packages/core-dojo/src"],
+            "@pixelaw/core-mud": ["pixelaw.js/packages/core-mud/src"],
+            "@pixelaw/react": ["pixelaw.js/packages/react/src"],
+            "@pixelaw/react-dojo": ["pixelaw.js/packages/react-dojo/src"],
             "@/*": [
                 "src/*"
             ]

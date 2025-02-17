@@ -10,9 +10,10 @@ import { DojoEngine } from "@pixelaw/core-dojo"
 const MenuBar: React.FC = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    const { pixelawCore: {engine} } = usePixelawProvider()
+    const { pixelawCore: {engine}, wallet, world } = usePixelawProvider()
     // const { address } = useAccount()
     // const { connectAsync, connectors } = useConnect()
+    const currentWallet = wallet?.id
 
     if (!(engine instanceof DojoEngine)) return null;
 
@@ -59,10 +60,10 @@ const MenuBar: React.FC = () => {
             </div>
             <div className={styles.rightSection}>
                 <button type={"button"} className={styles.menuButton} onClick={toggleWalletSelector}>
-                    Wallet
+                    Wallet ({currentWallet})
                 </button>
                 <button type={"button"} className={styles.menuButton} onClick={toggleWorldSelector}>
-                    World ()
+                    World ({world})
                 </button>
                 <button type={"button"} className={styles.menuButton} onClick={toggleSettings}>
                     Settings
