@@ -9,7 +9,6 @@ import { Route, Routes } from "react-router-dom"
 import styles from "./Main.module.css"
 
 function Main() {
-
     const { coreStatus } = usePixelawProvider()
 
     if (["uninitialized", "initializing", "loadConfig"].includes(coreStatus)) {
@@ -19,13 +18,13 @@ function Main() {
 
     if (coreStatus === "error") {
         document.title = "PixeLAW: Error"
-        const clientError = "TODO ERROR"
+        const clientError = "Todo error"
         const errorMessage = `${clientError}`
         return (
             <div className={styles.errorContainer}>
                 <div className={styles.errorMessage}>
                     <h1 className={styles.errorTitle}>Something went wrong</h1>
-                    {errorMessage !== "" && <p className={styles.errorDetail}>{errorMessage}</p>}
+                    {errorMessage != "" && <p className={styles.errorDetail}>{errorMessage}</p>}
                     <p className={styles.errorSuggestion}>
                         Try to refresh this page. If issue still persists, alert the team at Discord.
                     </p>
@@ -48,6 +47,8 @@ function Main() {
                     <Route path="/" element={<GamePage />} />
                 </Routes>
             </div>
+
+
         </div>
     )
 }

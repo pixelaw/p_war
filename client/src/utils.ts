@@ -20,7 +20,7 @@ export function getCoreDefaultsFromUrl() {
     const app = queryParams.get("app") || "";
     const color = parseInt(queryParams.get("color") || "0", 10);
     const center = queryParams.get("center")?.split(",").map(Number) as [number, number] | undefined;
-    const zoom = parseInt(queryParams.get("zoom") || "0", 10);
+    const zoom = parseInt(queryParams.get("zoom") || "7000", 10);
 
     return {
         app,

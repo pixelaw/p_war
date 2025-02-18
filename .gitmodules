@@ -1,0 +1,3 @@
+[submodule "client/pixelaw.js"]
+	path = client/pixelaw.js
+	url = https://github.com/pixelaw/pixelaw.js
