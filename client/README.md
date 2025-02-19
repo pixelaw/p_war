@@ -18,3 +18,20 @@ cd client
 git fetch upstream
 git rebase upstream/main
 ```
+
+
+# repo structure
+client/
+└── pixelaw.js/
+    ├── package.json          # Main package.json for the monorepo
+    ├── lerna.json            # Lerna configuration for managing packages
+    ├── biome.json            # Biome configuration for linting and formatting
+    ├── packages/
+    │   ├── core/
+    │   │   ├── package.json  # Package.json for @pixelaw/core
+    │   │   └── src/          # Source code for @pixelaw/core
+    │   ├── core-dojo/
+    │   │   ├── package.json  # Package.json for @pixelaw/core-dojo
+    │   │   └── src/          # Source code for @pixelaw/core-dojo
+    │   └── ...               # Other packages
+    └── examples/             # Example applications or usage

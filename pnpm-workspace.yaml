@@ -1,0 +1,3 @@
+   packages:
+     - 'client'
+     - 'client/pixelaw.js/packages/*'  # Include all packages in the pixelaw.js subdirectory

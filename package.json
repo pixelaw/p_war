@@ -1,0 +1,11 @@
+{
+    "name": "pwar",
+    "version": "1.0.0",
+    "private": true,
+    "workspaces": [
+      "client"
+    ],
+    "scripts": {
+      "dev": "pnpm --filter @pixelaw/client run dev"
+    }
+  }

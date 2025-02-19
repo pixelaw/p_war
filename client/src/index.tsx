@@ -7,7 +7,7 @@ import { BrowserRouter } from "react-router-dom"
 import {DojoEngine} from "@pixelaw/core-dojo"
 import {MudEngine} from "@pixelaw/core-mud"
 import {DEFAULT_WORLD, getCoreDefaultsFromUrl} from "@/utils.ts";
-import { StarknetChainProvider } from "@pixelaw/react-dojo"
+// import { StarknetChainProvider } from "@pixelaw/react-dojo"
 
 // TODO for now hardcoded, but planning to retrieve from github URL using env WORLDS_REGISTRY_URL
 import worldsRegistry from "@/config/worlds.json"
@@ -19,7 +19,7 @@ const engines = [DojoEngine, MudEngine]
 
 const coreDefaults = getCoreDefaultsFromUrl()
 
-const ChainProvider = StarknetChainProvider
+// const ChainProvider = StarknetChainProvider
 
 console.log("root")
 if (rootElement) {
@@ -27,9 +27,9 @@ if (rootElement) {
         <React.StrictMode>
             <PixelawProvider worldsRegistry={worldsRegistry} world={DEFAULT_WORLD} engines={engines} coreDefaults={coreDefaults}>
                     <BrowserRouter>
-                        <ChainProvider>
+                        {/* <ChainProvider> */}
                         <Main />
-                        </ChainProvider>
+                        {/* </ChainProvider> */}
                     </BrowserRouter>
                 </PixelawProvider>
         </React.StrictMode>,
