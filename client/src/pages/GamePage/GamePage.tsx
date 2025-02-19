@@ -1,12 +1,9 @@
 import Apps from "@/components/GamePage/Apps/Apps.tsx"
 import SimpleColorPicker from "@/components/GamePage/ColorPicker/SimpleColorPicker.tsx"
-
 import {clearDomChildren} from "@/utils.ts"
-
 import { type Coordinate } from "@pixelaw/core"
 import { usePixelawProvider } from "@pixelaw/react"
 import { useEffect, useMemo, useRef } from "react"
-
 import styles from "./GamePage.module.css"
 import dialogStyles from "./dialog.css"
 
@@ -78,7 +75,7 @@ const GamePage: React.FC = () => {
         if (coreStatus !== "ready") return
 
         renderer.setContainer(rendererContainerRef.current!)
-        renderer.setCenter(center)
+
     }, [coreStatus, renderer])
 
     return (

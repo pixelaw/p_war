@@ -32,7 +32,7 @@ if (rootElement) {
                         {/* </ChainProvider> */}
                     </BrowserRouter>
                 </PixelawProvider>
-        </React.StrictMode>,
+        </React.StrictMode>
     )
 } else {
     console.error("Failed to find the root element")
