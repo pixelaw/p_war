@@ -4,9 +4,10 @@ import GamePage from "@/pages/GamePage/GamePage.tsx"
 import SettingsPage from "@/pages/SettingsPage.tsx"
 import {WalletSelectorPage} from "@/pages/WalletSelectorPage.tsx";
 import WorldSelectorPage from "@/pages/WorldSelectorPage.tsx"
-import { usePixelawProvider } from "@pixelaw/react"
-import { Route, Routes } from "react-router-dom"
+import { PixelawProvider, usePixelawProvider } from "@pixelaw/react"
+import { Route, Routes, Navigate } from "react-router-dom"
 import styles from "./Main.module.css"
+import { PwarProvider } from "./providers/PwarProvider"
 
 function Main() {
     const { coreStatus } = usePixelawProvider()
@@ -45,10 +46,9 @@ function Main() {
                     <Route path="/world" element={<WorldSelectorPage />} />
                     <Route path="/wallet" element={<WalletSelectorPage />} />
                     <Route path="/" element={<GamePage />} />
+                    <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </div>
-
-
         </div>
     )
 }
