@@ -4,10 +4,9 @@ import GamePage from "@/pages/GamePage/GamePage.tsx"
 import SettingsPage from "@/pages/SettingsPage.tsx"
 import {WalletSelectorPage} from "@/pages/WalletSelectorPage.tsx";
 import WorldSelectorPage from "@/pages/WorldSelectorPage.tsx"
-import { PixelawProvider, usePixelawProvider } from "@pixelaw/react"
+import { usePixelawProvider } from "@pixelaw/react"
 import { Route, Routes, Navigate } from "react-router-dom"
 import styles from "./Main.module.css"
-import { PwarProvider } from "./providers/PwarProvider"
 
 function Main() {
     const { coreStatus } = usePixelawProvider()

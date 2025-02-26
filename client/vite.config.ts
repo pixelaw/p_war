@@ -75,6 +75,11 @@ export default defineConfig({
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/rpc/, ''),
                 // ws: true
+            },
+            '/starknet': {
+                target: 'https://alpha4.starknet.io',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/starknet/, '')
             }
         },
         allowedHosts: true, //["px.tunnel.devsat.work"],

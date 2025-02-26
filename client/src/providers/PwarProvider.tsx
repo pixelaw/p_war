@@ -1,7 +1,7 @@
 import { createContext, type ReactNode, useContext, useEffect, useState } from "react"
 import type { Coordinate } from "@pixelaw/core"
 import { type BaseWallet } from "@pixelaw/core"
-import { Contract, RpcProvider } from "starknet"
+import { Contract, RpcProvider, constants } from "starknet"
 
 // Define types based on the Cairo contract
 type DefaultParameters = {
@@ -29,6 +29,26 @@ export type IPwarContext = {
 }
 
 export const PwarContext = createContext<IPwarContext | undefined>(undefined)
+
+// Add this helper function at the top of the file
+const formatAddress = (address: string): string => {
+    // Remove '0x' if present and pad to 64 characters
+    return '0x' + address.replace('0x', '').padStart(64, '0')
+}
+
+const checkNetwork = async (provider: RpcProvider) => {
+    try {
+        const chainId = await provider.getChainId()
+        console.log("Connected to network with chainId:", chainId)
+        return true
+    } catch (error) {
+        console.error("Failed to connect to network:", error)
+        return false
+    }
+}
+
+const sepoliaProvider = new RpcProvider({ nodeUrl: constants.NetworkName.SN_SEPOLIA });
+// const myProvider = new RpcProvider({ nodeUrl: constants.NetworkName.SN_MAIN });
 
 export const PwarProvider = ({ children }: { children: ReactNode }) => {
     const [pwarContract, setPwarContract] = useState<Contract | null>(null)
@@ -77,22 +97,39 @@ export const PwarProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const initializePwar = async () => {
             try {
-                const provider = new RpcProvider({ nodeUrl: "http://127.0.0.1:5050" })
+                // Configure provider with better options
                 
-                // This should be the address where your actions.cairo contract is deployed
-                const contractAddress = "0x1f04b61e71f2afa9610c422db007807f73ebad6b4c069e72bb6e22ff032a93c"
-                const { abi } = await provider.getClassAt(contractAddress)
-                
-                if (!abi) {
-                    throw new Error("No ABI found for contract")
+                const networkAvailable = await checkNetwork(sepoliaProvider)
+                if (!networkAvailable) {
+                    throw new Error("Cannot connect to Starknet network")
                 }
+                
+                const contractAddress = formatAddress("0x05665ef6b299012bf20afdeec1d413ced884bc698567a4c17fcebe841dde9197")
+                console.log("Attempting to connect to contract at:", contractAddress)
+                
+                try {
+                    const { abi } = await sepoliaProvider.getClassAt(contractAddress)
+                    if (!abi) {
+                        throw new Error("No ABI found for contract")
+                    }
 
-                const contract = new Contract(abi, contractAddress, provider)
-                setPwarContract(contract)
-                setContextValues(prev => ({ ...prev, pwarStatus: "ready" }))
+                    const contract = new Contract(abi, contractAddress, sepoliaProvider)
+                    setPwarContract(contract)
+                    setContextValues(prev => ({ ...prev, pwarStatus: "ready" }))
+                } catch (error: unknown) {
+                    // Type guard for error
+                    if (error instanceof Error && error.message.includes("Contract not found")) {
+                        throw new Error(`Contract not found at address ${contractAddress}`)
+                    }
+                    throw error
+                }
             } catch (error) {
                 console.error("Failed to initialize Pwar:", error)
-                setContextValues(prev => ({ ...prev, pwarStatus: "error" }))
+                setContextValues(prev => ({ 
+                    ...prev, 
+                    pwarStatus: "error",
+                    error: error instanceof Error ? error.message : 'Unknown error'
+                }))
             }
         }
 

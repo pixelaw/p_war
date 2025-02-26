@@ -46,3 +46,13 @@ And after moving into contracts directory, the versions for these libs are set i
 
 pnpm install
 pnpm --filter @pixelaw/client run dev
+
+
+## change made in pixelaw.js
+export const StarknetChainProvider: React.FC<ChainProviderProps> = ({ children }) => {
+    return (
+        <StarknetConfig chains={[mainnet, devnet]} provider={publicProvider()} connectors={[]}>
+            <ConnectorProvider>{children}</ConnectorProvider>
+        </StarknetConfig>
+    )
+}
