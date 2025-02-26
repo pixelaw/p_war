@@ -1,4 +1,4 @@
-export const DEFAULT_WORLD = "local-populated"
+export const DEFAULT_WORLD = "local"
 
 export const clearDomChildren = (element: HTMLElement) => {
     while (element.firstChild) {

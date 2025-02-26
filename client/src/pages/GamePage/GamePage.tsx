@@ -10,6 +10,7 @@ import dialogStyles from "./dialog.css"
 
 
 const GamePage: React.FC = () => {
+    // TODO: Ideally pixelawCore doesnt need to be exposed here, and we have a setter for renderer
     const { pixelawCore, coreStatus, world, app, color, center, zoom, setColor } = usePixelawProvider()
     const { viewPort: renderer } = pixelawCore
     const rendererContainerRef = useRef<HTMLDivElement | null>(null)
@@ -70,6 +71,7 @@ const GamePage: React.FC = () => {
             pixelawCore.events.off("cellClicked", handleCellClick)
         }
     }, [pixelawCore])
+
 
     useEffect(() => {
         if (coreStatus !== "ready") return
