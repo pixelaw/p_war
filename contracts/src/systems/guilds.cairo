@@ -5,16 +5,16 @@ use starknet::{ContractAddress, get_caller_address};
 
 #[starknet::interface]
 pub trait IGuild<T> {
-    fn create_guild(ref self: T, game_id: usize, guild_name: felt252) -> usize; //returns guild ID
-    fn add_member(ref self: T, game_id: usize, guild_id: usize, new_member: ContractAddress);
-    fn join_guild(ref self: T, game_id: usize, guild_id: usize);
-    fn remove_member(ref self: T, game_id: usize, guild_id: usize, member: ContractAddress);
-    fn is_member(ref self: T, game_id: usize, guild_id: usize, member: ContractAddress) -> bool;
+    fn create_guild(ref self: T, game_id: u32, guild_name: felt252) -> u32; //returns guild ID
+    fn add_member(ref self: T, game_id: u32, guild_id: u32, new_member: ContractAddress);
+    fn join_guild(ref self: T, game_id: u32, guild_id: u32);
+    fn remove_member(ref self: T, game_id: u32, guild_id: u32, member: ContractAddress);
+    fn is_member(ref self: T, game_id: u32, guild_id: u32, member: ContractAddress) -> bool;
     fn get_guild_contract_address(ref self: T) -> ContractAddress;
-    fn get_guild_points(ref self: T, game_id: usize, guild_id: usize) -> usize;
+    fn get_guild_points(ref self: T, game_id: u32, guild_id: u32) -> u32;
 }
 
-#[dojo::contract(namespace: "pixelaw", nomapping: true)]
+#[dojo::contract]
 mod guild_actions {
     use dojo::event::EventStorage;
     use dojo::model::{ModelStorage, ModelValueStorage};
@@ -32,8 +32,8 @@ mod guild_actions {
     #[dojo::event]
     pub struct GuildCreated {
         #[key]
-        game_id: usize,
-        guild_id: usize,
+        game_id: u32,
+        guild_id: u32,
         guild_name: felt252,
         creator: ContractAddress
     }
@@ -42,8 +42,8 @@ mod guild_actions {
     #[dojo::event]
     pub struct MemberAdded {
         #[key]
-        game_id: usize,
-        guild_id: usize,
+        game_id: u32,
+        guild_id: u32,
         member: ContractAddress
     }
 
@@ -51,14 +51,14 @@ mod guild_actions {
     #[dojo::event]
     pub struct MemberRemoved {
         #[key]
-        game_id: usize,
-        guild_id: usize,
+        game_id: u32,
+        guild_id: u32,
         member: ContractAddress
     }
 
     #[abi(embed_v0)]
     impl GuildImpl of IGuild<ContractState> {
-        fn create_guild(ref self: ContractState, game_id: usize, guild_name: felt252) -> usize {
+        fn create_guild(ref self: ContractState, game_id: u32, guild_name: felt252) -> u32 {
             let mut world = self.world(@"pixelaw");
             let caller = get_caller_address();
 
@@ -111,7 +111,7 @@ mod guild_actions {
         }
 
         fn add_member(
-            ref self: ContractState, game_id: usize, guild_id: usize, new_member: ContractAddress
+            ref self: ContractState, game_id: u32, guild_id: u32, new_member: ContractAddress
         ) {
             let mut world = self.world(@"pixelaw");
             let caller = get_caller_address();
@@ -151,7 +151,7 @@ mod guild_actions {
             world.emit_event(@MemberAdded { game_id, guild_id, member: new_member });
         }
 
-        fn join_guild(ref self: ContractState, game_id: usize, guild_id: usize) {
+        fn join_guild(ref self: ContractState, game_id: u32, guild_id: u32) {
             let caller = get_caller_address();
 
             // Add the member to the guild
@@ -159,7 +159,7 @@ mod guild_actions {
         }
 
         fn remove_member(
-            ref self: ContractState, game_id: usize, guild_id: usize, member: ContractAddress
+            ref self: ContractState, game_id: u32, guild_id: u32, member: ContractAddress
         ) {
             let mut world = self.world(@"pixelaw");
             let caller = get_caller_address();
@@ -197,7 +197,7 @@ mod guild_actions {
         }
 
         fn is_member(
-            ref self: ContractState, game_id: usize, guild_id: usize, member: ContractAddress
+            ref self: ContractState, game_id: u32, guild_id: u32, member: ContractAddress
         ) -> bool {
             let mut world = self.world(@"pixelaw");
             let guild: Guild = world.read_model((game_id, guild_id));
@@ -222,7 +222,7 @@ mod guild_actions {
             guild_contract_address
         }
 
-        fn get_guild_points(ref self: ContractState, game_id: usize, guild_id: usize) -> usize {
+        fn get_guild_points(ref self: ContractState, game_id: u32, guild_id: u32) -> u32 {
             // Get the guild
             let mut world = self.world(@"pixelaw");
             let mut guild: Guild = world.read_model((game_id, guild_id));

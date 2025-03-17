@@ -8,14 +8,14 @@ use p_war::models::{
 #[starknet::interface]
 pub trait IPropose<T> {
     fn create_proposal(
-        ref self: T, game_id: usize, proposal_type: u8, target_args_1: u32, target_args_2: u32
-    ) -> usize;
-    fn activate_proposal(ref self: T, game_id: usize, index: usize, clear_data: Span<Position>);
-    fn add_new_color(ref self: T, game_id: usize, index: usize, game: Game, proposal: Proposal);
+        ref self: T, game_id: u32, proposal_type: u8, target_args_1: u32, target_args_2: u32
+    ) -> u32;
+    fn activate_proposal(ref self: T, game_id: u32, index: u32, clear_data: Span<Position>);
+    fn add_new_color(ref self: T, game_id: u32, index: u32, game: Game, proposal: Proposal);
     fn reset_to_white(
         ref self: T,
-        game_id: usize,
-        index: usize,
+        game_id: u32,
+        index: u32,
         game: Game,
         proposal: Proposal,
         clear_data: Span<Position>
@@ -23,7 +23,7 @@ pub trait IPropose<T> {
 }
 
 // dojo decorator
-#[dojo::contract(namespace: "pixelaw", nomapping: true)]
+#[dojo::contract]
 mod propose_actions {
     use dojo::event::EventStorage;
     use dojo::model::{ModelStorage, ModelValueStorage};
@@ -52,8 +52,8 @@ mod propose_actions {
     #[dojo::event]
     pub struct ProposalCreated {
         #[key]
-        game_id: usize,
-        index: usize,
+        game_id: u32,
+        index: u32,
         proposal_type: u8,
         target_args_1: u32,
         target_args_2: u32
@@ -63,8 +63,8 @@ mod propose_actions {
     #[dojo::event]
     pub struct ProposalActivated {
         #[key]
-        game_id: usize,
-        index: usize,
+        game_id: u32,
+        index: u32,
         proposal_type: u8,
         target_args_1: u32,
         target_args_2: u32
@@ -74,11 +74,11 @@ mod propose_actions {
     impl ProposeImpl of IPropose<ContractState> {
         fn create_proposal(
             ref self: ContractState,
-            game_id: usize,
+            game_id: u32,
             proposal_type: u8,
             target_args_1: u32,
             target_args_2: u32
-        ) -> usize {
+        ) -> u32 {
             //get world
             let mut world = self.world(@"pixelaw");
             // get models
@@ -129,7 +129,7 @@ mod propose_actions {
         }
 
         fn activate_proposal(
-            ref self: ContractState, game_id: usize, index: usize, clear_data: Span<Position>
+            ref self: ContractState, game_id: u32, index: u32, clear_data: Span<Position>
         ) {
             // get the proposal
             let mut world = self.world(@"pixelaw");
@@ -180,7 +180,7 @@ mod propose_actions {
 
         // add new color to the palette, if the color is added, the oldest color become unusable.
         fn add_new_color(
-            ref self: ContractState, game_id: usize, index: usize, game: Game, proposal: Proposal
+            ref self: ContractState, game_id: u32, index: u32, game: Game, proposal: Proposal
         ) {
             assert(proposal.proposal_type == 1, 'not add new color proposal');
             let mut world = self.world(@"pixelaw");
@@ -253,8 +253,8 @@ mod propose_actions {
 
         fn reset_to_white(
             ref self: ContractState,
-            game_id: usize,
-            index: usize,
+            game_id: u32,
+            index: u32,
             game: Game,
             proposal: Proposal,
             clear_data: Span<Position>
@@ -269,7 +269,7 @@ mod propose_actions {
 
             let target_args_1: u32 = proposal.target_args_1;
 
-            let mut idx: usize = 0;
+            let mut idx: u32 = 0;
 
             loop {
                 let pixel_to_clear = clear_data.get(idx);

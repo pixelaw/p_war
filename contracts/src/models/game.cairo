@@ -2,19 +2,19 @@ use starknet::ContractAddress;
 use starknet::get_block_timestamp;
 
 #[derive(Copy, Drop, Serde)]
-#[dojo::model(namespace: "pixelaw", nomapping: true)]
+#[dojo::model]
 struct Game {
     #[key]
-    id: usize,
+    id: u32,
     start: u64,
     end: u64,
-    proposal_idx: usize,
+    proposal_idx: u32,
     coeff_own_pixels: u32,
     coeff_commits: u32,
     winner_config: u32, // optimally, set by contract address.
     winner: ContractAddress,
     guild_ids: Span<u32>, //list of guild IDs inside the game struct
-    guild_count: usize,
+    guild_count: u32,
 }
 
 #[derive(PartialEq, Copy, Drop, Serde)]

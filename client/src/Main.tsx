@@ -5,7 +5,7 @@ import SettingsPage from "@/pages/SettingsPage.tsx"
 import {WalletSelectorPage} from "@/pages/WalletSelectorPage.tsx";
 import WorldSelectorPage from "@/pages/WorldSelectorPage.tsx"
 import { usePixelawProvider } from "@pixelaw/react"
-import { Route, Routes, Navigate } from "react-router-dom"
+import { Route, Routes } from "react-router-dom"
 import styles from "./Main.module.css"
 
 function Main() {
@@ -45,9 +45,10 @@ function Main() {
                     <Route path="/world" element={<WorldSelectorPage />} />
                     <Route path="/wallet" element={<WalletSelectorPage />} />
                     <Route path="/" element={<GamePage />} />
-                    <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </div>
+
+
         </div>
     )
 }

@@ -1,11 +1,11 @@
 // define the interface
 #[starknet::interface]
 pub trait IVoting<T> {
-    fn vote(ref self: T, game_id: usize, index: usize, use_px: u32, is_in_favor: bool);
+    fn vote(ref self: T, game_id: u32, index: u32, use_px: u32, is_in_favor: bool);
 }
 
 // dojo decorator
-#[dojo::contract(namespace: "pixelaw", nomapping: true)]
+#[dojo::contract]
 mod voting_actions {
     use dojo::event::EventStorage;
     use dojo::model::{ModelStorage, ModelValueStorage};
@@ -18,8 +18,8 @@ mod voting_actions {
     #[dojo::event]
     struct Voted {
         #[key]
-        game_id: usize,
-        index: usize,
+        game_id: u32,
+        index: u32,
         timestamp: u64,
         voter: ContractAddress,
         is_in_favor: bool
@@ -28,7 +28,7 @@ mod voting_actions {
     #[abi(embed_v0)]
     impl VotingImpl of IVoting<ContractState> {
         fn vote(
-            ref self: ContractState, game_id: usize, index: usize, use_px: u32, is_in_favor: bool
+            ref self: ContractState, game_id: u32, index: u32, use_px: u32, is_in_favor: bool
         ) {
             let mut world = self.world(@"pixelaw");
             let player_address = get_caller_address();

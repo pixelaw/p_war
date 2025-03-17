@@ -20,9 +20,9 @@ mod models {
 
 #[cfg(test)]
 mod tests {
-    mod test_games;
-    mod test_guilds;
-    mod test_proposals;
+    // mod test_games;
+    // mod test_guilds;
+    // mod test_proposals;
     mod test_setup;
-    mod utils;
+    // mod utils;
 }

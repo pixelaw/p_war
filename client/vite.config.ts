@@ -4,9 +4,15 @@ import {defineConfig} from 'vite';
 import {viteEnvs} from 'vite-envs'
 import topLevelAwait from "vite-plugin-top-level-await";
 import wasm from "vite-plugin-wasm";
+import fs from "fs";
+
+const IN_WORKSPACE = fs.existsSync("pnpm-workspace.yaml")
 
 export default defineConfig({
     logLevel: "info",
+    optimizeDeps: {
+        include: ['@pixelaw/core-dojo/dist/DojoSqlPixelStore.webworker.js']
+    },
     plugins: [
         react(),
         wasm(),
@@ -36,12 +42,16 @@ export default defineConfig({
         },
     ],
     resolve: {
-        alias: {
-            "@pixelaw/core": path.resolve(__dirname, 'pixelaw.js/packages/core/src'),
-            "@pixelaw/core-dojo": path.resolve(__dirname, "pixelaw.js/packages/core-dojo/src"),
-            "@pixelaw/core-mud": path.resolve(__dirname, "pixelaw.js/packages/core-mud/src"),
-            "@pixelaw/react": path.resolve(__dirname, "pixelaw.js/packages/react/src"),
-            "@pixelaw/react-dojo": path.resolve(__dirname, "pixelaw.js/packages/react-dojo/src"),
+        alias: IN_WORKSPACE ? {
+            "@pixelaw/core": path.resolve(__dirname, '../pixelaw.js/packages/core/src'),
+            "@pixelaw/core-dojo": path.resolve(__dirname, "../pixelaw.js/packages/core-dojo/src"),
+            "@pixelaw/core-mud": path.resolve(__dirname, "../pixelaw.js/packages/core-mud/src"),
+            "@pixelaw/react": path.resolve(__dirname, "../pixelaw.js/packages/react/src"),
+            "@pixelaw/react-dojo": path.resolve(__dirname, "../pixelaw.js/packages/react-dojo/src"),
+            '@': path.resolve(__dirname, './src'),
+        }:{
+            // TODO dirty hack to make the webworker available
+            '/node_modules/.vite/deps/DojoSqlPixelStore.webworker.js': path.resolve(__dirname, 'node_modules/@pixelaw/core-dojo/dist/DojoSqlPixelStore.webworker.js'),
             '@': path.resolve(__dirname, './src'),
         },
     },
@@ -52,8 +62,14 @@ export default defineConfig({
             input: {
                 main: path.resolve(__dirname, 'index.html'),
             },
+        },
+        // minify: 'terser',
+        // terserOptions: {
+        //     mangle: {
+        //         reserved: ['DojoEngine'],
+        //     },
+        // },
 
-        }
     },
 
     server: {
@@ -75,22 +91,17 @@ export default defineConfig({
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/rpc/, ''),
                 // ws: true
-            },
-            '/starknet': {
-                target: 'https://alpha4.starknet.io',
-                changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/starknet/, '')
             }
         },
         allowedHosts: true, //["px.tunnel.devsat.work"],
         strictPort: true,
         fs: {
             allow: [
-                path.resolve(__dirname, 'pixelaw.js/packages/core-dojo/dist'),
-                path.resolve(__dirname, 'pixelaw.js/packages/core-dojo/src'),
+                path.resolve(__dirname, '../pixelaw.js/packages/core-dojo/src'),
                 path.resolve(__dirname, './'),
             ],
         },
+
     },
 });
 

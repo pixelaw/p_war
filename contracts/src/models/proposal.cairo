@@ -1,4 +1,6 @@
 use starknet::ContractAddress;
+use dojo::model::{ModelStorage};
+use dojo::world::storage::WorldStorage;
 
 // #[derive(Copy, Drop, Serde, Introspect, PartialEq, Print)]
 // struct Args {
@@ -26,9 +28,9 @@ use starknet::ContractAddress;
 // #[derive(Model, Copy, Drop, Serde, Print)]
 // struct Proposal {
 //     #[key]
-//     game_id: usize,
+//     game_id: u32,
 //     #[key]
-//     index: usize,
+//     index: u32,
 //     author: ContractAddress,
 //     proposal_type: ProposalType,
 //     args: Args,
@@ -39,12 +41,12 @@ use starknet::ContractAddress;
 // }
 
 #[derive(Copy, Drop, Serde)]
-#[dojo::model(namespace: "pixelaw", nomapping: true)]
+#[dojo::model]
 struct Proposal {
     #[key]
-    game_id: usize,
+    game_id: u32,
     #[key]
-    index: usize,
+    index: u32,
     author: ContractAddress,
     proposal_type: u8, // change it from ProposalType is not working...
     target_args_1: u32,
@@ -58,23 +60,23 @@ struct Proposal {
 
 
 #[derive(Serde, Copy, Drop, PartialEq)]
-#[dojo::model(namespace: "pixelaw", nomapping: true)]
+#[dojo::model]
 struct PlayerVote {
     #[key]
     player: ContractAddress,
     #[key]
-    game_id: usize,
+    game_id: u32,
     #[key]
-    index: usize,
+    index: u32,
     is_in_favor: bool,
     voting_power: u32
 }
 
 #[derive(Copy, Drop, Serde)]
-#[dojo::model(namespace: "pixelaw", nomapping: true)]
+#[dojo::model]
 struct PixelRecoveryRate {
     #[key]
-    game_id: usize,
+    game_id: u32,
     rate: u64
 }
 // impl ProposalTypeFelt252 of Into<ProposalType, felt252> {

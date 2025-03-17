@@ -1,11 +1,11 @@
 import Apps from "@/components/GamePage/Apps/Apps.tsx"
 import SimpleColorPicker from "@/components/GamePage/ColorPicker/SimpleColorPicker.tsx"
 import {clearDomChildren} from "@/utils.ts"
-import { type Coordinate } from "@pixelaw/core"
-import { usePixelawProvider } from "@pixelaw/react"
-import { useEffect, useMemo, useRef } from "react"
+import {type Coordinate, type QueueItem} from "@pixelaw/core"
+import {usePixelawProvider} from "@pixelaw/react"
+import {useEffect, useMemo, useRef} from "react"
 import styles from "./GamePage.module.css"
-import dialogStyles from "./dialog.css"
+// import dialogStyles from "./dialog.css"
 
 
 
@@ -29,7 +29,7 @@ const GamePage: React.FC = () => {
             queryParams.set("center", `${center[0]},${center[1]}`)
             queryParams.set("zoom", zoom.toString())
             queryParams.set("color", color.toString())
-            queryParams.set("world", world)
+            queryParams.set("world", world!)
             const newSearch = `?${queryParams.toString()}`
 
             if (window.location.search !== newSearch) {
@@ -44,11 +44,10 @@ const GamePage: React.FC = () => {
     // Handle viewport events
     useEffect(() => {
 
-        const handleCellClick = (cell?: Coordinate) => {
+        const handleCellClick = async (cell: Coordinate) => {
             if (!dialogContainerRef || !dialogContainerRef.current) return
 
-            // setClickedCell(cell)
-            const interaction = pixelawCore.handleInteraction(cell)
+            const interaction = await pixelawCore.handleInteraction(cell)
 
             // Clear existing children (dialogs)
             clearDomChildren(dialogContainerRef.current)
@@ -63,12 +62,23 @@ const GamePage: React.FC = () => {
             }
         }
 
+        const handleQueueItem = (item: QueueItem) => {
+            pixelawCore
+                .executeQueueItem(item)
+                .catch(console.error)
+        }
+
+
+        pixelawCore.queue.eventEmitter.on("scheduled", handleQueueItem)
+
+
         // pixelawCore.events.on("cellHovered", handleCellHover)
         pixelawCore.events.on("cellClicked", handleCellClick)
 
         return () => {
             // pixelawCore.events.off("cellHovered", handleCellHover)
             pixelawCore.events.off("cellClicked", handleCellClick)
+            pixelawCore.queue.eventEmitter.off("scheduled", handleQueueItem)
         }
     }, [pixelawCore])
 

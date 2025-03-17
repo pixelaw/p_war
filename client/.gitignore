@@ -3,6 +3,10 @@ src/assets/tiles
 coverage/
 .env
 
+# Ignoring the workspace file. It is in use when using the pixelaw.js submodule
+# but this is not the regular situation and should not be committed
+pnpm-workspace*
+
 # Logs
 logs
 *.log

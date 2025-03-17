@@ -1,15 +1,14 @@
-use dojo::world::IWorldDispatcher;
 use starknet::ContractAddress;
 
 #[derive(Copy, Drop, Serde)]
-#[dojo::model(namespace: "pixelaw", nomapping: true)]
+#[dojo::model]
 struct Guild {
     #[key]
-    game_id: usize,
+    game_id: u32,
     #[key]
-    guild_id: usize,
+    guild_id: u32,
     guild_name: felt252,
     creator: ContractAddress,
     members: Span<ContractAddress>,
-    member_count: usize
+    member_count: u32
 }

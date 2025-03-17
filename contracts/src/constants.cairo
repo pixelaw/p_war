@@ -4,16 +4,16 @@
 const APP_KEY: felt252 = 'p_war';
 const APP_ICON: felt252 = 'U+2694';
 
-const OUT_OF_BOUNDS_GAME_ID: usize = 9999;
+const OUT_OF_BOUNDS_GAME_ID: u32 = 9999;
 // ####################################
 // ### GAME CONFIGURATION FOR pwar v2 ###
 // ####################################
 // # Initial settings
-// const GAME_ID: usize = 1;
+// const GAME_ID: u32 = 1;
 // const INITIAL_COLOR: u32 = 0xFFFFFFFF; // white
 // const DEFAULT_AREA: u32 = 32; // 32x32 grid
 // const DEFAULT_PX: u32 = 30; // 30 max PX per player
-// const MAX_COLOR_SIZE: usize = 9; // 9 available colors
+// const MAX_COLOR_SIZE: u32 = 9; // 9 available colors
 // const GAME_DURATION: u64 = 1209600 + 3600; // 2 weeks + 1 hour (for preparation) in seconds
 // const DEFAULT_RECOVERY_RATE: u64 = 30; // 30 seconds to recover 1PX
 
@@ -28,10 +28,10 @@ const OUT_OF_BOUNDS_GAME_ID: usize = 9999;
 // // ### GAME CONFIGURATION FOR CLOSED BETA TEST ###
 // // ###############################################
 // // # Initial settings
-// const GAME_ID: usize = 1;
+// const GAME_ID: u32 = 1;
 // const INITIAL_COLOR: u32 = 0xFFFFFFFF;
 // const DEFAULT_AREA: u32 = 16;
-// const MAX_COLOR_SIZE: usize = 9;
+// const MAX_COLOR_SIZE: u32 = 9;
 // const GAME_DURATION: u64 = 15 * 60; // 15 minutes in seconds
 // const DEFAULT_RECOVERY_RATE: u64 = 10; // 10 secs to recover 1PX
 
@@ -47,10 +47,10 @@ const OUT_OF_BOUNDS_GAME_ID: usize = 9999;
 // // ### GAME CONFIGURATION FOR LOCAL ###
 // // ####################################
 // // # Initial settings
-const GAME_ID: usize = 1;
+const GAME_ID: u32 = 1;
 const INITIAL_COLOR: u32 = 0xFFFFFFFF;
 const DEFAULT_AREA: u32 = 50; // changed from 5
-const MAX_COLOR_SIZE: usize = 9;
+const MAX_COLOR_SIZE: u32 = 9;
 const GAME_DURATION: u64 = 60 * 60 * 24 * 30 * 12; // 12 months
 const DEFAULT_RECOVERY_RATE: u64 = 5; // 5 secs to recover 1PX
 

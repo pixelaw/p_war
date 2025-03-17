@@ -1,7 +1,7 @@
 /* Reset default margins and paddings */
 html,
 body {
-    background-color: darkblue;
+    background-color: black;
     margin: 0;
     padding: 0;
     overflow: hidden; /* Prevent scrollbars */
@@ -43,7 +43,7 @@ body {
 }
 
 .container {
-    background-color: darkblue; /* Replace with the actual color value */
+    background-color: black; /* Replace with the actual color value */
     min-height: 100vh; /* Equivalent to min-h-screen */
     display: flex;
     flex-direction: column; /* Equivalent to flex-col */

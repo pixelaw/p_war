@@ -1,7 +1,7 @@
 use starknet::ContractAddress;
 
 #[derive(Copy, Drop, Serde)]
-#[dojo::model(namespace: "pixelaw", nomapping: true)]
+#[dojo::model]
 struct GamePayments {
     #[key]
     game_id: u32,
@@ -11,7 +11,7 @@ struct GamePayments {
 }
 
 #[derive(Copy, Drop, Serde)]
-#[dojo::model(namespace: "pixelaw", nomapping: true)]
+#[dojo::model]
 struct PlayerPayment {
     #[key]
     game_id: u32,
@@ -21,7 +21,7 @@ struct PlayerPayment {
 }
 
 #[derive(Copy, Drop, Serde)]
-#[dojo::model(namespace: "pixelaw", nomapping: true)]
+#[dojo::model]
 struct TreasuryInfo {
     #[key]
     dummy_key: u32,

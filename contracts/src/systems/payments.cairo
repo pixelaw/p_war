@@ -11,7 +11,7 @@ pub trait IPayments<T> {
     fn set_treasury_address(ref self: T, treasury_address: ContractAddress);
 }
 
-#[dojo::contract(namespace: "pixelaw", nomapping: true)]
+#[dojo::contract]
 mod payments {
     // use super::*;
 

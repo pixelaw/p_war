@@ -1,5 +1,5 @@
 [package]
-cairo-version = "=2.8.4"
+cairo-version = "=2.9.2"
 name = "p_war"
 version = "0.3.54"
 
@@ -7,18 +7,20 @@ version = "0.3.54"
 sierra-replace-ids = true
 
 [dependencies]
-pixelaw = { git = "https://github.com/pixelaw/core", tag = "v0.5.15" }
+pixelaw = { git = "https://github.com/pixelaw/core", tag = "v0.6.15" }
+dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.2.1" }
 
 [dev-dependencies]
-dojo_cairo_test = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.4" }
-pixelaw_test_helpers = { git = "https://github.com/pixelaw/core", tag = "v0.5.15" }
+dojo_cairo_test = { git = "https://github.com/dojoengine/dojo", tag = "v1.2.1" }
+cairo_test = "=2.9.2"
 
 [[target.starknet-contract]]
-allowed-libfuncs-list.name = "experimental"
+sierra = true
 build-external-contracts = [
     "dojo::world::world_contract::world",
     "pixelaw::core::actions::actions",
 ]
+
 
 [tool.fmt]
 sort-module-level-items = true

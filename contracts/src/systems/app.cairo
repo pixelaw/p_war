@@ -11,7 +11,7 @@ trait IAllowedApp<TContractState> {
 
 // ... existing code ...
 
-#[dojo::contract(namespace: "pixelaw", nomapping: true)]
+#[dojo::contract]
 mod allowed_app_actions {
     use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
     use pixelaw::core::actions::{

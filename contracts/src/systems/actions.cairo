@@ -11,18 +11,18 @@ use starknet::ContractAddress;
 pub trait IActions<T> {
     fn init(ref self: T);
     fn interact(ref self: T, default_params: DefaultParameters);
-    fn create_game(ref self: T, origin: Position) -> usize;
+    fn create_game(ref self: T, origin: Position) -> u32;
     fn create_game_guilds(
-        ref self: T, game_id: usize, guild_dispatcher: IGuildDispatcher
-    ) -> Array<usize>;
-    fn get_game_id(self: @T, position: Position) -> usize;
+        ref self: T, game_id: u32, guild_dispatcher: IGuildDispatcher
+    ) -> Array<u32>;
+    fn get_game_id(self: @T, position: Position) -> u32;
     fn place_pixel(ref self: T, app: ContractAddress, default_params: DefaultParameters);
     fn update_pixel(ref self: T, pixel_update: PixelUpdate);
-    fn end_game(ref self: T, game_id: usize);
+    fn end_game(ref self: T, game_id: u32);
 }
 
 // dojo decorator
-#[dojo::contract(namespace: "pixelaw", nomapping: true)]
+#[dojo::contract]
 mod p_war_actions {
     use dojo::event::EventStorage;
     use dojo::model::{ModelStorage, ModelValueStorage};
@@ -59,7 +59,7 @@ mod p_war_actions {
     #[dojo::event]
     pub struct StartedGame {
         #[key]
-        id: usize,
+        id: u32,
         timestamp: u128,
         creator: ContractAddress
     }
@@ -68,7 +68,7 @@ mod p_war_actions {
     #[dojo::event]
     pub struct EndedGame {
         #[key]
-        id: usize,
+        id: u32,
         timestamp: u128,
     }
 
@@ -95,7 +95,7 @@ mod p_war_actions {
             };
         }
 
-        fn get_game_id(self: @ContractState, position: Position) -> usize {
+        fn get_game_id(self: @ContractState, position: Position) -> u32 {
             let mut world = self.world(@"pixelaw");
 
             let mut id = world.dispatcher.uuid();
@@ -116,7 +116,7 @@ mod p_war_actions {
             return 1;
         }
 
-        fn create_game(ref self: ContractState, origin: Position) -> usize {
+        fn create_game(ref self: ContractState, origin: Position) -> u32 {
             let mut world = self.world(@"pixelaw");
             println!("create_game BEGIN");
 
@@ -199,8 +199,8 @@ mod p_war_actions {
 
         // initialize guilds for the game
         fn create_game_guilds(
-            ref self: ContractState, game_id: usize, guild_dispatcher: IGuildDispatcher
-        ) -> Array<usize> {
+            ref self: ContractState, game_id: u32, guild_dispatcher: IGuildDispatcher
+        ) -> Array<u32> {
             let mut guild_ids = ArrayTrait::new();
             guild_ids.append(guild_dispatcher.create_guild(game_id, 'Fire'));
             guild_ids.append(guild_dispatcher.create_guild(game_id, 'Water'));
@@ -308,7 +308,7 @@ mod p_war_actions {
             core_actions.update_pixel(player_address, system, pixel_update, Option::None, false);
         }
 
-        fn end_game(ref self: ContractState, game_id: usize) {
+        fn end_game(ref self: ContractState, game_id: u32) {
             // check if the time is expired.
             let mut world = self.world(@"pixelaw");
             let mut game: Game = world.read_model(game_id);
