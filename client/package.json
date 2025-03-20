@@ -25,11 +25,11 @@
     "check": "biome check --apply ."
   },
   "dependencies": {
-    "@pixelaw/core": "^0.6.8",
-    "@pixelaw/core-dojo": "^0.6.8",
-    "@pixelaw/core-mud": "^0.6.8",
-    "@pixelaw/react": "^0.6.8",
-    "@pixelaw/react-dojo": "^0.6.8",
+    "@pixelaw/core": "^0.6.9",
+    "@pixelaw/core-dojo": "^0.6.9",
+    "@pixelaw/core-mud": "^0.6.9",
+    "@pixelaw/react": "^0.6.9",
+    "@pixelaw/react-dojo": "^0.6.9",
     "@react-hook/resize-observer": "^2.0.2",
     "autoprefixer": "^10.4.21",
     "dotenv": "^16.4.7",
