@@ -1,8 +1,9 @@
 use p_war::models::{
-    game::{Game, Status, GameTrait}, proposal::{Proposal, PixelRecoveryRate},
-    board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,
-    allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette}
+    game::{Game}, 
+    proposal::Proposal,
 };
+
+use pixelaw::core::utils::Position;
 
 // define the interface
 #[starknet::interface]
@@ -26,27 +27,29 @@ pub trait IPropose<T> {
 #[dojo::contract]
 mod propose_actions {
     use dojo::event::EventStorage;
-    use dojo::model::{ModelStorage, ModelValueStorage};
-    use dojo::world::WorldStorageTrait;
+    use dojo::model::ModelStorage;
     use p_war::constants::{
-        PROPOSAL_DURATION, NEEDED_YES_VOTING_POWER, DISASTER_SIZE, PROPOSAL_FACTOR
+        PROPOSAL_DURATION, NEEDED_YES_VOTING_POWER
     };
     use p_war::models::{
-        game::{Game, Status, GameTrait}, proposal::{Proposal, PixelRecoveryRate},
-        board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,
-        allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette}
+        game::{Game, GameTrait}, 
+        proposal::Proposal,
+        board::{Board, PWarPixel},
+        allowed_color::{AllowedColor, PaletteColors, GamePalette, InPalette},
+        player::Player
     };
-    use p_war::systems::utils::{check_game_status};
+    use p_war::systems::utils::check_game_status;
     use pixelaw::core::actions::{
-        IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
     use pixelaw::core::models::{pixel::PixelUpdate, pixel::Pixel};
-    use pixelaw::core::utils::{get_core_actions, DefaultParameters};
+    use pixelaw::core::utils::{get_core_actions, Position};
     use starknet::{
-        ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
+        get_caller_address, 
+        get_tx_info,
+        get_block_timestamp
     };
-    use super::{IPropose};
+    use super::IPropose;
 
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]

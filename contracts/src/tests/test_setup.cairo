@@ -1,9 +1,9 @@
 #[cfg(test)]
 mod tests {
-    use dojo::world::WorldStorage;
+    use dojo::world::{WorldStorage, WorldStorageTrait};
+    use dojo::world::{ModelStorage};
     use p_war::tests::utils::{deploy_p_war};
-    // use pixelaw::contracts::{setup_core_initialized};
-    use pixelaw::actions::{setup_core_initialized};
+    use pixelaw_testing::helpers::{setup_core_initialized};
 
     #[test]
     #[available_gas(100000)]

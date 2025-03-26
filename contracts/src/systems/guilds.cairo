@@ -1,7 +1,4 @@
-use p_war::models::game::Game;
-use p_war::models::guilds::Guild;
-use p_war::models::player::Player;
-use starknet::{ContractAddress, get_caller_address};
+use starknet::{ContractAddress};
 
 #[starknet::interface]
 pub trait IGuild<T> {
@@ -17,16 +14,18 @@ pub trait IGuild<T> {
 #[dojo::contract]
 mod guild_actions {
     use dojo::event::EventStorage;
-    use dojo::model::{ModelStorage, ModelValueStorage};
-    use dojo::world::WorldStorageTrait;
+    use dojo::model::ModelStorage;
     use p_war::models::{
-        game::{Game, Status, GameTrait}, guilds::{Guild},
-        board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,
+        game::{Game}, 
+        guilds::Guild,
+        player::Player
     };
     use starknet::{
-        ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
+        ContractAddress, 
+        get_caller_address, 
+        get_contract_address, 
     };
-    use super::{IGuild};
+    use super::IGuild;
 
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]

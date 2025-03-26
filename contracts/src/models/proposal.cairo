@@ -1,6 +1,4 @@
 use starknet::ContractAddress;
-use dojo::model::{ModelStorage};
-use dojo::world::storage::WorldStorage;
 
 // #[derive(Copy, Drop, Serde, Introspect, PartialEq, Print)]
 // struct Args {
@@ -42,42 +40,42 @@ use dojo::world::storage::WorldStorage;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct Proposal {
+pub struct Proposal {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    index: u32,
-    author: ContractAddress,
-    proposal_type: u8, // change it from ProposalType is not working...
-    target_args_1: u32,
-    target_args_2: u32,
-    start: u64,
-    end: u64,
-    yes_voting_power: u32,
-    no_voting_power: u32,
-    is_activated: bool, // added: check if the proposal is activated
+    pub index: u32,
+    pub author: ContractAddress,
+    pub proposal_type: u8, // change it from ProposalType is not working...
+    pub target_args_1: u32,
+    pub target_args_2: u32,
+    pub start: u64,
+    pub end: u64,
+    pub yes_voting_power: u32,
+    pub no_voting_power: u32,
+    pub is_activated: bool, // added: check if the proposal is activated
 }
 
 
 #[derive(Serde, Copy, Drop, PartialEq)]
 #[dojo::model]
-struct PlayerVote {
+pub struct PlayerVote {
     #[key]
-    player: ContractAddress,
+    pub player: ContractAddress,
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    index: u32,
-    is_in_favor: bool,
-    voting_power: u32
+    pub index: u32,
+    pub is_in_favor: bool,
+    pub voting_power: u32
 }
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct PixelRecoveryRate {
+pub struct PixelRecoveryRate {
     #[key]
-    game_id: u32,
-    rate: u64
+    pub game_id: u32,
+    pub rate: u64
 }
 // impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
 //     fn into(self: ProposalType) -> felt252 {

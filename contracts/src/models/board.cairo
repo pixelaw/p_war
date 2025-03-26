@@ -3,29 +3,29 @@ use starknet::{ContractAddress};
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct Board {
+pub struct Board {
     #[key]
-    id: u32,
-    origin: Position,
-    width: u32,
-    height: u32,
+    pub id: u32,
+    pub origin: Position,
+    pub width: u32,
+    pub height: u32,
 }
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct PWarPixel {
+pub struct PWarPixel {
     #[key]
-    position: Position,
-    owner: ContractAddress
+    pub position: Position,
+    pub owner: ContractAddress
 }
 
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct GameId {
+pub struct GameId {
     #[key]
-    x: u32,
+    pub x: u32,
     #[key]
-    y: u32,
-    value: u32
+    pub y: u32,
+    pub value: u32
 }

@@ -1,27 +1,18 @@
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use pixelaw::core::models::pixel::PixelUpdate;
 use pixelaw::core::utils::DefaultParameters;
-use starknet::{ContractAddress, get_contract_address};
-use super::actions::{IActionsDispatcher, IActionsDispatcherTrait}; // Add this import
 
 #[starknet::interface]
 trait IAllowedApp<TContractState> {
     fn set_pixel(ref self: TContractState, default_params: DefaultParameters);
 }
 
-// ... existing code ...
-
 #[dojo::contract]
 mod allowed_app_actions {
-    use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
     use pixelaw::core::actions::{
-        IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
     use pixelaw::core::models::pixel::PixelUpdate;
-    use pixelaw::core::utils::DefaultParameters;
-    use pixelaw::core::utils::get_core_actions;
-    use starknet::{ContractAddress, get_contract_address};
+    use pixelaw::core::utils::{DefaultParameters, get_core_actions};
+    use starknet::get_contract_address;
     use super::IAllowedApp;
 
     #[abi(embed_v0)]
@@ -48,7 +39,7 @@ mod allowed_app_actions {
                         action: Option::None
                     },
                     Option::None,
-                    false
+                    true
                 );
         }
     }

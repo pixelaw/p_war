@@ -1,10 +1,9 @@
-use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
-use p_war::models::board::Position;
-use p_war::models::game::Game;
-use p_war::systems::guilds::{IGuildDispatcher, IGuildDispatcherTrait};
+// use p_war::models::board::Position;
+use pixelaw::core::utils::Position;
+use p_war::systems::guilds::{IGuildDispatcher};
 use pixelaw::core::models::pixel::PixelUpdate;
 use pixelaw::core::utils::DefaultParameters;
-use starknet::ContractAddress;
+use starknet::{ContractAddress};
 
 // define the interface
 #[starknet::interface]
@@ -24,36 +23,32 @@ pub trait IActions<T> {
 // dojo decorator
 #[dojo::contract]
 mod p_war_actions {
-    use dojo::event::EventStorage;
-    use dojo::model::{ModelStorage, ModelValueStorage};
-    use dojo::world::WorldStorageTrait;
+    use dojo::model::{ModelStorage};
     use dojo::world::{IWorldDispatcherTrait};
     use p_war::constants::{
-        APP_KEY, APP_ICON, GAME_ID, OUT_OF_BOUNDS_GAME_ID, DEFAULT_RECOVERY_RATE, INITIAL_COLOR,
+        APP_KEY, APP_ICON, GAME_ID, OUT_OF_BOUNDS_GAME_ID, DEFAULT_RECOVERY_RATE,
         GAME_DURATION, DEFAULT_AREA,
     };
     use p_war::models::{
-        game::{Game, Status, GameTrait}, board::{Board, GameId, PWarPixel}, player::{Player},
+        game::{Game, GameTrait}, board::{Board, PWarPixel}, player::{Player},
         proposal::{PixelRecoveryRate},
         allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette},
         allowed_app::AllowedApp
     };
-    use p_war::systems::app::{IAllowedApp, IAllowedAppDispatcher, IAllowedAppDispatcherTrait};
     use p_war::systems::guilds::{IGuildDispatcher, IGuildDispatcherTrait};
     use p_war::systems::utils::{check_game_status};
     use pixelaw::core::actions::{
-        IActionsDispatcher as ICoreActionsDispatcher,
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
-    use pixelaw::core::models::{pixel::PixelUpdate, registry::App};
+    use pixelaw::core::models::{pixel::PixelUpdate};
     use pixelaw::core::utils::{
-        get_callers, get_core_actions, Direction, Position, DefaultParameters
+        get_core_actions, Position, DefaultParameters
     };
     use starknet::{
         ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info,
         contract_address_const,
     };
-    use super::{IActions, IActionsDispatcher, IActionsDispatcherTrait};
+    use super::{IActions};
 
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
@@ -228,7 +223,7 @@ mod p_war_actions {
             ); // cannot test correctly without cheatcodes.
 
             let allowed_app: AllowedApp = world.read_model((game_id, app));
-            assert(app.is_zero() || allowed_app.is_allowed, 'app is not allowed');
+            assert(allowed_app.is_allowed, 'app is not allowed');
 
             // let contract_address = if app.is_zero() {
             //     get_contract_address()

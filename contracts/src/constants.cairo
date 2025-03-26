@@ -1,10 +1,10 @@
 // #########################
 // ### APP CONFIGURATION ###
 // #########################
-const APP_KEY: felt252 = 'p_war';
-const APP_ICON: felt252 = 'U+2694';
+pub const APP_KEY: felt252 = 'p_war';
+pub const APP_ICON: felt252 = 'U+2694';
 
-const OUT_OF_BOUNDS_GAME_ID: u32 = 9999;
+pub const OUT_OF_BOUNDS_GAME_ID: u32 = 9999;
 // ####################################
 // ### GAME CONFIGURATION FOR pwar v2 ###
 // ####################################
@@ -47,17 +47,17 @@ const OUT_OF_BOUNDS_GAME_ID: u32 = 9999;
 // // ### GAME CONFIGURATION FOR LOCAL ###
 // // ####################################
 // // # Initial settings
-const GAME_ID: u32 = 1;
-const INITIAL_COLOR: u32 = 0xFFFFFFFF;
-const DEFAULT_AREA: u32 = 50; // changed from 5
-const MAX_COLOR_SIZE: u32 = 9;
-const GAME_DURATION: u64 = 60 * 60 * 24 * 30 * 12; // 12 months
-const DEFAULT_RECOVERY_RATE: u64 = 5; // 5 secs to recover 1PX
+pub const GAME_ID: u32 = 1;
+pub const INITIAL_COLOR: u32 = 0xFFFFFFFF;
+pub const DEFAULT_AREA: u32 = 50; // changed from 5
+pub const MAX_COLOR_SIZE: u32 = 9;
+pub const GAME_DURATION: u64 = 60 * 60 * 24 * 30 * 12; // 12 months
+pub const DEFAULT_RECOVERY_RATE: u64 = 5; // 5 secs to recover 1PX
 
 // # For Governance
-const PROPOSAL_FACTOR: u32 = 1; // 3 seconds in seconds.
-const PROPOSAL_DURATION: u64 = 3 * 60; // 3mins
-const NEEDED_YES_VOTING_POWER: u32 = 1;
+pub const PROPOSAL_FACTOR: u32 = 1; // 3 seconds in seconds.
+pub const PROPOSAL_DURATION: u64 = 3 * 60; // 3mins
+pub const NEEDED_YES_VOTING_POWER: u32 = 1;
 
 // for additional rules
-const DISASTER_SIZE: u32 = 5;
+pub const DISASTER_SIZE: u32 = 5;

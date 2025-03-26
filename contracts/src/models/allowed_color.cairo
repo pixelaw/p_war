@@ -1,41 +1,41 @@
 // if the color is allowed
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct AllowedColor {
+pub struct AllowedColor {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    color: u32,
-    is_allowed: bool
+    pub color: u32,
+    pub is_allowed: bool
 }
 
 // the color found in what index
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct PaletteColors {
+pub struct PaletteColors {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    idx: u32,
-    color: u32
+    pub idx: u32,
+    pub color: u32
 }
 
 // if the color is already in the palette
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct InPalette {
+pub struct InPalette {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    color: u32,
-    value: bool
+    pub color: u32,
+    pub value: bool
 }
 
 // number of colors in the game's palette
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct GamePalette {
+pub struct GamePalette {
     #[key]
-    game_id: u32,
-    length: u32
+    pub game_id: u32,
+    pub length: u32
 }

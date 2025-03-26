@@ -8,9 +8,11 @@ pub trait IVoting<T> {
 #[dojo::contract]
 mod voting_actions {
     use dojo::event::EventStorage;
-    use dojo::model::{ModelStorage, ModelValueStorage};
-    use dojo::world::WorldStorageTrait;
-    use p_war::models::{player::{Player}, proposal::{PlayerVote, Proposal}};
+    use dojo::model::ModelStorage;
+    use p_war::models::{
+        player::Player,
+        proposal::{PlayerVote, Proposal}
+    };
     use starknet::{ContractAddress, get_caller_address, get_block_timestamp};
     use super::IVoting;
 

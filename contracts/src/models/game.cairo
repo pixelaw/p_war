@@ -3,29 +3,29 @@ use starknet::get_block_timestamp;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct Game {
+pub struct Game {
     #[key]
-    id: u32,
-    start: u64,
-    end: u64,
-    proposal_idx: u32,
-    coeff_own_pixels: u32,
-    coeff_commits: u32,
-    winner_config: u32, // optimally, set by contract address.
-    winner: ContractAddress,
-    guild_ids: Span<u32>, //list of guild IDs inside the game struct
-    guild_count: u32,
+    pub id: u32,
+    pub start: u64,
+    pub end: u64,
+    pub proposal_idx: u32,
+    pub coeff_own_pixels: u32,
+    pub coeff_commits: u32,
+    pub winner_config: u32, // optimally, set by contract address.
+    pub winner: ContractAddress,
+    pub guild_ids: Span<u32>, //list of guild IDs inside the game pub struct
+    pub guild_count: u32,
 }
 
 #[derive(PartialEq, Copy, Drop, Serde)]
-enum Status {
+pub enum Status {
     Unknown,
     Pending,
     Ongoing,
     Completed
 }
 
-trait GameTrait {
+pub trait GameTrait {
     fn status(self: Game) -> Status;
 }
 

@@ -2,10 +2,10 @@ use starknet::ContractAddress;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct AllowedApp {
+pub struct AllowedApp {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    contract: ContractAddress,
-    is_allowed: bool
+    pub contract: ContractAddress,
+    pub is_allowed: bool
 }

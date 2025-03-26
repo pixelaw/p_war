@@ -2,13 +2,13 @@ use starknet::ContractAddress;
 
 #[derive(Copy, Drop, Serde)]
 #[dojo::model]
-struct Guild {
+pub struct Guild {
     #[key]
-    game_id: u32,
+    pub game_id: u32,
     #[key]
-    guild_id: u32,
-    guild_name: felt252,
-    creator: ContractAddress,
-    members: Span<ContractAddress>,
-    member_count: u32
+    pub guild_id: u32,
+    pub guild_name: felt252,
+    pub creator: ContractAddress,
+    pub members: Span<ContractAddress>,
+    pub member_count: u32
 }
