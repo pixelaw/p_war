@@ -1,0 +1,3 @@
+[submodule "pwar_client"]
+	path = pwar_client
+	url = https://github.com/OwnerOfJK/pwar_client.git
