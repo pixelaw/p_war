@@ -19,10 +19,10 @@ pub mod models {
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     // mod test_games;
     // mod test_guilds;
     // mod test_proposals;
-    mod test_setup;
-    // mod utils;
+    pub mod test_setup;
+    pub mod utils;
 }

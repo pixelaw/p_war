@@ -1,26 +1,25 @@
 // import test utils
 // import world dispatcher
-use debug::PrintTrait;
-use dojo::model::{ModelStorage};
-use dojo::world::{world, IWorldDispatcher, IWorldDispatcherTrait, WorldStorageTrait, WorldStorage};
+// use dojo::model::{ModelStorage};
+use dojo::world::{WorldStorage, WorldStorageTrait};
 use dojo_cairo_test::{
-    spawn_test_world, NamespaceDef, TestResource, ContractDefTrait, ContractDef,
-    WorldStorageTestTrait
+    ContractDef, ContractDefTrait, NamespaceDef, TestResource, WorldStorageTestTrait,
 };
 // import test utils
 use p_war::{
     models::{
-        player::{Player, m_Player}, game::{Game, m_Game},
-        board::{Board, m_Board, GameId, m_GameId, PWarPixel, m_PWarPixel},
+        player::{m_Player}, game::{m_Game},
+        board::{m_Board, m_GameId, m_PWarPixel},
         proposal::{
-            Proposal, m_Proposal, PixelRecoveryRate, m_PixelRecoveryRate, PlayerVote, m_PlayerVote
+            m_Proposal, m_PixelRecoveryRate, m_PlayerVote
         },
-        guilds::{Guild, m_Guild}, allowed_app::{AllowedApp, m_AllowedApp},
+        guilds::{m_Guild}, allowed_app::{m_AllowedApp},
         allowed_color::{
-            AllowedColor, m_AllowedColor, PaletteColors, m_PaletteColors, InPalette, m_InPalette,
-            GamePalette, m_GamePalette
+            m_AllowedColor, m_PaletteColors, m_InPalette,
+            m_GamePalette
         },
     },
+    //DispatcherTrait only needed for all except actions.
     systems::{
         actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
         propose::{propose_actions, IProposeDispatcher, IProposeDispatcherTrait},
@@ -29,17 +28,8 @@ use p_war::{
         app::{allowed_app_actions, IAllowedAppDispatcher, IAllowedAppDispatcherTrait}
     },
 };
-
-use pixelaw::core::utils::{
-    get_core_actions, encode_rgba, decode_rgba, Direction, Position, DefaultParameters
-};
-use pixelaw_test_helpers::{
-    update_test_world, setup_core, setup_core_initialized, setup_apps, setup_apps_initialized,
-    ZERO_ADDRESS, set_caller, drop_all_events, TEST_POSITION, WHITE_COLOR, RED_COLOR
-};
-use starknet::class_hash::Felt252TryIntoClassHash;
-
-use zeroable::Zeroable;
+use pixelaw::core::utils::{Position};
+use pixelaw_testing::helpers::{update_test_world, setup_core, setup_apps};
 
 pub fn deploy_p_war(
     ref world: WorldStorage
@@ -58,9 +48,9 @@ pub fn deploy_p_war(
 
     world.sync_perms_and_inits(cdefs);
 
-    let (p_war_actions, propose, voting, guild, allowed_app) = setup_pwar_apps_initialized(world);
+    let (p_war_actions, propose_actions, voting_actions, guild_actions, allowed_app_actions) = setup_pwar_apps_initialized(world);
 
-    (world, p_war_actions, propose, voting, guild, allowed_app)
+    (world, p_war_actions, propose_actions, voting_actions, guild_actions, allowed_app_actions)
 }
 
 pub fn namespace_def() -> NamespaceDef {
@@ -163,6 +153,7 @@ pub fn setup_pwar_apps_initialized(
         setup_pwar_apps(
         world
     );
+    //Only needed to init p_war_actions
     p_war_actions.init();
     // propose_actions.init();
     // voting_actions.init();
@@ -172,15 +163,15 @@ pub fn setup_pwar_apps_initialized(
     (p_war_actions, propose_actions, voting_actions, guild_actions, allowed_app_actions)
 }
 
-pub fn print_all_colors(ref world: WorldStorage, id: u32) {
-    let mut i = 0;
-    loop {
-        let color: PaletteColors = world.read_model((id, i));
-        let allowed_color: AllowedColor = world.read_model((id, color.color));
-        println!("@@@@@ COLOR: {}, {} @@@@", color.color, allowed_color.is_allowed);
-        i += 1;
-        if i == 9 {
-            break;
-        }
-    }
-}
+// pub fn print_all_colors(ref world: WorldStorage, id: u32) {
+//     let mut i = 0;
+//     loop {
+//         let color: PaletteColors = world.read_model((id, i));
+//         let allowed_color: AllowedColor = world.read_model((id, color.color));
+//         println!("@@@@@ COLOR: {}, {} @@@@", color.color, allowed_color.is_allowed);
+//         i += 1;
+//         if i == 9 {
+//             break;
+//         }
+//     }
+// }
