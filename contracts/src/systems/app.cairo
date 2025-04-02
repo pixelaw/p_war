@@ -1,7 +1,7 @@
 use pixelaw::core::utils::DefaultParameters;
 
 #[starknet::interface]
-trait IAllowedApp<TContractState> {
+pub trait IAllowedApp<TContractState> {
     fn set_pixel(ref self: TContractState, default_params: DefaultParameters);
 }
 
