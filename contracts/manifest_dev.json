@@ -1,10 +1,13 @@
 {
   "world": {
-    "class_hash": "0x7c9469d45a9cdbab775035afb48e1fa73fb35ab059fcb9dfb0a301aa973e783",
+    "class_hash": "0xcef4e30ae63ea699e7b703c8019b936ba12f93cf7aee25b71ab0cbdf9b420",
     "address": "0x5a247732e3a59737fea5504ed776c6e79eae8b6b2317402ab36b6d3cc508e6",
     "seed": "pixelaw",
     "name": "p_war",
     "entrypoints": [
+      "set_entity_test",
+      "delete_entity_test",
+      "emit_event_test",
       "uuid",
       "set_metadata",
       "register_namespace",
@@ -31,78 +34,8 @@
     "abi": [
       {
         "type": "impl",
-        "name": "World",
-        "interface_name": "dojo::world::iworld::IWorld"
-      },
-      {
-        "type": "struct",
-        "name": "core::byte_array::ByteArray",
-        "members": [
-          {
-            "name": "data",
-            "type": "core::array::Array::<core::bytes_31::bytes31>"
-          },
-          {
-            "name": "pending_word",
-            "type": "core::felt252"
-          },
-          {
-            "name": "pending_word_len",
-            "type": "core::integer::u32"
-          }
-        ]
-      },
-      {
-        "type": "enum",
-        "name": "dojo::world::resource::Resource",
-        "variants": [
-          {
-            "name": "Model",
-            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
-          },
-          {
-            "name": "Event",
-            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
-          },
-          {
-            "name": "Contract",
-            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
-          },
-          {
-            "name": "Namespace",
-            "type": "core::byte_array::ByteArray"
-          },
-          {
-            "name": "World",
-            "type": "()"
-          },
-          {
-            "name": "Unregistered",
-            "type": "()"
-          },
-          {
-            "name": "Library",
-            "type": "(core::starknet::class_hash::ClassHash, core::felt252)"
-          }
-        ]
-      },
-      {
-        "type": "struct",
-        "name": "dojo::model::metadata::ResourceMetadata",
-        "members": [
-          {
-            "name": "resource_id",
-            "type": "core::felt252"
-          },
-          {
-            "name": "metadata_uri",
-            "type": "core::byte_array::ByteArray"
-          },
-          {
-            "name": "metadata_hash",
-            "type": "core::felt252"
-          }
-        ]
+        "name": "WorldTestImpl",
+        "interface_name": "dojo::world::iworld::IWorldTest"
       },
       {
         "type": "struct",
@@ -111,16 +44,6 @@
           {
             "name": "snapshot",
             "type": "@core::array::Array::<core::felt252>"
-          }
-        ]
-      },
-      {
-        "type": "struct",
-        "name": "core::array::Span::<core::array::Span::<core::felt252>>",
-        "members": [
-          {
-            "name": "snapshot",
-            "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
           }
         ]
       },
@@ -213,6 +136,177 @@
           {
             "name": "Enum",
             "type": "core::array::Span::<dojo::meta::layout::FieldLayout>"
+          }
+        ]
+      },
+      {
+        "type": "interface",
+        "name": "dojo::world::iworld::IWorldTest",
+        "items": [
+          {
+            "type": "function",
+            "name": "set_entity_test",
+            "inputs": [
+              {
+                "name": "model_selector",
+                "type": "core::felt252"
+              },
+              {
+                "name": "index",
+                "type": "dojo::model::definition::ModelIndex"
+              },
+              {
+                "name": "values",
+                "type": "core::array::Span::<core::felt252>"
+              },
+              {
+                "name": "layout",
+                "type": "dojo::meta::layout::Layout"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "delete_entity_test",
+            "inputs": [
+              {
+                "name": "model_selector",
+                "type": "core::felt252"
+              },
+              {
+                "name": "index",
+                "type": "dojo::model::definition::ModelIndex"
+              },
+              {
+                "name": "layout",
+                "type": "dojo::meta::layout::Layout"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "emit_event_test",
+            "inputs": [
+              {
+                "name": "event_selector",
+                "type": "core::felt252"
+              },
+              {
+                "name": "keys",
+                "type": "core::array::Span::<core::felt252>"
+              },
+              {
+                "name": "values",
+                "type": "core::array::Span::<core::felt252>"
+              }
+            ],
+            "outputs": [],
+            "state_mutability": "external"
+          },
+          {
+            "type": "function",
+            "name": "dojo_contract_address",
+            "inputs": [
+              {
+                "name": "contract_selector",
+                "type": "core::felt252"
+              }
+            ],
+            "outputs": [
+              {
+                "type": "core::starknet::contract_address::ContractAddress"
+              }
+            ],
+            "state_mutability": "view"
+          }
+        ]
+      },
+      {
+        "type": "impl",
+        "name": "World",
+        "interface_name": "dojo::world::iworld::IWorld"
+      },
+      {
+        "type": "struct",
+        "name": "core::byte_array::ByteArray",
+        "members": [
+          {
+            "name": "data",
+            "type": "core::array::Array::<core::bytes_31::bytes31>"
+          },
+          {
+            "name": "pending_word",
+            "type": "core::felt252"
+          },
+          {
+            "name": "pending_word_len",
+            "type": "core::integer::u32"
+          }
+        ]
+      },
+      {
+        "type": "enum",
+        "name": "dojo::world::resource::Resource",
+        "variants": [
+          {
+            "name": "Model",
+            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
+          },
+          {
+            "name": "Event",
+            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
+          },
+          {
+            "name": "Contract",
+            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
+          },
+          {
+            "name": "Namespace",
+            "type": "core::byte_array::ByteArray"
+          },
+          {
+            "name": "World",
+            "type": "()"
+          },
+          {
+            "name": "Unregistered",
+            "type": "()"
+          },
+          {
+            "name": "Library",
+            "type": "(core::starknet::class_hash::ClassHash, core::felt252)"
+          }
+        ]
+      },
+      {
+        "type": "struct",
+        "name": "dojo::model::metadata::ResourceMetadata",
+        "members": [
+          {
+            "name": "resource_id",
+            "type": "core::felt252"
+          },
+          {
+            "name": "metadata_uri",
+            "type": "core::byte_array::ByteArray"
+          },
+          {
+            "name": "metadata_hash",
+            "type": "core::felt252"
+          }
+        ]
+      },
+      {
+        "type": "struct",
+        "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+        "members": [
+          {
+            "name": "snapshot",
+            "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
           }
         ]
       },
@@ -1312,7 +1406,7 @@
   },
   "contracts": [
     {
-      "address": "0x5abe5e7947471f74a79d169091544f5caf38a24d1f66ed3c6ca3a0020ddcdde",
+      "address": "0x74d62337ea2319f3e65d75cda97bc8691a3e0e6c5efc12ceb3e982c3caf62f8",
       "class_hash": "0x55422c132e78eb30d4e09ac1bba77b25fca2adb86c23ae960434afbedc4ba31",
       "abi": [
         {
@@ -2039,8 +2133,8 @@
       ]
     },
     {
-      "address": "0xc3ec15211a4ce2e6ebd93f3d5cf6f9c0a3b4e820b7797209be0020144f309a",
-      "class_hash": "0x5bbaa2b7e1c6e37d8686ff61ca206fae6cf17439c248e427da66687fc5643fc",
+      "address": "0x49c8224ce2feb7ff797391991e5e786ea2d698b180c755664422de3b4f31dc7",
+      "class_hash": "0x478526ae788d934271d0672ec9276852ff83848580045f8543d59c65683bd20",
       "abi": [
         {
           "type": "impl",
@@ -2646,8 +2740,8 @@
       ]
     },
     {
-      "address": "0xaf6854b90b294223050a2bb369e7e4ca386fe251a5f6ccbdcdc335c9e7b052",
-      "class_hash": "0x2a3d57abc5edb84aff3f54ef22b6753d950f56bcd5f19e41491b10ecda38a94",
+      "address": "0x101a1ddd0ebf5b0539a734c9c4d6013cdbea18b993d8a0d3db269bd535c01b6",
+      "class_hash": "0x4af3f7cc80649a96d5efd242af75ae19e2ae8b118df7c40f7d8d7c64b279fd9",
       "abi": [
         {
           "type": "impl",
