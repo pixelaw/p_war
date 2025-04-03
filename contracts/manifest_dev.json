@@ -1,13 +1,10 @@
 {
   "world": {
-    "class_hash": "0xcef4e30ae63ea699e7b703c8019b936ba12f93cf7aee25b71ab0cbdf9b420",
-    "address": "0x5a247732e3a59737fea5504ed776c6e79eae8b6b2317402ab36b6d3cc508e6",
+    "class_hash": "0x75fc75bcd1a7f8b4bf64b74978b0f89c8cee44bb755c1dae6f82284756451ec",
+    "address": "0x1d09b5e00f376337603943fc12715e439e91c0039f353b1cc48bb278dfa99d5",
     "seed": "pixelaw",
     "name": "p_war",
     "entrypoints": [
-      "set_entity_test",
-      "delete_entity_test",
-      "emit_event_test",
       "uuid",
       "set_metadata",
       "register_namespace",
@@ -34,8 +31,78 @@
     "abi": [
       {
         "type": "impl",
-        "name": "WorldTestImpl",
-        "interface_name": "dojo::world::iworld::IWorldTest"
+        "name": "World",
+        "interface_name": "dojo::world::iworld::IWorld"
+      },
+      {
+        "type": "struct",
+        "name": "core::byte_array::ByteArray",
+        "members": [
+          {
+            "name": "data",
+            "type": "core::array::Array::<core::bytes_31::bytes31>"
+          },
+          {
+            "name": "pending_word",
+            "type": "core::felt252"
+          },
+          {
+            "name": "pending_word_len",
+            "type": "core::integer::u32"
+          }
+        ]
+      },
+      {
+        "type": "enum",
+        "name": "dojo::world::resource::Resource",
+        "variants": [
+          {
+            "name": "Model",
+            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
+          },
+          {
+            "name": "Event",
+            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
+          },
+          {
+            "name": "Contract",
+            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
+          },
+          {
+            "name": "Namespace",
+            "type": "core::byte_array::ByteArray"
+          },
+          {
+            "name": "World",
+            "type": "()"
+          },
+          {
+            "name": "Unregistered",
+            "type": "()"
+          },
+          {
+            "name": "Library",
+            "type": "(core::starknet::class_hash::ClassHash, core::felt252)"
+          }
+        ]
+      },
+      {
+        "type": "struct",
+        "name": "dojo::model::metadata::ResourceMetadata",
+        "members": [
+          {
+            "name": "resource_id",
+            "type": "core::felt252"
+          },
+          {
+            "name": "metadata_uri",
+            "type": "core::byte_array::ByteArray"
+          },
+          {
+            "name": "metadata_hash",
+            "type": "core::felt252"
+          }
+        ]
       },
       {
         "type": "struct",
@@ -44,6 +111,16 @@
           {
             "name": "snapshot",
             "type": "@core::array::Array::<core::felt252>"
+          }
+        ]
+      },
+      {
+        "type": "struct",
+        "name": "core::array::Span::<core::array::Span::<core::felt252>>",
+        "members": [
+          {
+            "name": "snapshot",
+            "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
           }
         ]
       },
@@ -136,177 +213,6 @@
           {
             "name": "Enum",
             "type": "core::array::Span::<dojo::meta::layout::FieldLayout>"
-          }
-        ]
-      },
-      {
-        "type": "interface",
-        "name": "dojo::world::iworld::IWorldTest",
-        "items": [
-          {
-            "type": "function",
-            "name": "set_entity_test",
-            "inputs": [
-              {
-                "name": "model_selector",
-                "type": "core::felt252"
-              },
-              {
-                "name": "index",
-                "type": "dojo::model::definition::ModelIndex"
-              },
-              {
-                "name": "values",
-                "type": "core::array::Span::<core::felt252>"
-              },
-              {
-                "name": "layout",
-                "type": "dojo::meta::layout::Layout"
-              }
-            ],
-            "outputs": [],
-            "state_mutability": "external"
-          },
-          {
-            "type": "function",
-            "name": "delete_entity_test",
-            "inputs": [
-              {
-                "name": "model_selector",
-                "type": "core::felt252"
-              },
-              {
-                "name": "index",
-                "type": "dojo::model::definition::ModelIndex"
-              },
-              {
-                "name": "layout",
-                "type": "dojo::meta::layout::Layout"
-              }
-            ],
-            "outputs": [],
-            "state_mutability": "external"
-          },
-          {
-            "type": "function",
-            "name": "emit_event_test",
-            "inputs": [
-              {
-                "name": "event_selector",
-                "type": "core::felt252"
-              },
-              {
-                "name": "keys",
-                "type": "core::array::Span::<core::felt252>"
-              },
-              {
-                "name": "values",
-                "type": "core::array::Span::<core::felt252>"
-              }
-            ],
-            "outputs": [],
-            "state_mutability": "external"
-          },
-          {
-            "type": "function",
-            "name": "dojo_contract_address",
-            "inputs": [
-              {
-                "name": "contract_selector",
-                "type": "core::felt252"
-              }
-            ],
-            "outputs": [
-              {
-                "type": "core::starknet::contract_address::ContractAddress"
-              }
-            ],
-            "state_mutability": "view"
-          }
-        ]
-      },
-      {
-        "type": "impl",
-        "name": "World",
-        "interface_name": "dojo::world::iworld::IWorld"
-      },
-      {
-        "type": "struct",
-        "name": "core::byte_array::ByteArray",
-        "members": [
-          {
-            "name": "data",
-            "type": "core::array::Array::<core::bytes_31::bytes31>"
-          },
-          {
-            "name": "pending_word",
-            "type": "core::felt252"
-          },
-          {
-            "name": "pending_word_len",
-            "type": "core::integer::u32"
-          }
-        ]
-      },
-      {
-        "type": "enum",
-        "name": "dojo::world::resource::Resource",
-        "variants": [
-          {
-            "name": "Model",
-            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
-          },
-          {
-            "name": "Event",
-            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
-          },
-          {
-            "name": "Contract",
-            "type": "(core::starknet::contract_address::ContractAddress, core::felt252)"
-          },
-          {
-            "name": "Namespace",
-            "type": "core::byte_array::ByteArray"
-          },
-          {
-            "name": "World",
-            "type": "()"
-          },
-          {
-            "name": "Unregistered",
-            "type": "()"
-          },
-          {
-            "name": "Library",
-            "type": "(core::starknet::class_hash::ClassHash, core::felt252)"
-          }
-        ]
-      },
-      {
-        "type": "struct",
-        "name": "dojo::model::metadata::ResourceMetadata",
-        "members": [
-          {
-            "name": "resource_id",
-            "type": "core::felt252"
-          },
-          {
-            "name": "metadata_uri",
-            "type": "core::byte_array::ByteArray"
-          },
-          {
-            "name": "metadata_hash",
-            "type": "core::felt252"
-          }
-        ]
-      },
-      {
-        "type": "struct",
-        "name": "core::array::Span::<core::array::Span::<core::felt252>>",
-        "members": [
-          {
-            "name": "snapshot",
-            "type": "@core::array::Array::<core::array::Span::<core::felt252>>"
           }
         ]
       },
@@ -1406,8 +1312,8 @@
   },
   "contracts": [
     {
-      "address": "0x74d62337ea2319f3e65d75cda97bc8691a3e0e6c5efc12ceb3e982c3caf62f8",
-      "class_hash": "0x55422c132e78eb30d4e09ac1bba77b25fca2adb86c23ae960434afbedc4ba31",
+      "address": "0x52cf765ad094d9edb5787f47cfd3a0682ff35006995e8146b55e73c3c600be4",
+      "class_hash": "0x57045b4433b2cbae0e955c27d092cd263446ddfc31a010708f23794bcbbabdb",
       "abi": [
         {
           "type": "impl",
@@ -2133,8 +2039,8 @@
       ]
     },
     {
-      "address": "0x49c8224ce2feb7ff797391991e5e786ea2d698b180c755664422de3b4f31dc7",
-      "class_hash": "0x478526ae788d934271d0672ec9276852ff83848580045f8543d59c65683bd20",
+      "address": "0x3d2e301175d8b1ec864e943398b75630b748402ce591bcb3014dc99136b3cfd",
+      "class_hash": "0x3c40b7e5dd422eea358bfd1cb185dcfbb957afb4fe4ff3d9388c02edca7f60",
       "abi": [
         {
           "type": "impl",
@@ -2401,8 +2307,8 @@
       ]
     },
     {
-      "address": "0x5c7f7a3f57e22f97388231589472d2f0d00d24d4b9418fff496cc0bff7e4350",
-      "class_hash": "0x75185fd00578f1baa5c747e3bf2598340344b1ae8a466b177c2279604ea27e0",
+      "address": "0x553ef42231269e4884e9700f4b10ea56ccd02c6f4b08491ffee68eea93119f0",
+      "class_hash": "0x14ad1079824c01a7c5ea92c2a86e45083409f79268b1ac7c42d01abb9ccd41d",
       "abi": [
         {
           "type": "impl",
@@ -2740,8 +2646,8 @@
       ]
     },
     {
-      "address": "0x101a1ddd0ebf5b0539a734c9c4d6013cdbea18b993d8a0d3db269bd535c01b6",
-      "class_hash": "0x4af3f7cc80649a96d5efd242af75ae19e2ae8b118df7c40f7d8d7c64b279fd9",
+      "address": "0x244c4a167a5120fe1ff0b7bf6d17205f8e8e5b135539e1431e2894cf9237dc0",
+      "class_hash": "0x347e34ab59fa60ffb4ffd2261e3e28411d39e1189e6c47b029deb85c29f426b",
       "abi": [
         {
           "type": "impl",
@@ -3189,8 +3095,8 @@
       ]
     },
     {
-      "address": "0x5fe63c7ceb70e224b79183559f504c38393192e295443b42636db719068d69e",
-      "class_hash": "0x48589f2386967028dd325480b8fdc480fcbda9b1e380b4f27d1d22ec214887",
+      "address": "0x1eadb73080c2fe9bf0141ecba8315864741495195645f5b63bb9b8a467ce495",
+      "class_hash": "0x597fb291da2f8a302c422c38d450e682c020d069e4b7c7ad1d8810ab5140298",
       "abi": [
         {
           "type": "impl",
@@ -3624,8 +3530,8 @@
       ]
     },
     {
-      "address": "0x218c07f3fc4199ba09fa28ba12b9a494f81dcdd18cba84363a40b4accc3904f",
-      "class_hash": "0x71d339d1fe21cb836125b3eed3db601dd543f333f46ec9708fd1e67dc1a5d61",
+      "address": "0x754d787ce64fb90b0941b91c582a8d7e8a901203e0aded7f9c9080dcfdd5c29",
+      "class_hash": "0x389ab47d5a1d1425b3f45ed4e1b3046c3926e9b0890be1814361844fc5ffefd",
       "abi": [
         {
           "type": "impl",
@@ -3854,85 +3760,85 @@
   "models": [
     {
       "members": [],
-      "class_hash": "0x7ee79b6f7dda50ef7c20d31d96836596b7998a0b0f5756d8956d7be4cb01a8d",
+      "class_hash": "0x423e605cafdcebc820f8f5645dfafc447eba70bc3f7e9918266ab73d57712d0",
       "tag": "pixelaw-AllowedApp",
       "selector": "0x4aa2705854562c8bf719f487c3c8d7b13c3d5981a2ef8a2b8662454ab20dda1"
     },
     {
       "members": [],
-      "class_hash": "0x60771a900e641a9e86dccfe89eb58614c899d04629648bf96280c09703a447e",
+      "class_hash": "0xfa8547b0979f4ad4eba25343ef31c40d94627eaaabcc49cf33d325636ab886",
       "tag": "pixelaw-AllowedColor",
       "selector": "0x22c1a7964214ed1b17ffc58c6204c0e1b665dec234c929384f196d94aecd4f1"
     },
     {
       "members": [],
-      "class_hash": "0x602a0cdffb699ed4f1c2c309163e75a53d4614443eb12a057375e17ced9c6fb",
+      "class_hash": "0x30b6839e92f62e3886ae97119901bbd153f32fff27205a6797ab303a86a87a0",
       "tag": "pixelaw-Board",
       "selector": "0x124dc3e76f4ed3f4837711f41cedecca802a320158b9de00a7b11c2178744db"
     },
     {
       "members": [],
-      "class_hash": "0x2db39ec9b4d94334237a84e276054ea51e785e56e1dbc18673d16dd2717bb64",
+      "class_hash": "0x65cf4eb485fa604f8b870245ee294a6d84e184faddaa080d1305378f2aaf3f6",
       "tag": "pixelaw-Game",
       "selector": "0x5c1fa23f91c57a8abe1fbbd9810506e80760f755a32bec3afd8c9ce1e39cc31"
     },
     {
       "members": [],
-      "class_hash": "0x7e1c256150263b0a2dc487cdf6883a52db2e7b483637ae3b5aac7e45ec32ac",
+      "class_hash": "0x5339ede456007a59cc5761de7ff5085c872fa7636e017333e028b842c004e42",
       "tag": "pixelaw-GameId",
       "selector": "0x1ee8756e78c92bc9c335b55e61b80e3973e3fff0f30011d964afe0f254e8bfa"
     },
     {
       "members": [],
-      "class_hash": "0x4bffcc821282f99fc8e35ee682d5f598a49d006d665d91e512c676b58c01f8",
+      "class_hash": "0x503688f0dcfade0c9d2fe61760b6463a5f5924233a4416c5e742117bd9e1a19",
       "tag": "pixelaw-GamePalette",
       "selector": "0x49013f2b735532ac5a03f978e29eff91c1384d5c3ca9bede116ebb3e8d093b8"
     },
     {
       "members": [],
-      "class_hash": "0x12247f79a914a0953304beaecfe04dd5605faf1cfc487c20457267add25a922",
+      "class_hash": "0x64fe758d9600a58b090f6d7ac2411df817a0664d6d5fead21c4a63eb4170dfd",
       "tag": "pixelaw-Guild",
       "selector": "0x40e97c00653ba125f4c47d25c4869afe483b0d08badc3a85ff8779c4ae09d58"
     },
     {
       "members": [],
-      "class_hash": "0x17a7a15a5db6b826e0b6d118a00a381b98d14e59c71570648384056d941ef63",
+      "class_hash": "0x22ebf2681241ef00b9025c09295cde34a97d203f9d04b6907185b58168ae57d",
       "tag": "pixelaw-InPalette",
       "selector": "0x7a46e3ad45c2a3929942f7b159fca9f0d5760becedb0ad2d8a083e3e2a1dfd3"
     },
     {
       "members": [],
-      "class_hash": "0x6e627bf312ea529e9a136147e3ad8143ca7f1b0409e04467ffadef4fc6ff28b",
+      "class_hash": "0x1048e1116b12374c5f02b02742a98a5b723d4fd60c586ee7774b01fc80ca887",
       "tag": "pixelaw-PWarPixel",
       "selector": "0x15195913884de92cc197b011be399aa8f603f113600bb09a372028241ccd52d"
     },
     {
       "members": [],
-      "class_hash": "0x1186148b87fd2dc5d4d532890e839846a40ae0674dc443a20140c71b14e696",
+      "class_hash": "0x45b749cb3c2477ef416a533fed3f64c7372115722a26c1d210b25a60dccf36e",
       "tag": "pixelaw-PaletteColors",
       "selector": "0x39a92a0aa39ccee2d026d433e089f1a063f2ff73fc1c0f0bcf7c21a9731687b"
     },
     {
       "members": [],
-      "class_hash": "0x5a5ffb29169a047cc9b52238ed019cbbd282034dff7e96d279e6ae3742e9bad",
+      "class_hash": "0x106b53a8619bde83e1ac4039023881762978447ec50da531cfa92cac0776ce2",
       "tag": "pixelaw-PixelRecoveryRate",
       "selector": "0x3aa284c05a1c4add28708228abefb8eadff58a064e2d56a64f573e3764f9acc"
     },
     {
       "members": [],
-      "class_hash": "0x3198de87540c3e261eebe54d6ca18d14eb759d6665ecf7bdbc8145fea325c8e",
+      "class_hash": "0x329c3da995072ef4a0e83c366fd51e91bebce0602d8dd5a9a0bd67ffffafdc3",
       "tag": "pixelaw-Player",
       "selector": "0x30a1b371016270e1d0c33e176d9d07ab01d801d8b1f0e1fd1d45534137f2ce"
     },
     {
       "members": [],
-      "class_hash": "0x3ba3e2a21ae77ae92f47efa08f683afabe29c9d19ff54e39713c41333968e00",
+      "class_hash": "0x6f8b50e57c149d8670cdf26b19adcdfd84c000d6fcb564cfe07d9c9e7a86152",
       "tag": "pixelaw-PlayerVote",
       "selector": "0x326c17c626b9eecdb1744cb055eed766d8e9adf96c10aa60310c6961d79498c"
     },
     {
       "members": [],
-      "class_hash": "0x1f5a4dfcbb7da5e3dd10303f8b2fd7fc0ac8cb8b19b19ca06f92b84e3c4bcc",
+      "class_hash": "0xbb2c658b9e1fd1c0ba8920c408caf7e2aa4db58d03023e09be32c889343a66",
       "tag": "pixelaw-Proposal",
       "selector": "0x49e1daf5238e47ac52ce3f79a684ec035e7f9e864b2979f1d0f2d46cf31c1bc"
     }
@@ -3940,49 +3846,49 @@
   "events": [
     {
       "members": [],
-      "class_hash": "0x767f62f1e8b591cc15a9b0882e4076f8416b9aea973ba5834517649fcf27f19",
+      "class_hash": "0x45a2d3816647b1fdbc8dd1808753595ae1eeae172db756391d41289aba8c3a6",
       "tag": "pixelaw-EndedGame",
       "selector": "0x63cc2102a4b3877596cde2f2e0eb68416dd8ac4b552d6319bd4705ab48fda09"
     },
     {
       "members": [],
-      "class_hash": "0x255a2de2e024af5ce40fdc352543100a1b1f2c31be6febab8a9ac87eb027edb",
+      "class_hash": "0x211f4e713a3af2940365396d3f83cfde36e990ee14d693e5426eb86656ff97b",
       "tag": "pixelaw-GuildCreated",
       "selector": "0x190791bd5d67d74c1a3e7e908a7faa1097dc88444fc9cdbe1e4f17d4eb275c2"
     },
     {
       "members": [],
-      "class_hash": "0x71112dd16af99000961ee05c670e69f1f26dc35730723081409d395cd364835",
+      "class_hash": "0x791ed74618ebc870dd468353dd8d3bee3a7398de67f0e3bd03c2e42269fc73e",
       "tag": "pixelaw-MemberAdded",
       "selector": "0x5d030a1690f08a7cdd65ea908927c4d28ca6464b700fd14d7ba601e6a5a6b7b"
     },
     {
       "members": [],
-      "class_hash": "0x2cd9ae5a646e206f7332a21025beb8790921802d64bd56b1078e9215afed813",
+      "class_hash": "0x3df1c5fa486593faf1ee0ab917a8ab4623c8a3b7b0741833b31812a8dbff2c",
       "tag": "pixelaw-MemberRemoved",
       "selector": "0x31bc155f610ea9b75a636476db4c4b09c0c75929e2ee378ff21f421df968a0e"
     },
     {
       "members": [],
-      "class_hash": "0x22667cc6f15b740fc0262e0cce3bac9d5f7a84c96b00aa671d99c1540779668",
+      "class_hash": "0x167ba94e99adfa8a2624bbfbb266e4386bff9b7be4081ef82ddbc07a53518f3",
       "tag": "pixelaw-ProposalActivated",
       "selector": "0x54cf9af9951fc42af752b63b2402d7b3a50e99d28973ea368bf03d4d559b9ab"
     },
     {
       "members": [],
-      "class_hash": "0x4ed3a2f9ebdc3632a61352c02d810fe597c9968a8af58a85ee1933b84132ea1",
+      "class_hash": "0x34de11f71220666c87e5671eec05d3ff0297b81bf0fd031ea63db408576650a",
       "tag": "pixelaw-ProposalCreated",
       "selector": "0x2695c2b5813023020f748292a15196fa26b6a28de03d9b0d98fe03f3383cb2b"
     },
     {
       "members": [],
-      "class_hash": "0x6099e9bc670f5a669b89b13e0472ee0b7fd7247eb4d50e71d974e63e463db46",
+      "class_hash": "0x439a9d0ae0853991ecbd6b4fc2c725f040c922962d2cd1f94518e1831f0c974",
       "tag": "pixelaw-StartedGame",
       "selector": "0x681f18fed97923a1fa8abc421f42125d7af9a14c1cb2dbbf21cc0ee998ba644"
     },
     {
       "members": [],
-      "class_hash": "0x297e716f975b84f0c82385a79fb121220fc34d7c5d240239c5064711d1954de",
+      "class_hash": "0x79097a1b85f0d04bcac13625d5a20400651fafb91fe1fcd3a7bed3d89416164",
       "tag": "pixelaw-Voted",
       "selector": "0x2658eb5934f0ca3746e650c1cf0d5656f5ed5f2ce59aba3fafac0a7c80c093f"
     }
