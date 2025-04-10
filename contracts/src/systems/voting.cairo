@@ -32,7 +32,7 @@ mod voting_actions {
         fn vote(
             ref self: ContractState, game_id: u32, index: u32, use_px: u32, is_in_favor: bool
         ) {
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             let player_address = get_caller_address();
             let mut proposal: Proposal = world.read_model((game_id, index));
             let mut player_vote: PlayerVote = world.read_model((player_address, game_id, index));

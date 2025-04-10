@@ -83,7 +83,7 @@ mod propose_actions {
             target_args_2: u32
         ) -> u32 {
             //get world
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             // get models
             let mut game: Game = world.read_model(game_id);
             // println!("game status: {}", game.status());
@@ -135,7 +135,7 @@ mod propose_actions {
             ref self: ContractState, game_id: u32, index: u32, clear_data: Span<Position>
         ) {
             // get the proposal
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             let mut proposal: Proposal = world.read_model((game_id, index));
             let mut game: Game = world.read_model(game_id);
             let current_timestamp = get_block_timestamp();
@@ -186,7 +186,7 @@ mod propose_actions {
             ref self: ContractState, game_id: u32, index: u32, game: Game, proposal: Proposal
         ) {
             assert(proposal.proposal_type == 1, 'not add new color proposal');
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             let new_color: u32 = proposal.target_args_1;
             let mut new_color_allowed: AllowedColor = world.read_model((game_id, new_color));
             // only change it if it's not allowed
@@ -263,7 +263,7 @@ mod propose_actions {
             clear_data: Span<Position>
         ) {
             assert(proposal.proposal_type == 2, 'not reset to white proposal');
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             // Reset to white by color
             let core_actions = get_core_actions(
                 ref world

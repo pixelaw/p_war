@@ -70,7 +70,7 @@ mod p_war_actions {
     #[abi(embed_v0)]
     impl ActionsImpl of IActions<ContractState> {
         fn init(ref self: ContractState) {
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             let core_actions = get_core_actions(ref world);
             core_actions.new_app(contract_address_const::<0>(), APP_KEY, APP_ICON);
         }
@@ -91,7 +91,7 @@ mod p_war_actions {
         }
 
         fn get_game_id(self: @ContractState, position: Position) -> u32 {
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
 
             let mut id = world.dispatcher.uuid();
             if id == 0 {
@@ -112,7 +112,7 @@ mod p_war_actions {
         }
 
         fn create_game(ref self: ContractState, origin: Position) -> u32 {
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             println!("create_game BEGIN");
 
             // check if a game exists
@@ -208,7 +208,7 @@ mod p_war_actions {
         fn place_pixel(
             ref self: ContractState, app: ContractAddress, default_params: DefaultParameters
         ) {
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             let core_actions = get_core_actions(ref world); //new
             let system = get_contract_address(); //new
             let position = Position { x: default_params.position.x, y: default_params.position.y };
@@ -294,7 +294,7 @@ mod p_war_actions {
 
         // only use for expand areas.
         fn update_pixel(ref self: ContractState, pixel_update: PixelUpdate) {
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             assert(get_caller_address() == get_contract_address(), 'invalid caller');
             let player_address = get_tx_info().unbox().account_contract_address;
             let system = get_contract_address();
@@ -305,7 +305,7 @@ mod p_war_actions {
 
         fn end_game(ref self: ContractState, game_id: u32) {
             // check if the time is expired.
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             let mut game: Game = world.read_model(game_id);
             assert(get_block_timestamp() >= game.end, 'game is not ended');
 

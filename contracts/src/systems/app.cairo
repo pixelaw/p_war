@@ -19,7 +19,7 @@ mod allowed_app_actions {
     impl AllowedAppImpl of IAllowedApp<ContractState> {
         fn set_pixel(ref self: ContractState, default_params: DefaultParameters) {
             // Instead of calling back to actions, call core_actions directly
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             let core_actions = get_core_actions(ref world);
             let player = starknet::get_tx_info().unbox().account_contract_address;
             let system = get_contract_address();

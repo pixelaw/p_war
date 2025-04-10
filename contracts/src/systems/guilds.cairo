@@ -58,7 +58,7 @@ mod guild_actions {
     #[abi(embed_v0)]
     impl GuildImpl of IGuild<ContractState> {
         fn create_guild(ref self: ContractState, game_id: u32, guild_name: felt252) -> u32 {
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             let caller = get_caller_address();
 
             // Check if the game exists and get the game data
@@ -112,7 +112,7 @@ mod guild_actions {
         fn add_member(
             ref self: ContractState, game_id: u32, guild_id: u32, new_member: ContractAddress
         ) {
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             let caller = get_caller_address();
 
             // Get the guild
@@ -160,7 +160,7 @@ mod guild_actions {
         fn remove_member(
             ref self: ContractState, game_id: u32, guild_id: u32, member: ContractAddress
         ) {
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             let caller = get_caller_address();
 
             // Get the guild
@@ -198,7 +198,7 @@ mod guild_actions {
         fn is_member(
             ref self: ContractState, game_id: u32, guild_id: u32, member: ContractAddress
         ) -> bool {
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             let guild: Guild = world.read_model((game_id, guild_id));
             let mut is_member = false;
             let mut i = 0;
@@ -223,7 +223,7 @@ mod guild_actions {
 
         fn get_guild_points(ref self: ContractState, game_id: u32, guild_id: u32) -> u32 {
             // Get the guild
-            let mut world = self.world(@"pixelaw");
+            let mut world = self.world(@"p_war");
             let mut guild: Guild = world.read_model((game_id, guild_id));
 
             let mut guild_total_points = 0;

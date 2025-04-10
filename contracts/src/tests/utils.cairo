@@ -91,16 +91,16 @@ pub fn namespace_def() -> NamespaceDef {
 
 pub fn contract_defs() -> Span<ContractDef> {
     let cdefs: Span<ContractDef> = [
-        ContractDefTrait::new(@"pixelaw", @"p_war_actions")
-            .with_writer_of([dojo::utils::bytearray_hash(@"pixelaw")].span()),
-        ContractDefTrait::new(@"pixelaw", @"propose_actions")
-            .with_writer_of([dojo::utils::bytearray_hash(@"pixelaw")].span()),
-        ContractDefTrait::new(@"pixelaw", @"voting_actions")
-            .with_writer_of([dojo::utils::bytearray_hash(@"pixelaw")].span()),
-        ContractDefTrait::new(@"pixelaw", @"guild_actions")
-            .with_writer_of([dojo::utils::bytearray_hash(@"pixelaw")].span()),
-        ContractDefTrait::new(@"pixelaw", @"allowed_app_actions")
-            .with_writer_of([dojo::utils::bytearray_hash(@"pixelaw")].span()),
+        ContractDefTrait::new(@"p_war", @"p_war_actions")
+            .with_writer_of([dojo::utils::bytearray_hash(@"p_war")].span()),
+        ContractDefTrait::new(@"p_war", @"propose_actions")
+            .with_writer_of([dojo::utils::bytearray_hash(@"p_war")].span()),
+        ContractDefTrait::new(@"p_war", @"voting_actions")
+            .with_writer_of([dojo::utils::bytearray_hash(@"p_war")].span()),
+        ContractDefTrait::new(@"p_war", @"guild_actions")
+            .with_writer_of([dojo::utils::bytearray_hash(@"p_war")].span()),
+        ContractDefTrait::new(@"p_war", @"allowed_app_actions")
+            .with_writer_of([dojo::utils::bytearray_hash(@"p_war")].span()),
     ].span();
     cdefs
 }
