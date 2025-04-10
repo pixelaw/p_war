@@ -1312,7 +1312,7 @@
   },
   "contracts": [
     {
-      "address": "0x52cf765ad094d9edb5787f47cfd3a0682ff35006995e8146b55e73c3c600be4",
+      "address": "0xd1e895319120004075fdd61571f3e3aa90e89a2b0f22462775e4a63408d0c5",
       "class_hash": "0x57045b4433b2cbae0e955c27d092cd263446ddfc31a010708f23794bcbbabdb",
       "abi": [
         {
@@ -2021,8 +2021,8 @@
         }
       ],
       "init_calldata": [],
-      "tag": "pixelaw-actions",
-      "selector": "0x16928a49cfd8cf14e9f41e9d8f873890d1ab7d23b9a312d8a72f4031159876f",
+      "tag": "p_war-actions",
+      "selector": "0x5c4dfad1ce85f4c83221306fbcb419ee67523cc89465f028a2a6f3f90a6f0b8",
       "systems": [
         "init",
         "can_update_pixel",
@@ -2039,8 +2039,8 @@
       ]
     },
     {
-      "address": "0x3d2e301175d8b1ec864e943398b75630b748402ce591bcb3014dc99136b3cfd",
-      "class_hash": "0x3c40b7e5dd422eea358bfd1cb185dcfbb957afb4fe4ff3d9388c02edca7f60",
+      "address": "0x5690b9d49b93542faa53db1ad2a9631b0ea175abb1297b6da5db60a0a94e35a",
+      "class_hash": "0x5b364e36eb86d1aa7e3b5f4d0f8471091cc6f4239d3ec71d30cd4972ecda74b",
       "abi": [
         {
           "type": "impl",
@@ -2299,16 +2299,16 @@
         }
       ],
       "init_calldata": [],
-      "tag": "pixelaw-allowed_app_actions",
-      "selector": "0x4eb94962c665465ddf98717edce32f775575e7548d61f72c0657800c5545709",
+      "tag": "p_war-allowed_app_actions",
+      "selector": "0x78f047e7dd7b9623dc8867dc03af4d60eb5d2a11b2c41afabeea4e6d0ec0c8c",
       "systems": [
         "set_pixel",
         "upgrade"
       ]
     },
     {
-      "address": "0x553ef42231269e4884e9700f4b10ea56ccd02c6f4b08491ffee68eea93119f0",
-      "class_hash": "0x14ad1079824c01a7c5ea92c2a86e45083409f79268b1ac7c42d01abb9ccd41d",
+      "address": "0x48d49c8e764afef53c591f812fdbafdb00177d065c858ee07ac4bcc6d01b216",
+      "class_hash": "0x4ffd8f0827a911b9a975bd864b9c772e1c653914ab0cbd450c4a691d68bedc8",
       "abi": [
         {
           "type": "impl",
@@ -2632,8 +2632,8 @@
         }
       ],
       "init_calldata": [],
-      "tag": "pixelaw-guild_actions",
-      "selector": "0x4c9f59312c9c6ebd49039a1172f6596c44684651bb7a534011e2f4b164bba84",
+      "tag": "p_war-guild_actions",
+      "selector": "0x5a9bda3f6e0c2434004cf6dab0745c5d894da70cf53eca4bd847b21b3c94276",
       "systems": [
         "create_guild",
         "add_member",
@@ -2646,8 +2646,8 @@
       ]
     },
     {
-      "address": "0x244c4a167a5120fe1ff0b7bf6d17205f8e8e5b135539e1431e2894cf9237dc0",
-      "class_hash": "0x347e34ab59fa60ffb4ffd2261e3e28411d39e1189e6c47b029deb85c29f426b",
+      "address": "0x2f3dad854016a24174a0cfdd3f5c72c1ef5b0320d28eba044e73467c53f385a",
+      "class_hash": "0x275e60b827e5b5866b27e0037edca0b3bb091690939a3646d460eaaa9e8a1ea",
       "abi": [
         {
           "type": "impl",
@@ -3081,8 +3081,8 @@
         }
       ],
       "init_calldata": [],
-      "tag": "pixelaw-p_war_actions",
-      "selector": "0x60819afda106eb158f2bab7b32887de68857103d8ffb9a1683ba40f9d96e98b",
+      "tag": "p_war-p_war_actions",
+      "selector": "0x386fdc6d6ac46f91810daa12b1e916e9abad5027835f35126b3c4950a94ed99",
       "systems": [
         "init",
         "interact",
@@ -3095,8 +3095,8 @@
       ]
     },
     {
-      "address": "0x1eadb73080c2fe9bf0141ecba8315864741495195645f5b63bb9b8a467ce495",
-      "class_hash": "0x597fb291da2f8a302c422c38d450e682c020d069e4b7c7ad1d8810ab5140298",
+      "address": "0x6313aef58aaf53fe10367e1b8dd49fb57c167161692fe317d6af29c17ba3fd1",
+      "class_hash": "0x18ec3243e81f7e5f66eb14e6419e386e005500f808bfb9c76f93b2a9375c3a9",
       "abi": [
         {
           "type": "impl",
@@ -3519,8 +3519,8 @@
         }
       ],
       "init_calldata": [],
-      "tag": "pixelaw-propose_actions",
-      "selector": "0x4ee7028a73b7bd0e88525eaf1d60daf9a2f7e3fa14b15f3a52f27978569b58d",
+      "tag": "p_war-propose_actions",
+      "selector": "0x5f7a960aa6f278cc9d575d01a7832f32c10a05356e7bfed4a2d70701e561583",
       "systems": [
         "create_proposal",
         "activate_proposal",
@@ -3530,8 +3530,8 @@
       ]
     },
     {
-      "address": "0x754d787ce64fb90b0941b91c582a8d7e8a901203e0aded7f9c9080dcfdd5c29",
-      "class_hash": "0x389ab47d5a1d1425b3f45ed4e1b3046c3926e9b0890be1814361844fc5ffefd",
+      "address": "0x48b80202712169439d21f954a694827eeb35f33641f1bb04bce607a66cbe89",
+      "class_hash": "0x1b824bc299e36f833652d5f28136be1d8baab919158b7f57207ea0f9c6bc33f",
       "abi": [
         {
           "type": "impl",
@@ -3748,8 +3748,8 @@
         }
       ],
       "init_calldata": [],
-      "tag": "pixelaw-voting_actions",
-      "selector": "0x6aab73ea9b21bfd9442dae40417908aacc10dd3545ee349c9694c482f9ccbc9",
+      "tag": "p_war-voting_actions",
+      "selector": "0x346d11d3e74683676b1ea1f5b985192ac36ed677b0b01bc8c5cc975eb920460",
       "systems": [
         "vote",
         "upgrade"
@@ -3761,136 +3761,196 @@
     {
       "members": [],
       "class_hash": "0x423e605cafdcebc820f8f5645dfafc447eba70bc3f7e9918266ab73d57712d0",
-      "tag": "pixelaw-AllowedApp",
-      "selector": "0x4aa2705854562c8bf719f487c3c8d7b13c3d5981a2ef8a2b8662454ab20dda1"
+      "tag": "p_war-AllowedApp",
+      "selector": "0x24c44da87007d7e5ddba30435a344c4296937b3e49ba3f1dab26998bc977c1b"
     },
     {
       "members": [],
       "class_hash": "0xfa8547b0979f4ad4eba25343ef31c40d94627eaaabcc49cf33d325636ab886",
-      "tag": "pixelaw-AllowedColor",
-      "selector": "0x22c1a7964214ed1b17ffc58c6204c0e1b665dec234c929384f196d94aecd4f1"
+      "tag": "p_war-AllowedColor",
+      "selector": "0x5520152b0978c0c76d1cb39e3a23ebedc3fc1cac2b0ec48c2f0164de62ff394"
+    },
+    {
+      "members": [],
+      "class_hash": "0x3277207fce5103f94e14d6a4ff3bff9c2167d84c4d8cee75e4c5d7c4240589c",
+      "tag": "p_war-App",
+      "selector": "0x47de031d5f59200c9c7b04f93cec782f351bcfbee4bd6b9497d1d0fddf5ba7e"
+    },
+    {
+      "members": [],
+      "class_hash": "0x7afa370c6115105b8e50bfbea180c34f19d9815c53788bb8b5159fffdadbd69",
+      "tag": "p_war-AppName",
+      "selector": "0x55e803bc532c319a920c31267510f5fdfa6431bbc4e0432fa8f4073d996ee40"
+    },
+    {
+      "members": [],
+      "class_hash": "0x32f32c05a337949bf091c11221b8d629e30e7f3e9de7baf8e367bb651ac7485",
+      "tag": "p_war-Area",
+      "selector": "0x19b86f5e8e9198414125643c74e58c79a863e4010eef19df7263bef8a60f228"
     },
     {
       "members": [],
       "class_hash": "0x30b6839e92f62e3886ae97119901bbd153f32fff27205a6797ab303a86a87a0",
-      "tag": "pixelaw-Board",
-      "selector": "0x124dc3e76f4ed3f4837711f41cedecca802a320158b9de00a7b11c2178744db"
+      "tag": "p_war-Board",
+      "selector": "0x1f5d3e04352f0283dd848120e3c8146498d70a3cf08d115ceab9ddba114fc7c"
+    },
+    {
+      "members": [],
+      "class_hash": "0x5e84ac0ba7ad9f83bcd5a9623562b22170daa59f96ff2c7d941274364ac2763",
+      "tag": "p_war-CoreActionsAddress",
+      "selector": "0x30d1e3efaf806af0a7b10bb8bf98d545aa8dcb636325d85dbde74441cabf3d3"
+    },
+    {
+      "members": [],
+      "class_hash": "0x39e50141cbf5917855043d556ca7df6f6cf6ccbb4b78190c34ed0632854958b",
+      "tag": "p_war-Dummy",
+      "selector": "0x5167094bdb505ce4fdd1f941d7875554f94197ca1be0cb7e534e77c80ded21e"
     },
     {
       "members": [],
       "class_hash": "0x65cf4eb485fa604f8b870245ee294a6d84e184faddaa080d1305378f2aaf3f6",
-      "tag": "pixelaw-Game",
-      "selector": "0x5c1fa23f91c57a8abe1fbbd9810506e80760f755a32bec3afd8c9ce1e39cc31"
+      "tag": "p_war-Game",
+      "selector": "0x2f439249064bca5221700d011bb4b2b8163fe152f960a5e9a8418622b2d49b0"
     },
     {
       "members": [],
       "class_hash": "0x5339ede456007a59cc5761de7ff5085c872fa7636e017333e028b842c004e42",
-      "tag": "pixelaw-GameId",
-      "selector": "0x1ee8756e78c92bc9c335b55e61b80e3973e3fff0f30011d964afe0f254e8bfa"
+      "tag": "p_war-GameId",
+      "selector": "0x5b7763433d1f2ff36e03b56fad54f2ca8628eb87e8060fa6502a0519958433e"
     },
     {
       "members": [],
       "class_hash": "0x503688f0dcfade0c9d2fe61760b6463a5f5924233a4416c5e742117bd9e1a19",
-      "tag": "pixelaw-GamePalette",
-      "selector": "0x49013f2b735532ac5a03f978e29eff91c1384d5c3ca9bede116ebb3e8d093b8"
+      "tag": "p_war-GamePalette",
+      "selector": "0x71e91cdbe22c2bde22cac40da33028857d64dc54d3aa59047d55afbcaf0c361"
     },
     {
       "members": [],
       "class_hash": "0x64fe758d9600a58b090f6d7ac2411df817a0664d6d5fead21c4a63eb4170dfd",
-      "tag": "pixelaw-Guild",
-      "selector": "0x40e97c00653ba125f4c47d25c4869afe483b0d08badc3a85ff8779c4ae09d58"
+      "tag": "p_war-Guild",
+      "selector": "0x48b7dd3863c574a6506b254b4533005c295e6a55c14eaaef2c01f7a8ddf1b0"
     },
     {
       "members": [],
       "class_hash": "0x22ebf2681241ef00b9025c09295cde34a97d203f9d04b6907185b58168ae57d",
-      "tag": "pixelaw-InPalette",
-      "selector": "0x7a46e3ad45c2a3929942f7b159fca9f0d5760becedb0ad2d8a083e3e2a1dfd3"
+      "tag": "p_war-InPalette",
+      "selector": "0x595373238c6856488ccac73560860adb7b99bcae8f508476b06da609ecefc0d"
     },
     {
       "members": [],
       "class_hash": "0x1048e1116b12374c5f02b02742a98a5b723d4fd60c586ee7774b01fc80ca887",
-      "tag": "pixelaw-PWarPixel",
-      "selector": "0x15195913884de92cc197b011be399aa8f603f113600bb09a372028241ccd52d"
+      "tag": "p_war-PWarPixel",
+      "selector": "0x78c9c0ceddaf61af54b0bf9c8f85d8abdeafa54db374022604a4ccc68081123"
     },
     {
       "members": [],
       "class_hash": "0x45b749cb3c2477ef416a533fed3f64c7372115722a26c1d210b25a60dccf36e",
-      "tag": "pixelaw-PaletteColors",
-      "selector": "0x39a92a0aa39ccee2d026d433e089f1a063f2ff73fc1c0f0bcf7c21a9731687b"
+      "tag": "p_war-PaletteColors",
+      "selector": "0x6eeea3eba46705c4886f109fef4bae971d7ee2e974ad518bc8c7b00efdbc1d6"
+    },
+    {
+      "members": [],
+      "class_hash": "0x758a60dcbbda6e92d82a7925437569a68fdf6fa18edb77e6a8e415105f70125",
+      "tag": "p_war-Pixel",
+      "selector": "0x4974fb435220fdae657329e6934401b2e7ac716f252bb3ffb4d880dca2937ea"
     },
     {
       "members": [],
       "class_hash": "0x106b53a8619bde83e1ac4039023881762978447ec50da531cfa92cac0776ce2",
-      "tag": "pixelaw-PixelRecoveryRate",
-      "selector": "0x3aa284c05a1c4add28708228abefb8eadff58a064e2d56a64f573e3764f9acc"
+      "tag": "p_war-PixelRecoveryRate",
+      "selector": "0x321eed807285c99cb799dd5f9330f4a0a273dc7643f0cdce71792bc11a3e64"
     },
     {
       "members": [],
       "class_hash": "0x329c3da995072ef4a0e83c366fd51e91bebce0602d8dd5a9a0bd67ffffafdc3",
-      "tag": "pixelaw-Player",
-      "selector": "0x30a1b371016270e1d0c33e176d9d07ab01d801d8b1f0e1fd1d45534137f2ce"
+      "tag": "p_war-Player",
+      "selector": "0x2d334816f8b0196ba2404794e0bbc78a982dea84e82eaf39e1abcf10e15e7af"
     },
     {
       "members": [],
       "class_hash": "0x6f8b50e57c149d8670cdf26b19adcdfd84c000d6fcb564cfe07d9c9e7a86152",
-      "tag": "pixelaw-PlayerVote",
-      "selector": "0x326c17c626b9eecdb1744cb055eed766d8e9adf96c10aa60310c6961d79498c"
+      "tag": "p_war-PlayerVote",
+      "selector": "0x15f95c6cdb848bc38c7eaf9b6404f68ea8aa6478d363fcc0e0f40516057d25c"
     },
     {
       "members": [],
       "class_hash": "0xbb2c658b9e1fd1c0ba8920c408caf7e2aa4db58d03023e09be32c889343a66",
-      "tag": "pixelaw-Proposal",
-      "selector": "0x49e1daf5238e47ac52ce3f79a684ec035e7f9e864b2979f1d0f2d46cf31c1bc"
+      "tag": "p_war-Proposal",
+      "selector": "0x61d35f2d26dad619a3f5f1e6c36fe98bc6e2556dcda13ae9dd0d715c2e17f4f"
+    },
+    {
+      "members": [],
+      "class_hash": "0x57bb10e6c057ac469ce11f1770286ed9f4737e4460679777842a2ea49c72fbc",
+      "tag": "p_war-QueueItem",
+      "selector": "0x23311c9635a725e77b130e9272595ea13c1747a10313fe5ca5a3fd8f96b5fbf"
+    },
+    {
+      "members": [],
+      "class_hash": "0x5cf7901005db5b4088cceca22e648d1f4c6d350b73651f4a437d1c4f532367b",
+      "tag": "p_war-RTree",
+      "selector": "0x85c55cda1cdc80e0690ba3e8978aa9ef145ffebf149f3aa61b552ab95d9e7e"
     }
   ],
   "events": [
     {
       "members": [],
+      "class_hash": "0x16ec6175a9b597b0c3ac5b70f8a41f7d54e0d291f4fa93e0e436cfead9a8aa7",
+      "tag": "p_war-Alert",
+      "selector": "0x77fb61101ea7e6f84df47e2c22e4af3f2b69fdb12606746a063f3e5fd5eb5cf"
+    },
+    {
+      "members": [],
       "class_hash": "0x45a2d3816647b1fdbc8dd1808753595ae1eeae172db756391d41289aba8c3a6",
-      "tag": "pixelaw-EndedGame",
-      "selector": "0x63cc2102a4b3877596cde2f2e0eb68416dd8ac4b552d6319bd4705ab48fda09"
+      "tag": "p_war-EndedGame",
+      "selector": "0x24dbf8c208d84f64e9ff343f2d5e8c55d17e320506e85a2f6c57bff0246607"
     },
     {
       "members": [],
       "class_hash": "0x211f4e713a3af2940365396d3f83cfde36e990ee14d693e5426eb86656ff97b",
-      "tag": "pixelaw-GuildCreated",
-      "selector": "0x190791bd5d67d74c1a3e7e908a7faa1097dc88444fc9cdbe1e4f17d4eb275c2"
+      "tag": "p_war-GuildCreated",
+      "selector": "0x5ff13353b9e99044fa57b4cc5271f2a9eec32cbaca1796152f43b4f6761b54f"
     },
     {
       "members": [],
       "class_hash": "0x791ed74618ebc870dd468353dd8d3bee3a7398de67f0e3bd03c2e42269fc73e",
-      "tag": "pixelaw-MemberAdded",
-      "selector": "0x5d030a1690f08a7cdd65ea908927c4d28ca6464b700fd14d7ba601e6a5a6b7b"
+      "tag": "p_war-MemberAdded",
+      "selector": "0x54a885b1bb6b6ef8fea6d057029c71b7f80c415c51c11049f86e5697ed90292"
     },
     {
       "members": [],
       "class_hash": "0x3df1c5fa486593faf1ee0ab917a8ab4623c8a3b7b0741833b31812a8dbff2c",
-      "tag": "pixelaw-MemberRemoved",
-      "selector": "0x31bc155f610ea9b75a636476db4c4b09c0c75929e2ee378ff21f421df968a0e"
+      "tag": "p_war-MemberRemoved",
+      "selector": "0x3469f9971d508b567c106b36b1cc4f39a9c490c5162104dd01f2a0d58122572"
     },
     {
       "members": [],
       "class_hash": "0x167ba94e99adfa8a2624bbfbb266e4386bff9b7be4081ef82ddbc07a53518f3",
-      "tag": "pixelaw-ProposalActivated",
-      "selector": "0x54cf9af9951fc42af752b63b2402d7b3a50e99d28973ea368bf03d4d559b9ab"
+      "tag": "p_war-ProposalActivated",
+      "selector": "0x67e54ab4a55e99a7d9b1e83e96ce2aac29a14ba607de70a46fcbd98aded54ec"
     },
     {
       "members": [],
       "class_hash": "0x34de11f71220666c87e5671eec05d3ff0297b81bf0fd031ea63db408576650a",
-      "tag": "pixelaw-ProposalCreated",
-      "selector": "0x2695c2b5813023020f748292a15196fa26b6a28de03d9b0d98fe03f3383cb2b"
+      "tag": "p_war-ProposalCreated",
+      "selector": "0x2e3ccd2cfa06f11ce5e606a3887ad5c0f8ccc44374c77435b9c4bd38c04c9c7"
+    },
+    {
+      "members": [],
+      "class_hash": "0x1c581acd62b7983967827adb6d5578d12c515544f6eee1a5044336525baeb09",
+      "tag": "p_war-QueueScheduled",
+      "selector": "0x5d93507a88860ffaa48952f5aa5669abc159f353ba9135693f7c99961ca3369"
     },
     {
       "members": [],
       "class_hash": "0x439a9d0ae0853991ecbd6b4fc2c725f040c922962d2cd1f94518e1831f0c974",
-      "tag": "pixelaw-StartedGame",
-      "selector": "0x681f18fed97923a1fa8abc421f42125d7af9a14c1cb2dbbf21cc0ee998ba644"
+      "tag": "p_war-StartedGame",
+      "selector": "0x15e616b9a625c7825e4a5d9e5fd1d4743822c85dd2381ab5f40cbfccad9902e"
     },
     {
       "members": [],
       "class_hash": "0x79097a1b85f0d04bcac13625d5a20400651fafb91fe1fcd3a7bed3d89416164",
-      "tag": "pixelaw-Voted",
-      "selector": "0x2658eb5934f0ca3746e650c1cf0d5656f5ed5f2ce59aba3fafac0a7c80c093f"
+      "tag": "p_war-Voted",
+      "selector": "0x2c917f12b4b0002752d7fb61fa0c24dfaaf3e0f1be5b62f9ee52a5009961eb1"
     }
   ],
   "external_contracts": []

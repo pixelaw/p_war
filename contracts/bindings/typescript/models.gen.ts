@@ -1,6 +1,6 @@
 import type { SchemaType as ISchemaType } from "@dojoengine/sdk";
 
-import { BigNumberish } from 'starknet';
+import { CairoOption, CairoOptionVariant, BigNumberish } from 'starknet';
 
 // Type definition for `p_war::models::allowed_app::AllowedApp` struct
 export interface AllowedApp {
@@ -215,6 +215,150 @@ export interface ProposalValue {
 	is_activated: boolean;
 }
 
+// Type definition for `pixelaw::core::models::area::Area` struct
+export interface Area {
+	id: BigNumberish;
+	app: string;
+	owner: string;
+	color: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::area::AreaValue` struct
+export interface AreaValue {
+	app: string;
+	owner: string;
+	color: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::area::RTree` struct
+export interface RTree {
+	id: BigNumberish;
+	children: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::area::RTreeValue` struct
+export interface RTreeValue {
+	children: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::dummy::Dummy` struct
+export interface Dummy {
+	id: BigNumberish;
+	defaultParams: DefaultParameters;
+	bounds: Bounds;
+	pixelUpdate: PixelUpdate;
+}
+
+// Type definition for `pixelaw::core::models::dummy::DummyValue` struct
+export interface DummyValue {
+	defaultParams: DefaultParameters;
+	bounds: Bounds;
+	pixelUpdate: PixelUpdate;
+}
+
+// Type definition for `pixelaw::core::models::pixel::Pixel` struct
+export interface Pixel {
+	x: BigNumberish;
+	y: BigNumberish;
+	app: string;
+	color: BigNumberish;
+	created_at: BigNumberish;
+	updated_at: BigNumberish;
+	timestamp: BigNumberish;
+	owner: string;
+	text: BigNumberish;
+	action: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::pixel::PixelUpdate` struct
+export interface PixelUpdate {
+	x: BigNumberish;
+	y: BigNumberish;
+	color: CairoOption<BigNumberish>;
+	owner: CairoOption<string>;
+	app: CairoOption<string>;
+	text: CairoOption<BigNumberish>;
+	timestamp: CairoOption<BigNumberish>;
+	action: CairoOption<BigNumberish>;
+}
+
+// Type definition for `pixelaw::core::models::pixel::PixelValue` struct
+export interface PixelValue {
+	app: string;
+	color: BigNumberish;
+	created_at: BigNumberish;
+	updated_at: BigNumberish;
+	timestamp: BigNumberish;
+	owner: string;
+	text: BigNumberish;
+	action: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::queue::QueueItem` struct
+export interface QueueItem {
+	id: BigNumberish;
+	valid: boolean;
+}
+
+// Type definition for `pixelaw::core::models::queue::QueueItemValue` struct
+export interface QueueItemValue {
+	valid: boolean;
+}
+
+// Type definition for `pixelaw::core::models::registry::App` struct
+export interface App {
+	system: string;
+	name: BigNumberish;
+	icon: BigNumberish;
+	action: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::registry::AppName` struct
+export interface AppName {
+	name: BigNumberish;
+	system: string;
+}
+
+// Type definition for `pixelaw::core::models::registry::AppNameValue` struct
+export interface AppNameValue {
+	system: string;
+}
+
+// Type definition for `pixelaw::core::models::registry::AppValue` struct
+export interface AppValue {
+	name: BigNumberish;
+	icon: BigNumberish;
+	action: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::models::registry::CoreActionsAddress` struct
+export interface CoreActionsAddress {
+	key: BigNumberish;
+	value: string;
+}
+
+// Type definition for `pixelaw::core::models::registry::CoreActionsAddressValue` struct
+export interface CoreActionsAddressValue {
+	value: string;
+}
+
+// Type definition for `pixelaw::core::utils::Bounds` struct
+export interface Bounds {
+	x_min: BigNumberish;
+	y_min: BigNumberish;
+	x_max: BigNumberish;
+	y_max: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::utils::DefaultParameters` struct
+export interface DefaultParameters {
+	player_override: CairoOption<string>;
+	system_override: CairoOption<string>;
+	area_hint: CairoOption<BigNumberish>;
+	position: Position;
+	color: BigNumberish;
+}
+
 // Type definition for `pixelaw::core::utils::Position` struct
 export interface Position {
 	x: BigNumberish;
@@ -337,6 +481,40 @@ export interface VotedValue {
 	is_in_favor: boolean;
 }
 
+// Type definition for `pixelaw::core::events::Alert` struct
+export interface Alert {
+	position: Position;
+	caller: string;
+	player: string;
+	message: BigNumberish;
+	timestamp: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::events::AlertValue` struct
+export interface AlertValue {
+	caller: string;
+	player: string;
+	message: BigNumberish;
+	timestamp: BigNumberish;
+}
+
+// Type definition for `pixelaw::core::events::QueueScheduled` struct
+export interface QueueScheduled {
+	id: BigNumberish;
+	timestamp: BigNumberish;
+	called_system: string;
+	selector: BigNumberish;
+	calldata: Array<BigNumberish>;
+}
+
+// Type definition for `pixelaw::core::events::QueueScheduledValue` struct
+export interface QueueScheduledValue {
+	timestamp: BigNumberish;
+	called_system: string;
+	selector: BigNumberish;
+	calldata: Array<BigNumberish>;
+}
+
 export interface SchemaType extends ISchemaType {
 	p_war: {
 		AllowedApp: AllowedApp,
@@ -369,6 +547,25 @@ export interface SchemaType extends ISchemaType {
 		ProposalValue: ProposalValue,
 	},
 	pixelaw: {
+		Area: Area,
+		AreaValue: AreaValue,
+		RTree: RTree,
+		RTreeValue: RTreeValue,
+		Dummy: Dummy,
+		DummyValue: DummyValue,
+		Pixel: Pixel,
+		PixelUpdate: PixelUpdate,
+		PixelValue: PixelValue,
+		QueueItem: QueueItem,
+		QueueItemValue: QueueItemValue,
+		App: App,
+		AppName: AppName,
+		AppNameValue: AppNameValue,
+		AppValue: AppValue,
+		CoreActionsAddress: CoreActionsAddress,
+		CoreActionsAddressValue: CoreActionsAddressValue,
+		Bounds: Bounds,
+		DefaultParameters: DefaultParameters,
 		Position: Position,
 		EndedGame: EndedGame,
 		EndedGameValue: EndedGameValue,
@@ -386,6 +583,10 @@ export interface SchemaType extends ISchemaType {
 		ProposalCreatedValue: ProposalCreatedValue,
 		Voted: Voted,
 		VotedValue: VotedValue,
+		Alert: Alert,
+		AlertValue: AlertValue,
+		QueueScheduled: QueueScheduled,
+		QueueScheduledValue: QueueScheduledValue,
 	},
 }
 export const schema: SchemaType = {
@@ -547,6 +748,112 @@ export const schema: SchemaType = {
 			no_voting_power: 0,
 			is_activated: false,
 		},
+		Area: {
+			id: 0,
+			app: "",
+			owner: "",
+			color: 0,
+		},
+		AreaValue: {
+			app: "",
+			owner: "",
+			color: 0,
+		},
+		RTree: {
+			id: 0,
+			children: 0,
+		},
+		RTreeValue: {
+			children: 0,
+		},
+		Dummy: {
+			id: 0,
+		defaultParams: { player_override: new CairoOption(CairoOptionVariant.None), system_override: new CairoOption(CairoOptionVariant.None), area_hint: new CairoOption(CairoOptionVariant.None), position: { x: 0, y: 0, }, color: 0, },
+		bounds: { x_min: 0, y_min: 0, x_max: 0, y_max: 0, },
+		pixelUpdate: { x: 0, y: 0, color: new CairoOption(CairoOptionVariant.None), owner: new CairoOption(CairoOptionVariant.None), app: new CairoOption(CairoOptionVariant.None), text: new CairoOption(CairoOptionVariant.None), timestamp: new CairoOption(CairoOptionVariant.None), action: new CairoOption(CairoOptionVariant.None), },
+		},
+		DummyValue: {
+		defaultParams: { player_override: new CairoOption(CairoOptionVariant.None), system_override: new CairoOption(CairoOptionVariant.None), area_hint: new CairoOption(CairoOptionVariant.None), position: { x: 0, y: 0, }, color: 0, },
+		bounds: { x_min: 0, y_min: 0, x_max: 0, y_max: 0, },
+		pixelUpdate: { x: 0, y: 0, color: new CairoOption(CairoOptionVariant.None), owner: new CairoOption(CairoOptionVariant.None), app: new CairoOption(CairoOptionVariant.None), text: new CairoOption(CairoOptionVariant.None), timestamp: new CairoOption(CairoOptionVariant.None), action: new CairoOption(CairoOptionVariant.None), },
+		},
+		Pixel: {
+			x: 0,
+			y: 0,
+			app: "",
+			color: 0,
+			created_at: 0,
+			updated_at: 0,
+			timestamp: 0,
+			owner: "",
+			text: 0,
+			action: 0,
+		},
+		PixelUpdate: {
+			x: 0,
+			y: 0,
+		color: new CairoOption(CairoOptionVariant.None),
+		owner: new CairoOption(CairoOptionVariant.None),
+		app: new CairoOption(CairoOptionVariant.None),
+		text: new CairoOption(CairoOptionVariant.None),
+		timestamp: new CairoOption(CairoOptionVariant.None),
+		action: new CairoOption(CairoOptionVariant.None),
+		},
+		PixelValue: {
+			app: "",
+			color: 0,
+			created_at: 0,
+			updated_at: 0,
+			timestamp: 0,
+			owner: "",
+			text: 0,
+			action: 0,
+		},
+		QueueItem: {
+			id: 0,
+			valid: false,
+		},
+		QueueItemValue: {
+			valid: false,
+		},
+		App: {
+			system: "",
+			name: 0,
+			icon: 0,
+			action: 0,
+		},
+		AppName: {
+			name: 0,
+			system: "",
+		},
+		AppNameValue: {
+			system: "",
+		},
+		AppValue: {
+			name: 0,
+			icon: 0,
+			action: 0,
+		},
+		CoreActionsAddress: {
+			key: 0,
+			value: "",
+		},
+		CoreActionsAddressValue: {
+			value: "",
+		},
+		Bounds: {
+			x_min: 0,
+			y_min: 0,
+			x_max: 0,
+			y_max: 0,
+		},
+		DefaultParameters: {
+		player_override: new CairoOption(CairoOptionVariant.None),
+		system_override: new CairoOption(CairoOptionVariant.None),
+		area_hint: new CairoOption(CairoOptionVariant.None),
+		position: { x: 0, y: 0, },
+			color: 0,
+		},
 		Position: {
 			x: 0,
 			y: 0,
@@ -635,6 +942,32 @@ export const schema: SchemaType = {
 			voter: "",
 			is_in_favor: false,
 		},
+		Alert: {
+		position: { x: 0, y: 0, },
+			caller: "",
+			player: "",
+			message: 0,
+			timestamp: 0,
+		},
+		AlertValue: {
+			caller: "",
+			player: "",
+			message: 0,
+			timestamp: 0,
+		},
+		QueueScheduled: {
+			id: 0,
+			timestamp: 0,
+			called_system: "",
+			selector: 0,
+			calldata: [0],
+		},
+		QueueScheduledValue: {
+			timestamp: 0,
+			called_system: "",
+			selector: 0,
+			calldata: [0],
+		},
 	},
 };
 export enum ModelsMapping {
@@ -666,6 +999,25 @@ export enum ModelsMapping {
 	PlayerVoteValue = 'p_war-PlayerVoteValue',
 	Proposal = 'p_war-Proposal',
 	ProposalValue = 'p_war-ProposalValue',
+	Area = 'pixelaw-Area',
+	AreaValue = 'pixelaw-AreaValue',
+	RTree = 'pixelaw-RTree',
+	RTreeValue = 'pixelaw-RTreeValue',
+	Dummy = 'pixelaw-Dummy',
+	DummyValue = 'pixelaw-DummyValue',
+	Pixel = 'pixelaw-Pixel',
+	PixelUpdate = 'pixelaw-PixelUpdate',
+	PixelValue = 'pixelaw-PixelValue',
+	QueueItem = 'pixelaw-QueueItem',
+	QueueItemValue = 'pixelaw-QueueItemValue',
+	App = 'pixelaw-App',
+	AppName = 'pixelaw-AppName',
+	AppNameValue = 'pixelaw-AppNameValue',
+	AppValue = 'pixelaw-AppValue',
+	CoreActionsAddress = 'pixelaw-CoreActionsAddress',
+	CoreActionsAddressValue = 'pixelaw-CoreActionsAddressValue',
+	Bounds = 'pixelaw-Bounds',
+	DefaultParameters = 'pixelaw-DefaultParameters',
 	Position = 'pixelaw-Position',
 	EndedGame = 'p_war-EndedGame',
 	EndedGameValue = 'p_war-EndedGameValue',
@@ -683,4 +1035,8 @@ export enum ModelsMapping {
 	ProposalCreatedValue = 'p_war-ProposalCreatedValue',
 	Voted = 'p_war-Voted',
 	VotedValue = 'p_war-VotedValue',
+	Alert = 'pixelaw-Alert',
+	AlertValue = 'pixelaw-AlertValue',
+	QueueScheduled = 'pixelaw-QueueScheduled',
+	QueueScheduledValue = 'pixelaw-QueueScheduledValue',
 }

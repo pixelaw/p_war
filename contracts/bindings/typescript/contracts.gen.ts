@@ -17,7 +17,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_addArea_calldata(bounds, owner, color, app),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -38,7 +38,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_alertPlayer_calldata(position, player, message),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -59,7 +59,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_canUpdatePixel_calldata(forPlayer, forSystem, pixel, pixelUpdate, areaIdHint, allowModify),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -80,7 +80,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_findAreaByPosition_calldata(position),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -101,7 +101,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_findAreasInsideBounds_calldata(bounds),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -122,7 +122,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_init_calldata(),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -143,7 +143,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_newApp_calldata(system, name, icon),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -164,7 +164,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_processQueue_calldata(id, timestamp, calledSystem, selector, calldata),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -185,7 +185,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_removeArea_calldata(areaId),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -206,7 +206,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_scheduleQueue_calldata(timestamp, calledSystem, selector, calldata),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -227,7 +227,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_updatePixel_calldata(forPlayer, forSystem, pixelUpdate, areaId, allowModify),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -248,7 +248,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_allowed_app_actions_setPixel_calldata(defaultParams),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -269,7 +269,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_addMember_calldata(gameId, guildId, newMember),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -290,7 +290,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_createGuild_calldata(gameId, guildName),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -311,7 +311,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_getGuildContractAddress_calldata(),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -332,7 +332,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_getGuildPoints_calldata(gameId, guildId),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -353,7 +353,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_isMember_calldata(gameId, guildId, member),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -374,7 +374,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_joinGuild_calldata(gameId, guildId),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -395,7 +395,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_removeMember_calldata(gameId, guildId, member),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -416,7 +416,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_p_war_actions_createGame_calldata(origin),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -437,7 +437,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_p_war_actions_createGameGuilds_calldata(gameId, guildDispatcher),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -458,7 +458,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_p_war_actions_endGame_calldata(gameId),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -476,7 +476,7 @@ export function setupWorld(provider: DojoProvider) {
 
 	const p_war_actions_getGameId = async (position: models.Position) => {
 		try {
-			return await provider.call("pixelaw", build_p_war_actions_getGameId_calldata(position));
+			return await provider.call("p_war", build_p_war_actions_getGameId_calldata(position));
 		} catch (error) {
 			console.error(error);
 			throw error;
@@ -496,7 +496,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_p_war_actions_init_calldata(),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -517,7 +517,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_p_war_actions_interact_calldata(defaultParams),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -538,7 +538,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_p_war_actions_placePixel_calldata(app, defaultParams),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -559,7 +559,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_p_war_actions_updatePixel_calldata(pixelUpdate),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -580,7 +580,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_propose_actions_activateProposal_calldata(gameId, index, clearData),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -601,7 +601,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_propose_actions_addNewColor_calldata(gameId, index, game, proposal),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -622,7 +622,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_propose_actions_createProposal_calldata(gameId, proposalType, targetArgs1, targetArgs2),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -643,7 +643,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_propose_actions_resetToWhite_calldata(gameId, index, game, proposal, clearData),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
@@ -664,7 +664,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_voting_actions_vote_calldata(gameId, index, usePx, isInFavor),
-				"pixelaw",
+				"p_war",
 			);
 		} catch (error) {
 			console.error(error);
