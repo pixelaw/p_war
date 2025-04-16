@@ -17,7 +17,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_addArea_calldata(bounds, owner, color, app),
-				"p_war",
+				"pixelaw",
 			);
 		} catch (error) {
 			console.error(error);
@@ -38,7 +38,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_alertPlayer_calldata(position, player, message),
-				"p_war",
+				"pixelaw",
 			);
 		} catch (error) {
 			console.error(error);
@@ -59,7 +59,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_canUpdatePixel_calldata(forPlayer, forSystem, pixel, pixelUpdate, areaIdHint, allowModify),
-				"p_war",
+				"pixelaw",
 			);
 		} catch (error) {
 			console.error(error);
@@ -80,7 +80,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_findAreaByPosition_calldata(position),
-				"p_war",
+				"pixelaw",
 			);
 		} catch (error) {
 			console.error(error);
@@ -101,7 +101,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_findAreasInsideBounds_calldata(bounds),
-				"p_war",
+				"pixelaw",
 			);
 		} catch (error) {
 			console.error(error);
@@ -122,7 +122,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_init_calldata(),
-				"p_war",
+				"pixelaw",
 			);
 		} catch (error) {
 			console.error(error);
@@ -143,7 +143,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_newApp_calldata(system, name, icon),
-				"p_war",
+				"pixelaw",
 			);
 		} catch (error) {
 			console.error(error);
@@ -164,7 +164,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_processQueue_calldata(id, timestamp, calledSystem, selector, calldata),
-				"p_war",
+				"pixelaw",
 			);
 		} catch (error) {
 			console.error(error);
@@ -185,7 +185,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_removeArea_calldata(areaId),
-				"p_war",
+				"pixelaw",
 			);
 		} catch (error) {
 			console.error(error);
@@ -206,7 +206,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_scheduleQueue_calldata(timestamp, calledSystem, selector, calldata),
-				"p_war",
+				"pixelaw",
 			);
 		} catch (error) {
 			console.error(error);
@@ -227,7 +227,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_updatePixel_calldata(forPlayer, forSystem, pixelUpdate, areaId, allowModify),
-				"p_war",
+				"pixelaw",
 			);
 		} catch (error) {
 			console.error(error);
@@ -332,6 +332,48 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_getGuildPoints_calldata(gameId, guildId),
+				"p_war",
+			);
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	};
+
+	const build_guild_actions_getPlayerCommit_calldata = (playerAddress: string): DojoCall => {
+		return {
+			contractName: "guild_actions",
+			entrypoint: "get_player_commit",
+			calldata: [playerAddress],
+		};
+	};
+
+	const guild_actions_getPlayerCommit = async (snAccount: Account | AccountInterface, playerAddress: string) => {
+		try {
+			return await provider.execute(
+				snAccount,
+				build_guild_actions_getPlayerCommit_calldata(playerAddress),
+				"p_war",
+			);
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	};
+
+	const build_guild_actions_getPlayerOwns_calldata = (playerAddress: string): DojoCall => {
+		return {
+			contractName: "guild_actions",
+			entrypoint: "get_player_owns",
+			calldata: [playerAddress],
+		};
+	};
+
+	const guild_actions_getPlayerOwns = async (snAccount: Account | AccountInterface, playerAddress: string) => {
+		try {
+			return await provider.execute(
+				snAccount,
+				build_guild_actions_getPlayerOwns_calldata(playerAddress),
 				"p_war",
 			);
 		} catch (error) {
@@ -712,6 +754,10 @@ export function setupWorld(provider: DojoProvider) {
 			buildGetGuildContractAddressCalldata: build_guild_actions_getGuildContractAddress_calldata,
 			getGuildPoints: guild_actions_getGuildPoints,
 			buildGetGuildPointsCalldata: build_guild_actions_getGuildPoints_calldata,
+			getPlayerCommit: guild_actions_getPlayerCommit,
+			buildGetPlayerCommitCalldata: build_guild_actions_getPlayerCommit_calldata,
+			getPlayerOwns: guild_actions_getPlayerOwns,
+			buildGetPlayerOwnsCalldata: build_guild_actions_getPlayerOwns_calldata,
 			isMember: guild_actions_isMember,
 			buildIsMemberCalldata: build_guild_actions_isMember_calldata,
 			joinGuild: guild_actions_joinGuild,
