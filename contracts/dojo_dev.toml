@@ -5,7 +5,9 @@ seed = "pixelaw"
 
 [namespace]
 default = "p_war"
-mappings = {}
+mappings = { "pixelaw" = [
+     "actions", "App", "AppName", "Area", "CoreActionsAddress", "Pixel", "QueueItem", "RTree", "Notification", "QueueScheduled"
+ ] }
 
 [env]
 rpc_url = "http://localhost:5050/"
@@ -32,3 +34,18 @@ world_address = "0x01d09b5e00f376337603943fc12715e439e91c0039f353b1cc48bb278dfa9
 "p_war-Proposal" = ["p_war-propose_actions", "p_war-voting_actions"]
 # VOTING
 "p_war-PlayerVote" = ["p_war-voting_actions"]
+
+
+ [migration]
+ skip_contracts = [
+     "pixelaw-actions",
+     "pixelaw-App",
+     "pixelaw-AppName",
+     "pixelaw-Area",
+     "pixelaw-CoreActionsAddress",
+     "pixelaw-Pixel",
+     "pixelaw-QueueItem",
+     "pixelaw-RTree",
+     "pixelaw-Notification",
+     "pixelaw-QueueScheduled"
+ ]

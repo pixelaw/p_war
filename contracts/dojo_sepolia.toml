@@ -4,7 +4,7 @@ name = "p_war"
 seed = "pixelaw"
 
 [namespace]
-default = "pixelaw"
+default = "p_war"
 mappings = {}
 
 [env]
@@ -15,39 +15,21 @@ keystore_path = "sepolia.deployer.keystore.json"
 world_address = "0x2bf4d3aa0dced89d37d8c3b4ff6a05895c0af32ff3baf9b02abf8504e53eaad"
 
 [writers]
-# CORE
-"pixelaw-App" = ["pixelaw-actions"]
-"pixelaw-AppName" = ["pixelaw-actions"]
-"pixelaw-AppUser" = ["pixelaw-actions"]
-"pixelaw-CoreActionsAddress" = ["pixelaw-actions"]
-"pixelaw-QueueScheduled" = ["pixelaw-actions"]
-"pixelaw-QueueProcessed" = ["pixelaw-actions"]
-"pixelaw-Alert" = ["pixelaw-actions"]
-"pixelaw-Pixel" = [
-  "pixelaw-actions",
-  "pixelaw-paint_actions",
-  "pixelaw-snake_actions",
-]
-"pixelaw-QueueItem" = ["pixelaw-actions"]
-"pixelaw-Snake" = ["pixelaw-actions", "pixelaw-snake_actions"]
-"pixelaw-RTree" = ["pixelaw-actions"]
-"pixelaw-Area" = ["pixelaw-actions"]
-"pixelaw-SnakeSegment" = ["pixelaw-snake_actions"]
 # GUILD
-"pixelaw-Guild" = ["pixelaw-guild_actions"]
+"p_war-Guild" = ["p_war-guild_actions"]
 # P-WAR
-"pixelaw-AllowedApp" = ["pixelaw-p_war_actions"]
-"pixelaw-Board" = ["pixelaw-p_war_actions", "pixelaw-propose_actions"]
-"pixelaw-AllowedColor" = ["pixelaw-p_war_actions", "pixelaw-propose_actions"]
-"pixelaw-PaletteColors" = ["pixelaw-p_war_actions", "pixelaw-propose_actions"]
-"pixelaw-PWarPixel" = ["pixelaw-p_war_actions"]
-"pixelaw-Game" = ["pixelaw-p_war_actions"]
-"pixelaw-GameId" = ["pixelaw-p_war_actions"]
-"pixelaw-GamePalette" = ["pixelaw-p_war_actions", "pixelaw-propose_actions"]
-"pixelaw-InPalette" = ["pixelaw-p_war_actions", "pixelaw-propose_actions"]
-"pixelaw-Player" = ["pixelaw-p_war_actions", "pixelaw-propose_actions", "pixelaw-voting_actions"]
-"pixelaw-PixelRecoveryRate" = ["pixelaw-p_war_actions"]
+"p_war-AllowedApp" = ["p_war-p_war_actions"]
+"p_war-Board" = ["p_war-p_war_actions", "p_war-propose_actions"]
+"p_war-AllowedColor" = ["p_war-p_war_actions", "p_war-propose_actions"]
+"p_war-PaletteColors" = ["p_war-p_war_actions", "p_war-propose_actions"]
+"p_war-PWarPixel" = ["p_war-p_war_actions"]
+"p_war-Game" = ["p_war-p_war_actions"]
+"p_war-GameId" = ["p_war-p_war_actions"]
+"p_war-GamePalette" = ["p_war-p_war_actions", "p_war-propose_actions"]
+"p_war-InPalette" = ["p_war-p_war_actions", "p_war-propose_actions"]
+"p_war-Player" = ["p_war-p_war_actions", "p_war-propose_actions", "p_war-voting_actions"]
+"p_war-PixelRecoveryRate" = ["p_war-p_war_actions"]
 # PROPOSE
-"pixelaw-Proposal" = ["pixelaw-propose_actions", "pixelaw-voting_actions"]
+"p_war-Proposal" = ["p_war-propose_actions", "p_war-voting_actions"]
 # VOTING
-"pixelaw-PlayerVote" = ["pixelaw-voting_actions"]
+"p_war-PlayerVote" = ["p_war-voting_actions"]
