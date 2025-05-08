@@ -5,7 +5,7 @@
 // use p_war::{
 //     models::{
 //         game::{Game}, board::{Board, GameId, Position}, proposal::{Proposal}, guilds::{Guild},
-//         allowed_app::AllowedApp, allowed_color::{AllowedColor, PaletteColors},
+//         allowed_color::{AllowedColor, PaletteColors},
 //     },
 //     systems::{
 //         actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
