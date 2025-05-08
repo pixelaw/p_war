@@ -8,6 +8,7 @@ pub trait IGuild<T> {
     fn remove_member(ref self: T, game_id: u32, guild_id: u32, member: ContractAddress);
     fn is_member(ref self: T, game_id: u32, guild_id: u32, member: ContractAddress) -> bool;
     fn get_guild_contract_address(ref self: T) -> ContractAddress;
+    fn get_guild_contract_name(ref self: T, game_id: u32, guild_id: u32) -> felt252;
     fn get_player_commit(ref self: T, player_address: ContractAddress) -> u32;
     fn get_player_owns(ref self: T, player_address: ContractAddress) -> u32;
     fn get_guild_points(ref self: T, game_id: u32, guild_id: u32) -> u32;
@@ -221,6 +222,12 @@ pub mod guild_actions {
             let guild_contract_address = get_contract_address();
 
             guild_contract_address
+        }
+
+        fn get_guild_contract_name(ref self: ContractState, game_id: u32, guild_id: u32) -> felt252 {
+            let mut world = self.world(@"p_war");
+            let guild: Guild = world.read_model((game_id, guild_id));
+            guild.guild_name
         }
 
         fn get_player_commit(ref self: ContractState, player_address: ContractAddress) -> u32 {
