@@ -1,14 +1,10 @@
-// use p_war::models::board::Position;
-use pixelaw::core::utils::Position;
 use p_war::systems::guilds::{IGuildDispatcher};
-use pixelaw::core::models::pixel::PixelUpdate;
-use pixelaw::core::utils::DefaultParameters;
+use pixelaw::core::utils::{DefaultParameters, Position};
 use starknet::{ContractAddress};
 
 // define the interface
 #[starknet::interface]
 pub trait IActions<T> {
-    fn init(ref self: T);
     fn interact(ref self: T, default_params: DefaultParameters);
     fn create_game(ref self: T, origin: Position) -> u32;
     fn create_game_guilds(
@@ -33,16 +29,15 @@ mod p_war_actions {
         game::{Game, GameTrait}, board::{Board, PWarPixel}, player::{Player},
         proposal::{PixelRecoveryRate},
         allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette},
-        allowed_app::AllowedApp
     };
     use p_war::systems::guilds::{IGuildDispatcher, IGuildDispatcherTrait};
     use p_war::systems::utils::{check_game_status};
     use pixelaw::core::actions::{
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
-    use pixelaw::core::models::{pixel::PixelUpdate};
+    use pixelaw::core::models::pixel::{PixelUpdate, PixelUpdateResultTraitImpl};
     use pixelaw::core::utils::{
-        get_core_actions, Position, DefaultParameters
+        get_core_actions, Position, DefaultParameters, get_callers
     };
     use starknet::{
         ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info,
@@ -67,14 +62,14 @@ mod p_war_actions {
         timestamp: u128,
     }
 
+    fn dojo_init(ref self: ContractState) {
+        let mut world = self.world(@"pixelaw");
+        let core_actions = pixelaw::core::utils::get_core_actions(ref world);
+        core_actions.new_app(contract_address_const::<0>(), APP_KEY, APP_ICON);
+    }
+
     #[abi(embed_v0)]
     impl ActionsImpl of IActions<ContractState> {
-        fn init(ref self: ContractState) {
-            let mut world = self.world(@"p_war");
-            let core_actions = get_core_actions(ref world);
-            core_actions.new_app(contract_address_const::<0>(), APP_KEY, APP_ICON);
-        }
-
         fn interact(ref self: ContractState, default_params: DefaultParameters) {
             let position = Position { x: default_params.position.x, y: default_params.position.y };
             println!("position x{}, y{}.", default_params.position.x, default_params.position.y);
