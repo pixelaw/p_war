@@ -8,7 +8,6 @@ pub mod systems {
 }
 
 pub mod models {
-    pub mod allowed_app;
     pub mod allowed_color;
     pub mod board;
     pub mod game;
