@@ -243,13 +243,13 @@ pub mod p_war_actions {
             assert(check_game_status(game.status()), 'game is not ongoing: actions1');
 
             println!("set_pixel BEGIN");
+            let position = default_params.position;
             core_actions
                 .update_pixel( //new
                     player_address,
                     system,
                     PixelUpdate {
-                        x: default_params.position.x,
-                        y: default_params.position.y,
+                        position,
                         color: Option::Some(default_params.color),
                         timestamp: Option::None,
                         text: Option::None,

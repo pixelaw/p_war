@@ -43,7 +43,7 @@ pub mod propose_actions {
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
     use pixelaw::core::models::{pixel::PixelUpdate, pixel::Pixel};
-    use pixelaw::core::utils::{get_core_actions, Position};
+    use pixelaw::core::utils::{get_core_actions, Position, get_callers};
     use starknet::{
         get_caller_address, 
         get_tx_info,
@@ -263,6 +263,8 @@ pub mod propose_actions {
             clear_data: Span<Position>
         ) {
             assert(proposal.proposal_type == 2, 'not reset to white proposal');
+            let mut core_world = self.world(@"pixelaw");
+            let mut app_world = self.world(@"myapp");
             let mut world = self.world(@"p_war");
             // Reset to white by color
             let core_actions = get_core_actions(
@@ -282,18 +284,16 @@ pub mod propose_actions {
                 }
 
                 let pixel_to_clear = *clear_data.at(idx);
-
-                let pixel_info: Pixel = world.read_model((pixel_to_clear.x, pixel_to_clear.y));
+                let pixel_info: Pixel = core_world.read_model((pixel_to_clear.x, pixel_to_clear.y));
+                let position = Position { x: pixel_to_clear.x, y: pixel_to_clear.y };
 
                 if pixel_info.color == target_args_1 {
-                    // make it white
                     core_actions
                         .update_pixel(
-                            get_caller_address(), // is it okay?
+                            get_caller_address(),
                             system,
                             PixelUpdate {
-                                x: pixel_to_clear.x,
-                                y: pixel_to_clear.y,
+                                position,
                                 color: Option::Some(0xffffffff),
                                 timestamp: Option::None,
                                 text: Option::None,
@@ -307,15 +307,15 @@ pub mod propose_actions {
 
                     // decrease the previous owner's num_owns
                     let position = Position { x: pixel_to_clear.x, y: pixel_to_clear.y };
-                    let previous_pwarpixel: PWarPixel = world.read_model(position);
+                    let previous_pwarpixel: PWarPixel = app_world.read_model(position);
 
                     if (previous_pwarpixel.owner != starknet::contract_address_const::<0x0>()) {
                         // get the previous player's info
-                        let mut previous_player: Player = world
+                        let mut previous_player: Player = app_world
                             .read_model(previous_pwarpixel.owner);
 
                         previous_player.num_owns -= 1;
-                        world.write_model(@previous_player);
+                        app_world.write_model(@previous_player);
                     };
                 };
                 idx += 1;
