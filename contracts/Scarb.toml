@@ -1,5 +1,5 @@
 [package]
-cairo-version = "=2.9.4"
+cairo-version = "=2.8.4"
 name = "p_war"
 version = "0.3.54"
 edition = "2024_07"
