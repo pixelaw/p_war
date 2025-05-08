@@ -1,4 +1,4 @@
-use p_war::models::{
+use pwar::models::{
     game::{Game}, 
     proposal::Proposal,
 };
@@ -28,17 +28,17 @@ pub trait IPropose<T> {
 pub mod propose_actions {
     use dojo::event::EventStorage;
     use dojo::model::ModelStorage;
-    use p_war::constants::{
+    use pwar::constants::{
         PROPOSAL_DURATION, NEEDED_YES_VOTING_POWER
     };
-    use p_war::models::{
+    use pwar::models::{
         game::{Game, GameTrait}, 
         proposal::Proposal,
         board::{Board, PWarPixel},
         allowed_color::{AllowedColor, PaletteColors, GamePalette, InPalette},
         player::Player
     };
-    use p_war::systems::utils::check_game_status;
+    use pwar::systems::utils::check_game_status;
     use pixelaw::core::actions::{
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
@@ -83,7 +83,7 @@ pub mod propose_actions {
             target_args_2: u32
         ) -> u32 {
             //get world
-            let mut world = self.world(@"p_war");
+            let mut world = self.world(@"pwar");
             // get models
             let mut game: Game = world.read_model(game_id);
             // println!("game status: {}", game.status());
@@ -135,7 +135,7 @@ pub mod propose_actions {
             ref self: ContractState, game_id: u32, index: u32, clear_data: Span<Position>
         ) {
             // get the proposal
-            let mut world = self.world(@"p_war");
+            let mut world = self.world(@"pwar");
             let mut proposal: Proposal = world.read_model((game_id, index));
             let mut game: Game = world.read_model(game_id);
             let current_timestamp = get_block_timestamp();
@@ -186,7 +186,7 @@ pub mod propose_actions {
             ref self: ContractState, game_id: u32, index: u32, game: Game, proposal: Proposal
         ) {
             assert(proposal.proposal_type == 1, 'not add new color proposal');
-            let mut world = self.world(@"p_war");
+            let mut world = self.world(@"pwar");
             let new_color: u32 = proposal.target_args_1;
             let mut new_color_allowed: AllowedColor = world.read_model((game_id, new_color));
             // only change it if it's not allowed
@@ -265,11 +265,11 @@ pub mod propose_actions {
             assert(proposal.proposal_type == 2, 'not reset to white proposal');
             let mut core_world = self.world(@"pixelaw");
             let mut app_world = self.world(@"myapp");
-            let mut world = self.world(@"p_war");
+            let mut world = self.world(@"pwar");
             // Reset to white by color
             let core_actions = get_core_actions(
                 ref world
-            ); // TODO: should we use p_war_actions insted of core_actions???
+            ); // TODO: should we use pwar_actions insted of core_actions???
             let system = get_caller_address();
 
             let target_args_1: u32 = proposal.target_args_1;

@@ -1,6 +1,6 @@
-use p_war::models::game::Game;
-use p_war::models::guilds::Guild;
-use p_war::models::payments::{GamePayments, PlayerPayment, TreasuryInfo};
+use pwar::models::game::Game;
+use pwar::models::guilds::Guild;
+use pwar::models::payments::{GamePayments, PlayerPayment, TreasuryInfo};
 use starknet::{ContractAddress, get_caller_address};
 
 #[starknet::interface]

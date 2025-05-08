@@ -18,7 +18,7 @@ pub trait IGuild<T> {
 pub mod guild_actions {
     use dojo::event::EventStorage;
     use dojo::model::ModelStorage;
-    use p_war::models::{
+    use pwar::models::{
         game::{Game}, 
         guilds::Guild,
         player::Player
@@ -61,7 +61,7 @@ pub mod guild_actions {
     #[abi(embed_v0)]
     impl GuildImpl of IGuild<ContractState> {
         fn create_guild(ref self: ContractState, game_id: u32, guild_name: felt252) -> u32 {
-            let mut world = self.world(@"p_war");
+            let mut world = self.world(@"pwar");
             let caller = get_caller_address();
 
             // Check if the game exists and get the game data
@@ -115,7 +115,7 @@ pub mod guild_actions {
         fn add_member(
             ref self: ContractState, game_id: u32, guild_id: u32, new_member: ContractAddress
         ) {
-            let mut world = self.world(@"p_war");
+            let mut world = self.world(@"pwar");
             let caller = get_caller_address();
 
             // Get the guild
@@ -163,7 +163,7 @@ pub mod guild_actions {
         fn remove_member(
             ref self: ContractState, game_id: u32, guild_id: u32, member: ContractAddress
         ) {
-            let mut world = self.world(@"p_war");
+            let mut world = self.world(@"pwar");
             let caller = get_caller_address();
 
             // Get the guild
@@ -201,7 +201,7 @@ pub mod guild_actions {
         fn is_member(
             ref self: ContractState, game_id: u32, guild_id: u32, member: ContractAddress
         ) -> bool {
-            let mut world = self.world(@"p_war");
+            let mut world = self.world(@"pwar");
             let guild: Guild = world.read_model((game_id, guild_id));
             let mut is_member = false;
             let mut i = 0;
@@ -225,28 +225,28 @@ pub mod guild_actions {
         }
 
         fn get_guild_contract_name(ref self: ContractState, game_id: u32, guild_id: u32) -> felt252 {
-            let mut world = self.world(@"p_war");
+            let mut world = self.world(@"pwar");
             let guild: Guild = world.read_model((game_id, guild_id));
             guild.guild_name
         }
 
         fn get_player_commit(ref self: ContractState, player_address: ContractAddress) -> u32 {
             // let mut core_world = self.world(@"pixelaw");
-            let mut world = self.world(@"p_war");
+            let mut world = self.world(@"pwar");
             let mut player: Player = world.read_model(player_address);
             player.num_commit
         }
 
         fn get_player_owns(ref self: ContractState, player_address: ContractAddress) -> u32 {
             // let mut core_world = self.world(@"pixelaw");
-            let mut world = self.world(@"p_war");
+            let mut world = self.world(@"pwar");
             let mut player: Player = world.read_model(player_address);
             player.num_owns
         }
 
         fn get_guild_points(ref self: ContractState, game_id: u32, guild_id: u32) -> u32 {
             // Get the guild
-            let mut world = self.world(@"p_war");
+            let mut world = self.world(@"pwar");
             let mut guild: Guild = world.read_model((game_id, guild_id));
 
             let mut guild_total_points = 0;

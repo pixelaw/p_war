@@ -1,14 +1,14 @@
 // use dojo::event::EventStorage;
 // use dojo::model::{ModelStorage, ModelValueStorage};
 // use dojo::world::{WorldStorage, WorldStorageTrait};
-// use p_war::tests::utils::{deploy_p_war};
-// use p_war::{
+// use pwar::tests::utils::{deploy_pwar};
+// use pwar::{
 //     models::{
 //         game::{Game}, board::{Board, GameId, Position}, proposal::{Proposal}, player::{Player},
 //         , allowed_color::{AllowedColor, PaletteColors},
 //     },
 //     systems::{
-//         actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
+//         actions::{pwar_actions, IActionsDispatcher, IActionsDispatcherTrait},
 //         propose::{propose_actions, IProposeDispatcher, IProposeDispatcherTrait},
 //         voting::{voting_actions, IVotingDispatcher, IVotingDispatcherTrait}
 //     },
@@ -43,7 +43,7 @@
 // #[available_gas(999_999_999)]
 // fn test_add_color() {
 //     let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
-//     let (_world, p_war_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_p_war(
+//     let (_world, pwar_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_pwar(
 //         ref world
 //     );
 
@@ -56,9 +56,9 @@
 //     };
 
 //     // create a game
-//     p_war_actions.interact(default_params);
+//     pwar_actions.interact(default_params);
 
-//     let id = p_war_actions
+//     let id = pwar_actions
 //         .get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
 //     println!("id = {}", id);
 
@@ -92,7 +92,7 @@
 //         color: NEW_COLOR
 //     };
 
-//     p_war_actions.interact(new_params);
+//     pwar_actions.interact(new_params);
 
 //     // check if the oldest color is unusable
 //     let oldest_color_allowed: AllowedColor = world.read_model((id, oldest_color_pallette.color));
@@ -120,13 +120,13 @@
 // #[available_gas(999_999_999)]
 // fn test_reset_to_white() {
 //     let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
-//     let (_world, p_war_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_p_war(
+//     let (_world, pwar_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_pwar(
 //         ref world
 //     );
 
 //     // Create a game.
 //     // This creates a 10x10 grid to the bottom-right of the start_position
-//     p_war_actions
+//     pwar_actions
 //         .interact(
 //             DefaultParameters {
 //                 player_override: Option::None,
@@ -138,7 +138,7 @@
 //         );
 
 //     // paint a color inside of the grid
-//     p_war_actions
+//     pwar_actions
 //         .interact(
 //             DefaultParameters {
 //                 player_override: Option::None, // Leave this 0 if not processing the Queue
@@ -149,7 +149,7 @@
 //             }
 //         );
 
-//     let game_id = p_war_actions.get_game_id(GAME_ORIGIN_POSITION);
+//     let game_id = pwar_actions.get_game_id(GAME_ORIGIN_POSITION);
 
 //     print!("game_id = {}", game_id);
 
@@ -180,7 +180,7 @@
 //     );
 
 //     // Now try to paint on it again
-//     p_war_actions
+//     pwar_actions
 //         .interact(
 //             DefaultParameters {
 //                 player_override: Option::None, // Leave this 0 if not processing the Queue
@@ -196,7 +196,7 @@
 //     );
 
 //     // Now try to paint on it again
-//     p_war_actions
+//     pwar_actions
 //         .interact(
 //             DefaultParameters {
 //                 player_override: Option::None, // Leave this 0 if not processing the Queue
@@ -217,7 +217,7 @@
 // #[available_gas(999_999_999)]
 // fn test_expand_area() {
 //     let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
-//     let (_world, p_war_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_p_war(
+//     let (_world, pwar_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_pwar(
 //         ref world
 //     );
 
@@ -230,9 +230,9 @@
 //     };
 
 //     // create a game
-//     p_war_actions.interact(default_params);
+//     pwar_actions.interact(default_params);
 
-//     let id = p_war_actions
+//     let id = pwar_actions
 //         .get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
 //     print!("id = {}", id);
 
@@ -261,7 +261,7 @@
 // #[available_gas(999_999_999)]
 // fn test_extend_game_end() {
 //     let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
-//     let (_world, p_war_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_p_war(
+//     let (_world, pwar_actions, propose_action, voting_action, _guild, _allowed_app) = deploy_pwar(
 //         ref world
 //     );
 
@@ -274,9 +274,9 @@
 //     };
 
 //     // create a game
-//     p_war_actions.interact(default_params);
+//     pwar_actions.interact(default_params);
 
-//     let id = p_war_actions
+//     let id = pwar_actions
 //         .get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
 //     println!("id = {}", id);
 

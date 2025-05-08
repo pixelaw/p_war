@@ -1,4 +1,4 @@
-use p_war::systems::guilds::{IGuildDispatcher};
+use pwar::systems::guilds::{IGuildDispatcher};
 use pixelaw::core::utils::{DefaultParameters, Position};
 use starknet::{ContractAddress};
 
@@ -17,20 +17,20 @@ pub trait IActions<T> {
 
 // dojo decorator
 #[dojo::contract]
-pub mod p_war_actions {
+pub mod pwar_actions {
     use dojo::model::{ModelStorage};
     use dojo::world::{IWorldDispatcherTrait};
-    use p_war::constants::{
+    use pwar::constants::{
         APP_KEY, APP_ICON, GAME_ID, OUT_OF_BOUNDS_GAME_ID, DEFAULT_RECOVERY_RATE,
         GAME_DURATION, DEFAULT_AREA,
     };
-    use p_war::models::{
+    use pwar::models::{
         game::{Game, GameTrait}, board::{Board, PWarPixel}, player::{Player},
         proposal::{PixelRecoveryRate},
         allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette},
     };
-    use p_war::systems::guilds::{IGuildDispatcher, IGuildDispatcherTrait};
-    use p_war::systems::utils::{check_game_status};
+    use pwar::systems::guilds::{IGuildDispatcher, IGuildDispatcherTrait};
+    use pwar::systems::utils::{check_game_status};
     use pixelaw::core::actions::{
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
@@ -70,8 +70,8 @@ pub mod p_war_actions {
     #[abi(embed_v0)]
     impl ActionsImpl of IActions<ContractState> {
         fn interact(ref self: ContractState, default_params: DefaultParameters) {
-            let position = Position { x: default_params.position.x, y: default_params.position.y };
-            println!("position x{}, y{}.", default_params.position.x, default_params.position.y);
+            let position = default_params.position;
+            println!("position x{}, y{}.", position.x, position.y);
             let game_id = self.get_game_id(position);
             println!("game id: {}", game_id);
             if game_id == 0 {
@@ -85,7 +85,7 @@ pub mod p_war_actions {
         }
 
         fn get_game_id(self: @ContractState, position: Position) -> u32 {
-            let mut world = self.world(@"p_war");
+            let mut world = self.world(@"pwar");
 
             let mut id = world.dispatcher.uuid();
             if id == 0 {
@@ -106,7 +106,7 @@ pub mod p_war_actions {
         }
 
         fn create_game(ref self: ContractState, origin: Position) -> u32 {
-            let mut world = self.world(@"p_war");
+            let mut world = self.world(@"pwar");
             println!("create_game BEGIN");
 
             let mut id = GAME_ID;
@@ -263,7 +263,7 @@ pub mod p_war_actions {
 
         fn end_game(ref self: ContractState, game_id: u32) {
             // check if the time is expired.
-            let mut world = self.world(@"p_war");
+            let mut world = self.world(@"pwar");
             let mut game: Game = world.read_model(game_id);
             assert(get_block_timestamp() >= game.end, 'game is not ended');
 

@@ -23,16 +23,6 @@ version = "2.9.4"
 source = "git+https://github.com/dojoengine/dojo?tag=v1.4.0#22ef7101e84429f4f06fa634f927dd6ad2c48752"
 
 [[package]]
-name = "p_war"
-version = "0.3.54"
-dependencies = [
- "dojo",
- "dojo_cairo_test",
- "pixelaw",
- "pixelaw_testing",
-]
-
-[[package]]
 name = "pixelaw"
 version = "0.6.31"
 source = "git+https://github.com/pixelaw/core?tag=v0.6.31#a69e77ab58a65f0623851f47a1ac19f67048133c"
@@ -48,4 +38,14 @@ dependencies = [
  "dojo",
  "dojo_cairo_test",
  "pixelaw",
+]
+
+[[package]]
+name = "pwar"
+version = "0.3.54"
+dependencies = [
+ "dojo",
+ "dojo_cairo_test",
+ "pixelaw",
+ "pixelaw_testing",
 ]

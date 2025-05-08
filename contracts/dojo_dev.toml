@@ -1,10 +1,10 @@
 [world]
 description = "P-WAR"
-name = "p_war"
+name = "pwar"
 seed = "pixelaw"
 
 [namespace]
-default = "p_war"
+default = "pwar"
 mappings = { "pixelaw" = [
      "actions", "App", "AppName", "Area", "CoreActionsAddress", "Pixel", "QueueItem", "RTree", "Notification", "QueueScheduled"
  ] }
@@ -17,22 +17,22 @@ world_address = "0x01d09b5e00f376337603943fc12715e439e91c0039f353b1cc48bb278dfa9
 
 [writers]
 # GUILD
-"p_war-Guild" = ["p_war-guild_actions"]
+"pwar-Guild" = ["pwar-guild_actions"]
 # P-WAR
-"p_war-Board" = ["p_war-p_war_actions", "p_war-propose_actions"]
-"p_war-AllowedColor" = ["p_war-p_war_actions", "p_war-propose_actions"]
-"p_war-PaletteColors" = ["p_war-p_war_actions", "p_war-propose_actions"]
-"p_war-PWarPixel" = ["p_war-p_war_actions"]
-"p_war-Game" = ["p_war-p_war_actions"]
-"p_war-GameId" = ["p_war-p_war_actions"]
-"p_war-GamePalette" = ["p_war-p_war_actions", "p_war-propose_actions"]
-"p_war-InPalette" = ["p_war-p_war_actions", "p_war-propose_actions"]
-"p_war-Player" = ["p_war-p_war_actions", "p_war-propose_actions", "p_war-voting_actions"]
-"p_war-PixelRecoveryRate" = ["p_war-p_war_actions"]
+"pwar-Board" = ["pwar-pwar_actions", "pwar-propose_actions"]
+"pwar-AllowedColor" = ["pwar-pwar_actions", "pwar-propose_actions"]
+"pwar-PaletteColors" = ["pwar-pwar_actions", "pwar-propose_actions"]
+"pwar-PWarPixel" = ["pwar-pwar_actions"]
+"pwar-Game" = ["pwar-pwar_actions"]
+"pwar-GameId" = ["pwar-pwar_actions"]
+"pwar-GamePalette" = ["pwar-pwar_actions", "pwar-propose_actions"]
+"pwar-InPalette" = ["pwar-pwar_actions", "pwar-propose_actions"]
+"pwar-Player" = ["pwar-pwar_actions", "pwar-propose_actions", "pwar-voting_actions"]
+"pwar-PixelRecoveryRate" = ["pwar-pwar_actions"]
 # PROPOSE
-"p_war-Proposal" = ["p_war-propose_actions", "p_war-voting_actions"]
+"pwar-Proposal" = ["pwar-propose_actions", "pwar-voting_actions"]
 # VOTING
-"p_war-PlayerVote" = ["p_war-voting_actions"]
+"pwar-PlayerVote" = ["pwar-voting_actions"]
 
 
  [migration]

@@ -1,14 +1,14 @@
 // use dojo::event::EventStorage;
 // use dojo::model::{ModelStorage, ModelValueStorage};
 // use dojo::world::{WorldStorage, WorldStorageTrait};
-// use p_war::tests::utils::{deploy_p_war};
-// use p_war::{
+// use pwar::tests::utils::{deploy_pwar};
+// use pwar::{
 //     models::{
 //         game::{Game}, board::{Board, GameId, Position}, proposal::{Proposal},
 //         allowed_color::{AllowedColor, PaletteColors},
 //     },
 //     systems::{
-//         actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
+//         actions::{pwar_actions, IActionsDispatcher, IActionsDispatcherTrait},
 //         propose::{propose_actions, IProposeDispatcher, IProposeDispatcherTrait},
 //         voting::{voting_actions, IVotingDispatcher, IVotingDispatcherTrait}
 //     },
@@ -33,8 +33,8 @@
 // #[available_gas(999_999_999)]
 // fn test_game_created() {
 //     let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
-//     let (_world, p_war_actions, _propose_action, _voting_action, _guild, _allowed_app) =
-//         deploy_p_war(
+//     let (_world, pwar_actions, _propose_action, _voting_action, _guild, _allowed_app) =
+//         deploy_pwar(
 //         ref world
 //     );
 //     // caller
@@ -49,9 +49,9 @@
 //     };
 
 //     // create a game
-//     p_war_actions.interact(default_params);
+//     pwar_actions.interact(default_params);
 
-//     let id = p_war_actions
+//     let id = pwar_actions
 //         .get_game_id(Position { x: default_params.position.x, y: default_params.position.y });
 //     println!("id = {}", id);
 

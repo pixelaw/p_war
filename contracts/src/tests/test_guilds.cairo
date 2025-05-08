@@ -1,14 +1,14 @@
 // use dojo::event::EventStorage;
 // use dojo::model::{ModelStorage, ModelValueStorage};
 // use dojo::world::{WorldStorage, WorldStorageTrait};
-// use p_war::tests::utils::{deploy_p_war, print_all_colors};
-// use p_war::{
+// use pwar::tests::utils::{deploy_pwar, print_all_colors};
+// use pwar::{
 //     models::{
 //         game::{Game}, board::{Board, GameId, Position}, proposal::{Proposal}, guilds::{Guild},
 //         allowed_color::{AllowedColor, PaletteColors},
 //     },
 //     systems::{
-//         actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
+//         actions::{pwar_actions, IActionsDispatcher, IActionsDispatcherTrait},
 //         propose::{propose_actions, IProposeDispatcher, IProposeDispatcherTrait},
 //         voting::{voting_actions, IVotingDispatcher, IVotingDispatcherTrait},
 //         guilds::{guild_actions, IGuildDispatcher, IGuildDispatcherTrait}
@@ -43,8 +43,8 @@
 
 //     // Initialize the world and the actions
 //     let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
-//     let (_world, p_war_actions, _propose_action, _voting_action, guild_actions, _allowed_app) =
-//         deploy_p_war(
+//     let (_world, pwar_actions, _propose_action, _voting_action, guild_actions, _allowed_app) =
+//         deploy_pwar(
 //         ref world
 //     );
 
@@ -55,7 +55,7 @@
 //     let PLAYER_2 = contract_address_const::<0x42>();
 
 //     // Create a game
-//     p_war_actions
+//     pwar_actions
 //         .interact(
 //             DefaultParameters {
 //                 player_override: Option::None,
@@ -66,7 +66,7 @@
 //             }
 //         );
 
-//     let game_id = p_war_actions.get_game_id(GAME_ORIGIN_POSITION);
+//     let game_id = pwar_actions.get_game_id(GAME_ORIGIN_POSITION);
 //     println!("game created: game_id = {}", game_id);
 
 //     //was not able to import set_call from core::helpers
@@ -111,8 +111,8 @@
 // fn test_guild_points() {
 //     // Initialize the world and the actions
 //     let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
-//     let (_world, p_war_actions, _propose_action, _voting_action, guild_actions, _allowed_app) =
-//         deploy_p_war(
+//     let (_world, pwar_actions, _propose_action, _voting_action, guild_actions, _allowed_app) =
+//         deploy_pwar(
 //         ref world
 //     );
 //     println!("setup");
@@ -120,7 +120,7 @@
 //     let PLAYER_1 = contract_address_const::<0x1337>();
 //     let PLAYER_2 = contract_address_const::<0x42>();
 
-//     p_war_actions
+//     pwar_actions
 //         .interact(
 //             DefaultParameters {
 //                 player_override: Option::None,
@@ -130,7 +130,7 @@
 //                 color: WHITE_COLOR
 //             }
 //         );
-//     let game_id = p_war_actions.get_game_id(GAME_ORIGIN_POSITION);
+//     let game_id = pwar_actions.get_game_id(GAME_ORIGIN_POSITION);
 //     println!("game created: game_id = {}", game_id);
 
 //     //create guild
@@ -141,7 +141,7 @@
 //     //place a pixel
 //     set_account_contract_address(PLAYER_1);
 //     set_contract_address(PLAYER_1);
-//     p_war_actions
+//     pwar_actions
 //         .interact(
 //             DefaultParameters {
 //                 player_override: Option::None,
@@ -151,7 +151,7 @@
 //                 color: WHITE_COLOR
 //             }
 //         );
-//     p_war_actions
+//     pwar_actions
 //         .interact(
 //             DefaultParameters {
 //                 player_override: Option::None,
@@ -171,7 +171,7 @@
 
 //     set_account_contract_address(PLAYER_2);
 //     set_contract_address(PLAYER_2);
-//     p_war_actions
+//     pwar_actions
 //         .interact(
 //             DefaultParameters {
 //                 player_override: Option::None,
@@ -181,7 +181,7 @@
 //                 color: WHITE_COLOR
 //             }
 //         );
-//     p_war_actions
+//     pwar_actions
 //         .interact(
 //             DefaultParameters {
 //                 player_override: Option::None,
@@ -202,8 +202,8 @@
 // fn test_guild_creation() {
 //     // Initialize the world and the actions
 //     let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
-//     let (_world, p_war_actions, _propose_action, _voting_action, guild_actions, _allowed_app) =
-//         deploy_p_war(
+//     let (_world, pwar_actions, _propose_action, _voting_action, guild_actions, _allowed_app) =
+//         deploy_pwar(
 //         ref world
 //     );
 
@@ -211,7 +211,7 @@
 //     let PLAYER_1 = contract_address_const::<0x1337>();
 
 //     // Create a game
-//     p_war_actions
+//     pwar_actions
 //         .interact(
 //             DefaultParameters {
 //                 player_override: Option::None,
@@ -222,12 +222,12 @@
 //             }
 //         );
 
-//     let game_id: u32 = p_war_actions.get_game_id(GAME_ORIGIN_POSITION);
+//     let game_id: u32 = pwar_actions.get_game_id(GAME_ORIGIN_POSITION);
 
 //     // Create guilds for the game
 //     set_account_contract_address(PLAYER_1);
 //     set_contract_address(PLAYER_1);
-//     let guild_ids: Array<u32> = p_war_actions.create_game_guilds(game_id, guild_actions);
+//     let guild_ids: Array<u32> = pwar_actions.create_game_guilds(game_id, guild_actions);
 
 //     // Create a guild
 //     let guild_id: u32 = *guild_ids.at(0);

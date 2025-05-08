@@ -1,7 +1,7 @@
 // #########################
 // ### APP CONFIGURATION ###
 // #########################
-pub const APP_KEY: felt252 = 'p_war';
+pub const APP_KEY: felt252 = 'pwar';
 pub const APP_ICON: felt252 = 'U+2694';
 
 pub const OUT_OF_BOUNDS_GAME_ID: u32 = 9999;

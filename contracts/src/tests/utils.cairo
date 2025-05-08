@@ -10,7 +10,7 @@ use pixelaw::core::models::pixel::{Pixel};
 use pixelaw::core::utils::{DefaultParameters, Position, encode_rgba};
 use pixelaw_testing::helpers::{set_caller, setup_core, update_test_world};
 // import test utils
-use p_war::{
+use pwar::{
     models::{
         player::{m_Player}, game::{m_Game},
         board::{m_Board, m_GameId, m_PWarPixel},
@@ -24,14 +24,14 @@ use p_war::{
         },
     },
     systems::{
-        actions::{p_war_actions, IActionsDispatcher, IActionsDispatcherTrait},
+        actions::{pwar_actions, IActionsDispatcher, IActionsDispatcherTrait},
         propose::{propose_actions, IProposeDispatcher, IProposeDispatcherTrait},
         voting::{voting_actions, IVotingDispatcher, IVotingDispatcherTrait},
         guilds::{guild_actions, IGuildDispatcher, IGuildDispatcherTrait},
     },
 };
 
-pub fn deploy_p_war(
+pub fn deploy_pwar(
     ref world: WorldStorage
 ) -> (
     WorldStorage,
@@ -41,7 +41,7 @@ pub fn deploy_p_war(
     IGuildDispatcher
 ) {
 
-    let namespace = "p_war";
+    let namespace = "pwar";
 
     world.dispatcher.register_namespace(namespace.clone());
     let ndef = namespace_def(namespace.clone());
@@ -53,11 +53,11 @@ pub fn deploy_p_war(
 
     world.set_namespace(@namespace);
 
-    let (p_war_actions, propose_actions, voting_actions, guild_actions) = setup_pwar_apps(world);
+    let (pwar_actions, propose_actions, voting_actions, guild_actions) = setup_pwar_apps(world);
 
     world.set_namespace(@"pixelaw");
 
-    (world, p_war_actions, propose_actions, voting_actions, guild_actions)
+    (world, pwar_actions, propose_actions, voting_actions, guild_actions)
 }
 
 pub fn namespace_def(namespace: ByteArray) -> NamespaceDef {
@@ -77,15 +77,15 @@ pub fn namespace_def(namespace: ByteArray) -> NamespaceDef {
             TestResource::Model(m_Proposal::TEST_CLASS_HASH),
             TestResource::Model(m_PixelRecoveryRate::TEST_CLASS_HASH),
             TestResource::Model(m_PlayerVote::TEST_CLASS_HASH),
-            // TestResource::Event(p_war_actions::e_StartedGame::TEST_CLASS_HASH),
-            // TestResource::Event(p_war_actions::e_EndedGame::TEST_CLASS_HASH),
+            // TestResource::Event(pwar_actions::e_StartedGame::TEST_CLASS_HASH),
+            // TestResource::Event(pwar_actions::e_EndedGame::TEST_CLASS_HASH),
             // TestResource::Event(propose_actions::e_ProposalCreated::TEST_CLASS_HASH),
             // TestResource::Event(propose_actions::e_ProposalActivated::TEST_CLASS_HASH),
             // TestResource::Event(guild_actions::e_GuildCreated::TEST_CLASS_HASH),
             // TestResource::Event(guild_actions::e_MemberAdded::TEST_CLASS_HASH),
             // TestResource::Event(guild_actions::e_MemberRemoved::TEST_CLASS_HASH),
             // TestResource::Event(voting_actions::e_Voted::TEST_CLASS_HASH),
-            TestResource::Contract(p_war_actions::TEST_CLASS_HASH),
+            TestResource::Contract(pwar_actions::TEST_CLASS_HASH),
             TestResource::Contract(propose_actions::TEST_CLASS_HASH),
             TestResource::Contract(voting_actions::TEST_CLASS_HASH),
             TestResource::Contract(guild_actions::TEST_CLASS_HASH),
@@ -97,7 +97,7 @@ pub fn namespace_def(namespace: ByteArray) -> NamespaceDef {
 
 pub fn contract_defs(namespace: @ByteArray) -> Span<ContractDef> {
     let cdefs: Span<ContractDef> = [
-        ContractDefTrait::new(namespace, @"p_war_actions")
+        ContractDefTrait::new(namespace, @"pwar_actions")
             .with_writer_of([dojo::utils::bytearray_hash(namespace)].span()),
         ContractDefTrait::new(namespace, @"propose_actions")
             .with_writer_of([dojo::utils::bytearray_hash(namespace)].span()),
@@ -117,8 +117,8 @@ pub fn setup_pwar_apps(
     IVotingDispatcher,
     IGuildDispatcher,
 ) {
-    let p_war_actions_address = world.dns_address(@"p_war_actions").unwrap();
-    let p_war_actions = IActionsDispatcher { contract_address: p_war_actions_address };
+    let pwar_actions_address = world.dns_address(@"pwar_actions").unwrap();
+    let pwar_actions = IActionsDispatcher { contract_address: pwar_actions_address };
 
     let propose_address = world.dns_address(@"propose_actions").unwrap();
     let propose_actions = IProposeDispatcher { contract_address: propose_address };
@@ -129,7 +129,7 @@ pub fn setup_pwar_apps(
     let guild_address = world.dns_address(@"guild_actions").unwrap();
     let guild_actions = IGuildDispatcher { contract_address: guild_address };
 
-    (p_war_actions, propose_actions, voting_actions, guild_actions)
+    (pwar_actions, propose_actions, voting_actions, guild_actions)
 }
 
 // pub fn print_all_colors(ref world: WorldStorage, id: u32) {
