@@ -109,16 +109,7 @@ pub mod p_war_actions {
             let mut world = self.world(@"p_war");
             println!("create_game BEGIN");
 
-            // check if a game exists
-            // let mut tmp_uuid = world.uuid();
-            // if tmp_uuid != 0 {
-            //     return 0;
-            // };
-
-            // if id == 0 {
-            //     id = world.uuid();
-            // }
-            let mut id = GAME_ID; // set as a constant for now.
+            let mut id = GAME_ID;
 
             let start = get_block_timestamp();
 
@@ -202,42 +193,27 @@ pub mod p_war_actions {
         fn place_pixel(
             ref self: ContractState, app: ContractAddress, default_params: DefaultParameters
         ) {
-            let mut world = self.world(@"p_war");
-            let core_actions = get_core_actions(ref world); //new
-            let system = get_contract_address(); //new
-            let position = Position { x: default_params.position.x, y: default_params.position.y };
+            // Load important variables
+            let mut core_world = self.world(@"pixelaw");
+            let mut app_world = self.world(@"myapp");
+            let core_actions = get_core_actions(ref core_world);
+            let (player, system) = get_callers(ref core_world, default_params);
+            let position = default_params.position;
             let game_id = self.get_game_id(position);
-            let player_address = get_caller_address();
             assert(game_id != 0, 'this game does not exist');
-            println!("color: {}", default_params.color);
 
-            let allowed_color: AllowedColor = world.read_model((game_id, default_params.color));
+            let allowed_color: AllowedColor = app_world.read_model((game_id, default_params.color));
             assert(
                 allowed_color.is_allowed, 'color is not allowed'
             ); // cannot test correctly without cheatcodes.
 
-            let allowed_app: AllowedApp = world.read_model((game_id, app));
-            assert(allowed_app.is_allowed, 'app is not allowed');
-
-            // let contract_address = if app.is_zero() {
-            //     get_contract_address()
-            // } else {
-            //     app
-            // };
-
-            //let app = IAllowedAppDispatcher { contract_address }; old
-            // println!("app: {}", app);
-            // recover px
-            //recover_px(ref world, game_id, player_address);
-
-            // if this is first time for the caller, let's set initial px.
-            let mut player: Player = world.read_model(player_address);
+            let mut pwarPlayer: Player = app_world.read_model(player);
 
             // get the game info
-            let game: Game = world.read_model(game_id);
+            let game: Game = app_world.read_model(game_id);
 
             // check the player is banned or not
-            assert(player.is_banned == false, 'you are banned');
+            assert(pwarPlayer.is_banned == false, 'you are banned');
 
             // check if the game is ongoing
             assert(check_game_status(game.status()), 'game is not ongoing: actions1');
@@ -246,7 +222,7 @@ pub mod p_war_actions {
             let position = default_params.position;
             core_actions
                 .update_pixel( //new
-                    player_address,
+                    pwarPlayer.address,
                     system,
                     PixelUpdate {
                         position,
@@ -254,7 +230,7 @@ pub mod p_war_actions {
                         timestamp: Option::None,
                         text: Option::None,
                         app: Option::None,
-                        owner: Option::None,
+                        owner: Option::Some(pwarPlayer.address),
                         action: Option::None
                     },
                     Option::None,
@@ -262,39 +238,27 @@ pub mod p_war_actions {
                 );
             println!("set_pixel END");
 
-            player.num_owns += 1;
-            player.num_commit += 1;
-            println!("player.num_commit: {}", player.num_commit);
-            player.last_date = get_block_timestamp();
-            world.write_model(@player);
+            pwarPlayer.num_owns += 1;
+            pwarPlayer.num_commit += 1;
+            println!("player.num_commit: {}", pwarPlayer.num_commit);
+            pwarPlayer.last_date = get_block_timestamp();
+            app_world.write_model(@pwarPlayer);
 
             // get the previous owner of PWarPixel
-            let position = Position { x: default_params.position.x, y: default_params.position.y };
-            let mut previous_pwarpixel: PWarPixel = world.read_model(position);
+            let mut previous_pwarpixel: PWarPixel = app_world.read_model(position);
 
             if (previous_pwarpixel.owner != contract_address_const::<0x0>()
-                && previous_pwarpixel.owner != player.address) {
+                && previous_pwarpixel.owner != pwarPlayer.address) {
                 // get the previous player's info
-                let mut previous_player: Player = world.read_model(previous_pwarpixel.owner);
+                let mut previous_player: Player = app_world.read_model(previous_pwarpixel.owner);
                 // decrease the previous player's num_owns
                 previous_player.num_owns -= 1;
-                world.write_model(@previous_player);
+                app_world.write_model(@previous_player);
             }
 
             // set the new owner of PWarPixel
-            previous_pwarpixel.owner = player.address;
-            world.write_model(@previous_pwarpixel);
-        }
-
-        // only use for expand areas.
-        fn update_pixel(ref self: ContractState, pixel_update: PixelUpdate) {
-            let mut world = self.world(@"p_war");
-            assert(get_caller_address() == get_contract_address(), 'invalid caller');
-            let player_address = get_tx_info().unbox().account_contract_address;
-            let system = get_contract_address();
-            let core_actions = get_core_actions(ref world);
-
-            core_actions.update_pixel(player_address, system, pixel_update, Option::None, false);
+            previous_pwarpixel.owner = pwarPlayer.address;
+            app_world.write_model(@previous_pwarpixel);
         }
 
         fn end_game(ref self: ContractState, game_id: u32) {
