@@ -61,11 +61,11 @@ pub mod guild_actions {
     #[abi(embed_v0)]
     impl GuildImpl of IGuild<ContractState> {
         fn create_guild(ref self: ContractState, game_id: u32, guild_name: felt252) -> u32 {
-            let mut world = self.world(@"pwar");
+            let mut app_world = self.world(@"pwar");
             let caller = get_caller_address();
 
             // Check if the game exists and get the game data
-            let mut game: Game = world.read_model(game_id);
+            let mut game: Game = app_world.read_model(game_id);
             assert(game.id == game_id, 'Game does not exist');
 
             // Use the current guild_count as the new guild_id
@@ -104,22 +104,22 @@ pub mod guild_actions {
             println!("new_guild.guild_id: {}", new_guild.guild_id);
 
             // Save the guild and update the game
-            world.write_model(@new_guild);
-            world.write_model(@game);
+            app_world.write_model(@new_guild);
+            app_world.write_model(@game);
             println!("set guild");
             let caller = get_caller_address();
-            world.emit_event(@GuildCreated { game_id, guild_id, guild_name, creator: caller });
+            app_world.emit_event(@GuildCreated { game_id, guild_id, guild_name, creator: caller });
             guild_id
         }
 
         fn add_member(
             ref self: ContractState, game_id: u32, guild_id: u32, new_member: ContractAddress
         ) {
-            let mut world = self.world(@"pwar");
+            let mut app_world = self.world(@"pwar");
             let caller = get_caller_address();
 
             // Get the guild
-            let mut guild: Guild = world.read_model((game_id, guild_id));
+            let mut guild: Guild = app_world.read_model((game_id, guild_id));
 
             // Check if the caller is the creator
             assert(guild.creator == caller, 'Only creator can add members');
@@ -149,8 +149,8 @@ pub mod guild_actions {
             guild.member_count += 1;
 
             // Save the updated guild
-            world.write_model(@guild);
-            world.emit_event(@MemberAdded { game_id, guild_id, member: new_member });
+            app_world.write_model(@guild);
+            app_world.emit_event(@MemberAdded { game_id, guild_id, member: new_member });
         }
 
         fn join_guild(ref self: ContractState, game_id: u32, guild_id: u32) {
@@ -163,11 +163,11 @@ pub mod guild_actions {
         fn remove_member(
             ref self: ContractState, game_id: u32, guild_id: u32, member: ContractAddress
         ) {
-            let mut world = self.world(@"pwar");
+            let mut app_world = self.world(@"pwar");
             let caller = get_caller_address();
 
             // Get the guild
-            let mut guild: Guild = world.read_model((game_id, guild_id));
+            let mut guild: Guild = app_world.read_model((game_id, guild_id));
 
             // Check if the caller is the creator
             assert(guild.creator == caller, 'Only creator can remove members');
@@ -194,15 +194,15 @@ pub mod guild_actions {
             guild.member_count -= 1;
 
             // Save the updated guild
-            world.write_model(@guild);
-            world.emit_event(@MemberRemoved { game_id, guild_id, member })
+            app_world.write_model(@guild);
+            app_world.emit_event(@MemberRemoved { game_id, guild_id, member })
         }
 
         fn is_member(
             ref self: ContractState, game_id: u32, guild_id: u32, member: ContractAddress
         ) -> bool {
-            let mut world = self.world(@"pwar");
-            let guild: Guild = world.read_model((game_id, guild_id));
+            let mut app_world = self.world(@"pwar");
+            let guild: Guild = app_world.read_model((game_id, guild_id));
             let mut is_member = false;
             let mut i = 0;
             loop {
@@ -225,29 +225,27 @@ pub mod guild_actions {
         }
 
         fn get_guild_contract_name(ref self: ContractState, game_id: u32, guild_id: u32) -> felt252 {
-            let mut world = self.world(@"pwar");
-            let guild: Guild = world.read_model((game_id, guild_id));
+            let mut app_world = self.world(@"pwar");
+            let guild: Guild = app_world.read_model((game_id, guild_id));
             guild.guild_name
         }
 
         fn get_player_commit(ref self: ContractState, player_address: ContractAddress) -> u32 {
-            // let mut core_world = self.world(@"pixelaw");
-            let mut world = self.world(@"pwar");
-            let mut player: Player = world.read_model(player_address);
+            let mut app_world = self.world(@"pwar");
+            let mut player: Player = app_world.read_model(player_address);
             player.num_commit
         }
 
         fn get_player_owns(ref self: ContractState, player_address: ContractAddress) -> u32 {
-            // let mut core_world = self.world(@"pixelaw");
-            let mut world = self.world(@"pwar");
-            let mut player: Player = world.read_model(player_address);
+            let mut app_world = self.world(@"pwar");
+            let mut player: Player = app_world.read_model(player_address);
             player.num_owns
         }
 
         fn get_guild_points(ref self: ContractState, game_id: u32, guild_id: u32) -> u32 {
             // Get the guild
-            let mut world = self.world(@"pwar");
-            let mut guild: Guild = world.read_model((game_id, guild_id));
+            let mut app_world = self.world(@"pwar");
+            let mut guild: Guild = app_world.read_model((game_id, guild_id));
 
             let mut guild_total_points = 0;
             let mut i = 0;
@@ -256,7 +254,7 @@ pub mod guild_actions {
                 if i >= guild.member_count {
                     break;
                 }
-                let mut player: Player = world.read_model(*guild.members.at(i));
+                let mut player: Player = app_world.read_model(*guild.members.at(i));
                 guild_total_points += player.num_commit;
                 i += 1;
                 println!("player.num_commit: {}", player.num_commit);

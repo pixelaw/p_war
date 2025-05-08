@@ -83,15 +83,15 @@ pub mod propose_actions {
             target_args_2: u32
         ) -> u32 {
             //get world
-            let mut world = self.world(@"pwar");
+            let mut app_world = self.world(@"pwar");
             // get models
-            let mut game: Game = world.read_model(game_id);
+            let mut game: Game = app_world.read_model(game_id);
             // println!("game status: {}", game.status());
             assert(check_game_status(game.status()), 'game is not ongoing: propose1');
             let player_address = get_tx_info().unbox().account_contract_address;
 
             // if this is first time for the caller, let's set initial px.
-            let mut player: Player = world.read_model(player_address);
+            let mut player: Player = app_world.read_model(player_address);
 
             // check the player is banned or not
             assert(player.is_banned == false, 'you are banned');
@@ -112,13 +112,13 @@ pub mod propose_actions {
 
             game.proposal_idx += 1;
 
-            world.write_model(@new_proposal);
-            world.write_model(@game);
+            app_world.write_model(@new_proposal);
+            app_world.write_model(@game);
 
             player.num_commit = player.num_commit + 1;
-            world.write_model(@player);
+            app_world.write_model(@player);
 
-            world
+            app_world
                 .emit_event(
                     @ProposalCreated {
                         game_id,
@@ -135,9 +135,9 @@ pub mod propose_actions {
             ref self: ContractState, game_id: u32, index: u32, clear_data: Span<Position>
         ) {
             // get the proposal
-            let mut world = self.world(@"pwar");
-            let mut proposal: Proposal = world.read_model((game_id, index));
-            let mut game: Game = world.read_model(game_id);
+            let mut app_world = self.world(@"pwar");
+            let mut proposal: Proposal = app_world.read_model((game_id, index));
+            let mut game: Game = app_world.read_model(game_id);
             let current_timestamp = get_block_timestamp();
             assert(current_timestamp >= proposal.end, 'proposal period has not ended');
             assert(
@@ -153,14 +153,14 @@ pub mod propose_actions {
             } else if proposal.proposal_type == 2 {
                 self.reset_to_white(game_id, index, game, proposal, clear_data)
             } else if proposal.proposal_type == 3 { // ProposalType::ExtendGameEndTime
-                let mut game: Game = world.read_model(game_id);
+                let mut game: Game = app_world.read_model(game_id);
                 game.end += proposal.target_args_1.into();
-                world.write_model(@game);
+                app_world.write_model(@game);
             } else if proposal.proposal_type == 4 { // ProposalType::ExpandArea
-                let mut board: Board = world.read_model(game_id);
+                let mut board: Board = app_world.read_model(game_id);
                 board.width += proposal.target_args_1.try_into().unwrap();
                 board.height += proposal.target_args_2.try_into().unwrap();
-                world.write_model(@board);
+                app_world.write_model(@board);
             } else {
                 return;
             };
@@ -168,8 +168,8 @@ pub mod propose_actions {
             // make it activated.
             proposal.is_activated = true;
 
-            world.write_model(@proposal);
-            world
+            app_world.write_model(@proposal);
+            app_world
                 .emit_event(
                     @ProposalActivated {
                         game_id,
@@ -186,46 +186,46 @@ pub mod propose_actions {
             ref self: ContractState, game_id: u32, index: u32, game: Game, proposal: Proposal
         ) {
             assert(proposal.proposal_type == 1, 'not add new color proposal');
-            let mut world = self.world(@"pwar");
+            let mut app_world = self.world(@"pwar");
             let new_color: u32 = proposal.target_args_1;
-            let mut new_color_allowed: AllowedColor = world.read_model((game_id, new_color));
+            let mut new_color_allowed: AllowedColor = app_world.read_model((game_id, new_color));
             // only change it if it's not allowed
             if !new_color_allowed.is_allowed {
                 new_color_allowed.is_allowed = !new_color_allowed.is_allowed;
-                world.write_model(@new_color_allowed);
+                app_world.write_model(@new_color_allowed);
 
                 // check if color already is in the palette
-                let mut is_in_palette: InPalette = world.read_model((game_id, new_color));
+                let mut is_in_palette: InPalette = app_world.read_model((game_id, new_color));
                 // if aready in the palette early return
                 if is_in_palette.value {
                     return;
                 }
 
-                let mut game_palette: GamePalette = world.read_model(game_id);
+                let mut game_palette: GamePalette = app_world.read_model(game_id);
 
                 // check if there's less colors in place
                 if game_palette.length < 9 {
                     is_in_palette.value = true;
-                    world.write_model(@is_in_palette);
+                    app_world.write_model(@is_in_palette);
 
-                    let mut palette_color: PaletteColors = world
+                    let mut palette_color: PaletteColors = app_world
                         .read_model((game_id, game_palette.length));
                     palette_color.color = new_color;
-                    world.write_model(@palette_color);
+                    app_world.write_model(@palette_color);
 
                     game_palette.length += 1;
-                    world.write_model(@game_palette);
+                    app_world.write_model(@game_palette);
                 } else {
                     // get 0 idx
-                    let oldest_color: PaletteColors = world.read_model((game_id, 0));
+                    let oldest_color: PaletteColors = app_world.read_model((game_id, 0));
                     let mut idx = 1;
 
                     loop {
-                        let mut palette_color: PaletteColors = world.read_model((game_id, idx));
-                        let prev_color: PaletteColors = world.read_model((game_id, idx));
+                        let mut palette_color: PaletteColors = app_world.read_model((game_id, idx));
+                        let prev_color: PaletteColors = app_world.read_model((game_id, idx));
                         palette_color.idx = idx - 1;
                         palette_color.color = prev_color.color;
-                        world.write_model(@palette_color);
+                        app_world.write_model(@palette_color);
 
                         idx = idx + 1;
                         if idx == 9 {
@@ -234,22 +234,22 @@ pub mod propose_actions {
                     };
 
                     // Set the new color in the last position
-                    let mut last_palette_color: PaletteColors = world.read_model((game_id, 8));
+                    let mut last_palette_color: PaletteColors = app_world.read_model((game_id, 8));
                     last_palette_color.color = new_color;
-                    world.write_model(@last_palette_color);
+                    app_world.write_model(@last_palette_color);
 
-                    let mut old_in_pallet: InPalette = world
+                    let mut old_in_pallet: InPalette = app_world
                         .read_model((game_id, oldest_color.color));
                     old_in_pallet.value = false;
-                    world.write_model(@old_in_pallet);
+                    app_world.write_model(@old_in_pallet);
 
                     is_in_palette.value = true;
-                    world.write_model(@is_in_palette);
+                    app_world.write_model(@is_in_palette);
 
-                    let mut old_color_allowed: AllowedColor = world
+                    let mut old_color_allowed: AllowedColor = app_world
                         .read_model((game_id, oldest_color.color));
                     old_color_allowed.is_allowed = false;
-                    world.write_model(@old_color_allowed);
+                    app_world.write_model(@old_color_allowed);
                 };
             };
         }
@@ -264,11 +264,10 @@ pub mod propose_actions {
         ) {
             assert(proposal.proposal_type == 2, 'not reset to white proposal');
             let mut core_world = self.world(@"pixelaw");
-            let mut app_world = self.world(@"myapp");
-            let mut world = self.world(@"pwar");
+            let mut app_world = self.world(@"pwar");
             // Reset to white by color
             let core_actions = get_core_actions(
-                ref world
+                ref core_world
             ); // TODO: should we use pwar_actions insted of core_actions???
             let system = get_caller_address();
 

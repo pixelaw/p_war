@@ -38,10 +38,7 @@ pub mod pwar_actions {
     use pixelaw::core::utils::{
         get_core_actions, Position, DefaultParameters, get_callers
     };
-    use starknet::{
-        ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info,
-        contract_address_const,
-    };
+    use starknet::{ContractAddress, get_block_timestamp, contract_address_const};
     use super::{IActions};
 
     #[derive(Copy, Drop, Serde)]
@@ -62,8 +59,8 @@ pub mod pwar_actions {
     }
 
     fn dojo_init(ref self: ContractState) {
-        let mut world = self.world(@"pixelaw");
-        let core_actions = pixelaw::core::utils::get_core_actions(ref world);
+        let mut core_world = self.world(@"pixelaw");
+        let core_actions = pixelaw::core::utils::get_core_actions(ref core_world);
         core_actions.new_app(contract_address_const::<0>(), APP_KEY, APP_ICON);
     }
 
@@ -106,7 +103,7 @@ pub mod pwar_actions {
         }
 
         fn create_game(ref self: ContractState, origin: Position) -> u32 {
-            let mut world = self.world(@"pwar");
+            let mut app_world = self.world(@"pwar");
             println!("create_game BEGIN");
 
             let mut id = GAME_ID;
@@ -128,8 +125,8 @@ pub mod pwar_actions {
 
             let board = Board { id, origin, width: DEFAULT_AREA, height: DEFAULT_AREA, };
 
-            world.write_model(@board); //not sure
-            world.write_model(@game);
+            app_world.write_model(@board); //not sure
+            app_world.write_model(@game);
             println!("create_game 1");
 
             // add default colors (changed these to RGBA)
@@ -156,9 +153,9 @@ pub mod pwar_actions {
                     game_id: id, idx: color_idx, color: *a.at(color_idx)
                 };
                 let in_palette = InPalette { game_id: id, color: *a.at(color_idx), value: true };
-                world.write_model(@allowed_color);
-                world.write_model(@palette_colors);
-                world.write_model(@in_palette);
+                app_world.write_model(@allowed_color);
+                app_world.write_model(@palette_colors);
+                app_world.write_model(@in_palette);
                 color_idx += 1;
             };
 
@@ -168,8 +165,8 @@ pub mod pwar_actions {
                 game_id: id, rate: DEFAULT_RECOVERY_RATE
             };
             let game_palette = GamePalette { game_id: id, length: 9 };
-            world.write_model(@pixel_recovery_rate);
-            world.write_model(@game_palette);
+            app_world.write_model(@pixel_recovery_rate);
+            app_world.write_model(@game_palette);
 
             println!("create_game 2.1");
 
@@ -195,7 +192,7 @@ pub mod pwar_actions {
         ) {
             // Load important variables
             let mut core_world = self.world(@"pixelaw");
-            let mut app_world = self.world(@"myapp");
+            let mut app_world = self.world(@"pwar");
             let core_actions = get_core_actions(ref core_world);
             let (player, system) = get_callers(ref core_world, default_params);
             let position = default_params.position;
@@ -263,8 +260,8 @@ pub mod pwar_actions {
 
         fn end_game(ref self: ContractState, game_id: u32) {
             // check if the time is expired.
-            let mut world = self.world(@"pwar");
-            let mut game: Game = world.read_model(game_id);
+            let mut app_world = self.world(@"pwar");
+            let mut game: Game = app_world.read_model(game_id);
             assert(get_block_timestamp() >= game.end, 'game is not ended');
 
             // TODO: emit the status??
@@ -293,7 +290,7 @@ pub mod pwar_actions {
 
             game.winner = winner;
 
-            world.write_model(@game);
+            app_world.write_model(@game);
             // TODO: emit the winner!
         }
     }
