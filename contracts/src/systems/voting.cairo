@@ -6,7 +6,7 @@ pub trait IVoting<T> {
 
 // dojo decorator
 #[dojo::contract]
-mod voting_actions {
+pub mod voting_actions {
     use dojo::event::EventStorage;
     use dojo::model::ModelStorage;
     use p_war::models::{

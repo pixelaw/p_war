@@ -14,7 +14,7 @@ pub trait IGuild<T> {
 }
 
 #[dojo::contract]
-mod guild_actions {
+pub mod guild_actions {
     use dojo::event::EventStorage;
     use dojo::model::ModelStorage;
     use p_war::models::{

@@ -12,13 +12,12 @@ pub trait IActions<T> {
     ) -> Array<u32>;
     fn get_game_id(self: @T, position: Position) -> u32;
     fn place_pixel(ref self: T, app: ContractAddress, default_params: DefaultParameters);
-    fn update_pixel(ref self: T, pixel_update: PixelUpdate);
     fn end_game(ref self: T, game_id: u32);
 }
 
 // dojo decorator
 #[dojo::contract]
-mod p_war_actions {
+pub mod p_war_actions {
     use dojo::model::{ModelStorage};
     use dojo::world::{IWorldDispatcherTrait};
     use p_war::constants::{

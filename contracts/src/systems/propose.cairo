@@ -25,7 +25,7 @@ pub trait IPropose<T> {
 
 // dojo decorator
 #[dojo::contract]
-mod propose_actions {
+pub mod propose_actions {
     use dojo::event::EventStorage;
     use dojo::model::ModelStorage;
     use p_war::constants::{

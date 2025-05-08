@@ -12,7 +12,7 @@ pub trait IPayments<T> {
 }
 
 #[dojo::contract]
-mod payments {
+pub mod payments {
     // use super::*;
 
     use dojo::event::EventStorage;
