@@ -10,7 +10,6 @@ use starknet::ContractAddress;
 // #[derive(PartialEq, Copy, Introspect, Drop, Serde, Print)]
 // enum ProposalType {
 //     Unknown,
-//     ToggleAllowedApp,
 //     AddNewColor,
 //     ExtendGameEndTime,
 //     ChangePixelRecovery,
@@ -81,7 +80,6 @@ pub struct PixelRecoveryRate {
 //     fn into(self: ProposalType) -> felt252 {
 //         match self {
 //             ProposalType::Unknown => 0,
-//             ProposalType::ToggleAllowedApp => 1,
 //             ProposalType::AddNewColor => 2,
 //             ProposalType::ExtendGameEndTime => 3,
 //             ProposalType::ChangePixelRecovery => 4,

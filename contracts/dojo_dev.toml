@@ -19,7 +19,6 @@ world_address = "0x01d09b5e00f376337603943fc12715e439e91c0039f353b1cc48bb278dfa9
 # GUILD
 "p_war-Guild" = ["p_war-guild_actions"]
 # P-WAR
-"p_war-AllowedApp" = ["p_war-p_war_actions"]
 "p_war-Board" = ["p_war-p_war_actions", "p_war-propose_actions"]
 "p_war-AllowedColor" = ["p_war-p_war_actions", "p_war-propose_actions"]
 "p_war-PaletteColors" = ["p_war-p_war_actions", "p_war-propose_actions"]

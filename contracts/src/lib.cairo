@@ -1,7 +1,6 @@
 mod constants;
 pub mod systems {
     pub mod actions;
-    pub mod app;
     pub mod guilds;
     pub mod propose;
     pub mod utils;
