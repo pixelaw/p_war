@@ -3,7 +3,7 @@
     "class_hash": "0x75fc75bcd1a7f8b4bf64b74978b0f89c8cee44bb755c1dae6f82284756451ec",
     "address": "0x1d09b5e00f376337603943fc12715e439e91c0039f353b1cc48bb278dfa99d5",
     "seed": "pixelaw",
-    "name": "p_war",
+    "name": "pwar",
     "entrypoints": [
       "uuid",
       "set_metadata",
@@ -1312,1003 +1312,8 @@
   },
   "contracts": [
     {
-      "address": "0xd1e895319120004075fdd61571f3e3aa90e89a2b0f22462775e4a63408d0c5",
-      "class_hash": "0x57045b4433b2cbae0e955c27d092cd263446ddfc31a010708f23794bcbbabdb",
-      "abi": [
-        {
-          "type": "impl",
-          "name": "actions__ContractImpl",
-          "interface_name": "dojo::contract::interface::IContract"
-        },
-        {
-          "type": "interface",
-          "name": "dojo::contract::interface::IContract",
-          "items": []
-        },
-        {
-          "type": "impl",
-          "name": "actions__DeployedContractImpl",
-          "interface_name": "dojo::meta::interface::IDeployedResource"
-        },
-        {
-          "type": "struct",
-          "name": "core::byte_array::ByteArray",
-          "members": [
-            {
-              "name": "data",
-              "type": "core::array::Array::<core::bytes_31::bytes31>"
-            },
-            {
-              "name": "pending_word",
-              "type": "core::felt252"
-            },
-            {
-              "name": "pending_word_len",
-              "type": "core::integer::u32"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "dojo::meta::interface::IDeployedResource",
-          "items": [
-            {
-              "type": "function",
-              "name": "dojo_name",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::byte_array::ByteArray"
-                }
-              ],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "ActionsImpl",
-          "interface_name": "pixelaw::core::actions::IActions"
-        },
-        {
-          "type": "struct",
-          "name": "pixelaw::core::models::pixel::Pixel",
-          "members": [
-            {
-              "name": "x",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "y",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "app",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "color",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "created_at",
-              "type": "core::integer::u64"
-            },
-            {
-              "name": "updated_at",
-              "type": "core::integer::u64"
-            },
-            {
-              "name": "timestamp",
-              "type": "core::integer::u64"
-            },
-            {
-              "name": "owner",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "text",
-              "type": "core::felt252"
-            },
-            {
-              "name": "action",
-              "type": "core::felt252"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "core::option::Option::<core::integer::u32>",
-          "variants": [
-            {
-              "name": "Some",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "None",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "core::option::Option::<core::starknet::contract_address::ContractAddress>",
-          "variants": [
-            {
-              "name": "Some",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "None",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "core::option::Option::<core::felt252>",
-          "variants": [
-            {
-              "name": "Some",
-              "type": "core::felt252"
-            },
-            {
-              "name": "None",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "core::option::Option::<core::integer::u64>",
-          "variants": [
-            {
-              "name": "Some",
-              "type": "core::integer::u64"
-            },
-            {
-              "name": "None",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "pixelaw::core::models::pixel::PixelUpdate",
-          "members": [
-            {
-              "name": "x",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "y",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "color",
-              "type": "core::option::Option::<core::integer::u32>"
-            },
-            {
-              "name": "owner",
-              "type": "core::option::Option::<core::starknet::contract_address::ContractAddress>"
-            },
-            {
-              "name": "app",
-              "type": "core::option::Option::<core::starknet::contract_address::ContractAddress>"
-            },
-            {
-              "name": "text",
-              "type": "core::option::Option::<core::felt252>"
-            },
-            {
-              "name": "timestamp",
-              "type": "core::option::Option::<core::integer::u64>"
-            },
-            {
-              "name": "action",
-              "type": "core::option::Option::<core::felt252>"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "core::bool",
-          "variants": [
-            {
-              "name": "False",
-              "type": "()"
-            },
-            {
-              "name": "True",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "pixelaw::core::models::pixel::PixelUpdateResult",
-          "variants": [
-            {
-              "name": "Ok",
-              "type": "pixelaw::core::models::pixel::PixelUpdate"
-            },
-            {
-              "name": "NotAllowed",
-              "type": "()"
-            },
-            {
-              "name": "Error",
-              "type": "core::felt252"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<core::felt252>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<core::felt252>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "pixelaw::core::models::registry::App",
-          "members": [
-            {
-              "name": "system",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "name",
-              "type": "core::felt252"
-            },
-            {
-              "name": "icon",
-              "type": "core::felt252"
-            },
-            {
-              "name": "action",
-              "type": "core::felt252"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "pixelaw::core::utils::Position",
-          "members": [
-            {
-              "name": "x",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "y",
-              "type": "core::integer::u16"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "pixelaw::core::utils::Bounds",
-          "members": [
-            {
-              "name": "x_min",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "y_min",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "x_max",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "y_max",
-              "type": "core::integer::u16"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "pixelaw::core::models::area::Area",
-          "members": [
-            {
-              "name": "id",
-              "type": "core::integer::u64"
-            },
-            {
-              "name": "app",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "owner",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "color",
-              "type": "core::integer::u32"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "core::option::Option::<pixelaw::core::models::area::Area>",
-          "variants": [
-            {
-              "name": "Some",
-              "type": "pixelaw::core::models::area::Area"
-            },
-            {
-              "name": "None",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<pixelaw::core::models::area::Area>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<pixelaw::core::models::area::Area>"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "pixelaw::core::actions::IActions",
-          "items": [
-            {
-              "type": "function",
-              "name": "init",
-              "inputs": [],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "can_update_pixel",
-              "inputs": [
-                {
-                  "name": "for_player",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                },
-                {
-                  "name": "for_system",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                },
-                {
-                  "name": "pixel",
-                  "type": "pixelaw::core::models::pixel::Pixel"
-                },
-                {
-                  "name": "pixel_update",
-                  "type": "pixelaw::core::models::pixel::PixelUpdate"
-                },
-                {
-                  "name": "area_id_hint",
-                  "type": "core::option::Option::<core::integer::u64>"
-                },
-                {
-                  "name": "allow_modify",
-                  "type": "core::bool"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "pixelaw::core::models::pixel::PixelUpdateResult"
-                }
-              ],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "update_pixel",
-              "inputs": [
-                {
-                  "name": "for_player",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                },
-                {
-                  "name": "for_system",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                },
-                {
-                  "name": "pixel_update",
-                  "type": "pixelaw::core::models::pixel::PixelUpdate"
-                },
-                {
-                  "name": "area_id",
-                  "type": "core::option::Option::<core::integer::u64>"
-                },
-                {
-                  "name": "allow_modify",
-                  "type": "core::bool"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "pixelaw::core::models::pixel::PixelUpdateResult"
-                }
-              ],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "process_queue",
-              "inputs": [
-                {
-                  "name": "id",
-                  "type": "core::felt252"
-                },
-                {
-                  "name": "timestamp",
-                  "type": "core::integer::u64"
-                },
-                {
-                  "name": "called_system",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                },
-                {
-                  "name": "selector",
-                  "type": "core::felt252"
-                },
-                {
-                  "name": "calldata",
-                  "type": "core::array::Span::<core::felt252>"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "schedule_queue",
-              "inputs": [
-                {
-                  "name": "timestamp",
-                  "type": "core::integer::u64"
-                },
-                {
-                  "name": "called_system",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                },
-                {
-                  "name": "selector",
-                  "type": "core::felt252"
-                },
-                {
-                  "name": "calldata",
-                  "type": "core::array::Span::<core::felt252>"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "new_app",
-              "inputs": [
-                {
-                  "name": "system",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                },
-                {
-                  "name": "name",
-                  "type": "core::felt252"
-                },
-                {
-                  "name": "icon",
-                  "type": "core::felt252"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "pixelaw::core::models::registry::App"
-                }
-              ],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "alert_player",
-              "inputs": [
-                {
-                  "name": "position",
-                  "type": "pixelaw::core::utils::Position"
-                },
-                {
-                  "name": "player",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                },
-                {
-                  "name": "message",
-                  "type": "core::felt252"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "add_area",
-              "inputs": [
-                {
-                  "name": "bounds",
-                  "type": "pixelaw::core::utils::Bounds"
-                },
-                {
-                  "name": "owner",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                },
-                {
-                  "name": "color",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "app",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "pixelaw::core::models::area::Area"
-                }
-              ],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "remove_area",
-              "inputs": [
-                {
-                  "name": "area_id",
-                  "type": "core::integer::u64"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "find_area_by_position",
-              "inputs": [
-                {
-                  "name": "position",
-                  "type": "pixelaw::core::utils::Position"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::option::Option::<pixelaw::core::models::area::Area>"
-                }
-              ],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "find_areas_inside_bounds",
-              "inputs": [
-                {
-                  "name": "bounds",
-                  "type": "pixelaw::core::utils::Bounds"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::array::Span::<pixelaw::core::models::area::Area>"
-                }
-              ],
-              "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "function",
-          "name": "dojo_init",
-          "inputs": [],
-          "outputs": [],
-          "state_mutability": "view"
-        },
-        {
-          "type": "impl",
-          "name": "WorldProviderImpl",
-          "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
-        },
-        {
-          "type": "struct",
-          "name": "dojo::world::iworld::IWorldDispatcher",
-          "members": [
-            {
-              "name": "contract_address",
-              "type": "core::starknet::contract_address::ContractAddress"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "dojo::contract::components::world_provider::IWorldProvider",
-          "items": [
-            {
-              "type": "function",
-              "name": "world_dispatcher",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "dojo::world::iworld::IWorldDispatcher"
-                }
-              ],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "UpgradeableImpl",
-          "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
-        },
-        {
-          "type": "interface",
-          "name": "dojo::contract::components::upgradeable::IUpgradeable",
-          "items": [
-            {
-              "type": "function",
-              "name": "upgrade",
-              "inputs": [
-                {
-                  "name": "new_class_hash",
-                  "type": "core::starknet::class_hash::ClassHash"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "constructor",
-          "name": "constructor",
-          "inputs": []
-        },
-        {
-          "type": "event",
-          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "class_hash",
-              "type": "core::starknet::class_hash::ClassHash",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
-          "kind": "enum",
-          "variants": [
-            {
-              "name": "Upgraded",
-              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
-              "kind": "nested"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
-          "kind": "enum",
-          "variants": []
-        },
-        {
-          "type": "event",
-          "name": "pixelaw::core::actions::actions::Event",
-          "kind": "enum",
-          "variants": [
-            {
-              "name": "UpgradeableEvent",
-              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
-              "kind": "nested"
-            },
-            {
-              "name": "WorldProviderEvent",
-              "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
-              "kind": "nested"
-            }
-          ]
-        }
-      ],
-      "init_calldata": [],
-      "tag": "p_war-actions",
-      "selector": "0x5c4dfad1ce85f4c83221306fbcb419ee67523cc89465f028a2a6f3f90a6f0b8",
-      "systems": [
-        "init",
-        "can_update_pixel",
-        "update_pixel",
-        "process_queue",
-        "schedule_queue",
-        "new_app",
-        "alert_player",
-        "add_area",
-        "remove_area",
-        "find_area_by_position",
-        "find_areas_inside_bounds",
-        "upgrade"
-      ]
-    },
-    {
-      "address": "0x5690b9d49b93542faa53db1ad2a9631b0ea175abb1297b6da5db60a0a94e35a",
-      "class_hash": "0x5b364e36eb86d1aa7e3b5f4d0f8471091cc6f4239d3ec71d30cd4972ecda74b",
-      "abi": [
-        {
-          "type": "impl",
-          "name": "allowed_app_actions__ContractImpl",
-          "interface_name": "dojo::contract::interface::IContract"
-        },
-        {
-          "type": "interface",
-          "name": "dojo::contract::interface::IContract",
-          "items": []
-        },
-        {
-          "type": "impl",
-          "name": "allowed_app_actions__DeployedContractImpl",
-          "interface_name": "dojo::meta::interface::IDeployedResource"
-        },
-        {
-          "type": "struct",
-          "name": "core::byte_array::ByteArray",
-          "members": [
-            {
-              "name": "data",
-              "type": "core::array::Array::<core::bytes_31::bytes31>"
-            },
-            {
-              "name": "pending_word",
-              "type": "core::felt252"
-            },
-            {
-              "name": "pending_word_len",
-              "type": "core::integer::u32"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "dojo::meta::interface::IDeployedResource",
-          "items": [
-            {
-              "type": "function",
-              "name": "dojo_name",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::byte_array::ByteArray"
-                }
-              ],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "AllowedAppImpl",
-          "interface_name": "p_war::systems::app::IAllowedApp"
-        },
-        {
-          "type": "enum",
-          "name": "core::option::Option::<core::starknet::contract_address::ContractAddress>",
-          "variants": [
-            {
-              "name": "Some",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "None",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "core::option::Option::<core::integer::u64>",
-          "variants": [
-            {
-              "name": "Some",
-              "type": "core::integer::u64"
-            },
-            {
-              "name": "None",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "pixelaw::core::utils::Position",
-          "members": [
-            {
-              "name": "x",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "y",
-              "type": "core::integer::u16"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "pixelaw::core::utils::DefaultParameters",
-          "members": [
-            {
-              "name": "player_override",
-              "type": "core::option::Option::<core::starknet::contract_address::ContractAddress>"
-            },
-            {
-              "name": "system_override",
-              "type": "core::option::Option::<core::starknet::contract_address::ContractAddress>"
-            },
-            {
-              "name": "area_hint",
-              "type": "core::option::Option::<core::integer::u64>"
-            },
-            {
-              "name": "position",
-              "type": "pixelaw::core::utils::Position"
-            },
-            {
-              "name": "color",
-              "type": "core::integer::u32"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "p_war::systems::app::IAllowedApp",
-          "items": [
-            {
-              "type": "function",
-              "name": "set_pixel",
-              "inputs": [
-                {
-                  "name": "default_params",
-                  "type": "pixelaw::core::utils::DefaultParameters"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "function",
-          "name": "dojo_init",
-          "inputs": [],
-          "outputs": [],
-          "state_mutability": "view"
-        },
-        {
-          "type": "impl",
-          "name": "WorldProviderImpl",
-          "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
-        },
-        {
-          "type": "struct",
-          "name": "dojo::world::iworld::IWorldDispatcher",
-          "members": [
-            {
-              "name": "contract_address",
-              "type": "core::starknet::contract_address::ContractAddress"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "dojo::contract::components::world_provider::IWorldProvider",
-          "items": [
-            {
-              "type": "function",
-              "name": "world_dispatcher",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "dojo::world::iworld::IWorldDispatcher"
-                }
-              ],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "UpgradeableImpl",
-          "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
-        },
-        {
-          "type": "interface",
-          "name": "dojo::contract::components::upgradeable::IUpgradeable",
-          "items": [
-            {
-              "type": "function",
-              "name": "upgrade",
-              "inputs": [
-                {
-                  "name": "new_class_hash",
-                  "type": "core::starknet::class_hash::ClassHash"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "constructor",
-          "name": "constructor",
-          "inputs": []
-        },
-        {
-          "type": "event",
-          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "class_hash",
-              "type": "core::starknet::class_hash::ClassHash",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
-          "kind": "enum",
-          "variants": [
-            {
-              "name": "Upgraded",
-              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
-              "kind": "nested"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
-          "kind": "enum",
-          "variants": []
-        },
-        {
-          "type": "event",
-          "name": "p_war::systems::app::allowed_app_actions::Event",
-          "kind": "enum",
-          "variants": [
-            {
-              "name": "UpgradeableEvent",
-              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
-              "kind": "nested"
-            },
-            {
-              "name": "WorldProviderEvent",
-              "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
-              "kind": "nested"
-            }
-          ]
-        }
-      ],
-      "init_calldata": [],
-      "tag": "p_war-allowed_app_actions",
-      "selector": "0x78f047e7dd7b9623dc8867dc03af4d60eb5d2a11b2c41afabeea4e6d0ec0c8c",
-      "systems": [
-        "set_pixel",
-        "upgrade"
-      ]
-    },
-    {
-      "address": "0x48d49c8e764afef53c591f812fdbafdb00177d065c858ee07ac4bcc6d01b216",
-      "class_hash": "0x4ffd8f0827a911b9a975bd864b9c772e1c653914ab0cbd450c4a691d68bedc8",
+      "address": "0x38be037c76817f4d73f7cec04a5bffb9d64ce544674f72637563708971ef1d3",
+      "class_hash": "0x6ec9c343a9c790dde78143e508f2f63c5116874110d2ef2ef237df220170a79",
       "abi": [
         {
           "type": "impl",
@@ -2363,7 +1368,7 @@
         {
           "type": "impl",
           "name": "GuildImpl",
-          "interface_name": "p_war::systems::guilds::IGuild"
+          "interface_name": "pwar::systems::guilds::IGuild"
         },
         {
           "type": "enum",
@@ -2381,7 +1386,7 @@
         },
         {
           "type": "interface",
-          "name": "p_war::systems::guilds::IGuild",
+          "name": "pwar::systems::guilds::IGuild",
           "items": [
             {
               "type": "function",
@@ -2490,6 +1495,58 @@
               "outputs": [
                 {
                   "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "get_guild_contract_name",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "guild_id",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::felt252"
+                }
+              ],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "get_player_commit",
+              "inputs": [
+                {
+                  "name": "player_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "get_player_owns",
+              "inputs": [
+                {
+                  "name": "player_address",
+                  "type": "core::starknet::contract_address::ContractAddress"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
                 }
               ],
               "state_mutability": "external"
@@ -2615,7 +1672,7 @@
         },
         {
           "type": "event",
-          "name": "p_war::systems::guilds::guild_actions::Event",
+          "name": "pwar::systems::guilds::guild_actions::Event",
           "kind": "enum",
           "variants": [
             {
@@ -2632,8 +1689,8 @@
         }
       ],
       "init_calldata": [],
-      "tag": "p_war-guild_actions",
-      "selector": "0x5a9bda3f6e0c2434004cf6dab0745c5d894da70cf53eca4bd847b21b3c94276",
+      "tag": "pwar-guild_actions",
+      "selector": "0x3c3b77d165909386294773571272f51dcefab9d0aa99d69b70796f6501d6f42",
       "systems": [
         "create_guild",
         "add_member",
@@ -2641,17 +1698,20 @@
         "remove_member",
         "is_member",
         "get_guild_contract_address",
+        "get_guild_contract_name",
+        "get_player_commit",
+        "get_player_owns",
         "get_guild_points",
         "upgrade"
       ]
     },
     {
-      "address": "0x2f3dad854016a24174a0cfdd3f5c72c1ef5b0320d28eba044e73467c53f385a",
-      "class_hash": "0x275e60b827e5b5866b27e0037edca0b3bb091690939a3646d460eaaa9e8a1ea",
+      "address": "0x4038ddb14b806e40242355883643c009451a6b15fc9aa402a1248dae25a5a49",
+      "class_hash": "0x7dd3c84c52aebfc627247b8890e9c54321fb971128c085470acf5e7ecef9b9",
       "abi": [
         {
           "type": "impl",
-          "name": "p_war_actions__ContractImpl",
+          "name": "propose_actions__ContractImpl",
           "interface_name": "dojo::contract::interface::IContract"
         },
         {
@@ -2661,7 +1721,7 @@
         },
         {
           "type": "impl",
-          "name": "p_war_actions__DeployedContractImpl",
+          "name": "propose_actions__DeployedContractImpl",
           "interface_name": "dojo::meta::interface::IDeployedResource"
         },
         {
@@ -2701,8 +1761,450 @@
         },
         {
           "type": "impl",
+          "name": "ProposeImpl",
+          "interface_name": "pwar::systems::propose::IPropose"
+        },
+        {
+          "type": "struct",
+          "name": "pixelaw::core::utils::Position",
+          "members": [
+            {
+              "name": "x",
+              "type": "core::integer::u16"
+            },
+            {
+              "name": "y",
+              "type": "core::integer::u16"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<pixelaw::core::utils::Position>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<pixelaw::core::utils::Position>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u32>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u32>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "pwar::models::game::Game",
+          "members": [
+            {
+              "name": "id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "start",
+              "type": "core::integer::u64"
+            },
+            {
+              "name": "end",
+              "type": "core::integer::u64"
+            },
+            {
+              "name": "proposal_idx",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "coeff_own_pixels",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "coeff_commits",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "winner_config",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "winner",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "guild_ids",
+              "type": "core::array::Span::<core::integer::u32>"
+            },
+            {
+              "name": "guild_count",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "enum",
+          "name": "core::bool",
+          "variants": [
+            {
+              "name": "False",
+              "type": "()"
+            },
+            {
+              "name": "True",
+              "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "pwar::models::proposal::Proposal",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "index",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "author",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "proposal_type",
+              "type": "core::integer::u8"
+            },
+            {
+              "name": "target_args_1",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "target_args_2",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "start",
+              "type": "core::integer::u64"
+            },
+            {
+              "name": "end",
+              "type": "core::integer::u64"
+            },
+            {
+              "name": "yes_voting_power",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "no_voting_power",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "is_activated",
+              "type": "core::bool"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "pwar::systems::propose::IPropose",
+          "items": [
+            {
+              "type": "function",
+              "name": "create_proposal",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "proposal_type",
+                  "type": "core::integer::u8"
+                },
+                {
+                  "name": "target_args_1",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "target_args_2",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "activate_proposal",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "index",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "clear_data",
+                  "type": "core::array::Span::<pixelaw::core::utils::Position>"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "add_new_color",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "index",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "game",
+                  "type": "pwar::models::game::Game"
+                },
+                {
+                  "name": "proposal",
+                  "type": "pwar::models::proposal::Proposal"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            },
+            {
+              "type": "function",
+              "name": "reset_to_white",
+              "inputs": [
+                {
+                  "name": "game_id",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "index",
+                  "type": "core::integer::u32"
+                },
+                {
+                  "name": "game",
+                  "type": "pwar::models::game::Game"
+                },
+                {
+                  "name": "proposal",
+                  "type": "pwar::models::proposal::Proposal"
+                },
+                {
+                  "name": "clear_data",
+                  "type": "core::array::Span::<pixelaw::core::utils::Position>"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "dojo_init",
+          "inputs": [],
+          "outputs": [],
+          "state_mutability": "view"
+        },
+        {
+          "type": "impl",
+          "name": "WorldProviderImpl",
+          "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
+        },
+        {
+          "type": "struct",
+          "name": "dojo::world::iworld::IWorldDispatcher",
+          "members": [
+            {
+              "name": "contract_address",
+              "type": "core::starknet::contract_address::ContractAddress"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::world_provider::IWorldProvider",
+          "items": [
+            {
+              "type": "function",
+              "name": "world_dispatcher",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "dojo::world::iworld::IWorldDispatcher"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "impl",
+          "name": "UpgradeableImpl",
+          "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::components::upgradeable::IUpgradeable",
+          "items": [
+            {
+              "type": "function",
+              "name": "upgrade",
+              "inputs": [
+                {
+                  "name": "new_class_hash",
+                  "type": "core::starknet::class_hash::ClassHash"
+                }
+              ],
+              "outputs": [],
+              "state_mutability": "external"
+            }
+          ]
+        },
+        {
+          "type": "constructor",
+          "name": "constructor",
+          "inputs": []
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+          "kind": "struct",
+          "members": [
+            {
+              "name": "class_hash",
+              "type": "core::starknet::class_hash::ClassHash",
+              "kind": "data"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "Upgraded",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
+              "kind": "nested"
+            }
+          ]
+        },
+        {
+          "type": "event",
+          "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+          "kind": "enum",
+          "variants": []
+        },
+        {
+          "type": "event",
+          "name": "pwar::systems::propose::propose_actions::Event",
+          "kind": "enum",
+          "variants": [
+            {
+              "name": "UpgradeableEvent",
+              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
+              "kind": "nested"
+            },
+            {
+              "name": "WorldProviderEvent",
+              "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
+              "kind": "nested"
+            }
+          ]
+        }
+      ],
+      "init_calldata": [],
+      "tag": "pwar-propose_actions",
+      "selector": "0x5052f70e59d3197eee09586db5f0c9578581601c549020f478ffe96e57d8573",
+      "systems": [
+        "create_proposal",
+        "activate_proposal",
+        "add_new_color",
+        "reset_to_white",
+        "upgrade"
+      ]
+    },
+    {
+      "address": "0x346e8974e4beaf30b8b2bf65c979ddfe9cc26fa0e77f885f7efe95cab7f8b0c",
+      "class_hash": "0x5ceb2039961b6cba55af60b31943e0b9d955bf83c3a31bf92a9520bb70bb4d9",
+      "abi": [
+        {
+          "type": "impl",
+          "name": "pwar_actions__ContractImpl",
+          "interface_name": "dojo::contract::interface::IContract"
+        },
+        {
+          "type": "interface",
+          "name": "dojo::contract::interface::IContract",
+          "items": []
+        },
+        {
+          "type": "impl",
+          "name": "pwar_actions__DeployedContractImpl",
+          "interface_name": "dojo::meta::interface::IDeployedResource"
+        },
+        {
+          "type": "struct",
+          "name": "core::byte_array::ByteArray",
+          "members": [
+            {
+              "name": "data",
+              "type": "core::array::Array::<core::bytes_31::bytes31>"
+            },
+            {
+              "name": "pending_word",
+              "type": "core::felt252"
+            },
+            {
+              "name": "pending_word_len",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
+          "type": "interface",
+          "name": "dojo::meta::interface::IDeployedResource",
+          "items": [
+            {
+              "type": "function",
+              "name": "dojo_name",
+              "inputs": [],
+              "outputs": [
+                {
+                  "type": "core::byte_array::ByteArray"
+                }
+              ],
+              "state_mutability": "view"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "dojo_init",
+          "inputs": [],
+          "outputs": [],
+          "state_mutability": "external"
+        },
+        {
+          "type": "impl",
           "name": "ActionsImpl",
-          "interface_name": "p_war::systems::actions::IActions"
+          "interface_name": "pwar::systems::actions::IActions"
         },
         {
           "type": "enum",
@@ -2774,7 +2276,7 @@
         },
         {
           "type": "struct",
-          "name": "p_war::systems::guilds::IGuildDispatcher",
+          "name": "pwar::systems::guilds::IGuildDispatcher",
           "members": [
             {
               "name": "contract_address",
@@ -2783,82 +2285,9 @@
           ]
         },
         {
-          "type": "enum",
-          "name": "core::option::Option::<core::integer::u32>",
-          "variants": [
-            {
-              "name": "Some",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "None",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "core::option::Option::<core::felt252>",
-          "variants": [
-            {
-              "name": "Some",
-              "type": "core::felt252"
-            },
-            {
-              "name": "None",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "pixelaw::core::models::pixel::PixelUpdate",
-          "members": [
-            {
-              "name": "x",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "y",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "color",
-              "type": "core::option::Option::<core::integer::u32>"
-            },
-            {
-              "name": "owner",
-              "type": "core::option::Option::<core::starknet::contract_address::ContractAddress>"
-            },
-            {
-              "name": "app",
-              "type": "core::option::Option::<core::starknet::contract_address::ContractAddress>"
-            },
-            {
-              "name": "text",
-              "type": "core::option::Option::<core::felt252>"
-            },
-            {
-              "name": "timestamp",
-              "type": "core::option::Option::<core::integer::u64>"
-            },
-            {
-              "name": "action",
-              "type": "core::option::Option::<core::felt252>"
-            }
-          ]
-        },
-        {
           "type": "interface",
-          "name": "p_war::systems::actions::IActions",
+          "name": "pwar::systems::actions::IActions",
           "items": [
-            {
-              "type": "function",
-              "name": "init",
-              "inputs": [],
-              "outputs": [],
-              "state_mutability": "external"
-            },
             {
               "type": "function",
               "name": "interact",
@@ -2897,7 +2326,7 @@
                 },
                 {
                   "name": "guild_dispatcher",
-                  "type": "p_war::systems::guilds::IGuildDispatcher"
+                  "type": "pwar::systems::guilds::IGuildDispatcher"
                 }
               ],
               "outputs": [
@@ -2941,18 +2370,6 @@
             },
             {
               "type": "function",
-              "name": "update_pixel",
-              "inputs": [
-                {
-                  "name": "pixel_update",
-                  "type": "pixelaw::core::models::pixel::PixelUpdate"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
               "name": "end_game",
               "inputs": [
                 {
@@ -2966,13 +2383,6 @@
           ]
         },
         {
-          "type": "function",
-          "name": "dojo_init",
-          "inputs": [],
-          "outputs": [],
-          "state_mutability": "view"
-        },
-        {
           "type": "impl",
           "name": "WorldProviderImpl",
           "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
@@ -3064,7 +2474,7 @@
         },
         {
           "type": "event",
-          "name": "p_war::systems::actions::p_war_actions::Event",
+          "name": "pwar::systems::actions::pwar_actions::Event",
           "kind": "enum",
           "variants": [
             {
@@ -3081,457 +2491,21 @@
         }
       ],
       "init_calldata": [],
-      "tag": "p_war-p_war_actions",
-      "selector": "0x386fdc6d6ac46f91810daa12b1e916e9abad5027835f35126b3c4950a94ed99",
+      "tag": "pwar-pwar_actions",
+      "selector": "0x3daa6a1f5dad3f5074b948a3e3a65e5b5f08198629686def58f43acce601a48",
       "systems": [
-        "init",
+        "dojo_init",
         "interact",
         "create_game",
         "create_game_guilds",
         "place_pixel",
-        "update_pixel",
         "end_game",
         "upgrade"
       ]
     },
     {
-      "address": "0x6313aef58aaf53fe10367e1b8dd49fb57c167161692fe317d6af29c17ba3fd1",
-      "class_hash": "0x18ec3243e81f7e5f66eb14e6419e386e005500f808bfb9c76f93b2a9375c3a9",
-      "abi": [
-        {
-          "type": "impl",
-          "name": "propose_actions__ContractImpl",
-          "interface_name": "dojo::contract::interface::IContract"
-        },
-        {
-          "type": "interface",
-          "name": "dojo::contract::interface::IContract",
-          "items": []
-        },
-        {
-          "type": "impl",
-          "name": "propose_actions__DeployedContractImpl",
-          "interface_name": "dojo::meta::interface::IDeployedResource"
-        },
-        {
-          "type": "struct",
-          "name": "core::byte_array::ByteArray",
-          "members": [
-            {
-              "name": "data",
-              "type": "core::array::Array::<core::bytes_31::bytes31>"
-            },
-            {
-              "name": "pending_word",
-              "type": "core::felt252"
-            },
-            {
-              "name": "pending_word_len",
-              "type": "core::integer::u32"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "dojo::meta::interface::IDeployedResource",
-          "items": [
-            {
-              "type": "function",
-              "name": "dojo_name",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::byte_array::ByteArray"
-                }
-              ],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "ProposeImpl",
-          "interface_name": "p_war::systems::propose::IPropose"
-        },
-        {
-          "type": "struct",
-          "name": "pixelaw::core::utils::Position",
-          "members": [
-            {
-              "name": "x",
-              "type": "core::integer::u16"
-            },
-            {
-              "name": "y",
-              "type": "core::integer::u16"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<pixelaw::core::utils::Position>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<pixelaw::core::utils::Position>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "core::array::Span::<core::integer::u32>",
-          "members": [
-            {
-              "name": "snapshot",
-              "type": "@core::array::Array::<core::integer::u32>"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "p_war::models::game::Game",
-          "members": [
-            {
-              "name": "id",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "start",
-              "type": "core::integer::u64"
-            },
-            {
-              "name": "end",
-              "type": "core::integer::u64"
-            },
-            {
-              "name": "proposal_idx",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "coeff_own_pixels",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "coeff_commits",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "winner_config",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "winner",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "guild_ids",
-              "type": "core::array::Span::<core::integer::u32>"
-            },
-            {
-              "name": "guild_count",
-              "type": "core::integer::u32"
-            }
-          ]
-        },
-        {
-          "type": "enum",
-          "name": "core::bool",
-          "variants": [
-            {
-              "name": "False",
-              "type": "()"
-            },
-            {
-              "name": "True",
-              "type": "()"
-            }
-          ]
-        },
-        {
-          "type": "struct",
-          "name": "p_war::models::proposal::Proposal",
-          "members": [
-            {
-              "name": "game_id",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "index",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "author",
-              "type": "core::starknet::contract_address::ContractAddress"
-            },
-            {
-              "name": "proposal_type",
-              "type": "core::integer::u8"
-            },
-            {
-              "name": "target_args_1",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "target_args_2",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "start",
-              "type": "core::integer::u64"
-            },
-            {
-              "name": "end",
-              "type": "core::integer::u64"
-            },
-            {
-              "name": "yes_voting_power",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "no_voting_power",
-              "type": "core::integer::u32"
-            },
-            {
-              "name": "is_activated",
-              "type": "core::bool"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "p_war::systems::propose::IPropose",
-          "items": [
-            {
-              "type": "function",
-              "name": "create_proposal",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "proposal_type",
-                  "type": "core::integer::u8"
-                },
-                {
-                  "name": "target_args_1",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "target_args_2",
-                  "type": "core::integer::u32"
-                }
-              ],
-              "outputs": [
-                {
-                  "type": "core::integer::u32"
-                }
-              ],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "activate_proposal",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "index",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "clear_data",
-                  "type": "core::array::Span::<pixelaw::core::utils::Position>"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "add_new_color",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "index",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "game",
-                  "type": "p_war::models::game::Game"
-                },
-                {
-                  "name": "proposal",
-                  "type": "p_war::models::proposal::Proposal"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            },
-            {
-              "type": "function",
-              "name": "reset_to_white",
-              "inputs": [
-                {
-                  "name": "game_id",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "index",
-                  "type": "core::integer::u32"
-                },
-                {
-                  "name": "game",
-                  "type": "p_war::models::game::Game"
-                },
-                {
-                  "name": "proposal",
-                  "type": "p_war::models::proposal::Proposal"
-                },
-                {
-                  "name": "clear_data",
-                  "type": "core::array::Span::<pixelaw::core::utils::Position>"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "function",
-          "name": "dojo_init",
-          "inputs": [],
-          "outputs": [],
-          "state_mutability": "view"
-        },
-        {
-          "type": "impl",
-          "name": "WorldProviderImpl",
-          "interface_name": "dojo::contract::components::world_provider::IWorldProvider"
-        },
-        {
-          "type": "struct",
-          "name": "dojo::world::iworld::IWorldDispatcher",
-          "members": [
-            {
-              "name": "contract_address",
-              "type": "core::starknet::contract_address::ContractAddress"
-            }
-          ]
-        },
-        {
-          "type": "interface",
-          "name": "dojo::contract::components::world_provider::IWorldProvider",
-          "items": [
-            {
-              "type": "function",
-              "name": "world_dispatcher",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "dojo::world::iworld::IWorldDispatcher"
-                }
-              ],
-              "state_mutability": "view"
-            }
-          ]
-        },
-        {
-          "type": "impl",
-          "name": "UpgradeableImpl",
-          "interface_name": "dojo::contract::components::upgradeable::IUpgradeable"
-        },
-        {
-          "type": "interface",
-          "name": "dojo::contract::components::upgradeable::IUpgradeable",
-          "items": [
-            {
-              "type": "function",
-              "name": "upgrade",
-              "inputs": [
-                {
-                  "name": "new_class_hash",
-                  "type": "core::starknet::class_hash::ClassHash"
-                }
-              ],
-              "outputs": [],
-              "state_mutability": "external"
-            }
-          ]
-        },
-        {
-          "type": "constructor",
-          "name": "constructor",
-          "inputs": []
-        },
-        {
-          "type": "event",
-          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
-          "kind": "struct",
-          "members": [
-            {
-              "name": "class_hash",
-              "type": "core::starknet::class_hash::ClassHash",
-              "kind": "data"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
-          "kind": "enum",
-          "variants": [
-            {
-              "name": "Upgraded",
-              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Upgraded",
-              "kind": "nested"
-            }
-          ]
-        },
-        {
-          "type": "event",
-          "name": "dojo::contract::components::world_provider::world_provider_cpt::Event",
-          "kind": "enum",
-          "variants": []
-        },
-        {
-          "type": "event",
-          "name": "p_war::systems::propose::propose_actions::Event",
-          "kind": "enum",
-          "variants": [
-            {
-              "name": "UpgradeableEvent",
-              "type": "dojo::contract::components::upgradeable::upgradeable_cpt::Event",
-              "kind": "nested"
-            },
-            {
-              "name": "WorldProviderEvent",
-              "type": "dojo::contract::components::world_provider::world_provider_cpt::Event",
-              "kind": "nested"
-            }
-          ]
-        }
-      ],
-      "init_calldata": [],
-      "tag": "p_war-propose_actions",
-      "selector": "0x5f7a960aa6f278cc9d575d01a7832f32c10a05356e7bfed4a2d70701e561583",
-      "systems": [
-        "create_proposal",
-        "activate_proposal",
-        "add_new_color",
-        "reset_to_white",
-        "upgrade"
-      ]
-    },
-    {
-      "address": "0x48b80202712169439d21f954a694827eeb35f33641f1bb04bce607a66cbe89",
-      "class_hash": "0x1b824bc299e36f833652d5f28136be1d8baab919158b7f57207ea0f9c6bc33f",
+      "address": "0x379ac4b00a0ad23a102ea64d2686123300ef515605d0cea7df79405f4555ba",
+      "class_hash": "0x336f77928b73a5f532bfa6975c71a11395ea86d2e8a9ea2e9c571efb15f8f4c",
       "abi": [
         {
           "type": "impl",
@@ -3586,7 +2560,7 @@
         {
           "type": "impl",
           "name": "VotingImpl",
-          "interface_name": "p_war::systems::voting::IVoting"
+          "interface_name": "pwar::systems::voting::IVoting"
         },
         {
           "type": "enum",
@@ -3604,7 +2578,7 @@
         },
         {
           "type": "interface",
-          "name": "p_war::systems::voting::IVoting",
+          "name": "pwar::systems::voting::IVoting",
           "items": [
             {
               "type": "function",
@@ -3731,7 +2705,7 @@
         },
         {
           "type": "event",
-          "name": "p_war::systems::voting::voting_actions::Event",
+          "name": "pwar::systems::voting::voting_actions::Event",
           "kind": "enum",
           "variants": [
             {
@@ -3748,8 +2722,8 @@
         }
       ],
       "init_calldata": [],
-      "tag": "p_war-voting_actions",
-      "selector": "0x346d11d3e74683676b1ea1f5b985192ac36ed677b0b01bc8c5cc975eb920460",
+      "tag": "pwar-voting_actions",
+      "selector": "0x62e6ca68a564d25337ca245b38054c9b249d3a9d3d7bb0d97a6a817e473383a",
       "systems": [
         "vote",
         "upgrade"
@@ -3760,197 +2734,137 @@
   "models": [
     {
       "members": [],
-      "class_hash": "0x423e605cafdcebc820f8f5645dfafc447eba70bc3f7e9918266ab73d57712d0",
-      "tag": "p_war-AllowedApp",
-      "selector": "0x24c44da87007d7e5ddba30435a344c4296937b3e49ba3f1dab26998bc977c1b"
+      "class_hash": "0x4dfb0a2a788b5f3c2dc063fe010509977ed6116293f5d5767f11addf4c8d7d0",
+      "tag": "pwar-AllowedColor",
+      "selector": "0x58a38d0fade38ada8b7b4ea1ad3f72e83937b1d67a3db259cabf89da916c113"
     },
     {
       "members": [],
-      "class_hash": "0xfa8547b0979f4ad4eba25343ef31c40d94627eaaabcc49cf33d325636ab886",
-      "tag": "p_war-AllowedColor",
-      "selector": "0x5520152b0978c0c76d1cb39e3a23ebedc3fc1cac2b0ec48c2f0164de62ff394"
+      "class_hash": "0x15f0be77cb173b3ebf11b7f99d98db882842f3b046512bea6a43e9ef1b9792d",
+      "tag": "pwar-Board",
+      "selector": "0x4e3da83a446904f6e1ab085d8b84a1ad8d361ccc19820f30833510912cd483e"
     },
     {
       "members": [],
-      "class_hash": "0x3277207fce5103f94e14d6a4ff3bff9c2167d84c4d8cee75e4c5d7c4240589c",
-      "tag": "p_war-App",
-      "selector": "0x47de031d5f59200c9c7b04f93cec782f351bcfbee4bd6b9497d1d0fddf5ba7e"
+      "class_hash": "0x4213414bf4290cdc7ff148eb823c82c399aea9a3c2ad051401ff252d642107f",
+      "tag": "pwar-Dummy",
+      "selector": "0x2962b188b8dc153cae1540d8ab6cb21672a46f9ab8651d7c912039d6fefab7f"
     },
     {
       "members": [],
-      "class_hash": "0x7afa370c6115105b8e50bfbea180c34f19d9815c53788bb8b5159fffdadbd69",
-      "tag": "p_war-AppName",
-      "selector": "0x55e803bc532c319a920c31267510f5fdfa6431bbc4e0432fa8f4073d996ee40"
+      "class_hash": "0x7163867e4bb835b278563ca9678a6998a54434f2b0e3613563698485f021b11",
+      "tag": "pwar-Game",
+      "selector": "0x46592e702ad6bb2731ed3e08a0de4b6923b9855554afa10f6b671ab9ceef2cf"
     },
     {
       "members": [],
-      "class_hash": "0x32f32c05a337949bf091c11221b8d629e30e7f3e9de7baf8e367bb651ac7485",
-      "tag": "p_war-Area",
-      "selector": "0x19b86f5e8e9198414125643c74e58c79a863e4010eef19df7263bef8a60f228"
+      "class_hash": "0x2372801f439ba79fc4718fbef9151a3bdc42e7cf536895bb98ee6a9bcee206b",
+      "tag": "pwar-GameId",
+      "selector": "0x543171bbc3c21261062cff1a10a96d431dff91bf380fb435b232915330d79d4"
     },
     {
       "members": [],
-      "class_hash": "0x30b6839e92f62e3886ae97119901bbd153f32fff27205a6797ab303a86a87a0",
-      "tag": "p_war-Board",
-      "selector": "0x1f5d3e04352f0283dd848120e3c8146498d70a3cf08d115ceab9ddba114fc7c"
+      "class_hash": "0xd86a845da34231fc07ad413799468c5744065c498d2ec96ecec2d16069d67c",
+      "tag": "pwar-GamePalette",
+      "selector": "0x708516af73e5ea91aabf8799d1678d91e64020fec55b52b41af2901eb6b4573"
     },
     {
       "members": [],
-      "class_hash": "0x5e84ac0ba7ad9f83bcd5a9623562b22170daa59f96ff2c7d941274364ac2763",
-      "tag": "p_war-CoreActionsAddress",
-      "selector": "0x30d1e3efaf806af0a7b10bb8bf98d545aa8dcb636325d85dbde74441cabf3d3"
+      "class_hash": "0x391f1b7279760c475dca76685d494df036ac058f559de44628e67bad2b4b000",
+      "tag": "pwar-Guild",
+      "selector": "0x141db48785b7b1b2d5b9454b58d87366cff6b3ce0afe8fbb0126d0bce96685f"
     },
     {
       "members": [],
-      "class_hash": "0x39e50141cbf5917855043d556ca7df6f6cf6ccbb4b78190c34ed0632854958b",
-      "tag": "p_war-Dummy",
-      "selector": "0x5167094bdb505ce4fdd1f941d7875554f94197ca1be0cb7e534e77c80ded21e"
+      "class_hash": "0x4baf2dd687271bf0ab1d2ab0cee24f9a313223d29120d8c72e5469ff78ac602",
+      "tag": "pwar-InPalette",
+      "selector": "0x35818e4ff6e9ba38342d5b79616d83fc230db430718620754e5cf5bf1d197a7"
     },
     {
       "members": [],
-      "class_hash": "0x65cf4eb485fa604f8b870245ee294a6d84e184faddaa080d1305378f2aaf3f6",
-      "tag": "p_war-Game",
-      "selector": "0x2f439249064bca5221700d011bb4b2b8163fe152f960a5e9a8418622b2d49b0"
+      "class_hash": "0x7f0b660016ca2f9273ed67eb0c47f8deb927abb9b92c2a416d611e2990d1602",
+      "tag": "pwar-PWarPixel",
+      "selector": "0x4bb33c5d3d85c135e0d7674f328cdf38a2a45379605e2ddc72a95003a3f50cc"
     },
     {
       "members": [],
-      "class_hash": "0x5339ede456007a59cc5761de7ff5085c872fa7636e017333e028b842c004e42",
-      "tag": "p_war-GameId",
-      "selector": "0x5b7763433d1f2ff36e03b56fad54f2ca8628eb87e8060fa6502a0519958433e"
+      "class_hash": "0x622ebb072edbe2e38756affe7d74ed5c2b04996d509b712f499bcbebd33af69",
+      "tag": "pwar-PaletteColors",
+      "selector": "0x9d4e9107b255cc8990e2e459e784ebd2286530ae3cd4483aff5cd9efc7a316"
     },
     {
       "members": [],
-      "class_hash": "0x503688f0dcfade0c9d2fe61760b6463a5f5924233a4416c5e742117bd9e1a19",
-      "tag": "p_war-GamePalette",
-      "selector": "0x71e91cdbe22c2bde22cac40da33028857d64dc54d3aa59047d55afbcaf0c361"
+      "class_hash": "0x16df6bd15cfcef3fe7e0bcb88641050bd951513d086aac97713661cc77a5110",
+      "tag": "pwar-PixelRecoveryRate",
+      "selector": "0x7643b1ef53792ea2a31f74047117109eefb2c758d6fe327ba6055514e0f84c0"
     },
     {
       "members": [],
-      "class_hash": "0x64fe758d9600a58b090f6d7ac2411df817a0664d6d5fead21c4a63eb4170dfd",
-      "tag": "p_war-Guild",
-      "selector": "0x48b7dd3863c574a6506b254b4533005c295e6a55c14eaaef2c01f7a8ddf1b0"
+      "class_hash": "0x75b89858b54220de72b56797e050e7bde6101090c256a90359a8c2b47607a92",
+      "tag": "pwar-Player",
+      "selector": "0x631b0584b81d509f326cb0fb45670acda594c91ece205cbff98af9fddbaa6b"
     },
     {
       "members": [],
-      "class_hash": "0x22ebf2681241ef00b9025c09295cde34a97d203f9d04b6907185b58168ae57d",
-      "tag": "p_war-InPalette",
-      "selector": "0x595373238c6856488ccac73560860adb7b99bcae8f508476b06da609ecefc0d"
+      "class_hash": "0x36bd3de214365832fae8f55607d265a94421670717bcdd290db2e4a8e5a16a3",
+      "tag": "pwar-PlayerVote",
+      "selector": "0x66568da1d9e588c2bddd14462c8b9d1ec593f155e87e04f66af56c3e0bac43c"
     },
     {
       "members": [],
-      "class_hash": "0x1048e1116b12374c5f02b02742a98a5b723d4fd60c586ee7774b01fc80ca887",
-      "tag": "p_war-PWarPixel",
-      "selector": "0x78c9c0ceddaf61af54b0bf9c8f85d8abdeafa54db374022604a4ccc68081123"
-    },
-    {
-      "members": [],
-      "class_hash": "0x45b749cb3c2477ef416a533fed3f64c7372115722a26c1d210b25a60dccf36e",
-      "tag": "p_war-PaletteColors",
-      "selector": "0x6eeea3eba46705c4886f109fef4bae971d7ee2e974ad518bc8c7b00efdbc1d6"
-    },
-    {
-      "members": [],
-      "class_hash": "0x758a60dcbbda6e92d82a7925437569a68fdf6fa18edb77e6a8e415105f70125",
-      "tag": "p_war-Pixel",
-      "selector": "0x4974fb435220fdae657329e6934401b2e7ac716f252bb3ffb4d880dca2937ea"
-    },
-    {
-      "members": [],
-      "class_hash": "0x106b53a8619bde83e1ac4039023881762978447ec50da531cfa92cac0776ce2",
-      "tag": "p_war-PixelRecoveryRate",
-      "selector": "0x321eed807285c99cb799dd5f9330f4a0a273dc7643f0cdce71792bc11a3e64"
-    },
-    {
-      "members": [],
-      "class_hash": "0x329c3da995072ef4a0e83c366fd51e91bebce0602d8dd5a9a0bd67ffffafdc3",
-      "tag": "p_war-Player",
-      "selector": "0x2d334816f8b0196ba2404794e0bbc78a982dea84e82eaf39e1abcf10e15e7af"
-    },
-    {
-      "members": [],
-      "class_hash": "0x6f8b50e57c149d8670cdf26b19adcdfd84c000d6fcb564cfe07d9c9e7a86152",
-      "tag": "p_war-PlayerVote",
-      "selector": "0x15f95c6cdb848bc38c7eaf9b6404f68ea8aa6478d363fcc0e0f40516057d25c"
-    },
-    {
-      "members": [],
-      "class_hash": "0xbb2c658b9e1fd1c0ba8920c408caf7e2aa4db58d03023e09be32c889343a66",
-      "tag": "p_war-Proposal",
-      "selector": "0x61d35f2d26dad619a3f5f1e6c36fe98bc6e2556dcda13ae9dd0d715c2e17f4f"
-    },
-    {
-      "members": [],
-      "class_hash": "0x57bb10e6c057ac469ce11f1770286ed9f4737e4460679777842a2ea49c72fbc",
-      "tag": "p_war-QueueItem",
-      "selector": "0x23311c9635a725e77b130e9272595ea13c1747a10313fe5ca5a3fd8f96b5fbf"
-    },
-    {
-      "members": [],
-      "class_hash": "0x5cf7901005db5b4088cceca22e648d1f4c6d350b73651f4a437d1c4f532367b",
-      "tag": "p_war-RTree",
-      "selector": "0x85c55cda1cdc80e0690ba3e8978aa9ef145ffebf149f3aa61b552ab95d9e7e"
+      "class_hash": "0x77eb36b0f722109a3c9953fe44b677be1ca6daf3953d76f39fb49ca22f8da5",
+      "tag": "pwar-Proposal",
+      "selector": "0x5d86acb7206f393e6675d53560320dcaae768cfdfde5c04afe1892cb1cf53b5"
     }
   ],
   "events": [
     {
       "members": [],
-      "class_hash": "0x16ec6175a9b597b0c3ac5b70f8a41f7d54e0d291f4fa93e0e436cfead9a8aa7",
-      "tag": "p_war-Alert",
-      "selector": "0x77fb61101ea7e6f84df47e2c22e4af3f2b69fdb12606746a063f3e5fd5eb5cf"
+      "class_hash": "0x9d46cb4e4f85bb7ccce3c1f892660a38e9d5931e7d7ac3fd7d12b8a2150a37",
+      "tag": "pwar-EndedGame",
+      "selector": "0x783100ea5deaebbb21ec5ceac9c06020b3a405f6eaebd35c3a4679b4052fe69"
     },
     {
       "members": [],
-      "class_hash": "0x45a2d3816647b1fdbc8dd1808753595ae1eeae172db756391d41289aba8c3a6",
-      "tag": "p_war-EndedGame",
-      "selector": "0x24dbf8c208d84f64e9ff343f2d5e8c55d17e320506e85a2f6c57bff0246607"
+      "class_hash": "0x6729f7ecd0b579383562358346e5b8ebd1c1ddb9aed204b980a8b7e80cb8ffb",
+      "tag": "pwar-GuildCreated",
+      "selector": "0x4a60caf23cdcc73f43ca89900e0aaa5772ccb442b380e85cb7d1949c5fa04be"
     },
     {
       "members": [],
-      "class_hash": "0x211f4e713a3af2940365396d3f83cfde36e990ee14d693e5426eb86656ff97b",
-      "tag": "p_war-GuildCreated",
-      "selector": "0x5ff13353b9e99044fa57b4cc5271f2a9eec32cbaca1796152f43b4f6761b54f"
+      "class_hash": "0x4a937b3b08be900b7730ff5e7d6984fa97dc06ff0a22a3a9d846bfceaddd686",
+      "tag": "pwar-MemberAdded",
+      "selector": "0x48d28bde10f0fff86325dd577e55fc08a477b03dbe72ab0f5969ab06e9b608b"
     },
     {
       "members": [],
-      "class_hash": "0x791ed74618ebc870dd468353dd8d3bee3a7398de67f0e3bd03c2e42269fc73e",
-      "tag": "p_war-MemberAdded",
-      "selector": "0x54a885b1bb6b6ef8fea6d057029c71b7f80c415c51c11049f86e5697ed90292"
+      "class_hash": "0x36ab6d8e708a555c8cc74c5ad3abbbcfecf681d7442553d61cc9f1dc5792073",
+      "tag": "pwar-MemberRemoved",
+      "selector": "0x2c75a32891e878002edc63f1136f84a9620173a77bee76d592358d3ed3241fb"
     },
     {
       "members": [],
-      "class_hash": "0x3df1c5fa486593faf1ee0ab917a8ab4623c8a3b7b0741833b31812a8dbff2c",
-      "tag": "p_war-MemberRemoved",
-      "selector": "0x3469f9971d508b567c106b36b1cc4f39a9c490c5162104dd01f2a0d58122572"
+      "class_hash": "0x73117a8818d3ff9b4f2a265fee43bf5e3954a2999b554f79860fcd430b3ea77",
+      "tag": "pwar-ProposalActivated",
+      "selector": "0x326c5fc197c47864260c462db88b3762de1746327e4f89be10fc53cae32af0"
     },
     {
       "members": [],
-      "class_hash": "0x167ba94e99adfa8a2624bbfbb266e4386bff9b7be4081ef82ddbc07a53518f3",
-      "tag": "p_war-ProposalActivated",
-      "selector": "0x67e54ab4a55e99a7d9b1e83e96ce2aac29a14ba607de70a46fcbd98aded54ec"
+      "class_hash": "0x19796988ddd268a7342efff84c1880be1fd32ff8d9d836f478d72e1219e11f6",
+      "tag": "pwar-ProposalCreated",
+      "selector": "0x460d31839213fdac40fd33efcd4c2ff242ddf8f100114c04b1617cfbc468fc2"
     },
     {
       "members": [],
-      "class_hash": "0x34de11f71220666c87e5671eec05d3ff0297b81bf0fd031ea63db408576650a",
-      "tag": "p_war-ProposalCreated",
-      "selector": "0x2e3ccd2cfa06f11ce5e606a3887ad5c0f8ccc44374c77435b9c4bd38c04c9c7"
+      "class_hash": "0xa4c2cf0a928a57230c3314f3367ca9dc0a3baac9f0ba0bfa62c080ca163b29",
+      "tag": "pwar-StartedGame",
+      "selector": "0x295cb760391553c019feacaaf6e248877c3ec968c5beff6d4395e5062a9ca0b"
     },
     {
       "members": [],
-      "class_hash": "0x1c581acd62b7983967827adb6d5578d12c515544f6eee1a5044336525baeb09",
-      "tag": "p_war-QueueScheduled",
-      "selector": "0x5d93507a88860ffaa48952f5aa5669abc159f353ba9135693f7c99961ca3369"
-    },
-    {
-      "members": [],
-      "class_hash": "0x439a9d0ae0853991ecbd6b4fc2c725f040c922962d2cd1f94518e1831f0c974",
-      "tag": "p_war-StartedGame",
-      "selector": "0x15e616b9a625c7825e4a5d9e5fd1d4743822c85dd2381ab5f40cbfccad9902e"
-    },
-    {
-      "members": [],
-      "class_hash": "0x79097a1b85f0d04bcac13625d5a20400651fafb91fe1fcd3a7bed3d89416164",
-      "tag": "p_war-Voted",
-      "selector": "0x2c917f12b4b0002752d7fb61fa0c24dfaaf3e0f1be5b62f9ee52a5009961eb1"
+      "class_hash": "0x7aa72f74edc5385d7201471860abd565a0d4ca3a3c1daf7ff98cd84a0ceae0d",
+      "tag": "pwar-Voted",
+      "selector": "0x453c6d68c4f80ccaf9b772f8a86149d09fd156dbf0af86fbf9dd28e8b3eb22d"
     }
   ],
   "external_contracts": []
