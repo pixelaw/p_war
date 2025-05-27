@@ -43,10 +43,9 @@ pub mod propose_actions {
         IActionsDispatcherTrait as ICoreActionsDispatcherTrait
     };
     use pixelaw::core::models::{pixel::PixelUpdate, pixel::Pixel};
-    use pixelaw::core::utils::{get_core_actions, Position, get_callers};
+    use pixelaw::core::utils::{get_core_actions, Position};
     use starknet::{
         get_caller_address, 
-        get_tx_info,
         get_block_timestamp
     };
     use super::IPropose;
@@ -88,7 +87,8 @@ pub mod propose_actions {
             let mut game: Game = app_world.read_model(game_id);
             // println!("game status: {}", game.status());
             assert(check_game_status(game.status()), 'game is not ongoing: propose1');
-            let player_address = get_tx_info().unbox().account_contract_address;
+            // let player_address = get_tx_info().unbox().account_contract_address;
+            let player_address = get_caller_address();
 
             // if this is first time for the caller, let's set initial px.
             let mut player: Player = app_world.read_model(player_address);
