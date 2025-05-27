@@ -1,6 +1,7 @@
 use pwar::systems::guilds::{IGuildDispatcher};
 use pixelaw::core::utils::{DefaultParameters, Position};
 use starknet::{ContractAddress};
+use pwar::models::game::Game;
 
 // define the interface
 #[starknet::interface]
@@ -11,6 +12,7 @@ pub trait IActions<T> {
         ref self: T, game_id: u32, guild_dispatcher: IGuildDispatcher
     ) -> Array<u32>;
     fn get_game_id(self: @T, position: Position) -> u32;
+    fn get_game(self: @T, id: u32) -> Game;
     fn place_pixel(ref self: T, app: ContractAddress, default_params: DefaultParameters);
     fn end_game(ref self: T, game_id: u32);
 }
@@ -82,15 +84,15 @@ pub mod pwar_actions {
         }
 
         fn get_game_id(self: @ContractState, position: Position) -> u32 {
-            let mut world = self.world(@"pwar");
+            let mut app_world = self.world(@"pwar");
 
-            let mut id = world.dispatcher.uuid();
+            let mut id = app_world.dispatcher.uuid();
             if id == 0 {
                 return 0;
             }
 
             // set id as GAME_ID=1
-            let board: Board = world.read_model(GAME_ID);
+            let board: Board = app_world.read_model(GAME_ID);
 
             if position.x < board.origin.x || position.x >= board.origin.x
                 + (board.width.try_into().unwrap())
@@ -102,9 +104,15 @@ pub mod pwar_actions {
             return 1;
         }
 
+        fn get_game(self: @ContractState, id: u32) -> Game {
+            let mut app_world = self.world(@"pwar");
+            let game: Game = app_world.read_model((id));
+            game
+        }
+
         fn create_game(ref self: ContractState, origin: Position) -> u32 {
             let mut app_world = self.world(@"pwar");
-            println!("create_game BEGIN");
+            println!("create_game function called at x:{} and y:{}", origin.x, origin.y);
 
             let mut id = GAME_ID;
 
@@ -127,7 +135,6 @@ pub mod pwar_actions {
 
             app_world.write_model(@board); //not sure
             app_world.write_model(@game);
-            println!("create_game 1");
 
             // add default colors (changed these to RGBA)
             let mut color_idx = 0;
@@ -159,7 +166,6 @@ pub mod pwar_actions {
                 color_idx += 1;
             };
 
-            println!("create_game 2");
             // set default recovery_rate
             let pixel_recovery_rate = PixelRecoveryRate {
                 game_id: id, rate: DEFAULT_RECOVERY_RATE
@@ -167,8 +173,6 @@ pub mod pwar_actions {
             let game_palette = GamePalette { game_id: id, length: 9 };
             app_world.write_model(@pixel_recovery_rate);
             app_world.write_model(@game_palette);
-
-            println!("create_game 2.1");
 
             id
             // emit event that game has started
