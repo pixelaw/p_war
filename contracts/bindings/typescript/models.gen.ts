@@ -2,219 +2,6 @@ import type { SchemaType as ISchemaType } from "@dojoengine/sdk";
 
 import { CairoOption, CairoOptionVariant, BigNumberish } from 'starknet';
 
-// Type definition for `p_war::models::allowed_app::AllowedApp` struct
-export interface AllowedApp {
-	game_id: BigNumberish;
-	contract: string;
-	is_allowed: boolean;
-}
-
-// Type definition for `p_war::models::allowed_app::AllowedAppValue` struct
-export interface AllowedAppValue {
-	is_allowed: boolean;
-}
-
-// Type definition for `p_war::models::allowed_color::AllowedColor` struct
-export interface AllowedColor {
-	game_id: BigNumberish;
-	color: BigNumberish;
-	is_allowed: boolean;
-}
-
-// Type definition for `p_war::models::allowed_color::AllowedColorValue` struct
-export interface AllowedColorValue {
-	is_allowed: boolean;
-}
-
-// Type definition for `p_war::models::allowed_color::GamePalette` struct
-export interface GamePalette {
-	game_id: BigNumberish;
-	length: BigNumberish;
-}
-
-// Type definition for `p_war::models::allowed_color::GamePaletteValue` struct
-export interface GamePaletteValue {
-	length: BigNumberish;
-}
-
-// Type definition for `p_war::models::allowed_color::InPalette` struct
-export interface InPalette {
-	game_id: BigNumberish;
-	color: BigNumberish;
-	value: boolean;
-}
-
-// Type definition for `p_war::models::allowed_color::InPaletteValue` struct
-export interface InPaletteValue {
-	value: boolean;
-}
-
-// Type definition for `p_war::models::allowed_color::PaletteColors` struct
-export interface PaletteColors {
-	game_id: BigNumberish;
-	idx: BigNumberish;
-	color: BigNumberish;
-}
-
-// Type definition for `p_war::models::allowed_color::PaletteColorsValue` struct
-export interface PaletteColorsValue {
-	color: BigNumberish;
-}
-
-// Type definition for `p_war::models::board::Board` struct
-export interface Board {
-	id: BigNumberish;
-	origin: Position;
-	width: BigNumberish;
-	height: BigNumberish;
-}
-
-// Type definition for `p_war::models::board::BoardValue` struct
-export interface BoardValue {
-	origin: Position;
-	width: BigNumberish;
-	height: BigNumberish;
-}
-
-// Type definition for `p_war::models::board::GameId` struct
-export interface GameId {
-	x: BigNumberish;
-	y: BigNumberish;
-	value: BigNumberish;
-}
-
-// Type definition for `p_war::models::board::GameIdValue` struct
-export interface GameIdValue {
-	value: BigNumberish;
-}
-
-// Type definition for `p_war::models::board::PWarPixel` struct
-export interface PWarPixel {
-	position: Position;
-	owner: string;
-}
-
-// Type definition for `p_war::models::board::PWarPixelValue` struct
-export interface PWarPixelValue {
-	owner: string;
-}
-
-// Type definition for `p_war::models::game::Game` struct
-export interface Game {
-	id: BigNumberish;
-	start: BigNumberish;
-	end: BigNumberish;
-	proposal_idx: BigNumberish;
-	coeff_own_pixels: BigNumberish;
-	coeff_commits: BigNumberish;
-	winner_config: BigNumberish;
-	winner: string;
-	guild_ids: Array<BigNumberish>;
-	guild_count: BigNumberish;
-}
-
-// Type definition for `p_war::models::game::GameValue` struct
-export interface GameValue {
-	start: BigNumberish;
-	end: BigNumberish;
-	proposal_idx: BigNumberish;
-	coeff_own_pixels: BigNumberish;
-	coeff_commits: BigNumberish;
-	winner_config: BigNumberish;
-	winner: string;
-	guild_ids: Array<BigNumberish>;
-	guild_count: BigNumberish;
-}
-
-// Type definition for `p_war::models::guilds::Guild` struct
-export interface Guild {
-	game_id: BigNumberish;
-	guild_id: BigNumberish;
-	guild_name: BigNumberish;
-	creator: string;
-	members: Array<string>;
-	member_count: BigNumberish;
-}
-
-// Type definition for `p_war::models::guilds::GuildValue` struct
-export interface GuildValue {
-	guild_name: BigNumberish;
-	creator: string;
-	members: Array<string>;
-	member_count: BigNumberish;
-}
-
-// Type definition for `p_war::models::player::Player` struct
-export interface Player {
-	address: string;
-	num_owns: BigNumberish;
-	num_commit: BigNumberish;
-	last_date: BigNumberish;
-	is_banned: boolean;
-}
-
-// Type definition for `p_war::models::player::PlayerValue` struct
-export interface PlayerValue {
-	num_owns: BigNumberish;
-	num_commit: BigNumberish;
-	last_date: BigNumberish;
-	is_banned: boolean;
-}
-
-// Type definition for `p_war::models::proposal::PixelRecoveryRate` struct
-export interface PixelRecoveryRate {
-	game_id: BigNumberish;
-	rate: BigNumberish;
-}
-
-// Type definition for `p_war::models::proposal::PixelRecoveryRateValue` struct
-export interface PixelRecoveryRateValue {
-	rate: BigNumberish;
-}
-
-// Type definition for `p_war::models::proposal::PlayerVote` struct
-export interface PlayerVote {
-	player: string;
-	game_id: BigNumberish;
-	index: BigNumberish;
-	is_in_favor: boolean;
-	voting_power: BigNumberish;
-}
-
-// Type definition for `p_war::models::proposal::PlayerVoteValue` struct
-export interface PlayerVoteValue {
-	is_in_favor: boolean;
-	voting_power: BigNumberish;
-}
-
-// Type definition for `p_war::models::proposal::Proposal` struct
-export interface Proposal {
-	game_id: BigNumberish;
-	index: BigNumberish;
-	author: string;
-	proposal_type: BigNumberish;
-	target_args_1: BigNumberish;
-	target_args_2: BigNumberish;
-	start: BigNumberish;
-	end: BigNumberish;
-	yes_voting_power: BigNumberish;
-	no_voting_power: BigNumberish;
-	is_activated: boolean;
-}
-
-// Type definition for `p_war::models::proposal::ProposalValue` struct
-export interface ProposalValue {
-	author: string;
-	proposal_type: BigNumberish;
-	target_args_1: BigNumberish;
-	target_args_2: BigNumberish;
-	start: BigNumberish;
-	end: BigNumberish;
-	yes_voting_power: BigNumberish;
-	no_voting_power: BigNumberish;
-	is_activated: boolean;
-}
-
 // Type definition for `pixelaw::core::models::area::Area` struct
 export interface Area {
 	id: BigNumberish;
@@ -247,6 +34,7 @@ export interface Dummy {
 	defaultParams: DefaultParameters;
 	bounds: Bounds;
 	pixelUpdate: PixelUpdate;
+	emoji: Emoji;
 }
 
 // Type definition for `pixelaw::core::models::dummy::DummyValue` struct
@@ -254,12 +42,12 @@ export interface DummyValue {
 	defaultParams: DefaultParameters;
 	bounds: Bounds;
 	pixelUpdate: PixelUpdate;
+	emoji: Emoji;
 }
 
 // Type definition for `pixelaw::core::models::pixel::Pixel` struct
 export interface Pixel {
-	x: BigNumberish;
-	y: BigNumberish;
+	position: Position;
 	app: string;
 	color: BigNumberish;
 	created_at: BigNumberish;
@@ -272,8 +60,7 @@ export interface Pixel {
 
 // Type definition for `pixelaw::core::models::pixel::PixelUpdate` struct
 export interface PixelUpdate {
-	x: BigNumberish;
-	y: BigNumberish;
+	position: Position;
 	color: CairoOption<BigNumberish>;
 	owner: CairoOption<string>;
 	app: CairoOption<string>;
@@ -359,143 +146,216 @@ export interface DefaultParameters {
 	color: BigNumberish;
 }
 
+// Type definition for `pixelaw::core::utils::Emoji` struct
+export interface Emoji {
+	value: BigNumberish;
+}
+
 // Type definition for `pixelaw::core::utils::Position` struct
 export interface Position {
 	x: BigNumberish;
 	y: BigNumberish;
 }
 
-// Type definition for `p_war::systems::actions::p_war_actions::EndedGame` struct
-export interface EndedGame {
+// Type definition for `pwar::models::allowed_color::AllowedColor` struct
+export interface AllowedColor {
+	game_id: BigNumberish;
+	color: BigNumberish;
+	is_allowed: boolean;
+}
+
+// Type definition for `pwar::models::allowed_color::AllowedColorValue` struct
+export interface AllowedColorValue {
+	is_allowed: boolean;
+}
+
+// Type definition for `pwar::models::allowed_color::GamePalette` struct
+export interface GamePalette {
+	game_id: BigNumberish;
+	length: BigNumberish;
+}
+
+// Type definition for `pwar::models::allowed_color::GamePaletteValue` struct
+export interface GamePaletteValue {
+	length: BigNumberish;
+}
+
+// Type definition for `pwar::models::allowed_color::InPalette` struct
+export interface InPalette {
+	game_id: BigNumberish;
+	color: BigNumberish;
+	value: boolean;
+}
+
+// Type definition for `pwar::models::allowed_color::InPaletteValue` struct
+export interface InPaletteValue {
+	value: boolean;
+}
+
+// Type definition for `pwar::models::allowed_color::PaletteColors` struct
+export interface PaletteColors {
+	game_id: BigNumberish;
+	idx: BigNumberish;
+	color: BigNumberish;
+}
+
+// Type definition for `pwar::models::allowed_color::PaletteColorsValue` struct
+export interface PaletteColorsValue {
+	color: BigNumberish;
+}
+
+// Type definition for `pwar::models::board::Board` struct
+export interface Board {
 	id: BigNumberish;
-	timestamp: BigNumberish;
+	origin: Position;
+	width: BigNumberish;
+	height: BigNumberish;
 }
 
-// Type definition for `p_war::systems::actions::p_war_actions::EndedGameValue` struct
-export interface EndedGameValue {
-	timestamp: BigNumberish;
+// Type definition for `pwar::models::board::BoardValue` struct
+export interface BoardValue {
+	origin: Position;
+	width: BigNumberish;
+	height: BigNumberish;
 }
 
-// Type definition for `p_war::systems::actions::p_war_actions::StartedGame` struct
-export interface StartedGame {
-	id: BigNumberish;
-	timestamp: BigNumberish;
-	creator: string;
+// Type definition for `pwar::models::board::GameId` struct
+export interface GameId {
+	x: BigNumberish;
+	y: BigNumberish;
+	value: BigNumberish;
 }
 
-// Type definition for `p_war::systems::actions::p_war_actions::StartedGameValue` struct
-export interface StartedGameValue {
-	timestamp: BigNumberish;
-	creator: string;
+// Type definition for `pwar::models::board::GameIdValue` struct
+export interface GameIdValue {
+	value: BigNumberish;
 }
 
-// Type definition for `p_war::systems::guilds::guild_actions::GuildCreated` struct
-export interface GuildCreated {
-	game_id: BigNumberish;
-	guild_id: BigNumberish;
-	guild_name: BigNumberish;
-	creator: string;
-}
-
-// Type definition for `p_war::systems::guilds::guild_actions::GuildCreatedValue` struct
-export interface GuildCreatedValue {
-	guild_id: BigNumberish;
-	guild_name: BigNumberish;
-	creator: string;
-}
-
-// Type definition for `p_war::systems::guilds::guild_actions::MemberAdded` struct
-export interface MemberAdded {
-	game_id: BigNumberish;
-	guild_id: BigNumberish;
-	member: string;
-}
-
-// Type definition for `p_war::systems::guilds::guild_actions::MemberAddedValue` struct
-export interface MemberAddedValue {
-	guild_id: BigNumberish;
-	member: string;
-}
-
-// Type definition for `p_war::systems::guilds::guild_actions::MemberRemoved` struct
-export interface MemberRemoved {
-	game_id: BigNumberish;
-	guild_id: BigNumberish;
-	member: string;
-}
-
-// Type definition for `p_war::systems::guilds::guild_actions::MemberRemovedValue` struct
-export interface MemberRemovedValue {
-	guild_id: BigNumberish;
-	member: string;
-}
-
-// Type definition for `p_war::systems::propose::propose_actions::ProposalActivated` struct
-export interface ProposalActivated {
-	game_id: BigNumberish;
-	index: BigNumberish;
-	proposal_type: BigNumberish;
-	target_args_1: BigNumberish;
-	target_args_2: BigNumberish;
-}
-
-// Type definition for `p_war::systems::propose::propose_actions::ProposalActivatedValue` struct
-export interface ProposalActivatedValue {
-	index: BigNumberish;
-	proposal_type: BigNumberish;
-	target_args_1: BigNumberish;
-	target_args_2: BigNumberish;
-}
-
-// Type definition for `p_war::systems::propose::propose_actions::ProposalCreated` struct
-export interface ProposalCreated {
-	game_id: BigNumberish;
-	index: BigNumberish;
-	proposal_type: BigNumberish;
-	target_args_1: BigNumberish;
-	target_args_2: BigNumberish;
-}
-
-// Type definition for `p_war::systems::propose::propose_actions::ProposalCreatedValue` struct
-export interface ProposalCreatedValue {
-	index: BigNumberish;
-	proposal_type: BigNumberish;
-	target_args_1: BigNumberish;
-	target_args_2: BigNumberish;
-}
-
-// Type definition for `p_war::systems::voting::voting_actions::Voted` struct
-export interface Voted {
-	game_id: BigNumberish;
-	index: BigNumberish;
-	timestamp: BigNumberish;
-	voter: string;
-	is_in_favor: boolean;
-}
-
-// Type definition for `p_war::systems::voting::voting_actions::VotedValue` struct
-export interface VotedValue {
-	index: BigNumberish;
-	timestamp: BigNumberish;
-	voter: string;
-	is_in_favor: boolean;
-}
-
-// Type definition for `pixelaw::core::events::Alert` struct
-export interface Alert {
+// Type definition for `pwar::models::board::PWarPixel` struct
+export interface PWarPixel {
 	position: Position;
-	caller: string;
-	player: string;
-	message: BigNumberish;
-	timestamp: BigNumberish;
+	owner: string;
 }
 
-// Type definition for `pixelaw::core::events::AlertValue` struct
-export interface AlertValue {
-	caller: string;
+// Type definition for `pwar::models::board::PWarPixelValue` struct
+export interface PWarPixelValue {
+	owner: string;
+}
+
+// Type definition for `pwar::models::game::Game` struct
+export interface Game {
+	id: BigNumberish;
+	start: BigNumberish;
+	end: BigNumberish;
+	proposal_idx: BigNumberish;
+	coeff_own_pixels: BigNumberish;
+	coeff_commits: BigNumberish;
+	winner_config: BigNumberish;
+	winner: string;
+	guild_ids: Array<BigNumberish>;
+	guild_count: BigNumberish;
+}
+
+// Type definition for `pwar::models::game::GameValue` struct
+export interface GameValue {
+	start: BigNumberish;
+	end: BigNumberish;
+	proposal_idx: BigNumberish;
+	coeff_own_pixels: BigNumberish;
+	coeff_commits: BigNumberish;
+	winner_config: BigNumberish;
+	winner: string;
+	guild_ids: Array<BigNumberish>;
+	guild_count: BigNumberish;
+}
+
+// Type definition for `pwar::models::guilds::Guild` struct
+export interface Guild {
+	game_id: BigNumberish;
+	guild_id: BigNumberish;
+	guild_name: BigNumberish;
+	creator: string;
+	members: Array<string>;
+	member_count: BigNumberish;
+}
+
+// Type definition for `pwar::models::guilds::GuildValue` struct
+export interface GuildValue {
+	guild_name: BigNumberish;
+	creator: string;
+	members: Array<string>;
+	member_count: BigNumberish;
+}
+
+// Type definition for `pwar::models::player::Player` struct
+export interface Player {
+	address: string;
+	num_owns: BigNumberish;
+	num_commit: BigNumberish;
+	last_date: BigNumberish;
+	is_banned: boolean;
+}
+
+// Type definition for `pwar::models::player::PlayerValue` struct
+export interface PlayerValue {
+	num_owns: BigNumberish;
+	num_commit: BigNumberish;
+	last_date: BigNumberish;
+	is_banned: boolean;
+}
+
+// Type definition for `pwar::models::proposal::PixelRecoveryRate` struct
+export interface PixelRecoveryRate {
+	game_id: BigNumberish;
+	rate: BigNumberish;
+}
+
+// Type definition for `pwar::models::proposal::PixelRecoveryRateValue` struct
+export interface PixelRecoveryRateValue {
+	rate: BigNumberish;
+}
+
+// Type definition for `pwar::models::proposal::PlayerVote` struct
+export interface PlayerVote {
 	player: string;
-	message: BigNumberish;
-	timestamp: BigNumberish;
+	game_id: BigNumberish;
+	index: BigNumberish;
+	is_in_favor: boolean;
+	voting_power: BigNumberish;
+}
+
+// Type definition for `pwar::models::proposal::PlayerVoteValue` struct
+export interface PlayerVoteValue {
+	is_in_favor: boolean;
+	voting_power: BigNumberish;
+}
+
+// Type definition for `pwar::models::proposal::Proposal` struct
+export interface Proposal {
+	game_id: BigNumberish;
+	index: BigNumberish;
+	author: string;
+	proposal_type: BigNumberish;
+	target_args_1: BigNumberish;
+	target_args_2: BigNumberish;
+	start: BigNumberish;
+	end: BigNumberish;
+	yes_voting_power: BigNumberish;
+	no_voting_power: BigNumberish;
+	is_activated: boolean;
+}
+
+// Type definition for `pwar::models::proposal::ProposalValue` struct
+export interface ProposalValue {
+	author: string;
+	proposal_type: BigNumberish;
+	target_args_1: BigNumberish;
+	target_args_2: BigNumberish;
+	start: BigNumberish;
+	end: BigNumberish;
+	yes_voting_power: BigNumberish;
+	no_voting_power: BigNumberish;
+	is_activated: boolean;
 }
 
 // Type definition for `pixelaw::core::events::QueueScheduled` struct
@@ -515,10 +375,147 @@ export interface QueueScheduledValue {
 	calldata: Array<BigNumberish>;
 }
 
+// Type definition for `pwar::systems::actions::pwar_actions::EndedGame` struct
+export interface EndedGame {
+	id: BigNumberish;
+	timestamp: BigNumberish;
+}
+
+// Type definition for `pwar::systems::actions::pwar_actions::EndedGameValue` struct
+export interface EndedGameValue {
+	timestamp: BigNumberish;
+}
+
+// Type definition for `pwar::systems::actions::pwar_actions::StartedGame` struct
+export interface StartedGame {
+	id: BigNumberish;
+	timestamp: BigNumberish;
+	creator: string;
+}
+
+// Type definition for `pwar::systems::actions::pwar_actions::StartedGameValue` struct
+export interface StartedGameValue {
+	timestamp: BigNumberish;
+	creator: string;
+}
+
+// Type definition for `pwar::systems::guilds::guild_actions::GuildCreated` struct
+export interface GuildCreated {
+	game_id: BigNumberish;
+	guild_id: BigNumberish;
+	guild_name: BigNumberish;
+	creator: string;
+}
+
+// Type definition for `pwar::systems::guilds::guild_actions::GuildCreatedValue` struct
+export interface GuildCreatedValue {
+	guild_id: BigNumberish;
+	guild_name: BigNumberish;
+	creator: string;
+}
+
+// Type definition for `pwar::systems::guilds::guild_actions::MemberAdded` struct
+export interface MemberAdded {
+	game_id: BigNumberish;
+	guild_id: BigNumberish;
+	member: string;
+}
+
+// Type definition for `pwar::systems::guilds::guild_actions::MemberAddedValue` struct
+export interface MemberAddedValue {
+	guild_id: BigNumberish;
+	member: string;
+}
+
+// Type definition for `pwar::systems::guilds::guild_actions::MemberRemoved` struct
+export interface MemberRemoved {
+	game_id: BigNumberish;
+	guild_id: BigNumberish;
+	member: string;
+}
+
+// Type definition for `pwar::systems::guilds::guild_actions::MemberRemovedValue` struct
+export interface MemberRemovedValue {
+	guild_id: BigNumberish;
+	member: string;
+}
+
+// Type definition for `pwar::systems::propose::propose_actions::ProposalActivated` struct
+export interface ProposalActivated {
+	game_id: BigNumberish;
+	index: BigNumberish;
+	proposal_type: BigNumberish;
+	target_args_1: BigNumberish;
+	target_args_2: BigNumberish;
+}
+
+// Type definition for `pwar::systems::propose::propose_actions::ProposalActivatedValue` struct
+export interface ProposalActivatedValue {
+	index: BigNumberish;
+	proposal_type: BigNumberish;
+	target_args_1: BigNumberish;
+	target_args_2: BigNumberish;
+}
+
+// Type definition for `pwar::systems::propose::propose_actions::ProposalCreated` struct
+export interface ProposalCreated {
+	game_id: BigNumberish;
+	index: BigNumberish;
+	proposal_type: BigNumberish;
+	target_args_1: BigNumberish;
+	target_args_2: BigNumberish;
+}
+
+// Type definition for `pwar::systems::propose::propose_actions::ProposalCreatedValue` struct
+export interface ProposalCreatedValue {
+	index: BigNumberish;
+	proposal_type: BigNumberish;
+	target_args_1: BigNumberish;
+	target_args_2: BigNumberish;
+}
+
+// Type definition for `pwar::systems::voting::voting_actions::Voted` struct
+export interface Voted {
+	game_id: BigNumberish;
+	index: BigNumberish;
+	timestamp: BigNumberish;
+	voter: string;
+	is_in_favor: boolean;
+}
+
+// Type definition for `pwar::systems::voting::voting_actions::VotedValue` struct
+export interface VotedValue {
+	index: BigNumberish;
+	timestamp: BigNumberish;
+	voter: string;
+	is_in_favor: boolean;
+}
+
 export interface SchemaType extends ISchemaType {
-	p_war: {
-		AllowedApp: AllowedApp,
-		AllowedAppValue: AllowedAppValue,
+	pixelaw: {
+		Area: Area,
+		AreaValue: AreaValue,
+		RTree: RTree,
+		RTreeValue: RTreeValue,
+		Dummy: Dummy,
+		DummyValue: DummyValue,
+		Pixel: Pixel,
+		PixelUpdate: PixelUpdate,
+		PixelValue: PixelValue,
+		QueueItem: QueueItem,
+		QueueItemValue: QueueItemValue,
+		App: App,
+		AppName: AppName,
+		AppNameValue: AppNameValue,
+		AppValue: AppValue,
+		CoreActionsAddress: CoreActionsAddress,
+		CoreActionsAddressValue: CoreActionsAddressValue,
+		Bounds: Bounds,
+		DefaultParameters: DefaultParameters,
+		Emoji: Emoji,
+		Position: Position,
+	},
+	pwar: {
 		AllowedColor: AllowedColor,
 		AllowedColorValue: AllowedColorValue,
 		GamePalette: GamePalette,
@@ -545,28 +542,8 @@ export interface SchemaType extends ISchemaType {
 		PlayerVoteValue: PlayerVoteValue,
 		Proposal: Proposal,
 		ProposalValue: ProposalValue,
-	},
-	pixelaw: {
-		Area: Area,
-		AreaValue: AreaValue,
-		RTree: RTree,
-		RTreeValue: RTreeValue,
-		Dummy: Dummy,
-		DummyValue: DummyValue,
-		Pixel: Pixel,
-		PixelUpdate: PixelUpdate,
-		PixelValue: PixelValue,
-		QueueItem: QueueItem,
-		QueueItemValue: QueueItemValue,
-		App: App,
-		AppName: AppName,
-		AppNameValue: AppNameValue,
-		AppValue: AppValue,
-		CoreActionsAddress: CoreActionsAddress,
-		CoreActionsAddressValue: CoreActionsAddressValue,
-		Bounds: Bounds,
-		DefaultParameters: DefaultParameters,
-		Position: Position,
+		QueueScheduled: QueueScheduled,
+		QueueScheduledValue: QueueScheduledValue,
 		EndedGame: EndedGame,
 		EndedGameValue: EndedGameValue,
 		StartedGame: StartedGame,
@@ -583,21 +560,122 @@ export interface SchemaType extends ISchemaType {
 		ProposalCreatedValue: ProposalCreatedValue,
 		Voted: Voted,
 		VotedValue: VotedValue,
-		Alert: Alert,
-		AlertValue: AlertValue,
-		QueueScheduled: QueueScheduled,
-		QueueScheduledValue: QueueScheduledValue,
 	},
 }
 export const schema: SchemaType = {
-	p_war: {
-		AllowedApp: {
-			game_id: 0,
-			contract: "",
-			is_allowed: false,
+	pixelaw: {
+		Area: {
+			id: 0,
+			app: "",
+			owner: "",
+			color: 0,
 		},
-		AllowedAppValue: {
-			is_allowed: false,
+		AreaValue: {
+			app: "",
+			owner: "",
+			color: 0,
+		},
+		RTree: {
+			id: 0,
+			children: 0,
+		},
+		RTreeValue: {
+			children: 0,
+		},
+		Dummy: {
+			id: 0,
+		defaultParams: { player_override: new CairoOption(CairoOptionVariant.None), system_override: new CairoOption(CairoOptionVariant.None), area_hint: new CairoOption(CairoOptionVariant.None), position: { x: 0, y: 0, }, color: 0, },
+		bounds: { x_min: 0, y_min: 0, x_max: 0, y_max: 0, },
+		pixelUpdate: { position: { x: 0, y: 0, }, color: new CairoOption(CairoOptionVariant.None), owner: new CairoOption(CairoOptionVariant.None), app: new CairoOption(CairoOptionVariant.None), text: new CairoOption(CairoOptionVariant.None), timestamp: new CairoOption(CairoOptionVariant.None), action: new CairoOption(CairoOptionVariant.None), },
+		emoji: { value: 0, },
+		},
+		DummyValue: {
+		defaultParams: { player_override: new CairoOption(CairoOptionVariant.None), system_override: new CairoOption(CairoOptionVariant.None), area_hint: new CairoOption(CairoOptionVariant.None), position: { x: 0, y: 0, }, color: 0, },
+		bounds: { x_min: 0, y_min: 0, x_max: 0, y_max: 0, },
+		pixelUpdate: { position: { x: 0, y: 0, }, color: new CairoOption(CairoOptionVariant.None), owner: new CairoOption(CairoOptionVariant.None), app: new CairoOption(CairoOptionVariant.None), text: new CairoOption(CairoOptionVariant.None), timestamp: new CairoOption(CairoOptionVariant.None), action: new CairoOption(CairoOptionVariant.None), },
+		emoji: { value: 0, },
+		},
+		Pixel: {
+		position: { x: 0, y: 0, },
+			app: "",
+			color: 0,
+			created_at: 0,
+			updated_at: 0,
+			timestamp: 0,
+			owner: "",
+			text: 0,
+			action: 0,
+		},
+		PixelUpdate: {
+		position: { x: 0, y: 0, },
+		color: new CairoOption(CairoOptionVariant.None),
+		owner: new CairoOption(CairoOptionVariant.None),
+		app: new CairoOption(CairoOptionVariant.None),
+		text: new CairoOption(CairoOptionVariant.None),
+		timestamp: new CairoOption(CairoOptionVariant.None),
+		action: new CairoOption(CairoOptionVariant.None),
+		},
+		PixelValue: {
+			app: "",
+			color: 0,
+			created_at: 0,
+			updated_at: 0,
+			timestamp: 0,
+			owner: "",
+			text: 0,
+			action: 0,
+		},
+		QueueItem: {
+			id: 0,
+			valid: false,
+		},
+		QueueItemValue: {
+			valid: false,
+		},
+		App: {
+			system: "",
+			name: 0,
+			icon: 0,
+			action: 0,
+		},
+		AppName: {
+			name: 0,
+			system: "",
+		},
+		AppNameValue: {
+			system: "",
+		},
+		AppValue: {
+			name: 0,
+			icon: 0,
+			action: 0,
+		},
+		CoreActionsAddress: {
+			key: 0,
+			value: "",
+		},
+		CoreActionsAddressValue: {
+			value: "",
+		},
+		Bounds: {
+			x_min: 0,
+			y_min: 0,
+			x_max: 0,
+			y_max: 0,
+		},
+		DefaultParameters: {
+		player_override: new CairoOption(CairoOptionVariant.None),
+		system_override: new CairoOption(CairoOptionVariant.None),
+		area_hint: new CairoOption(CairoOptionVariant.None),
+		position: { x: 0, y: 0, },
+			color: 0,
+		},
+		Emoji: {
+			value: 0,
+		},
+		Position: {
+			x: 0,
+			y: 0,
 		},
 		AllowedColor: {
 			game_id: 0,
@@ -748,115 +826,18 @@ export const schema: SchemaType = {
 			no_voting_power: 0,
 			is_activated: false,
 		},
-		Area: {
+		QueueScheduled: {
 			id: 0,
-			app: "",
-			owner: "",
-			color: 0,
-		},
-		AreaValue: {
-			app: "",
-			owner: "",
-			color: 0,
-		},
-		RTree: {
-			id: 0,
-			children: 0,
-		},
-		RTreeValue: {
-			children: 0,
-		},
-		Dummy: {
-			id: 0,
-		defaultParams: { player_override: new CairoOption(CairoOptionVariant.None), system_override: new CairoOption(CairoOptionVariant.None), area_hint: new CairoOption(CairoOptionVariant.None), position: { x: 0, y: 0, }, color: 0, },
-		bounds: { x_min: 0, y_min: 0, x_max: 0, y_max: 0, },
-		pixelUpdate: { x: 0, y: 0, color: new CairoOption(CairoOptionVariant.None), owner: new CairoOption(CairoOptionVariant.None), app: new CairoOption(CairoOptionVariant.None), text: new CairoOption(CairoOptionVariant.None), timestamp: new CairoOption(CairoOptionVariant.None), action: new CairoOption(CairoOptionVariant.None), },
-		},
-		DummyValue: {
-		defaultParams: { player_override: new CairoOption(CairoOptionVariant.None), system_override: new CairoOption(CairoOptionVariant.None), area_hint: new CairoOption(CairoOptionVariant.None), position: { x: 0, y: 0, }, color: 0, },
-		bounds: { x_min: 0, y_min: 0, x_max: 0, y_max: 0, },
-		pixelUpdate: { x: 0, y: 0, color: new CairoOption(CairoOptionVariant.None), owner: new CairoOption(CairoOptionVariant.None), app: new CairoOption(CairoOptionVariant.None), text: new CairoOption(CairoOptionVariant.None), timestamp: new CairoOption(CairoOptionVariant.None), action: new CairoOption(CairoOptionVariant.None), },
-		},
-		Pixel: {
-			x: 0,
-			y: 0,
-			app: "",
-			color: 0,
-			created_at: 0,
-			updated_at: 0,
 			timestamp: 0,
-			owner: "",
-			text: 0,
-			action: 0,
+			called_system: "",
+			selector: 0,
+			calldata: [0],
 		},
-		PixelUpdate: {
-			x: 0,
-			y: 0,
-		color: new CairoOption(CairoOptionVariant.None),
-		owner: new CairoOption(CairoOptionVariant.None),
-		app: new CairoOption(CairoOptionVariant.None),
-		text: new CairoOption(CairoOptionVariant.None),
-		timestamp: new CairoOption(CairoOptionVariant.None),
-		action: new CairoOption(CairoOptionVariant.None),
-		},
-		PixelValue: {
-			app: "",
-			color: 0,
-			created_at: 0,
-			updated_at: 0,
+		QueueScheduledValue: {
 			timestamp: 0,
-			owner: "",
-			text: 0,
-			action: 0,
-		},
-		QueueItem: {
-			id: 0,
-			valid: false,
-		},
-		QueueItemValue: {
-			valid: false,
-		},
-		App: {
-			system: "",
-			name: 0,
-			icon: 0,
-			action: 0,
-		},
-		AppName: {
-			name: 0,
-			system: "",
-		},
-		AppNameValue: {
-			system: "",
-		},
-		AppValue: {
-			name: 0,
-			icon: 0,
-			action: 0,
-		},
-		CoreActionsAddress: {
-			key: 0,
-			value: "",
-		},
-		CoreActionsAddressValue: {
-			value: "",
-		},
-		Bounds: {
-			x_min: 0,
-			y_min: 0,
-			x_max: 0,
-			y_max: 0,
-		},
-		DefaultParameters: {
-		player_override: new CairoOption(CairoOptionVariant.None),
-		system_override: new CairoOption(CairoOptionVariant.None),
-		area_hint: new CairoOption(CairoOptionVariant.None),
-		position: { x: 0, y: 0, },
-			color: 0,
-		},
-		Position: {
-			x: 0,
-			y: 0,
+			called_system: "",
+			selector: 0,
+			calldata: [0],
 		},
 		EndedGame: {
 			id: 0,
@@ -942,63 +923,9 @@ export const schema: SchemaType = {
 			voter: "",
 			is_in_favor: false,
 		},
-		Alert: {
-		position: { x: 0, y: 0, },
-			caller: "",
-			player: "",
-			message: 0,
-			timestamp: 0,
-		},
-		AlertValue: {
-			caller: "",
-			player: "",
-			message: 0,
-			timestamp: 0,
-		},
-		QueueScheduled: {
-			id: 0,
-			timestamp: 0,
-			called_system: "",
-			selector: 0,
-			calldata: [0],
-		},
-		QueueScheduledValue: {
-			timestamp: 0,
-			called_system: "",
-			selector: 0,
-			calldata: [0],
-		},
 	},
 };
 export enum ModelsMapping {
-	AllowedApp = 'p_war-AllowedApp',
-	AllowedAppValue = 'p_war-AllowedAppValue',
-	AllowedColor = 'p_war-AllowedColor',
-	AllowedColorValue = 'p_war-AllowedColorValue',
-	GamePalette = 'p_war-GamePalette',
-	GamePaletteValue = 'p_war-GamePaletteValue',
-	InPalette = 'p_war-InPalette',
-	InPaletteValue = 'p_war-InPaletteValue',
-	PaletteColors = 'p_war-PaletteColors',
-	PaletteColorsValue = 'p_war-PaletteColorsValue',
-	Board = 'p_war-Board',
-	BoardValue = 'p_war-BoardValue',
-	GameId = 'p_war-GameId',
-	GameIdValue = 'p_war-GameIdValue',
-	PWarPixel = 'p_war-PWarPixel',
-	PWarPixelValue = 'p_war-PWarPixelValue',
-	Game = 'p_war-Game',
-	GameValue = 'p_war-GameValue',
-	Guild = 'p_war-Guild',
-	GuildValue = 'p_war-GuildValue',
-	Player = 'p_war-Player',
-	PlayerValue = 'p_war-PlayerValue',
-	PixelRecoveryRate = 'p_war-PixelRecoveryRate',
-	PixelRecoveryRateValue = 'p_war-PixelRecoveryRateValue',
-	PlayerVote = 'p_war-PlayerVote',
-	PlayerVoteValue = 'p_war-PlayerVoteValue',
-	Proposal = 'p_war-Proposal',
-	ProposalValue = 'p_war-ProposalValue',
 	Area = 'pixelaw-Area',
 	AreaValue = 'pixelaw-AreaValue',
 	RTree = 'pixelaw-RTree',
@@ -1018,25 +945,50 @@ export enum ModelsMapping {
 	CoreActionsAddressValue = 'pixelaw-CoreActionsAddressValue',
 	Bounds = 'pixelaw-Bounds',
 	DefaultParameters = 'pixelaw-DefaultParameters',
+	Emoji = 'pixelaw-Emoji',
 	Position = 'pixelaw-Position',
-	EndedGame = 'p_war-EndedGame',
-	EndedGameValue = 'p_war-EndedGameValue',
-	StartedGame = 'p_war-StartedGame',
-	StartedGameValue = 'p_war-StartedGameValue',
-	GuildCreated = 'p_war-GuildCreated',
-	GuildCreatedValue = 'p_war-GuildCreatedValue',
-	MemberAdded = 'p_war-MemberAdded',
-	MemberAddedValue = 'p_war-MemberAddedValue',
-	MemberRemoved = 'p_war-MemberRemoved',
-	MemberRemovedValue = 'p_war-MemberRemovedValue',
-	ProposalActivated = 'p_war-ProposalActivated',
-	ProposalActivatedValue = 'p_war-ProposalActivatedValue',
-	ProposalCreated = 'p_war-ProposalCreated',
-	ProposalCreatedValue = 'p_war-ProposalCreatedValue',
-	Voted = 'p_war-Voted',
-	VotedValue = 'p_war-VotedValue',
-	Alert = 'pixelaw-Alert',
-	AlertValue = 'pixelaw-AlertValue',
+	AllowedColor = 'pwar-AllowedColor',
+	AllowedColorValue = 'pwar-AllowedColorValue',
+	GamePalette = 'pwar-GamePalette',
+	GamePaletteValue = 'pwar-GamePaletteValue',
+	InPalette = 'pwar-InPalette',
+	InPaletteValue = 'pwar-InPaletteValue',
+	PaletteColors = 'pwar-PaletteColors',
+	PaletteColorsValue = 'pwar-PaletteColorsValue',
+	Board = 'pwar-Board',
+	BoardValue = 'pwar-BoardValue',
+	GameId = 'pwar-GameId',
+	GameIdValue = 'pwar-GameIdValue',
+	PWarPixel = 'pwar-PWarPixel',
+	PWarPixelValue = 'pwar-PWarPixelValue',
+	Game = 'pwar-Game',
+	GameValue = 'pwar-GameValue',
+	Guild = 'pwar-Guild',
+	GuildValue = 'pwar-GuildValue',
+	Player = 'pwar-Player',
+	PlayerValue = 'pwar-PlayerValue',
+	PixelRecoveryRate = 'pwar-PixelRecoveryRate',
+	PixelRecoveryRateValue = 'pwar-PixelRecoveryRateValue',
+	PlayerVote = 'pwar-PlayerVote',
+	PlayerVoteValue = 'pwar-PlayerVoteValue',
+	Proposal = 'pwar-Proposal',
+	ProposalValue = 'pwar-ProposalValue',
 	QueueScheduled = 'pixelaw-QueueScheduled',
 	QueueScheduledValue = 'pixelaw-QueueScheduledValue',
+	EndedGame = 'pwar-EndedGame',
+	EndedGameValue = 'pwar-EndedGameValue',
+	StartedGame = 'pwar-StartedGame',
+	StartedGameValue = 'pwar-StartedGameValue',
+	GuildCreated = 'pwar-GuildCreated',
+	GuildCreatedValue = 'pwar-GuildCreatedValue',
+	MemberAdded = 'pwar-MemberAdded',
+	MemberAddedValue = 'pwar-MemberAddedValue',
+	MemberRemoved = 'pwar-MemberRemoved',
+	MemberRemovedValue = 'pwar-MemberRemovedValue',
+	ProposalActivated = 'pwar-ProposalActivated',
+	ProposalActivatedValue = 'pwar-ProposalActivatedValue',
+	ProposalCreated = 'pwar-ProposalCreated',
+	ProposalCreatedValue = 'pwar-ProposalCreatedValue',
+	Voted = 'pwar-Voted',
+	VotedValue = 'pwar-VotedValue',
 }

@@ -25,27 +25,6 @@ export function setupWorld(provider: DojoProvider) {
 		}
 	};
 
-	const build_actions_alertPlayer_calldata = (position: models.Position, player: string, message: BigNumberish): DojoCall => {
-		return {
-			contractName: "actions",
-			entrypoint: "alert_player",
-			calldata: [position, player, message],
-		};
-	};
-
-	const actions_alertPlayer = async (snAccount: Account | AccountInterface, position: models.Position, player: string, message: BigNumberish) => {
-		try {
-			return await provider.execute(
-				snAccount,
-				build_actions_alertPlayer_calldata(position, player, message),
-				"pixelaw",
-			);
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	};
-
 	const build_actions_canUpdatePixel_calldata = (forPlayer: string, forSystem: string, pixel: models.Pixel, pixelUpdate: models.PixelUpdate, areaIdHint: CairoOption<BigNumberish>, allowModify: boolean): DojoCall => {
 		return {
 			contractName: "actions",
@@ -109,27 +88,6 @@ export function setupWorld(provider: DojoProvider) {
 		}
 	};
 
-	const build_actions_init_calldata = (): DojoCall => {
-		return {
-			contractName: "actions",
-			entrypoint: "init",
-			calldata: [],
-		};
-	};
-
-	const actions_init = async (snAccount: Account | AccountInterface) => {
-		try {
-			return await provider.execute(
-				snAccount,
-				build_actions_init_calldata(),
-				"pixelaw",
-			);
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	};
-
 	const build_actions_newApp_calldata = (system: string, name: BigNumberish, icon: BigNumberish): DojoCall => {
 		return {
 			contractName: "actions",
@@ -143,6 +101,27 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_actions_newApp_calldata(system, name, icon),
+				"pixelaw",
+			);
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	};
+
+	const build_actions_notification_calldata = (position: models.Position, color: BigNumberish, from: CairoOption<BigNumberish>, to: CairoOption<BigNumberish>, text: BigNumberish): DojoCall => {
+		return {
+			contractName: "actions",
+			entrypoint: "notification",
+			calldata: [position, color, from, to, text],
+		};
+	};
+
+	const actions_notification = async (snAccount: Account | AccountInterface, position: models.Position, color: BigNumberish, from: CairoOption<BigNumberish>, to: CairoOption<BigNumberish>, text: BigNumberish) => {
+		try {
+			return await provider.execute(
+				snAccount,
+				build_actions_notification_calldata(position, color, from, to, text),
 				"pixelaw",
 			);
 		} catch (error) {
@@ -235,27 +214,6 @@ export function setupWorld(provider: DojoProvider) {
 		}
 	};
 
-	const build_allowed_app_actions_setPixel_calldata = (defaultParams: models.DefaultParameters): DojoCall => {
-		return {
-			contractName: "allowed_app_actions",
-			entrypoint: "set_pixel",
-			calldata: [defaultParams],
-		};
-	};
-
-	const allowed_app_actions_setPixel = async (snAccount: Account | AccountInterface, defaultParams: models.DefaultParameters) => {
-		try {
-			return await provider.execute(
-				snAccount,
-				build_allowed_app_actions_setPixel_calldata(defaultParams),
-				"p_war",
-			);
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	};
-
 	const build_guild_actions_addMember_calldata = (gameId: BigNumberish, guildId: BigNumberish, newMember: string): DojoCall => {
 		return {
 			contractName: "guild_actions",
@@ -269,7 +227,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_addMember_calldata(gameId, guildId, newMember),
-				"p_war",
+				"pwar",
 			);
 		} catch (error) {
 			console.error(error);
@@ -290,7 +248,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_createGuild_calldata(gameId, guildName),
-				"p_war",
+				"pwar",
 			);
 		} catch (error) {
 			console.error(error);
@@ -311,7 +269,28 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_getGuildContractAddress_calldata(),
-				"p_war",
+				"pwar",
+			);
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	};
+
+	const build_guild_actions_getGuildContractName_calldata = (gameId: BigNumberish, guildId: BigNumberish): DojoCall => {
+		return {
+			contractName: "guild_actions",
+			entrypoint: "get_guild_contract_name",
+			calldata: [gameId, guildId],
+		};
+	};
+
+	const guild_actions_getGuildContractName = async (snAccount: Account | AccountInterface, gameId: BigNumberish, guildId: BigNumberish) => {
+		try {
+			return await provider.execute(
+				snAccount,
+				build_guild_actions_getGuildContractName_calldata(gameId, guildId),
+				"pwar",
 			);
 		} catch (error) {
 			console.error(error);
@@ -332,7 +311,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_getGuildPoints_calldata(gameId, guildId),
-				"p_war",
+				"pwar",
 			);
 		} catch (error) {
 			console.error(error);
@@ -353,7 +332,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_getPlayerCommit_calldata(playerAddress),
-				"p_war",
+				"pwar",
 			);
 		} catch (error) {
 			console.error(error);
@@ -374,7 +353,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_getPlayerOwns_calldata(playerAddress),
-				"p_war",
+				"pwar",
 			);
 		} catch (error) {
 			console.error(error);
@@ -395,7 +374,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_isMember_calldata(gameId, guildId, member),
-				"p_war",
+				"pwar",
 			);
 		} catch (error) {
 			console.error(error);
@@ -416,7 +395,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_joinGuild_calldata(gameId, guildId),
-				"p_war",
+				"pwar",
 			);
 		} catch (error) {
 			console.error(error);
@@ -437,171 +416,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_guild_actions_removeMember_calldata(gameId, guildId, member),
-				"p_war",
-			);
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	};
-
-	const build_p_war_actions_createGame_calldata = (origin: models.Position): DojoCall => {
-		return {
-			contractName: "p_war_actions",
-			entrypoint: "create_game",
-			calldata: [origin],
-		};
-	};
-
-	const p_war_actions_createGame = async (snAccount: Account | AccountInterface, origin: models.Position) => {
-		try {
-			return await provider.execute(
-				snAccount,
-				build_p_war_actions_createGame_calldata(origin),
-				"p_war",
-			);
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	};
-
-	const build_p_war_actions_createGameGuilds_calldata = (gameId: BigNumberish, guildDispatcher: models.IGuildDispatcher): DojoCall => {
-		return {
-			contractName: "p_war_actions",
-			entrypoint: "create_game_guilds",
-			calldata: [gameId, guildDispatcher],
-		};
-	};
-
-	const p_war_actions_createGameGuilds = async (snAccount: Account | AccountInterface, gameId: BigNumberish, guildDispatcher: models.IGuildDispatcher) => {
-		try {
-			return await provider.execute(
-				snAccount,
-				build_p_war_actions_createGameGuilds_calldata(gameId, guildDispatcher),
-				"p_war",
-			);
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	};
-
-	const build_p_war_actions_endGame_calldata = (gameId: BigNumberish): DojoCall => {
-		return {
-			contractName: "p_war_actions",
-			entrypoint: "end_game",
-			calldata: [gameId],
-		};
-	};
-
-	const p_war_actions_endGame = async (snAccount: Account | AccountInterface, gameId: BigNumberish) => {
-		try {
-			return await provider.execute(
-				snAccount,
-				build_p_war_actions_endGame_calldata(gameId),
-				"p_war",
-			);
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	};
-
-	const build_p_war_actions_getGameId_calldata = (position: models.Position): DojoCall => {
-		return {
-			contractName: "p_war_actions",
-			entrypoint: "get_game_id",
-			calldata: [position],
-		};
-	};
-
-	const p_war_actions_getGameId = async (position: models.Position) => {
-		try {
-			return await provider.call("p_war", build_p_war_actions_getGameId_calldata(position));
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	};
-
-	const build_p_war_actions_init_calldata = (): DojoCall => {
-		return {
-			contractName: "p_war_actions",
-			entrypoint: "init",
-			calldata: [],
-		};
-	};
-
-	const p_war_actions_init = async (snAccount: Account | AccountInterface) => {
-		try {
-			return await provider.execute(
-				snAccount,
-				build_p_war_actions_init_calldata(),
-				"p_war",
-			);
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	};
-
-	const build_p_war_actions_interact_calldata = (defaultParams: models.DefaultParameters): DojoCall => {
-		return {
-			contractName: "p_war_actions",
-			entrypoint: "interact",
-			calldata: [defaultParams],
-		};
-	};
-
-	const p_war_actions_interact = async (snAccount: Account | AccountInterface, defaultParams: models.DefaultParameters) => {
-		try {
-			return await provider.execute(
-				snAccount,
-				build_p_war_actions_interact_calldata(defaultParams),
-				"p_war",
-			);
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	};
-
-	const build_p_war_actions_placePixel_calldata = (app: string, defaultParams: models.DefaultParameters): DojoCall => {
-		return {
-			contractName: "p_war_actions",
-			entrypoint: "place_pixel",
-			calldata: [app, defaultParams],
-		};
-	};
-
-	const p_war_actions_placePixel = async (snAccount: Account | AccountInterface, app: string, defaultParams: models.DefaultParameters) => {
-		try {
-			return await provider.execute(
-				snAccount,
-				build_p_war_actions_placePixel_calldata(app, defaultParams),
-				"p_war",
-			);
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	};
-
-	const build_p_war_actions_updatePixel_calldata = (pixelUpdate: models.PixelUpdate): DojoCall => {
-		return {
-			contractName: "p_war_actions",
-			entrypoint: "update_pixel",
-			calldata: [pixelUpdate],
-		};
-	};
-
-	const p_war_actions_updatePixel = async (snAccount: Account | AccountInterface, pixelUpdate: models.PixelUpdate) => {
-		try {
-			return await provider.execute(
-				snAccount,
-				build_p_war_actions_updatePixel_calldata(pixelUpdate),
-				"p_war",
+				"pwar",
 			);
 		} catch (error) {
 			console.error(error);
@@ -622,7 +437,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_propose_actions_activateProposal_calldata(gameId, index, clearData),
-				"p_war",
+				"pwar",
 			);
 		} catch (error) {
 			console.error(error);
@@ -643,7 +458,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_propose_actions_addNewColor_calldata(gameId, index, game, proposal),
-				"p_war",
+				"pwar",
 			);
 		} catch (error) {
 			console.error(error);
@@ -664,7 +479,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_propose_actions_createProposal_calldata(gameId, proposalType, targetArgs1, targetArgs2),
-				"p_war",
+				"pwar",
 			);
 		} catch (error) {
 			console.error(error);
@@ -685,7 +500,129 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_propose_actions_resetToWhite_calldata(gameId, index, game, proposal, clearData),
-				"p_war",
+				"pwar",
+			);
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	};
+
+	const build_pwar_actions_createGame_calldata = (origin: models.Position): DojoCall => {
+		return {
+			contractName: "pwar_actions",
+			entrypoint: "create_game",
+			calldata: [origin],
+		};
+	};
+
+	const pwar_actions_createGame = async (snAccount: Account | AccountInterface, origin: models.Position) => {
+		try {
+			return await provider.execute(
+				snAccount,
+				build_pwar_actions_createGame_calldata(origin),
+				"pwar",
+			);
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	};
+
+	const build_pwar_actions_createGameGuilds_calldata = (gameId: BigNumberish, guildDispatcher: models.IGuildDispatcher): DojoCall => {
+		return {
+			contractName: "pwar_actions",
+			entrypoint: "create_game_guilds",
+			calldata: [gameId, guildDispatcher],
+		};
+	};
+
+	const pwar_actions_createGameGuilds = async (snAccount: Account | AccountInterface, gameId: BigNumberish, guildDispatcher: models.IGuildDispatcher) => {
+		try {
+			return await provider.execute(
+				snAccount,
+				build_pwar_actions_createGameGuilds_calldata(gameId, guildDispatcher),
+				"pwar",
+			);
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	};
+
+	const build_pwar_actions_endGame_calldata = (gameId: BigNumberish): DojoCall => {
+		return {
+			contractName: "pwar_actions",
+			entrypoint: "end_game",
+			calldata: [gameId],
+		};
+	};
+
+	const pwar_actions_endGame = async (snAccount: Account | AccountInterface, gameId: BigNumberish) => {
+		try {
+			return await provider.execute(
+				snAccount,
+				build_pwar_actions_endGame_calldata(gameId),
+				"pwar",
+			);
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	};
+
+	const build_pwar_actions_getGameId_calldata = (position: models.Position): DojoCall => {
+		return {
+			contractName: "pwar_actions",
+			entrypoint: "get_game_id",
+			calldata: [position],
+		};
+	};
+
+	const pwar_actions_getGameId = async (position: models.Position) => {
+		try {
+			return await provider.call("pwar", build_pwar_actions_getGameId_calldata(position));
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	};
+
+	const build_pwar_actions_interact_calldata = (defaultParams: models.DefaultParameters): DojoCall => {
+		return {
+			contractName: "pwar_actions",
+			entrypoint: "interact",
+			calldata: [defaultParams],
+		};
+	};
+
+	const pwar_actions_interact = async (snAccount: Account | AccountInterface, defaultParams: models.DefaultParameters) => {
+		try {
+			return await provider.execute(
+				snAccount,
+				build_pwar_actions_interact_calldata(defaultParams),
+				"pwar",
+			);
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	};
+
+	const build_pwar_actions_placePixel_calldata = (app: string, defaultParams: models.DefaultParameters): DojoCall => {
+		return {
+			contractName: "pwar_actions",
+			entrypoint: "place_pixel",
+			calldata: [app, defaultParams],
+		};
+	};
+
+	const pwar_actions_placePixel = async (snAccount: Account | AccountInterface, app: string, defaultParams: models.DefaultParameters) => {
+		try {
+			return await provider.execute(
+				snAccount,
+				build_pwar_actions_placePixel_calldata(app, defaultParams),
+				"pwar",
 			);
 		} catch (error) {
 			console.error(error);
@@ -706,7 +643,7 @@ export function setupWorld(provider: DojoProvider) {
 			return await provider.execute(
 				snAccount,
 				build_voting_actions_vote_calldata(gameId, index, usePx, isInFavor),
-				"p_war",
+				"pwar",
 			);
 		} catch (error) {
 			console.error(error);
@@ -720,18 +657,16 @@ export function setupWorld(provider: DojoProvider) {
 		actions: {
 			addArea: actions_addArea,
 			buildAddAreaCalldata: build_actions_addArea_calldata,
-			alertPlayer: actions_alertPlayer,
-			buildAlertPlayerCalldata: build_actions_alertPlayer_calldata,
 			canUpdatePixel: actions_canUpdatePixel,
 			buildCanUpdatePixelCalldata: build_actions_canUpdatePixel_calldata,
 			findAreaByPosition: actions_findAreaByPosition,
 			buildFindAreaByPositionCalldata: build_actions_findAreaByPosition_calldata,
 			findAreasInsideBounds: actions_findAreasInsideBounds,
 			buildFindAreasInsideBoundsCalldata: build_actions_findAreasInsideBounds_calldata,
-			init: actions_init,
-			buildInitCalldata: build_actions_init_calldata,
 			newApp: actions_newApp,
 			buildNewAppCalldata: build_actions_newApp_calldata,
+			notification: actions_notification,
+			buildNotificationCalldata: build_actions_notification_calldata,
 			processQueue: actions_processQueue,
 			buildProcessQueueCalldata: build_actions_processQueue_calldata,
 			removeArea: actions_removeArea,
@@ -741,10 +676,6 @@ export function setupWorld(provider: DojoProvider) {
 			updatePixel: actions_updatePixel,
 			buildUpdatePixelCalldata: build_actions_updatePixel_calldata,
 		},
-		allowed_app_actions: {
-			setPixel: allowed_app_actions_setPixel,
-			buildSetPixelCalldata: build_allowed_app_actions_setPixel_calldata,
-		},
 		guild_actions: {
 			addMember: guild_actions_addMember,
 			buildAddMemberCalldata: build_guild_actions_addMember_calldata,
@@ -752,6 +683,8 @@ export function setupWorld(provider: DojoProvider) {
 			buildCreateGuildCalldata: build_guild_actions_createGuild_calldata,
 			getGuildContractAddress: guild_actions_getGuildContractAddress,
 			buildGetGuildContractAddressCalldata: build_guild_actions_getGuildContractAddress_calldata,
+			getGuildContractName: guild_actions_getGuildContractName,
+			buildGetGuildContractNameCalldata: build_guild_actions_getGuildContractName_calldata,
 			getGuildPoints: guild_actions_getGuildPoints,
 			buildGetGuildPointsCalldata: build_guild_actions_getGuildPoints_calldata,
 			getPlayerCommit: guild_actions_getPlayerCommit,
@@ -765,24 +698,6 @@ export function setupWorld(provider: DojoProvider) {
 			removeMember: guild_actions_removeMember,
 			buildRemoveMemberCalldata: build_guild_actions_removeMember_calldata,
 		},
-		p_war_actions: {
-			createGame: p_war_actions_createGame,
-			buildCreateGameCalldata: build_p_war_actions_createGame_calldata,
-			createGameGuilds: p_war_actions_createGameGuilds,
-			buildCreateGameGuildsCalldata: build_p_war_actions_createGameGuilds_calldata,
-			endGame: p_war_actions_endGame,
-			buildEndGameCalldata: build_p_war_actions_endGame_calldata,
-			getGameId: p_war_actions_getGameId,
-			buildGetGameIdCalldata: build_p_war_actions_getGameId_calldata,
-			init: p_war_actions_init,
-			buildInitCalldata: build_p_war_actions_init_calldata,
-			interact: p_war_actions_interact,
-			buildInteractCalldata: build_p_war_actions_interact_calldata,
-			placePixel: p_war_actions_placePixel,
-			buildPlacePixelCalldata: build_p_war_actions_placePixel_calldata,
-			updatePixel: p_war_actions_updatePixel,
-			buildUpdatePixelCalldata: build_p_war_actions_updatePixel_calldata,
-		},
 		propose_actions: {
 			activateProposal: propose_actions_activateProposal,
 			buildActivateProposalCalldata: build_propose_actions_activateProposal_calldata,
@@ -792,6 +707,20 @@ export function setupWorld(provider: DojoProvider) {
 			buildCreateProposalCalldata: build_propose_actions_createProposal_calldata,
 			resetToWhite: propose_actions_resetToWhite,
 			buildResetToWhiteCalldata: build_propose_actions_resetToWhite_calldata,
+		},
+		pwar_actions: {
+			createGame: pwar_actions_createGame,
+			buildCreateGameCalldata: build_pwar_actions_createGame_calldata,
+			createGameGuilds: pwar_actions_createGameGuilds,
+			buildCreateGameGuildsCalldata: build_pwar_actions_createGameGuilds_calldata,
+			endGame: pwar_actions_endGame,
+			buildEndGameCalldata: build_pwar_actions_endGame_calldata,
+			getGameId: pwar_actions_getGameId,
+			buildGetGameIdCalldata: build_pwar_actions_getGameId_calldata,
+			interact: pwar_actions_interact,
+			buildInteractCalldata: build_pwar_actions_interact_calldata,
+			placePixel: pwar_actions_placePixel,
+			buildPlacePixelCalldata: build_pwar_actions_placePixel_calldata,
 		},
 		voting_actions: {
 			vote: voting_actions_vote,
