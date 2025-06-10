@@ -30,7 +30,7 @@ Follow the asdf installation instructions.
 
 ```
 asdf plugin add dojo https://github.com/dojoengine/asdf-dojo
-asdf install dojo 1.0.0-alpha.11
+asdf install dojo
 ```
 
 ## Install scarb
@@ -44,15 +44,18 @@ And after moving into contracts directory, the versions for these libs are set i
 
 ## Running Locally
 
-pnpm install
-pnpm --filter @pixelaw/client run dev
+### Clone the Repository
 
+To clone this repository with all submodules, run:
 
-## change made in pixelaw.js
-export const StarknetChainProvider: React.FC<ChainProviderProps> = ({ children }) => {
-    return (
-        <StarknetConfig chains={[mainnet, devnet]} provider={publicProvider()} connectors={[]}>
-            <ConnectorProvider>{children}</ConnectorProvider>
-        </StarknetConfig>
-    )
-}
+```bash
+git clone --recurse-submodules https://github.com/pixelaw/pwar.git
+cd pwar
+
+git submodule init
+git submodule update
+```
+
+###
+
+Enter `/client` and `/contracts` and follow the respective README's.
