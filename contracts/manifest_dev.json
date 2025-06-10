@@ -2142,7 +2142,7 @@
     },
     {
       "address": "0x346e8974e4beaf30b8b2bf65c979ddfe9cc26fa0e77f885f7efe95cab7f8b0c",
-      "class_hash": "0x5ceb2039961b6cba55af60b31943e0b9d955bf83c3a31bf92a9520bb70bb4d9",
+      "class_hash": "0x2438b820f0bee8081c9722ea4b6f32df004b3babf9c56aff518c5f9e25187b1",
       "abi": [
         {
           "type": "impl",
