@@ -1,0 +1,29 @@
+.inner {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.25rem;
+  touch-action: none;
+  user-select: none;
+}
+
+.inner span {
+  position: absolute;
+  inset: 0; /* stretch to cover button */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  touch-action: none;
+  user-select: none;
+}
+
+.inner button {
+  all: unset; /* Remove all default styles */
+  display: inline-flex; /* Adjust size to fit content */
+  justify-content: center;
+  align-items: center;
+  cursor: pointer; /* Ensure it's still clickable */
+  height: auto; /* Let the height be determined by content */
+  width: auto; /* Let the width be determined by content */
+}

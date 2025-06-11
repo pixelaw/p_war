@@ -1,0 +1,42 @@
+#bottomMenu {
+  background-color: white;
+  position: absolute;
+  width: auto;
+  height: 6.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: auto;
+  box-sizing: border-box;
+  padding: 1rem;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  touch-action: none;
+  user-select: none;
+}
+
+.extraPanel {
+  position: absolute;
+  bottom: 150px; /* Position above the bottom menu */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  z-index: 100; /* Ensure it appears above other elements */
+}
+
+.apps {
+  position: absolute;
+  top: calc(50px + 1rem);
+  left: 1rem;
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+  z-index: 10;
+  height: calc(100vh - 50px - 2rem);
+}

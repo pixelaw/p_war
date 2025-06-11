@@ -1,0 +1,47 @@
+.statusBar {
+  background-color: #202225;
+  color: #eaeaea;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  height: 60px;
+}
+
+.statusMessage {
+  font-size: 16px;
+  font-weight: 500;
+  color: #dcddde;
+}
+
+.gameInfo {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.gameIdLabel {
+  font-weight: 600;
+  font-size: 18px;
+  color: #00aff4;
+  background-color: rgba(0, 175, 244, 0.1);
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.timeRemaining {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  background-color: rgba(237, 66, 69, 0.1);
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: #ed4245;
+  font-weight: 600;
+}
+
+.timeRemaining::before {
+  content: "⏱️";
+  margin-right: 6px;
+}
