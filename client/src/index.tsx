@@ -11,7 +11,7 @@ import { StarknetChainProvider } from "@pixelaw/react-dojo";
 import type { WorldsRegistry } from "@pixelaw/core";
 import worldsRegistry from "@/config/worlds.json";
 import { setupWorld } from "@/config/contracts.gen";
-import { DojoWallet } from "@pixelaw/core-dojo";
+import type { DojoWallet } from "@pixelaw/core-dojo";
 import { PwarContext } from "./provider/PwarContext";
 import { pwarManifest } from "./config/manifest.contracts";
 
@@ -54,11 +54,6 @@ const AppContent = React.memo(() => {
       const mergedContracts = [...manifest.contracts, ...pwarManifest];
       pixelawCore.engine["dojoSetup"].manifest.contracts = mergedContracts;
       const world = setupWorld(provider);
-      // console.log("manifest contracts: ", manifest.contracts);
-      // console.log("wallet:", wallet);
-      // console.log("Provider:", provider);
-      // console.log("World:", world);
-      // console.log("merged contracts", mergedContracts);
 
       return { account, wallet, provider, world };
     } catch (error) {

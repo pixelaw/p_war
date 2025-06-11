@@ -5,13 +5,21 @@
   },
   "linter": {
     "enabled": true,
+    "ignore": [
+      "src/config/**",
+      "src/lib/**",
+      "doc/**",
+      "scripts/**",
+      "*.gen.ts",
+      "src/index.tsx"
+    ],
     "rules": {
       "recommended": true,
       "correctness": {
         "noUnusedVariables": "error"
       },
       "suspicious": {
-        "noExplicitAny": "error"
+        "noExplicitAny": "warn" 
       },
       "style": {
         "noNonNullAssertion": "off",

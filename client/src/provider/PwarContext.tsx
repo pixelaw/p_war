@@ -1,12 +1,12 @@
 import { createContext, useContext } from "react";
-import { DojoWallet } from "@pixelaw/core-dojo";
+import type { DojoWallet } from "@pixelaw/core-dojo";
+import type { Account, Provider } from "starknet";
 
-//TODO: avoid any type.
 export type IPwarContext = {
   wallet: DojoWallet;
-  account: any;
-  provider: any;
-  world: any;
+  account: Account;
+  provider: Provider;
+  world: World;
 };
 
 export const PwarContext = createContext<IPwarContext | undefined>(undefined);

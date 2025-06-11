@@ -1,4 +1,4 @@
-function postLogs({ type, message }) {
+function postLogs({ message }) {
   const body = JSON.stringify([getDeviceType(), message]);
   fetch("/logs", {
     method: "POST",

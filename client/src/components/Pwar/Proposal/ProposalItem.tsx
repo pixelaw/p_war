@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 
 interface Proposal {
   id: number;
@@ -48,12 +48,14 @@ export const ProposalItem: React.FC<ProposalItemProps> = ({ proposal }) => {
       {/* Action Buttons */}
       <div className="flex gap-2 justify-end">
         <button
+          type="button"
           onClick={() => console.log("Vote Yes for", proposal.id)}
           className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-500"
         >
           Vote Yes
         </button>
         <button
+          type="button"
           onClick={() => console.log("Vote No for", proposal.id)}
           className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-500"
         >

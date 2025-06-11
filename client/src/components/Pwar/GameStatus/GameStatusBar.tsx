@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import styles from "./GameStatusBar.module.css";
 import { usePwarProvider } from "@/provider/PwarContext";
 import WalletPickerButton from "@/components/GamePage/WalletPicker/WalletPickerButton.tsx";
@@ -15,7 +15,7 @@ export const GameStatusBar: FC<GameStatusBarProps> = ({
   gameId,
 }) => {
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
-  const { world, account } = usePwarProvider();
+  const { world } = usePwarProvider();
 
   // Fetch game status/time remaining
   useEffect(() => {
@@ -26,7 +26,7 @@ export const GameStatusBar: FC<GameStatusBarProps> = ({
         // Implement according to your contract structure
         console.log("Fetching game time for gameId:", gameId);
         const gameData = await world.pwar_actions.getGame(gameId);
-        if (gameData && gameData.end_time) {
+        if (gameData?.end_time) {
           const currentTime = Math.floor(Date.now() / 1000);
           const remaining = gameData.end_time - currentTime;
           setTimeRemaining(remaining > 0 ? remaining : 0);

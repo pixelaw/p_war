@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 import styles from "./GameControls.module.css";
 
 interface GameControlsProps {
@@ -17,12 +17,12 @@ export const GameControls: FC<GameControlsProps> = ({
       <h3>Game Controls</h3>
 
       {!gameStarted ? (
-        <button className={styles.startGameButton} onClick={onStartGame}>
+        <button type="button" className={styles.startGameButton} onClick={onStartGame}>
           Start New Game
         </button>
       ) : (
         <div className={styles.gameActions}>
-          <button className={styles.actionButton} onClick={onPayFee}>
+          <button type="button" className={styles.actionButton} onClick={onPayFee}>
             Pay Participation Fee
           </button>
         </div>

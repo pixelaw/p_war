@@ -1,10 +1,10 @@
 import { usePixelawProvider } from "@pixelaw/react";
 import { useEffect, useRef, useState } from "react";
-import { Coordinate } from "@pixelaw/core";
+import type { Coordinate } from "@pixelaw/core";
 import styles from "./PwarPage.module.css";
 import { StatsDashboard } from "@/components/Pwar/Stats/StatsDashboard";
 import { usePwarProvider } from "@/provider/PwarContext";
-import { DefaultParameters, Position } from "@pixelaw/core-dojo";
+import type { DefaultParameters, Position } from "@pixelaw/core-dojo";
 import { CairoOption, CairoOptionVariant } from "starknet";
 import { GameControls } from "@/components/Pwar/GameControls/GameControls";
 import { GuildPanel } from "@/components/Pwar/Guild/GuildPanel";
@@ -15,7 +15,7 @@ const PwarPageContent: React.FC = () => {
   const { pixelawCore, coreStatus, center } = usePixelawProvider();
   const { viewPort: renderer } = pixelawCore;
   const rendererContainerRef = useRef<HTMLDivElement | null>(null);
-  const { provider, world, wallet, account } = usePwarProvider();
+  const { world, account } = usePwarProvider();
 
   // Game state
   const [gameStarted, setGameStarted] = useState(false);
@@ -58,7 +58,7 @@ const PwarPageContent: React.FC = () => {
     return () => {
       pixelawCore.events.off("cellClicked", handlePwarCellClick);
     };
-  }, [pixelawCore, world, gameStarted]);
+  }, [pixelawCore, world, gameStarted, account]);
 
   // Set up the renderer
   useEffect(() => {

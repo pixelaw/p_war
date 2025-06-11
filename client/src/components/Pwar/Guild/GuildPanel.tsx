@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { type FC, useState, useEffect } from "react";
 import styles from "./GuildPanel.module.css";
 import { usePwarProvider } from "@/provider/PwarContext";
 
@@ -17,7 +17,7 @@ export const GuildPanel: FC<GuildPanelProps> = ({
 }) => {
   const [guilds, setGuilds] = useState<Array<{ id: number; name: string }>>([]);
   const [guildName, setGuildName] = useState("");
-  const { account, world } = usePwarProvider();
+  const { world } = usePwarProvider();
 
   // Fetch guilds when gameId changes
   useEffect(() => {
@@ -27,11 +27,10 @@ export const GuildPanel: FC<GuildPanelProps> = ({
       try {
         const fetchedGame = await world.pwar_actions.getGame(gameId);
         console.log("Fetched game data: world.pwar_actions.getGame", fetchedGame);
-        if (fetchedGame && fetchedGame.guild_ids) {
+        if (fetchedGame?.guild_ids) {
           const guildPromises = fetchedGame.guild_ids.map(
             async (guildId: number) => {
-              const guildData = await world.guild_actions.get_guild(
-                account,
+              const guildData = await world.guild_actions.getGuild(
                 gameId,
                 guildId,
               );
@@ -81,7 +80,7 @@ export const GuildPanel: FC<GuildPanelProps> = ({
           onChange={(e) => setGuildName(e.target.value)}
           className={styles.guildNameInput}
         />
-        <button className={styles.createButton} onClick={handleCreateGuild}>
+        <button type="button" className={styles.createButton} onClick={handleCreateGuild}>
           Create Guild
         </button>
       </div>
@@ -99,6 +98,7 @@ export const GuildPanel: FC<GuildPanelProps> = ({
               >
                 <span>{guild.name}</span>
                 <button
+                  type="button"
                   onClick={() => onJoinGuild(guild.id)}
                   disabled={selectedGuildId === guild.id}
                 >

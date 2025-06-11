@@ -1,6 +1,6 @@
 // switchDependencies.js
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 const useWorkspace = process.argv.includes("--workspace");
 
@@ -28,9 +28,9 @@ function newWorkspaceFile(filename) {
 }
 
 if (useWorkspace) {
-  Object.keys(submodulePaths).forEach((dep) => {
+  for (const dep of Object.keys(submodulePaths)) {
     packageJson.dependencies[dep] = submodulePaths[dep];
-  });
+  }
   // Rename to enable submodules
   if (fs.existsSync(workspaceYamlDisabled)) {
     fs.renameSync(workspaceYamlDisabled, workspaceYamlEnabled);

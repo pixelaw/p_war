@@ -1,33 +1,33 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { usePixelawProvider } from "@pixelaw/react";
 import { usePwarProvider } from "@/provider/PwarContext";
 import styles from "./StatsDashboard.module.css";
 
 export const StatsDashboard = () => {
   const { pixelawCore } = usePixelawProvider();
-  const { wallet, world, account, provider } = usePwarProvider();
-  const [clickCount, setClickCount] = useState(0);
+  const { wallet, world, account } = usePwarProvider();
+  const [_clickCount, setClickCount] = useState(0);
   const [pixelsPlaced, setPixelsPlaced] = useState(0);
   const [playerCommit, setPlayerCommit] = useState<number | null>(null);
   const [playerOwns, setPlayerOwns] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   // Track clicks
-  const handleCellClick = () => {
+  const handleCellClick = useCallback(() => {
     setClickCount((prev) => prev + 1);
-  };
+  }, []);
 
   // Simulate successful pixel placement
-  const incrementPixelsPlaced = () => {
+  const incrementPixelsPlaced = useCallback(() => {
     setTimeout(() => {
       if (Math.random() > 0.3) {
         setPixelsPlaced((prev) => prev + 1);
       }
     }, 500);
-  };
+  }, []);
 
   // Fetch player data from the contract
-  const fetchPlayerData = async () => {
+  const fetchPlayerData = useCallback(async () => {
     if (!account || !world) return;
     console.log(wallet.address);
 
@@ -49,7 +49,7 @@ export const StatsDashboard = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [account, world, wallet.address]);
 
   // Set up click listener
   useEffect(() => {
@@ -60,17 +60,19 @@ export const StatsDashboard = () => {
       pixelawCore.events.off("cellClicked", handleCellClick);
       pixelawCore.events.off("cellClicked", incrementPixelsPlaced);
     };
-  }, [pixelawCore]);
+  }, [pixelawCore, handleCellClick, incrementPixelsPlaced]);
 
   // Fetch player data on component mount and when wallet changes
   useEffect(() => {
-    fetchPlayerData();
+    if (wallet && world) {
+      fetchPlayerData();
 
-    // Set up periodic refresh (every 30 seconds)
-    const intervalId = setInterval(fetchPlayerData, 30000);
+      // Set up periodic refresh (every 30 seconds)
+      const intervalId = setInterval(fetchPlayerData, 30000);
 
-    return () => clearInterval(intervalId);
-  }, [wallet, world]);
+      return () => clearInterval(intervalId);
+    }
+  }, [wallet, world, fetchPlayerData]);
 
   return (
     <div className={styles.statsDashboard}>
@@ -106,6 +108,7 @@ export const StatsDashboard = () => {
         </div>
 
         <button
+          type="button"
           className={styles.refreshButton}
           onClick={fetchPlayerData}
           disabled={isLoading}

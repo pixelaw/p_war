@@ -7,7 +7,6 @@ import {
 } from "@pixelaw/core";
 
 import AppPickerButton from "@/components/GamePage/AppPicker/AppPickerButton.tsx";
-import ColorPicker from "@/components/GamePage/ColorPicker/ColorPicker.tsx";
 import ColorPickerButton from "@/components/GamePage/ColorPicker/ColorPickerButton.tsx";
 import { WalletPicker } from "@/components/GamePage/WalletPicker/WalletPicker.tsx";
 import WalletPickerButton from "@/components/GamePage/WalletPicker/WalletPickerButton.tsx";
@@ -19,10 +18,9 @@ import styles from "./GamePage.module.css";
 import AppPicker from "@/components/GamePage/AppPicker/AppPicker";
 import SimpleColorPicker from "@/components/GamePage/ColorPicker/SimpleColorPicker.tsx";
 
-// biome-ignore lint/complexity/noBannedTypes: TODO
-function debounce(func: Function, wait: number) {
+function debounce<T extends unknown[]>(func: (...args: T) => void, wait: number) {
   let timeout: NodeJS.Timeout;
-  const debouncedFunction = (...args: any[]) => {
+  const debouncedFunction = (...args: T) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
   };

@@ -41,7 +41,7 @@ export const ProposalList = () => {
     const proposal: Proposal = {
       id: proposals.length + 1,
       title: newProposal,
-      author: "0x" + Math.floor(Math.random() * 1000).toString(16),
+      author: `0x${Math.floor(Math.random() * 1000).toString(16)}`,
       yesVotes: 0,
       noVotes: 0,
       isActive: true,
@@ -62,6 +62,7 @@ export const ProposalList = () => {
           className="flex-1 p-2 rounded bg-gray-700 text-white"
         />
         <button
+          type="button"
           onClick={handleAddProposal}
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500"
         >
