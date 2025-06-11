@@ -22,7 +22,7 @@ pub enum Status {
     Unknown,
     Pending,
     Ongoing,
-    Completed
+    Completed,
 }
 
 pub trait GameTrait {

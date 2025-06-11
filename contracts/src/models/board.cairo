@@ -16,7 +16,7 @@ pub struct Board {
 pub struct PWarPixel {
     #[key]
     pub position: Position,
-    pub owner: ContractAddress
+    pub owner: ContractAddress,
 }
 
 
@@ -27,5 +27,5 @@ pub struct GameId {
     pub x: u32,
     #[key]
     pub y: u32,
-    pub value: u32
+    pub value: u32,
 }

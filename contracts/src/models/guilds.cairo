@@ -10,5 +10,5 @@ pub struct Guild {
     pub guild_name: felt252,
     pub creator: ContractAddress,
     pub members: Span<ContractAddress>,
-    pub member_count: u32
+    pub member_count: u32,
 }

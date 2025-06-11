@@ -6,7 +6,7 @@ pub struct AllowedColor {
     pub game_id: u32,
     #[key]
     pub color: u32,
-    pub is_allowed: bool
+    pub is_allowed: bool,
 }
 
 // the color found in what index
@@ -17,7 +17,7 @@ pub struct PaletteColors {
     pub game_id: u32,
     #[key]
     pub idx: u32,
-    pub color: u32
+    pub color: u32,
 }
 
 // if the color is already in the palette
@@ -28,7 +28,7 @@ pub struct InPalette {
     pub game_id: u32,
     #[key]
     pub color: u32,
-    pub value: bool
+    pub value: bool,
 }
 
 // number of colors in the game's palette
@@ -37,5 +37,5 @@ pub struct InPalette {
 pub struct GamePalette {
     #[key]
     pub game_id: u32,
-    pub length: u32
+    pub length: u32,
 }

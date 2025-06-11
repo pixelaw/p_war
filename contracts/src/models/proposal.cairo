@@ -37,7 +37,7 @@ use starknet::ContractAddress;
 //     no_px: u32
 // }
 
-#[derive(Copy, Drop, Serde)]
+#[derive(Serde, Copy, Drop)]
 #[dojo::model]
 pub struct Proposal {
     #[key]
@@ -45,18 +45,18 @@ pub struct Proposal {
     #[key]
     pub index: u32,
     pub author: ContractAddress,
-    pub proposal_type: u8, // change it from ProposalType is not working...
+    pub proposal_type: u8,
     pub target_args_1: u32,
     pub target_args_2: u32,
     pub start: u64,
     pub end: u64,
     pub yes_voting_power: u32,
     pub no_voting_power: u32,
-    pub is_activated: bool, // added: check if the proposal is activated
+    pub is_activated: bool,
 }
 
 
-#[derive(Serde, Copy, Drop, PartialEq)]
+#[derive(Serde, Copy, Drop)]
 #[dojo::model]
 pub struct PlayerVote {
     #[key]
@@ -66,15 +66,15 @@ pub struct PlayerVote {
     #[key]
     pub index: u32,
     pub is_in_favor: bool,
-    pub voting_power: u32
+    pub voting_power: u32,
 }
 
-#[derive(Copy, Drop, Serde)]
+#[derive(Copy, Drop, Serde, PartialEq)]
 #[dojo::model]
 pub struct PixelRecoveryRate {
     #[key]
     pub game_id: u32,
-    pub rate: u64
+    pub rate: u64,
 }
 // impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
 //     fn into(self: ProposalType) -> felt252 {

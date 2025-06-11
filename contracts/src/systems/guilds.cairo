@@ -1,5 +1,5 @@
-use starknet::{ContractAddress};
 use pwar::models::guilds::Guild;
+use starknet::{ContractAddress};
 
 #[starknet::interface]
 pub trait IGuild<T> {
@@ -18,16 +18,8 @@ pub trait IGuild<T> {
 pub mod guild_actions {
     use dojo::event::EventStorage;
     use dojo::model::ModelStorage;
-    use pwar::models::{
-        game::{Game}, 
-        guilds::Guild,
-        player::Player
-    };
-    use starknet::{
-        ContractAddress, 
-        get_caller_address, 
-        get_contract_address, 
-    };
+    use pwar::models::{game::{Game}, guilds::Guild, player::Player};
+    use starknet::{ContractAddress, get_caller_address};
     use super::IGuild;
 
     #[derive(Copy, Drop, Serde)]
@@ -37,7 +29,7 @@ pub mod guild_actions {
         game_id: u32,
         guild_id: u32,
         guild_name: felt252,
-        creator: ContractAddress
+        creator: ContractAddress,
     }
 
     #[derive(Copy, Drop, Serde)]
@@ -46,7 +38,7 @@ pub mod guild_actions {
         #[key]
         game_id: u32,
         guild_id: u32,
-        member: ContractAddress
+        member: ContractAddress,
     }
 
     #[derive(Copy, Drop, Serde)]
@@ -55,7 +47,7 @@ pub mod guild_actions {
         #[key]
         game_id: u32,
         guild_id: u32,
-        member: ContractAddress
+        member: ContractAddress,
     }
 
     #[abi(embed_v0)]
@@ -99,7 +91,7 @@ pub mod guild_actions {
                 guild_name: guild_name,
                 creator: caller,
                 members: array![caller].span(),
-                member_count: 1
+                member_count: 1,
             };
             println!("new_guild.guild_id: {}", new_guild.guild_id);
 
@@ -113,7 +105,7 @@ pub mod guild_actions {
         }
 
         fn add_member(
-            ref self: ContractState, game_id: u32, guild_id: u32, new_member: ContractAddress
+            ref self: ContractState, game_id: u32, guild_id: u32, new_member: ContractAddress,
         ) {
             let mut app_world = self.world(@"pwar");
             let caller = get_caller_address();
@@ -161,7 +153,7 @@ pub mod guild_actions {
         }
 
         fn remove_member(
-            ref self: ContractState, game_id: u32, guild_id: u32, member: ContractAddress
+            ref self: ContractState, game_id: u32, guild_id: u32, member: ContractAddress,
         ) {
             let mut app_world = self.world(@"pwar");
             let caller = get_caller_address();
@@ -199,7 +191,7 @@ pub mod guild_actions {
         }
 
         fn is_member(
-            self: @ContractState, game_id: u32, guild_id: u32, member: ContractAddress
+            self: @ContractState, game_id: u32, guild_id: u32, member: ContractAddress,
         ) -> bool {
             let mut app_world = self.world(@"pwar");
             let guild: Guild = app_world.read_model((game_id, guild_id));

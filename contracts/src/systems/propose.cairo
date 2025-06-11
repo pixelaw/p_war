@@ -1,15 +1,11 @@
-use pwar::models::{
-    game::{Game}, 
-    proposal::Proposal,
-};
-
 use pixelaw::core::utils::Position;
+use pwar::models::{game::{Game}, proposal::Proposal};
 
 // define the interface
 #[starknet::interface]
 pub trait IPropose<T> {
     fn create_proposal(
-        ref self: T, game_id: u32, proposal_type: u8, target_args_1: u32, target_args_2: u32
+        ref self: T, game_id: u32, proposal_type: u8, target_args_1: u32, target_args_2: u32,
     ) -> u32;
     fn activate_proposal(ref self: T, game_id: u32, index: u32, clear_data: Span<Position>);
     fn add_new_color(ref self: T, game_id: u32, index: u32, game: Game, proposal: Proposal);
@@ -19,7 +15,7 @@ pub trait IPropose<T> {
         index: u32,
         game: Game,
         proposal: Proposal,
-        clear_data: Span<Position>
+        clear_data: Span<Position>,
     );
 }
 
@@ -28,26 +24,16 @@ pub trait IPropose<T> {
 pub mod propose_actions {
     use dojo::event::EventStorage;
     use dojo::model::ModelStorage;
-    use pwar::constants::{
-        PROPOSAL_DURATION, NEEDED_YES_VOTING_POWER
-    };
+    use pixelaw::core::actions::{IActionsDispatcherTrait as ICoreActionsDispatcherTrait};
+    use pixelaw::core::models::{pixel::Pixel, pixel::PixelUpdate};
+    use pixelaw::core::utils::{Position, get_core_actions};
+    use pwar::constants::{NEEDED_YES_VOTING_POWER, PROPOSAL_DURATION};
     use pwar::models::{
-        game::{Game, GameTrait}, 
-        proposal::Proposal,
-        board::{Board, PWarPixel},
-        allowed_color::{AllowedColor, PaletteColors, GamePalette, InPalette},
-        player::Player
+        allowed_color::{AllowedColor, GamePalette, InPalette, PaletteColors},
+        board::{Board, PWarPixel}, game::{Game, GameTrait}, player::Player, proposal::Proposal,
     };
     use pwar::systems::utils::check_game_status;
-    use pixelaw::core::actions::{
-        IActionsDispatcherTrait as ICoreActionsDispatcherTrait
-    };
-    use pixelaw::core::models::{pixel::PixelUpdate, pixel::Pixel};
-    use pixelaw::core::utils::{get_core_actions, Position};
-    use starknet::{
-        get_caller_address, 
-        get_block_timestamp
-    };
+    use starknet::{get_block_timestamp, get_caller_address};
     use super::IPropose;
 
     #[derive(Copy, Drop, Serde)]
@@ -58,7 +44,7 @@ pub mod propose_actions {
         index: u32,
         proposal_type: u8,
         target_args_1: u32,
-        target_args_2: u32
+        target_args_2: u32,
     }
 
     #[derive(Copy, Drop, Serde)]
@@ -69,7 +55,7 @@ pub mod propose_actions {
         index: u32,
         proposal_type: u8,
         target_args_1: u32,
-        target_args_2: u32
+        target_args_2: u32,
     }
 
     #[abi(embed_v0)]
@@ -79,7 +65,7 @@ pub mod propose_actions {
             game_id: u32,
             proposal_type: u8,
             target_args_1: u32,
-            target_args_2: u32
+            target_args_2: u32,
         ) -> u32 {
             //get world
             let mut app_world = self.world(@"pwar");
@@ -107,7 +93,7 @@ pub mod propose_actions {
                 end: get_block_timestamp() + PROPOSAL_DURATION,
                 yes_voting_power: 0,
                 no_voting_power: 0,
-                is_activated: false
+                is_activated: false,
             };
 
             game.proposal_idx += 1;
@@ -125,14 +111,14 @@ pub mod propose_actions {
                         index: game.proposal_idx,
                         proposal_type,
                         target_args_1,
-                        target_args_2
-                    }
+                        target_args_2,
+                    },
                 );
             new_proposal.index
         }
 
         fn activate_proposal(
-            ref self: ContractState, game_id: u32, index: u32, clear_data: Span<Position>
+            ref self: ContractState, game_id: u32, index: u32, clear_data: Span<Position>,
         ) {
             // get the proposal
             let mut app_world = self.world(@"pwar");
@@ -141,7 +127,7 @@ pub mod propose_actions {
             let current_timestamp = get_block_timestamp();
             assert(current_timestamp >= proposal.end, 'proposal period has not ended');
             assert(
-                proposal.yes_voting_power >= NEEDED_YES_VOTING_POWER, 'did not reach minimum yes'
+                proposal.yes_voting_power >= NEEDED_YES_VOTING_POWER, 'did not reach minimum yes',
             );
             assert(proposal.yes_voting_power > proposal.no_voting_power, 'yes is not more than no');
             assert(proposal.is_activated == false, 'this is already activated');
@@ -176,14 +162,14 @@ pub mod propose_actions {
                         index,
                         proposal_type: proposal.proposal_type,
                         target_args_1: proposal.target_args_1,
-                        target_args_2: proposal.target_args_2
-                    }
+                        target_args_2: proposal.target_args_2,
+                    },
                 )
         }
 
         // add new color to the palette, if the color is added, the oldest color become unusable.
         fn add_new_color(
-            ref self: ContractState, game_id: u32, index: u32, game: Game, proposal: Proposal
+            ref self: ContractState, game_id: u32, index: u32, game: Game, proposal: Proposal,
         ) {
             assert(proposal.proposal_type == 1, 'not add new color proposal');
             let mut app_world = self.world(@"pwar");
@@ -260,14 +246,14 @@ pub mod propose_actions {
             index: u32,
             game: Game,
             proposal: Proposal,
-            clear_data: Span<Position>
+            clear_data: Span<Position>,
         ) {
             assert(proposal.proposal_type == 2, 'not reset to white proposal');
             let mut core_world = self.world(@"pixelaw");
             let mut app_world = self.world(@"pwar");
             // Reset to white by color
             let core_actions = get_core_actions(
-                ref core_world
+                ref core_world,
             ); // TODO: should we use pwar_actions insted of core_actions???
             let system = get_caller_address();
 
@@ -298,10 +284,10 @@ pub mod propose_actions {
                                 text: Option::None,
                                 app: Option::Some(system),
                                 owner: Option::None,
-                                action: Option::None
+                                action: Option::None,
                             },
                             Option::None,
-                            false
+                            false,
                         );
 
                     // decrease the previous owner's num_owns

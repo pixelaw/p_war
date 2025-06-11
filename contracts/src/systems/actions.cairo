@@ -1,7 +1,7 @@
-use pwar::systems::guilds::{IGuildDispatcher};
 use pixelaw::core::utils::{DefaultParameters, Position};
-use starknet::{ContractAddress};
 use pwar::models::game::Game;
+use pwar::systems::guilds::{IGuildDispatcher};
+use starknet::{ContractAddress};
 
 // define the interface
 #[starknet::interface]
@@ -9,7 +9,7 @@ pub trait IActions<T> {
     fn interact(ref self: T, default_params: DefaultParameters);
     fn create_game(ref self: T, origin: Position) -> u32;
     fn create_game_guilds(
-        ref self: T, game_id: u32, guild_dispatcher: IGuildDispatcher
+        ref self: T, game_id: u32, guild_dispatcher: IGuildDispatcher,
     ) -> Array<u32>;
     fn get_game_id(self: @T, position: Position) -> u32;
     fn get_game(self: @T, id: u32) -> Game;
@@ -22,25 +22,21 @@ pub trait IActions<T> {
 pub mod pwar_actions {
     use dojo::model::{ModelStorage};
     use dojo::world::{IWorldDispatcherTrait};
+    use pixelaw::core::actions::{IActionsDispatcherTrait as ICoreActionsDispatcherTrait};
+    use pixelaw::core::models::pixel::{PixelUpdate, PixelUpdateResultTraitImpl};
+    use pixelaw::core::utils::{DefaultParameters, Position, get_callers, get_core_actions};
     use pwar::constants::{
-        APP_KEY, APP_ICON, GAME_ID, OUT_OF_BOUNDS_GAME_ID, DEFAULT_RECOVERY_RATE,
-        GAME_DURATION, DEFAULT_AREA,
+        APP_ICON, APP_KEY, DEFAULT_AREA, DEFAULT_RECOVERY_RATE, GAME_DURATION, GAME_ID,
+        OUT_OF_BOUNDS_GAME_ID,
     };
     use pwar::models::{
-        game::{Game, GameTrait}, board::{Board, PWarPixel}, player::{Player},
+        allowed_color::{AllowedColor, GamePalette, InPalette, PaletteColors},
+        board::{Board, PWarPixel}, game::{Game, GameTrait}, player::{Player},
         proposal::{PixelRecoveryRate},
-        allowed_color::{AllowedColor, PaletteColors, InPalette, GamePalette},
     };
     use pwar::systems::guilds::{IGuildDispatcher, IGuildDispatcherTrait};
     use pwar::systems::utils::{check_game_status};
-    use pixelaw::core::actions::{
-        IActionsDispatcherTrait as ICoreActionsDispatcherTrait
-    };
-    use pixelaw::core::models::pixel::{PixelUpdate, PixelUpdateResultTraitImpl};
-    use pixelaw::core::utils::{
-        get_core_actions, Position, DefaultParameters, get_callers
-    };
-    use starknet::{ContractAddress, get_block_timestamp, contract_address_const};
+    use starknet::{ContractAddress, contract_address_const, get_block_timestamp};
     use super::{IActions};
 
     #[derive(Copy, Drop, Serde)]
@@ -49,7 +45,7 @@ pub mod pwar_actions {
         #[key]
         id: u32,
         timestamp: u128,
-        creator: ContractAddress
+        creator: ContractAddress,
     }
 
     #[derive(Copy, Drop, Serde)]
@@ -128,10 +124,10 @@ pub mod pwar_actions {
                 winner_config: 0,
                 winner: starknet::contract_address_const::<0x0>(),
                 guild_ids: ArrayTrait::new().span(),
-                guild_count: 0
+                guild_count: 0,
             };
 
-            let board = Board { id, origin, width: DEFAULT_AREA, height: DEFAULT_AREA, };
+            let board = Board { id, origin, width: DEFAULT_AREA, height: DEFAULT_AREA };
 
             app_world.write_model(@board); //not sure
             app_world.write_model(@game);
@@ -154,10 +150,10 @@ pub mod pwar_actions {
                     break;
                 };
                 let allowed_color = AllowedColor {
-                    game_id: id, color: *a.at(color_idx), is_allowed: true
+                    game_id: id, color: *a.at(color_idx), is_allowed: true,
                 };
                 let palette_colors = PaletteColors {
-                    game_id: id, idx: color_idx, color: *a.at(color_idx)
+                    game_id: id, idx: color_idx, color: *a.at(color_idx),
                 };
                 let in_palette = InPalette { game_id: id, color: *a.at(color_idx), value: true };
                 app_world.write_model(@allowed_color);
@@ -168,7 +164,7 @@ pub mod pwar_actions {
 
             // set default recovery_rate
             let pixel_recovery_rate = PixelRecoveryRate {
-                game_id: id, rate: DEFAULT_RECOVERY_RATE
+                game_id: id, rate: DEFAULT_RECOVERY_RATE,
             };
             let game_palette = GamePalette { game_id: id, length: 9 };
             app_world.write_model(@pixel_recovery_rate);
@@ -180,7 +176,7 @@ pub mod pwar_actions {
 
         // initialize guilds for the game
         fn create_game_guilds(
-            ref self: ContractState, game_id: u32, guild_dispatcher: IGuildDispatcher
+            ref self: ContractState, game_id: u32, guild_dispatcher: IGuildDispatcher,
         ) -> Array<u32> {
             let mut guild_ids = ArrayTrait::new();
             guild_ids.append(guild_dispatcher.create_guild(game_id, 'Fire'));
@@ -192,7 +188,7 @@ pub mod pwar_actions {
 
         // To paint, basically use this function.
         fn place_pixel(
-            ref self: ContractState, app: ContractAddress, default_params: DefaultParameters
+            ref self: ContractState, app: ContractAddress, default_params: DefaultParameters,
         ) {
             // Load important variables
             let mut core_world = self.world(@"pixelaw");
@@ -205,7 +201,7 @@ pub mod pwar_actions {
 
             let allowed_color: AllowedColor = app_world.read_model((game_id, default_params.color));
             assert(
-                allowed_color.is_allowed, 'color is not allowed'
+                allowed_color.is_allowed, 'color is not allowed',
             ); // cannot test correctly without cheatcodes.
 
             let mut pwarPlayer: Player = app_world.read_model(player);
@@ -232,10 +228,10 @@ pub mod pwar_actions {
                         text: Option::None,
                         app: Option::None,
                         owner: Option::Some(pwarPlayer.address),
-                        action: Option::None
+                        action: Option::None,
                     },
                     Option::None,
-                    false
+                    false,
                 );
             println!("set_pixel END");
 
