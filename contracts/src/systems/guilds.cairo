@@ -6,12 +6,12 @@ pub trait IGuild<T> {
     fn add_member(ref self: T, game_id: u32, guild_id: u32, new_member: ContractAddress);
     fn join_guild(ref self: T, game_id: u32, guild_id: u32);
     fn remove_member(ref self: T, game_id: u32, guild_id: u32, member: ContractAddress);
-    fn is_member(ref self: T, game_id: u32, guild_id: u32, member: ContractAddress) -> bool;
-    fn get_guild_contract_address(ref self: T) -> ContractAddress;
-    fn get_guild_contract_name(ref self: T, game_id: u32, guild_id: u32) -> felt252;
-    fn get_player_commit(ref self: T, player_address: ContractAddress) -> u32;
-    fn get_player_owns(ref self: T, player_address: ContractAddress) -> u32;
-    fn get_guild_points(ref self: T, game_id: u32, guild_id: u32) -> u32;
+    fn is_member(self: @T, game_id: u32, guild_id: u32, member: ContractAddress) -> bool;
+    fn get_guild_contract_address(self: @T) -> ContractAddress;
+    fn get_guild_contract_name(self: @T, game_id: u32, guild_id: u32) -> felt252;
+    fn get_player_commit(self: @T, player_address: ContractAddress) -> u32;
+    fn get_player_owns(self: @T, player_address: ContractAddress) -> u32;
+    fn get_guild_points(self: @T, game_id: u32, guild_id: u32) -> u32;
 }
 
 #[dojo::contract]
@@ -199,7 +199,7 @@ pub mod guild_actions {
         }
 
         fn is_member(
-            ref self: ContractState, game_id: u32, guild_id: u32, member: ContractAddress
+            self: @ContractState, game_id: u32, guild_id: u32, member: ContractAddress
         ) -> bool {
             let mut app_world = self.world(@"pwar");
             let guild: Guild = app_world.read_model((game_id, guild_id));
@@ -218,31 +218,31 @@ pub mod guild_actions {
             is_member
         }
 
-        fn get_guild_contract_address(ref self: ContractState) -> ContractAddress {
+        fn get_guild_contract_address(self: @ContractState) -> ContractAddress {
             let guild_contract_address = get_contract_address();
 
             guild_contract_address
         }
 
-        fn get_guild_contract_name(ref self: ContractState, game_id: u32, guild_id: u32) -> felt252 {
+        fn get_guild_contract_name(self: @ContractState, game_id: u32, guild_id: u32) -> felt252 {
             let mut app_world = self.world(@"pwar");
             let guild: Guild = app_world.read_model((game_id, guild_id));
             guild.guild_name
         }
 
-        fn get_player_commit(ref self: ContractState, player_address: ContractAddress) -> u32 {
+        fn get_player_commit(self: @ContractState, player_address: ContractAddress) -> u32 {
             let mut app_world = self.world(@"pwar");
             let mut player: Player = app_world.read_model(player_address);
             player.num_commit
         }
 
-        fn get_player_owns(ref self: ContractState, player_address: ContractAddress) -> u32 {
+        fn get_player_owns(self: @ContractState, player_address: ContractAddress) -> u32 {
             let mut app_world = self.world(@"pwar");
             let mut player: Player = app_world.read_model(player_address);
             player.num_owns
         }
 
-        fn get_guild_points(ref self: ContractState, game_id: u32, guild_id: u32) -> u32 {
+        fn get_guild_points(self: @ContractState, game_id: u32, guild_id: u32) -> u32 {
             // Get the guild
             let mut app_world = self.world(@"pwar");
             let mut guild: Guild = app_world.read_model((game_id, guild_id));
