@@ -1,4 +1,5 @@
 use starknet::{ContractAddress};
+use pwar::models::guilds::Guild;
 
 #[starknet::interface]
 pub trait IGuild<T> {
@@ -7,8 +8,7 @@ pub trait IGuild<T> {
     fn join_guild(ref self: T, game_id: u32, guild_id: u32);
     fn remove_member(ref self: T, game_id: u32, guild_id: u32, member: ContractAddress);
     fn is_member(self: @T, game_id: u32, guild_id: u32, member: ContractAddress) -> bool;
-    fn get_guild_contract_address(self: @T) -> ContractAddress;
-    fn get_guild_contract_name(self: @T, game_id: u32, guild_id: u32) -> felt252;
+    fn get_guild(self: @T, game_id: u32, guild_id: u32) -> Guild;
     fn get_player_commit(self: @T, player_address: ContractAddress) -> u32;
     fn get_player_owns(self: @T, player_address: ContractAddress) -> u32;
     fn get_guild_points(self: @T, game_id: u32, guild_id: u32) -> u32;
@@ -218,16 +218,10 @@ pub mod guild_actions {
             is_member
         }
 
-        fn get_guild_contract_address(self: @ContractState) -> ContractAddress {
-            let guild_contract_address = get_contract_address();
-
-            guild_contract_address
-        }
-
-        fn get_guild_contract_name(self: @ContractState, game_id: u32, guild_id: u32) -> felt252 {
+        fn get_guild(self: @ContractState, game_id: u32, guild_id: u32) -> Guild {
             let mut app_world = self.world(@"pwar");
             let guild: Guild = app_world.read_model((game_id, guild_id));
-            guild.guild_name
+            guild
         }
 
         fn get_player_commit(self: @ContractState, player_address: ContractAddress) -> u32 {
