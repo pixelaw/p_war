@@ -49,13 +49,68 @@ And after moving into contracts directory, the versions for these libs are set i
 To clone this repository with all submodules, run:
 
 ```bash
-git clone --recurse-submodules https://github.com/pixelaw/pwar.git
+git clone https://github.com/pixelaw/pwar.git
 cd pwar
-
-git submodule init
-git submodule update
 ```
 
-###
+### Locally running pwar
 
-Enter `/client` and `/contracts` and follow the respective README's.
+**Pwar** runs inside the [PixeLAW Core World](https://github.com/pixelaw/core), which is why we initally have to spin up an empty PixeLAW world.
+
+For this we have built a docker container that builds the PixeLAW world:
+
+```bash
+cd client
+docker compose up --build
+```
+
+This docker container builds the PixeLAW world and runs Torii and Katana.
+
+Find `client/docker-compose.yml` for more information.
+
+Feel free to:
+
+```bash
+docker exec -it pixelaw-core bash
+klog
+```
+
+To find katana logs or `tlog` for torii logs.
+
+### Deploy pwar contracts
+
+Once we initialised the PixeLAW world and its contracts, we now have to deploy the pwar contracts.
+
+```bash
+cd contracts
+sozo build
+sozo migrate
+```
+
+
+### Run the client
+
+In order to spin up the pwar client run:
+
+```bash
+cd client
+pnpm install
+pnpm run dev
+```
+
+### Build on top of pwar
+
+If you would like to make changes feel free to raise a PR. Changes for the client inside `client`, and changes for the contracts inside `contracts`. Be sure to test the contracts.
+
+For that you will have to repeat to
+
+```bash
+sozo build --typescript
+sozo migrate
+```
+
+Copy the generated typescript files in `contracts/bindings/typescipts` (i.e. `contracts.gen.ts` and `models.gen.ts`)into `client/src/config`.
+
+Lastly you will also have to copy the contract section inside `contracts/manifest_dev.json` into `client/src/config/manifest.contracts.ts` (be sure to only replace the contracts array).
+
+For any questions reach out to us in our Discord or Twitter.
