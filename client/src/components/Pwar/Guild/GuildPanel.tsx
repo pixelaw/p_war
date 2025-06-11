@@ -25,7 +25,8 @@ export const GuildPanel: FC<GuildPanelProps> = ({
       if (!gameId) return;
 
       try {
-        const fetchedGame = await world.pwar_actions.getGameId(account, gameId);
+        const fetchedGame = await world.pwar_actions.getGame(gameId);
+        console.log("Fetched game data: world.pwar_actions.getGame", fetchedGame);
         if (fetchedGame && fetchedGame.guild_ids) {
           const guildPromises = fetchedGame.guild_ids.map(
             async (guildId: number) => {

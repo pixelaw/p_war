@@ -5,11 +5,10 @@ import styles from "./PwarPage.module.css";
 import { StatsDashboard } from "@/components/Pwar/Stats/StatsDashboard";
 import { usePwarProvider } from "@/provider/PwarContext";
 import { DefaultParameters, Position } from "@pixelaw/core-dojo";
-import { AccountInterface, CairoOption, CairoOptionVariant } from "starknet";
+import { CairoOption, CairoOptionVariant } from "starknet";
 import { GameControls } from "@/components/Pwar/GameControls/GameControls";
 import { GuildPanel } from "@/components/Pwar/Guild/GuildPanel";
 import { GameStatusBar } from "@/components/Pwar/GameStatus/GameStatusBar";
-import { DojoWallet } from "@pixelaw/core-dojo";
 
 // The content of the Pwar page, wrapped by PwarProvider
 const PwarPageContent: React.FC = () => {
@@ -75,10 +74,11 @@ const PwarPageContent: React.FC = () => {
         x: center[0],
         y: center[1],
       } as Position;
-      const newGameId = await world.pwar_actions.createGame(account, position);
+      await world.pwar_actions.createGame(account, position);
+      const newGameId = await world.pwar_actions.getGameId(position);
       console.log(newGameId);
-      // setGameId(newGameId);
-      setGameId(1);
+      setGameId(newGameId);
+      // setGameId(1);
       setGameStarted(true);
     } catch (error) {
       console.error("Failed to start game:", error);

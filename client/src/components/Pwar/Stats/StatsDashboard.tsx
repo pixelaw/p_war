@@ -34,20 +34,16 @@ export const StatsDashboard = () => {
     setIsLoading(true);
     try {
       // Get player commit data
-      const commitResponse = await world.guild_actions.getPlayerCommit(account,
-        wallet.address,
-      );
+      const commitResponse = await world.guild_actions.getPlayerCommit(wallet.address);
 
       // Get player owns data
-      const ownsResponse = await world.guild_actions.getPlayerOwns(account,
-        wallet.address,
-      );
+      const ownsResponse = await world.guild_actions.getPlayerOwns(wallet.address);
 
       console.log("commitResponse", commitResponse);
       console.log("ownsResponse", ownsResponse);
       // Update state with fetched data
-      // setPlayerCommit(Number(commitResponse));
-      // setPlayerOwns(Number(ownsResponse));
+      setPlayerCommit(Number(commitResponse));
+      setPlayerOwns(Number(ownsResponse));
     } catch (error) {
       console.error("Failed to fetch player stats:", error);
     } finally {

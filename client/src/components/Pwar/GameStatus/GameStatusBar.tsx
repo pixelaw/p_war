@@ -24,7 +24,8 @@ export const GameStatusBar: FC<GameStatusBarProps> = ({
     const fetchGameTime = async () => {
       try {
         // Implement according to your contract structure
-        const gameData = await world.p_war_game.get_game(account, gameId);
+        console.log("Fetching game time for gameId:", gameId);
+        const gameData = await world.pwar_actions.getGame(gameId);
         if (gameData && gameData.end_time) {
           const currentTime = Math.floor(Date.now() / 1000);
           const remaining = gameData.end_time - currentTime;
