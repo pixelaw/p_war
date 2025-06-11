@@ -1,7 +1,7 @@
 export const pwarManifest = [
     {
       "address": "0x38be037c76817f4d73f7cec04a5bffb9d64ce544674f72637563708971ef1d3",
-      "class_hash": "0x72fd8b7ba1cfe967f24420cf43b70bff30fcc2b9438f207db36eb999e4fa073",
+      "class_hash": "0x3ee99e91fdfa35698d20960111322d90bba48f0429d2c00ce2656f0ce8eb21e",
       "abi": [
         {
           "type": "impl",
@@ -69,6 +69,46 @@ export const pwarManifest = [
             {
               "name": "True",
               "type": "()"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "core::array::Span::<core::starknet::contract_address::ContractAddress>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::starknet::contract_address::ContractAddress>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "pwar::models::guilds::Guild",
+          "members": [
+            {
+              "name": "game_id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "guild_id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "guild_name",
+              "type": "core::felt252"
+            },
+            {
+              "name": "creator",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "members",
+              "type": "core::array::Span::<core::starknet::contract_address::ContractAddress>"
+            },
+            {
+              "name": "member_count",
+              "type": "core::integer::u32"
             }
           ]
         },
@@ -178,18 +218,7 @@ export const pwarManifest = [
             },
             {
               "type": "function",
-              "name": "get_guild_contract_address",
-              "inputs": [],
-              "outputs": [
-                {
-                  "type": "core::starknet::contract_address::ContractAddress"
-                }
-              ],
-              "state_mutability": "view"
-            },
-            {
-              "type": "function",
-              "name": "get_guild_contract_name",
+              "name": "get_guild",
               "inputs": [
                 {
                   "name": "game_id",
@@ -202,7 +231,7 @@ export const pwarManifest = [
               ],
               "outputs": [
                 {
-                  "type": "core::felt252"
+                  "type": "pwar::models::guilds::Guild"
                 }
               ],
               "state_mutability": "view"

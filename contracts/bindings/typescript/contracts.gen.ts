@@ -256,34 +256,17 @@ export function setupWorld(provider: DojoProvider) {
 		}
 	};
 
-	const build_guild_actions_getGuildContractAddress_calldata = (): DojoCall => {
+	const build_guild_actions_getGuild_calldata = (gameId: BigNumberish, guildId: BigNumberish): DojoCall => {
 		return {
 			contractName: "guild_actions",
-			entrypoint: "get_guild_contract_address",
-			calldata: [],
-		};
-	};
-
-	const guild_actions_getGuildContractAddress = async () => {
-		try {
-			return await provider.call("pwar", build_guild_actions_getGuildContractAddress_calldata());
-		} catch (error) {
-			console.error(error);
-			throw error;
-		}
-	};
-
-	const build_guild_actions_getGuildContractName_calldata = (gameId: BigNumberish, guildId: BigNumberish): DojoCall => {
-		return {
-			contractName: "guild_actions",
-			entrypoint: "get_guild_contract_name",
+			entrypoint: "get_guild",
 			calldata: [gameId, guildId],
 		};
 	};
 
-	const guild_actions_getGuildContractName = async (gameId: BigNumberish, guildId: BigNumberish) => {
+	const guild_actions_getGuild = async (gameId: BigNumberish, guildId: BigNumberish) => {
 		try {
-			return await provider.call("pwar", build_guild_actions_getGuildContractName_calldata(gameId, guildId));
+			return await provider.call("pwar", build_guild_actions_getGuild_calldata(gameId, guildId));
 		} catch (error) {
 			console.error(error);
 			throw error;
@@ -674,10 +657,8 @@ export function setupWorld(provider: DojoProvider) {
 			buildAddMemberCalldata: build_guild_actions_addMember_calldata,
 			createGuild: guild_actions_createGuild,
 			buildCreateGuildCalldata: build_guild_actions_createGuild_calldata,
-			getGuildContractAddress: guild_actions_getGuildContractAddress,
-			buildGetGuildContractAddressCalldata: build_guild_actions_getGuildContractAddress_calldata,
-			getGuildContractName: guild_actions_getGuildContractName,
-			buildGetGuildContractNameCalldata: build_guild_actions_getGuildContractName_calldata,
+			getGuild: guild_actions_getGuild,
+			buildGetGuildCalldata: build_guild_actions_getGuild_calldata,
 			getGuildPoints: guild_actions_getGuildPoints,
 			buildGetGuildPointsCalldata: build_guild_actions_getGuildPoints_calldata,
 			getPlayerCommit: guild_actions_getPlayerCommit,
