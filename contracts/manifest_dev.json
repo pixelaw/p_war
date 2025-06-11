@@ -2141,8 +2141,8 @@
       ]
     },
     {
-      "address": "0x346e8974e4beaf30b8b2bf65c979ddfe9cc26fa0e77f885f7efe95cab7f8b0c",
-      "class_hash": "0x2438b820f0bee8081c9722ea4b6f32df004b3babf9c56aff518c5f9e25187b1",
+      "address": "0x2226c41273351a3d09127412d87eab7ee2c934b6978da1342229201966014fa",
+      "class_hash": "0x273a59bed6da71650a30d4ff22b0c88329714d296a183b0171b14f36f72b9d3",
       "abi": [
         {
           "type": "impl",
@@ -2285,6 +2285,62 @@
           ]
         },
         {
+          "type": "struct",
+          "name": "core::array::Span::<core::integer::u32>",
+          "members": [
+            {
+              "name": "snapshot",
+              "type": "@core::array::Array::<core::integer::u32>"
+            }
+          ]
+        },
+        {
+          "type": "struct",
+          "name": "pwar::models::game::Game",
+          "members": [
+            {
+              "name": "id",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "start",
+              "type": "core::integer::u64"
+            },
+            {
+              "name": "end",
+              "type": "core::integer::u64"
+            },
+            {
+              "name": "proposal_idx",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "coeff_own_pixels",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "coeff_commits",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "winner_config",
+              "type": "core::integer::u32"
+            },
+            {
+              "name": "winner",
+              "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+              "name": "guild_ids",
+              "type": "core::array::Span::<core::integer::u32>"
+            },
+            {
+              "name": "guild_count",
+              "type": "core::integer::u32"
+            }
+          ]
+        },
+        {
           "type": "interface",
           "name": "pwar::systems::actions::IActions",
           "items": [
@@ -2348,6 +2404,22 @@
               "outputs": [
                 {
                   "type": "core::integer::u32"
+                }
+              ],
+              "state_mutability": "view"
+            },
+            {
+              "type": "function",
+              "name": "get_game",
+              "inputs": [
+                {
+                  "name": "id",
+                  "type": "core::integer::u32"
+                }
+              ],
+              "outputs": [
+                {
+                  "type": "pwar::models::game::Game"
                 }
               ],
               "state_mutability": "view"
