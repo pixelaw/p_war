@@ -18,8 +18,9 @@ function Main() {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/world" element={<WorldSelectorPage />} />
           <Route path="/wallet" element={<WalletSelectorPage />} />
+          <Route path="/pixelaw" element={<GamePage />} />
           <Route path="/pwar" element={<PwarPage />} />
-          <Route path="/" element={<GamePage />} />
+          <Route path="/" element={<PwarPage />} />
         </Routes>
       </div>
     </div>
