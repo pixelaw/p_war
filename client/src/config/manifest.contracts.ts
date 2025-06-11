@@ -1,7 +1,7 @@
 export const pwarManifest = [
     {
       "address": "0x38be037c76817f4d73f7cec04a5bffb9d64ce544674f72637563708971ef1d3",
-      "class_hash": "0x6ec9c343a9c790dde78143e508f2f63c5116874110d2ef2ef237df220170a79",
+      "class_hash": "0x72fd8b7ba1cfe967f24420cf43b70bff30fcc2b9438f207db36eb999e4fa073",
       "abi": [
         {
           "type": "impl",
@@ -174,7 +174,7 @@ export const pwarManifest = [
                   "type": "core::bool"
                 }
               ],
-              "state_mutability": "external"
+              "state_mutability": "view"
             },
             {
               "type": "function",
@@ -185,7 +185,7 @@ export const pwarManifest = [
                   "type": "core::starknet::contract_address::ContractAddress"
                 }
               ],
-              "state_mutability": "external"
+              "state_mutability": "view"
             },
             {
               "type": "function",
@@ -205,7 +205,7 @@ export const pwarManifest = [
                   "type": "core::felt252"
                 }
               ],
-              "state_mutability": "external"
+              "state_mutability": "view"
             },
             {
               "type": "function",
@@ -221,7 +221,7 @@ export const pwarManifest = [
                   "type": "core::integer::u32"
                 }
               ],
-              "state_mutability": "external"
+              "state_mutability": "view"
             },
             {
               "type": "function",
@@ -237,7 +237,7 @@ export const pwarManifest = [
                   "type": "core::integer::u32"
                 }
               ],
-              "state_mutability": "external"
+              "state_mutability": "view"
             },
             {
               "type": "function",
@@ -257,7 +257,7 @@ export const pwarManifest = [
                   "type": "core::integer::u32"
                 }
               ],
-              "state_mutability": "external"
+              "state_mutability": "view"
             }
           ]
         },
@@ -384,12 +384,6 @@ export const pwarManifest = [
         "add_member",
         "join_guild",
         "remove_member",
-        "is_member",
-        "get_guild_contract_address",
-        "get_guild_contract_name",
-        "get_player_commit",
-        "get_player_owns",
-        "get_guild_points",
         "upgrade"
       ]
     },
