@@ -3,54 +3,52 @@
 --------+--------------------------------------------------------------------+--------------------------------------------------------------------
  Synced | 0x01d09b5e00f376337603943fc12715e439e91c0039f353b1cc48bb278dfa99d5 | 0x075fc75bcd1a7f8b4bf64b74978b0f89c8cee44bb755c1dae6f82284756451ec 
 
- [90mNamespaces[39m | Status  | Dojo Selector                                                      
-------------+---------+--------------------------------------------------------------------
- p_war      | Created | 0x062d7b4b833f45f3b8bd23fdbd2e71ca4081f90752360bcf21fcaa39cce7f626 
+ [90mNamespaces[39m | Status | Dojo Selector                                                      
+------------+--------+--------------------------------------------------------------------
+ pixelaw    | Synced | 0x054b1a9dfb8f09560c4386777c6ec02c76a4aca5e18b896b2a9ee9b275c7ae77 
+ pwar       | Synced | 0x06561ddf9cdf4c5e58f9a4258af70b5b066bfe37099c013e2cf1299466478754 
 
- [90mContracts[39m                 | Status  | Is Initialized | Dojo Selector                                                      | Contract Address                                                   
----------------------------+---------+----------------+--------------------------------------------------------------------+--------------------------------------------------------------------
- p_war-actions             | Created | false          | 0x05c4dfad1ce85f4c83221306fbcb419ee67523cc89465f028a2a6f3f90a6f0b8 | 0x00d1e895319120004075fdd61571f3e3aa90e89a2b0f22462775e4a63408d0c5 
- p_war-allowed_app_actions | Created | false          | 0x078f047e7dd7b9623dc8867dc03af4d60eb5d2a11b2c41afabeea4e6d0ec0c8c | 0x05690b9d49b93542faa53db1ad2a9631b0ea175abb1297b6da5db60a0a94e35a 
- p_war-guild_actions       | Created | false          | 0x05a9bda3f6e0c2434004cf6dab0745c5d894da70cf53eca4bd847b21b3c94276 | 0x048d49c8e764afef53c591f812fdbafdb00177d065c858ee07ac4bcc6d01b216 
- p_war-p_war_actions       | Created | false          | 0x0386fdc6d6ac46f91810daa12b1e916e9abad5027835f35126b3c4950a94ed99 | 0x02f3dad854016a24174a0cfdd3f5c72c1ef5b0320d28eba044e73467c53f385a 
- p_war-propose_actions     | Created | false          | 0x05f7a960aa6f278cc9d575d01a7832f32c10a05356e7bfed4a2d70701e561583 | 0x06313aef58aaf53fe10367e1b8dd49fb57c167161692fe317d6af29c17ba3fd1 
- p_war-voting_actions      | Created | false          | 0x0346d11d3e74683676b1ea1f5b985192ac36ed677b0b01bc8c5cc975eb920460 | 0x0048b80202712169439d21f954a694827eeb35f33641f1bb04bce607a66cbe89 
+ [90mContracts[39m            | Status            | Is Initialized | Dojo Selector                                                      | Contract Address                                                   
+----------------------+-------------------+----------------+--------------------------------------------------------------------+--------------------------------------------------------------------
+ pixelaw-actions      | Migration skipped | true           | 0x016928a49cfd8cf14e9f41e9d8f873890d1ab7d23b9a312d8a72f4031159876f | 0x0001f455be12a750b7228e5626e1efd6bcee4849f24e98bb098371d6e8f773f3 
+ pwar-guild_actions   | Synced            | true           | 0x03c3b77d165909386294773571272f51dcefab9d0aa99d69b70796f6501d6f42 | 0x038be037c76817f4d73f7cec04a5bffb9d64ce544674f72637563708971ef1d3 
+ pwar-propose_actions | Synced            | true           | 0x05052f70e59d3197eee09586db5f0c9578581601c549020f478ffe96e57d8573 | 0x04038ddb14b806e40242355883643c009451a6b15fc9aa402a1248dae25a5a49 
+ pwar-pwar_actions    | Synced            | true           | 0x03daa6a1f5dad3f5074b948a3e3a65e5b5f08198629686def58f43acce601a48 | 0x02226c41273351a3d09127412d87eab7ee2c934b6978da1342229201966014fa 
+ pwar-voting_actions  | Synced            | true           | 0x062e6ca68a564d25337ca245b38054c9b249d3a9d3d7bb0d97a6a817e473383a | 0x00379ac4b00a0ad23a102ea64d2686123300ef515605d0cea7df79405f4555ba 
 
- [90mModels[39m                   | Status  | Dojo Selector                                                      
---------------------------+---------+--------------------------------------------------------------------
- p_war-AllowedApp         | Created | 0x024c44da87007d7e5ddba30435a344c4296937b3e49ba3f1dab26998bc977c1b 
- p_war-AllowedColor       | Created | 0x05520152b0978c0c76d1cb39e3a23ebedc3fc1cac2b0ec48c2f0164de62ff394 
- p_war-App                | Created | 0x047de031d5f59200c9c7b04f93cec782f351bcfbee4bd6b9497d1d0fddf5ba7e 
- p_war-AppName            | Created | 0x055e803bc532c319a920c31267510f5fdfa6431bbc4e0432fa8f4073d996ee40 
- p_war-Area               | Created | 0x019b86f5e8e9198414125643c74e58c79a863e4010eef19df7263bef8a60f228 
- p_war-Board              | Created | 0x01f5d3e04352f0283dd848120e3c8146498d70a3cf08d115ceab9ddba114fc7c 
- p_war-CoreActionsAddress | Created | 0x030d1e3efaf806af0a7b10bb8bf98d545aa8dcb636325d85dbde74441cabf3d3 
- p_war-Dummy              | Created | 0x05167094bdb505ce4fdd1f941d7875554f94197ca1be0cb7e534e77c80ded21e 
- p_war-Game               | Created | 0x02f439249064bca5221700d011bb4b2b8163fe152f960a5e9a8418622b2d49b0 
- p_war-GameId             | Created | 0x05b7763433d1f2ff36e03b56fad54f2ca8628eb87e8060fa6502a0519958433e 
- p_war-GamePalette        | Created | 0x071e91cdbe22c2bde22cac40da33028857d64dc54d3aa59047d55afbcaf0c361 
- p_war-Guild              | Created | 0x0048b7dd3863c574a6506b254b4533005c295e6a55c14eaaef2c01f7a8ddf1b0 
- p_war-InPalette          | Created | 0x0595373238c6856488ccac73560860adb7b99bcae8f508476b06da609ecefc0d 
- p_war-PWarPixel          | Created | 0x078c9c0ceddaf61af54b0bf9c8f85d8abdeafa54db374022604a4ccc68081123 
- p_war-PaletteColors      | Created | 0x06eeea3eba46705c4886f109fef4bae971d7ee2e974ad518bc8c7b00efdbc1d6 
- p_war-Pixel              | Created | 0x04974fb435220fdae657329e6934401b2e7ac716f252bb3ffb4d880dca2937ea 
- p_war-PixelRecoveryRate  | Created | 0x00321eed807285c99cb799dd5f9330f4a0a273dc7643f0cdce71792bc11a3e64 
- p_war-Player             | Created | 0x02d334816f8b0196ba2404794e0bbc78a982dea84e82eaf39e1abcf10e15e7af 
- p_war-PlayerVote         | Created | 0x015f95c6cdb848bc38c7eaf9b6404f68ea8aa6478d363fcc0e0f40516057d25c 
- p_war-Proposal           | Created | 0x061d35f2d26dad619a3f5f1e6c36fe98bc6e2556dcda13ae9dd0d715c2e17f4f 
- p_war-QueueItem          | Created | 0x023311c9635a725e77b130e9272595ea13c1747a10313fe5ca5a3fd8f96b5fbf 
- p_war-RTree              | Created | 0x0085c55cda1cdc80e0690ba3e8978aa9ef145ffebf149f3aa61b552ab95d9e7e 
+ [90mModels[39m                     | Status            | Dojo Selector                                                      
+----------------------------+-------------------+--------------------------------------------------------------------
+ pixelaw-App                | Migration skipped | 0x03650456503601ce448928ac87c54e3a6e95e76d725a59c95c7201324c9b2b74 
+ pixelaw-AppName            | Migration skipped | 0x03b816829f5d924b5acc1c44d28b6b61b4edd94e62444c536b2bdc85c0e70a2a 
+ pixelaw-Area               | Migration skipped | 0x0041f22f1725b6e571bd66653e79fd700d80cc35c56f9dc5d663802e57478194 
+ pixelaw-CoreActionsAddress | Migration skipped | 0x05379e1ce3a70cb70f1e96dae1b142164574f33d4e32cebdb965b5aec30222c5 
+ pixelaw-Pixel              | Migration skipped | 0x07e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e 
+ pixelaw-QueueItem          | Migration skipped | 0x0549a17f23ab80595d9abd4d989a3d4bf0c1987ebc08ad48aecab0f1e8c311b4 
+ pixelaw-RTree              | Migration skipped | 0x03baaf9fe25823e8928b6fc6400e28e98d4b7618ff56faf269a11f3400a1c105 
+ pwar-AllowedColor          | Synced            | 0x058a38d0fade38ada8b7b4ea1ad3f72e83937b1d67a3db259cabf89da916c113 
+ pwar-Board                 | Synced            | 0x04e3da83a446904f6e1ab085d8b84a1ad8d361ccc19820f30833510912cd483e 
+ pwar-Dummy                 | Synced            | 0x02962b188b8dc153cae1540d8ab6cb21672a46f9ab8651d7c912039d6fefab7f 
+ pwar-Game                  | Synced            | 0x046592e702ad6bb2731ed3e08a0de4b6923b9855554afa10f6b671ab9ceef2cf 
+ pwar-GameId                | Synced            | 0x0543171bbc3c21261062cff1a10a96d431dff91bf380fb435b232915330d79d4 
+ pwar-GamePalette           | Synced            | 0x0708516af73e5ea91aabf8799d1678d91e64020fec55b52b41af2901eb6b4573 
+ pwar-Guild                 | Synced            | 0x0141db48785b7b1b2d5b9454b58d87366cff6b3ce0afe8fbb0126d0bce96685f 
+ pwar-InPalette             | Synced            | 0x035818e4ff6e9ba38342d5b79616d83fc230db430718620754e5cf5bf1d197a7 
+ pwar-PWarPixel             | Synced            | 0x04bb33c5d3d85c135e0d7674f328cdf38a2a45379605e2ddc72a95003a3f50cc 
+ pwar-PaletteColors         | Synced            | 0x009d4e9107b255cc8990e2e459e784ebd2286530ae3cd4483aff5cd9efc7a316 
+ pwar-PixelRecoveryRate     | Synced            | 0x07643b1ef53792ea2a31f74047117109eefb2c758d6fe327ba6055514e0f84c0 
+ pwar-Player                | Synced            | 0x00631b0584b81d509f326cb0fb45670acda594c91ece205cbff98af9fddbaa6b 
+ pwar-PlayerVote            | Synced            | 0x066568da1d9e588c2bddd14462c8b9d1ec593f155e87e04f66af56c3e0bac43c 
+ pwar-Proposal              | Synced            | 0x05d86acb7206f393e6675d53560320dcaae768cfdfde5c04afe1892cb1cf53b5 
 
- [90mEvents[39m                  | Status  | Dojo Selector                                                      
--------------------------+---------+--------------------------------------------------------------------
- p_war-Alert             | Created | 0x077fb61101ea7e6f84df47e2c22e4af3f2b69fdb12606746a063f3e5fd5eb5cf 
- p_war-EndedGame         | Created | 0x0024dbf8c208d84f64e9ff343f2d5e8c55d17e320506e85a2f6c57bff0246607 
- p_war-GuildCreated      | Created | 0x05ff13353b9e99044fa57b4cc5271f2a9eec32cbaca1796152f43b4f6761b54f 
- p_war-MemberAdded       | Created | 0x054a885b1bb6b6ef8fea6d057029c71b7f80c415c51c11049f86e5697ed90292 
- p_war-MemberRemoved     | Created | 0x03469f9971d508b567c106b36b1cc4f39a9c490c5162104dd01f2a0d58122572 
- p_war-ProposalActivated | Created | 0x067e54ab4a55e99a7d9b1e83e96ce2aac29a14ba607de70a46fcbd98aded54ec 
- p_war-ProposalCreated   | Created | 0x02e3ccd2cfa06f11ce5e606a3887ad5c0f8ccc44374c77435b9c4bd38c04c9c7 
- p_war-QueueScheduled    | Created | 0x05d93507a88860ffaa48952f5aa5669abc159f353ba9135693f7c99961ca3369 
- p_war-StartedGame       | Created | 0x015e616b9a625c7825e4a5d9e5fd1d4743822c85dd2381ab5f40cbfccad9902e 
- p_war-Voted             | Created | 0x02c917f12b4b0002752d7fb61fa0c24dfaaf3e0f1be5b62f9ee52a5009961eb1 
+ [90mEvents[39m                 | Status            | Dojo Selector                                                      
+------------------------+-------------------+--------------------------------------------------------------------
+ pixelaw-QueueScheduled | Migration skipped | 0x032e74bc9762cc0dcdb6c7b67b35ded5b22a785e7c924673d6163369e6c6f769 
+ pwar-EndedGame         | Synced            | 0x0783100ea5deaebbb21ec5ceac9c06020b3a405f6eaebd35c3a4679b4052fe69 
+ pwar-GuildCreated      | Synced            | 0x04a60caf23cdcc73f43ca89900e0aaa5772ccb442b380e85cb7d1949c5fa04be 
+ pwar-MemberAdded       | Synced            | 0x048d28bde10f0fff86325dd577e55fc08a477b03dbe72ab0f5969ab06e9b608b 
+ pwar-MemberRemoved     | Synced            | 0x02c75a32891e878002edc63f1136f84a9620173a77bee76d592358d3ed3241fb 
+ pwar-ProposalActivated | Synced            | 0x00326c5fc197c47864260c462db88b3762de1746327e4f89be10fc53cae32af0 
+ pwar-ProposalCreated   | Synced            | 0x0460d31839213fdac40fd33efcd4c2ff242ddf8f100114c04b1617cfbc468fc2 
+ pwar-StartedGame       | Synced            | 0x0295cb760391553c019feacaaf6e248877c3ec968c5beff6d4395e5062a9ca0b 
+ pwar-Voted             | Synced            | 0x0453c6d68c4f80ccaf9b772f8a86149d09fd156dbf0af86fbf9dd28e8b3eb22d 
 
