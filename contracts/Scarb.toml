@@ -19,6 +19,7 @@ pixelaw_testing = { git = "https://github.com/pixelaw/core", tag = "v0.6.31" }
 
 [[target.starknet-contract]]
 sierra = true
+allowed-libfuncs-list.name = "experimental"
 
 #these external contract builds should come from pixelawjs
 build-external-contracts = [
