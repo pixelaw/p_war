@@ -1,69 +1,63 @@
-use p_war::models::game::Game;
-use p_war::models::guilds::Guild;
-use p_war::models::player::Player;
-use starknet::{ContractAddress, get_caller_address};
+use pwar::models::guilds::Guild;
+use starknet::{ContractAddress};
 
 #[starknet::interface]
 pub trait IGuild<T> {
-    fn create_guild(ref self: T, game_id: usize, guild_name: felt252) -> usize; //returns guild ID
-    fn add_member(ref self: T, game_id: usize, guild_id: usize, new_member: ContractAddress);
-    fn join_guild(ref self: T, game_id: usize, guild_id: usize);
-    fn remove_member(ref self: T, game_id: usize, guild_id: usize, member: ContractAddress);
-    fn is_member(ref self: T, game_id: usize, guild_id: usize, member: ContractAddress) -> bool;
-    fn get_guild_contract_address(ref self: T) -> ContractAddress;
-    fn get_guild_points(ref self: T, game_id: usize, guild_id: usize) -> usize;
+    fn create_guild(ref self: T, game_id: u32, guild_name: felt252) -> u32; //returns guild ID
+    fn add_member(ref self: T, game_id: u32, guild_id: u32, new_member: ContractAddress);
+    fn join_guild(ref self: T, game_id: u32, guild_id: u32);
+    fn remove_member(ref self: T, game_id: u32, guild_id: u32, member: ContractAddress);
+    fn is_member(self: @T, game_id: u32, guild_id: u32, member: ContractAddress) -> bool;
+    fn get_guild(self: @T, game_id: u32, guild_id: u32) -> Guild;
+    fn get_player_commit(self: @T, player_address: ContractAddress) -> u32;
+    fn get_player_owns(self: @T, player_address: ContractAddress) -> u32;
+    fn get_guild_points(self: @T, game_id: u32, guild_id: u32) -> u32;
 }
 
-#[dojo::contract(namespace: "pixelaw", nomapping: true)]
-mod guild_actions {
+#[dojo::contract]
+pub mod guild_actions {
     use dojo::event::EventStorage;
-    use dojo::model::{ModelStorage, ModelValueStorage};
-    use dojo::world::WorldStorageTrait;
-    use p_war::models::{
-        game::{Game, Status, GameTrait}, guilds::{Guild},
-        board::{GameId, Board, Position, PWarPixel}, player::{Player}, allowed_app::AllowedApp,
-    };
-    use starknet::{
-        ContractAddress, get_block_timestamp, get_caller_address, get_contract_address, get_tx_info
-    };
-    use super::{IGuild};
+    use dojo::model::ModelStorage;
+    use pwar::models::{game::{Game}, guilds::Guild, player::Player};
+    use starknet::{ContractAddress, get_caller_address};
+    use super::IGuild;
 
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
     pub struct GuildCreated {
         #[key]
-        game_id: usize,
-        guild_id: usize,
+        game_id: u32,
+        guild_id: u32,
         guild_name: felt252,
-        creator: ContractAddress
+        creator: ContractAddress,
     }
 
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
     pub struct MemberAdded {
         #[key]
-        game_id: usize,
-        guild_id: usize,
-        member: ContractAddress
+        game_id: u32,
+        guild_id: u32,
+        member: ContractAddress,
     }
 
     #[derive(Copy, Drop, Serde)]
     #[dojo::event]
     pub struct MemberRemoved {
         #[key]
-        game_id: usize,
-        guild_id: usize,
-        member: ContractAddress
+        game_id: u32,
+        guild_id: u32,
+        member: ContractAddress,
     }
 
     #[abi(embed_v0)]
     impl GuildImpl of IGuild<ContractState> {
-        fn create_guild(ref self: ContractState, game_id: usize, guild_name: felt252) -> usize {
-            let mut world = self.world(@"pixelaw");
+        fn create_guild(ref self: ContractState, game_id: u32, guild_name: felt252) -> u32 {
+            let mut app_world = self.world(@"pwar");
             let caller = get_caller_address();
 
             // Check if the game exists and get the game data
-            let mut game: Game = world.read_model(game_id);
+            let mut game: Game = app_world.read_model(game_id);
             assert(game.id == game_id, 'Game does not exist');
 
             // Use the current guild_count as the new guild_id
@@ -97,27 +91,27 @@ mod guild_actions {
                 guild_name: guild_name,
                 creator: caller,
                 members: array![caller].span(),
-                member_count: 1
+                member_count: 1,
             };
             println!("new_guild.guild_id: {}", new_guild.guild_id);
 
             // Save the guild and update the game
-            world.write_model(@new_guild);
-            world.write_model(@game);
+            app_world.write_model(@new_guild);
+            app_world.write_model(@game);
             println!("set guild");
             let caller = get_caller_address();
-            world.emit_event(@GuildCreated { game_id, guild_id, guild_name, creator: caller });
+            app_world.emit_event(@GuildCreated { game_id, guild_id, guild_name, creator: caller });
             guild_id
         }
 
         fn add_member(
-            ref self: ContractState, game_id: usize, guild_id: usize, new_member: ContractAddress
+            ref self: ContractState, game_id: u32, guild_id: u32, new_member: ContractAddress,
         ) {
-            let mut world = self.world(@"pixelaw");
+            let mut app_world = self.world(@"pwar");
             let caller = get_caller_address();
 
             // Get the guild
-            let mut guild: Guild = world.read_model((game_id, guild_id));
+            let mut guild: Guild = app_world.read_model((game_id, guild_id));
 
             // Check if the caller is the creator
             assert(guild.creator == caller, 'Only creator can add members');
@@ -147,11 +141,11 @@ mod guild_actions {
             guild.member_count += 1;
 
             // Save the updated guild
-            world.write_model(@guild);
-            world.emit_event(@MemberAdded { game_id, guild_id, member: new_member });
+            app_world.write_model(@guild);
+            app_world.emit_event(@MemberAdded { game_id, guild_id, member: new_member });
         }
 
-        fn join_guild(ref self: ContractState, game_id: usize, guild_id: usize) {
+        fn join_guild(ref self: ContractState, game_id: u32, guild_id: u32) {
             let caller = get_caller_address();
 
             // Add the member to the guild
@@ -159,13 +153,13 @@ mod guild_actions {
         }
 
         fn remove_member(
-            ref self: ContractState, game_id: usize, guild_id: usize, member: ContractAddress
+            ref self: ContractState, game_id: u32, guild_id: u32, member: ContractAddress,
         ) {
-            let mut world = self.world(@"pixelaw");
+            let mut app_world = self.world(@"pwar");
             let caller = get_caller_address();
 
             // Get the guild
-            let mut guild: Guild = world.read_model((game_id, guild_id));
+            let mut guild: Guild = app_world.read_model((game_id, guild_id));
 
             // Check if the caller is the creator
             assert(guild.creator == caller, 'Only creator can remove members');
@@ -192,15 +186,15 @@ mod guild_actions {
             guild.member_count -= 1;
 
             // Save the updated guild
-            world.write_model(@guild);
-            world.emit_event(@MemberRemoved { game_id, guild_id, member })
+            app_world.write_model(@guild);
+            app_world.emit_event(@MemberRemoved { game_id, guild_id, member })
         }
 
         fn is_member(
-            ref self: ContractState, game_id: usize, guild_id: usize, member: ContractAddress
+            self: @ContractState, game_id: u32, guild_id: u32, member: ContractAddress,
         ) -> bool {
-            let mut world = self.world(@"pixelaw");
-            let guild: Guild = world.read_model((game_id, guild_id));
+            let mut app_world = self.world(@"pwar");
+            let guild: Guild = app_world.read_model((game_id, guild_id));
             let mut is_member = false;
             let mut i = 0;
             loop {
@@ -216,16 +210,28 @@ mod guild_actions {
             is_member
         }
 
-        fn get_guild_contract_address(ref self: ContractState) -> ContractAddress {
-            let guild_contract_address = get_contract_address();
-
-            guild_contract_address
+        fn get_guild(self: @ContractState, game_id: u32, guild_id: u32) -> Guild {
+            let mut app_world = self.world(@"pwar");
+            let guild: Guild = app_world.read_model((game_id, guild_id));
+            guild
         }
 
-        fn get_guild_points(ref self: ContractState, game_id: usize, guild_id: usize) -> usize {
+        fn get_player_commit(self: @ContractState, player_address: ContractAddress) -> u32 {
+            let mut app_world = self.world(@"pwar");
+            let mut player: Player = app_world.read_model(player_address);
+            player.num_commit
+        }
+
+        fn get_player_owns(self: @ContractState, player_address: ContractAddress) -> u32 {
+            let mut app_world = self.world(@"pwar");
+            let mut player: Player = app_world.read_model(player_address);
+            player.num_owns
+        }
+
+        fn get_guild_points(self: @ContractState, game_id: u32, guild_id: u32) -> u32 {
             // Get the guild
-            let mut world = self.world(@"pixelaw");
-            let mut guild: Guild = world.read_model((game_id, guild_id));
+            let mut app_world = self.world(@"pwar");
+            let mut guild: Guild = app_world.read_model((game_id, guild_id));
 
             let mut guild_total_points = 0;
             let mut i = 0;
@@ -234,7 +240,7 @@ mod guild_actions {
                 if i >= guild.member_count {
                     break;
                 }
-                let mut player: Player = world.read_model(*guild.members.at(i));
+                let mut player: Player = app_world.read_model(*guild.members.at(i));
                 guild_total_points += player.num_commit;
                 i += 1;
                 println!("player.num_commit: {}", player.num_commit);

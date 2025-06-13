@@ -1,22 +1,30 @@
 {
   "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ES2022",
     "lib": ["ES2023"],
     "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
 
-    /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+    "paths": {
+      "@pixelaw/core": ["pixelaw.js/packages/core/src"],
+      "@pixelaw/core-dojo": ["pixelaw.js/packages/core-dojo/src"],
+      "@pixelaw/core-mud": ["pixelaw.js/packages/core-mud/src"],
+      "@pixelaw/react": ["pixelaw.js/packages/react/src"],
+      "@pixelaw/react-dojo": ["pixelaw.js/packages/react-dojo/src"],
+      "@/*": ["src/*"]
+    }
   },
   "include": ["vite.config.ts"]
 }

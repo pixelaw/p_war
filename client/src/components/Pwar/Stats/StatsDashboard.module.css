@@ -1,0 +1,78 @@
+.statsDashboard {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.statsDashboard h3 {
+  margin-top: 0;
+  color: #eaeaea;
+  border-bottom: 1px solid #444;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+.statsSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.statLabel {
+  color: #b9bbbe;
+  font-size: 14px;
+}
+
+.statValue {
+  color: #ffffff;
+  font-family: monospace;
+  background-color: #3a3a3a;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Highlight values with specific styling */
+.commitValue {
+  color: #43b581;
+  background-color: rgba(67, 181, 129, 0.1);
+  font-weight: bold;
+}
+
+.ownsValue {
+  color: #faa61a;
+  background-color: rgba(250, 166, 26, 0.1);
+  font-weight: bold;
+}
+
+/* Refresh button styling */
+.refreshButton {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: #4f545c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+  align-self: center;
+}
+
+.refreshButton:hover {
+  background-color: #5d6269;
+}
+
+.refreshButton:disabled {
+  background-color: #36393f;
+  cursor: not-allowed;
+  opacity: 0.7;
+}

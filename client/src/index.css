@@ -1,0 +1,209 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  /* place-items: center;  削除 */
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+/*.custom-button {*/
+/*    border-radius: 0.5rem;*/
+/*    border: none;*/
+/*    padding: 0.8em 0.8em;*/
+/*    cursor: pointer;*/
+/*    outline: none;*/
+/*    position: relative;*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    align-items: center;*/
+/*    font-size: 3rem;*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*}*/
+
+/*.custom-button-selected {*/
+/*    outline: none;*/
+/*}*/
+/*button:hover {*/
+/*    border-color: #646cff;*/
+/*}*/
+/*button:focus,*/
+/*button:focus-visible {*/
+/*    outline: 4px auto -webkit-focus-ring-color;*/
+/*}*/
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+.loading-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #646cff;
+  background-color: black;
+  padding: 20px;
+  border-radius: 5px;
+  font-size: 24px;
+  text-align: center;
+}
+.error-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  background-color: red;
+  padding: 20px;
+  border-radius: 5px;
+  font-size: 24px;
+  text-align: center;
+}
+
+/*
+    Interaction below
+    TODO fix up styling
+ */
+.emoji-picker-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white; /* or any other color */
+  z-index: 1000; /* Ensure it's above other elements */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.dialog {
+  position: absolute; /* Position it relative to the nearest positioned ancestor */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  height: 300px;
+  width: 300px;
+  background-color: #fff;
+  z-index: 20; /* Ensure it's above the overlay */
+}
+.overlay {
+  position: fixed; /* Cover the entire viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  z-index: 10; /* Ensure it's below the dialog */
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.label {
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: #333; /* Darker text for better readability */
+}
+
+.checkbox {
+  margin-right: 10px;
+}
+
+/*.button {*/
+/*    background-color: #007bff;*/
+/*    border: none; !* Remove border for a cleaner look *!*/
+/*    border-radius: 4px;*/
+/*    color: white;*/
+/*    cursor: pointer;*/
+/*    padding: 10px;*/
+/*    text-align: center;*/
+/*    transition: background-color 0.3s ease; !* Smooth transition for hover effect *!*/
+/*}*/
+
+/*.cancel-button {*/
+/*    background-color: #6c757d;*/
+/*}*/
+
+/*.button:hover {*/
+/*    background-color: #0056b3; !* Darker shade on hover *!*/
+/*    opacity: 0.9;*/
+/*}*/
+
+.pickerPanel {
+  position: fixed;
+  /*top: 50%;*/
+  bottom: 6.5rem;
+  left: 50%;
+  transform: translate(-50%, 0);
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 0;
+  z-index: 1000;
+  width: 50vw;
+  box-sizing: border-box;
+}
+@media (max-width: 768px) {
+  /* Adjust the breakpoint as needed */
+  .pickerPanel {
+    width: 100vw; /* Full width for smaller screens like iPhones */
+  }
+}
+@media (min-width: 769px) {
+  .pickerPanel {
+    width: 50vw; /* Half width for larger screens like desktops */
+  }
+}

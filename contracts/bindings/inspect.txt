@@ -1,0 +1,54 @@
+
+ [90mWorld[39m  | Contract Address                                                   | Class Hash                                                         
+--------+--------------------------------------------------------------------+--------------------------------------------------------------------
+ Synced | 0x01d09b5e00f376337603943fc12715e439e91c0039f353b1cc48bb278dfa99d5 | 0x075fc75bcd1a7f8b4bf64b74978b0f89c8cee44bb755c1dae6f82284756451ec 
+
+ [90mNamespaces[39m | Status | Dojo Selector                                                      
+------------+--------+--------------------------------------------------------------------
+ pixelaw    | Synced | 0x054b1a9dfb8f09560c4386777c6ec02c76a4aca5e18b896b2a9ee9b275c7ae77 
+ pwar       | Synced | 0x06561ddf9cdf4c5e58f9a4258af70b5b066bfe37099c013e2cf1299466478754 
+
+ [90mContracts[39m            | Status            | Is Initialized | Dojo Selector                                                      | Contract Address                                                   
+----------------------+-------------------+----------------+--------------------------------------------------------------------+--------------------------------------------------------------------
+ pixelaw-actions      | Migration skipped | true           | 0x016928a49cfd8cf14e9f41e9d8f873890d1ab7d23b9a312d8a72f4031159876f | 0x0001f455be12a750b7228e5626e1efd6bcee4849f24e98bb098371d6e8f773f3 
+ pwar-guild_actions   | Synced            | true           | 0x03c3b77d165909386294773571272f51dcefab9d0aa99d69b70796f6501d6f42 | 0x038be037c76817f4d73f7cec04a5bffb9d64ce544674f72637563708971ef1d3 
+ pwar-propose_actions | Synced            | true           | 0x05052f70e59d3197eee09586db5f0c9578581601c549020f478ffe96e57d8573 | 0x04038ddb14b806e40242355883643c009451a6b15fc9aa402a1248dae25a5a49 
+ pwar-pwar_actions    | Synced            | true           | 0x03daa6a1f5dad3f5074b948a3e3a65e5b5f08198629686def58f43acce601a48 | 0x02226c41273351a3d09127412d87eab7ee2c934b6978da1342229201966014fa 
+ pwar-voting_actions  | Synced            | true           | 0x062e6ca68a564d25337ca245b38054c9b249d3a9d3d7bb0d97a6a817e473383a | 0x00379ac4b00a0ad23a102ea64d2686123300ef515605d0cea7df79405f4555ba 
+
+ [90mModels[39m                     | Status            | Dojo Selector                                                      
+----------------------------+-------------------+--------------------------------------------------------------------
+ pixelaw-App                | Migration skipped | 0x03650456503601ce448928ac87c54e3a6e95e76d725a59c95c7201324c9b2b74 
+ pixelaw-AppName            | Migration skipped | 0x03b816829f5d924b5acc1c44d28b6b61b4edd94e62444c536b2bdc85c0e70a2a 
+ pixelaw-Area               | Migration skipped | 0x0041f22f1725b6e571bd66653e79fd700d80cc35c56f9dc5d663802e57478194 
+ pixelaw-CoreActionsAddress | Migration skipped | 0x05379e1ce3a70cb70f1e96dae1b142164574f33d4e32cebdb965b5aec30222c5 
+ pixelaw-Pixel              | Migration skipped | 0x07e607b2fbb4cfb3fb9d1258fa2ff3aa94f17b3820e42bf1e6a43e2de3f5772e 
+ pixelaw-QueueItem          | Migration skipped | 0x0549a17f23ab80595d9abd4d989a3d4bf0c1987ebc08ad48aecab0f1e8c311b4 
+ pixelaw-RTree              | Migration skipped | 0x03baaf9fe25823e8928b6fc6400e28e98d4b7618ff56faf269a11f3400a1c105 
+ pwar-AllowedColor          | Synced            | 0x058a38d0fade38ada8b7b4ea1ad3f72e83937b1d67a3db259cabf89da916c113 
+ pwar-Board                 | Synced            | 0x04e3da83a446904f6e1ab085d8b84a1ad8d361ccc19820f30833510912cd483e 
+ pwar-Dummy                 | Synced            | 0x02962b188b8dc153cae1540d8ab6cb21672a46f9ab8651d7c912039d6fefab7f 
+ pwar-Game                  | Synced            | 0x046592e702ad6bb2731ed3e08a0de4b6923b9855554afa10f6b671ab9ceef2cf 
+ pwar-GameId                | Synced            | 0x0543171bbc3c21261062cff1a10a96d431dff91bf380fb435b232915330d79d4 
+ pwar-GamePalette           | Synced            | 0x0708516af73e5ea91aabf8799d1678d91e64020fec55b52b41af2901eb6b4573 
+ pwar-Guild                 | Synced            | 0x0141db48785b7b1b2d5b9454b58d87366cff6b3ce0afe8fbb0126d0bce96685f 
+ pwar-InPalette             | Synced            | 0x035818e4ff6e9ba38342d5b79616d83fc230db430718620754e5cf5bf1d197a7 
+ pwar-PWarPixel             | Synced            | 0x04bb33c5d3d85c135e0d7674f328cdf38a2a45379605e2ddc72a95003a3f50cc 
+ pwar-PaletteColors         | Synced            | 0x009d4e9107b255cc8990e2e459e784ebd2286530ae3cd4483aff5cd9efc7a316 
+ pwar-PixelRecoveryRate     | Synced            | 0x07643b1ef53792ea2a31f74047117109eefb2c758d6fe327ba6055514e0f84c0 
+ pwar-Player                | Synced            | 0x00631b0584b81d509f326cb0fb45670acda594c91ece205cbff98af9fddbaa6b 
+ pwar-PlayerVote            | Synced            | 0x066568da1d9e588c2bddd14462c8b9d1ec593f155e87e04f66af56c3e0bac43c 
+ pwar-Proposal              | Synced            | 0x05d86acb7206f393e6675d53560320dcaae768cfdfde5c04afe1892cb1cf53b5 
+
+ [90mEvents[39m                 | Status            | Dojo Selector                                                      
+------------------------+-------------------+--------------------------------------------------------------------
+ pixelaw-QueueScheduled | Migration skipped | 0x032e74bc9762cc0dcdb6c7b67b35ded5b22a785e7c924673d6163369e6c6f769 
+ pwar-EndedGame         | Synced            | 0x0783100ea5deaebbb21ec5ceac9c06020b3a405f6eaebd35c3a4679b4052fe69 
+ pwar-GuildCreated      | Synced            | 0x04a60caf23cdcc73f43ca89900e0aaa5772ccb442b380e85cb7d1949c5fa04be 
+ pwar-MemberAdded       | Synced            | 0x048d28bde10f0fff86325dd577e55fc08a477b03dbe72ab0f5969ab06e9b608b 
+ pwar-MemberRemoved     | Synced            | 0x02c75a32891e878002edc63f1136f84a9620173a77bee76d592358d3ed3241fb 
+ pwar-ProposalActivated | Synced            | 0x00326c5fc197c47864260c462db88b3762de1746327e4f89be10fc53cae32af0 
+ pwar-ProposalCreated   | Synced            | 0x0460d31839213fdac40fd33efcd4c2ff242ddf8f100114c04b1617cfbc468fc2 
+ pwar-StartedGame       | Synced            | 0x0295cb760391553c019feacaaf6e248877c3ec968c5beff6d4395e5062a9ca0b 
+ pwar-Voted             | Synced            | 0x0453c6d68c4f80ccaf9b772f8a86149d09fd156dbf0af86fbf9dd28e8b3eb22d 
+

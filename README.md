@@ -30,7 +30,7 @@ Follow the asdf installation instructions.
 
 ```
 asdf plugin add dojo https://github.com/dojoengine/asdf-dojo
-asdf install dojo 1.0.0-alpha.11
+asdf install dojo
 ```
 
 ## Install scarb
@@ -44,78 +44,73 @@ And after moving into contracts directory, the versions for these libs are set i
 
 ## Running Locally
 
-If you use vscode, you can start katana and torii just press `⌘ + ⇧ + B` in your vscode. This can be executed by selecting commands here:
-![image](./public/assets/start_katana_and_torii.png)
+### Clone the Repository
 
-If you use these shortcut, please check out if the contract was deployed.
-
-otherwise,
-
-#### Terminal one (Make sure this is running)
+To clone this repository with all submodules, run:
 
 ```bash
-# Run Katana
-katana --allowed-origins "*" --db-dir katana
+git clone https://github.com/pixelaw/pwar.git
+cd pwar
 ```
 
-#### Terminal two
+### Locally running pwar
+
+**Pwar** runs inside the [PixeLAW Core World](https://github.com/pixelaw/core), which is why we initally have to spin up an empty PixeLAW world.
+
+For this we have built a docker container that builds the PixeLAW world:
 
 ```bash
-# Build the example
-sozo build
-
-# Migrate the example
-sozo migrate apply
-
-# Start Torii
-torii --world 0x2bf4d3aa0dced89d37d8c3b4ff6a05895c0af32ff3baf9b02abf8504e53eaad --allowed-origins "*"
+cd client
+docker compose up --build
 ```
 
-### How to deploy
+This docker container builds the PixeLAW world and runs Torii and Katana.
 
-you can deploy your app to our katana testnet by running the following commands:
+Find `client/docker-compose.yml` for more information.
+
+Feel free to:
 
 ```bash
-# Deploy the pixelaw app
-sozo build -P release
-sozo migrate apply -P release
+docker exec -it pixelaw-core bash
+klog
 ```
 
-### Setup Client
+To find katana logs or `tlog` for torii logs.
 
-After finishing setup a contract side, you can run the client locally by following commands: 
-```bash
-cd ./client
-bun install
-bun run dev
-```
+### Deploy pwar contracts
 
-## Troubleshooting
-
-If you want to use latest dojo version, you need to clone core by yourself and modify the path in `Scarb.toml` file.
-
-1. Clone core repo
-
-```bash
-git clone https://github.com/pixelaw/core
-```
-
-2. Modify the path in `Scarb.toml` file
-
-```Scarb.toml
-pixelaw = { path = "../pixelaw/core/contracts" }
-```
-
-3. Modify version in `Scarb.toml` file in core repo
-
-```Scarb.toml
-dojo = { git = "https://github.com/dojoengine/dojo", tag = "v1.0.0-alpha.11" }
-```
-
-4. Build and run core
+Once we initialised the PixeLAW world and its contracts, we now have to deploy the pwar contracts.
 
 ```bash
 cd contracts
 sozo build
-sozo migrate apply
+sozo migrate
 ```
+
+
+### Run the client
+
+In order to spin up the pwar client run:
+
+```bash
+cd client
+pnpm install
+pnpm run dev
+```
+
+### Build on top of pwar
+
+If you would like to make changes feel free to raise a PR. Changes for the client inside `client`, and changes for the contracts inside `contracts`. Be sure to test the contracts.
+
+For that you will have to repeat to
+
+```bash
+sozo build --typescript
+sozo migrate
+```
+
+Copy the generated typescript files in `contracts/bindings/typescript` (i.e. `contracts.gen.ts` and `models.gen.ts` into `client/src/config`.  
+
+Lastly you will also have to copy the contract section inside `contracts/manifest_dev.json` into `client/src/config/manifest.contracts.ts` (be sure to only replace the contracts array).
+
+For any questions reach out to us in our Discord or Twitter.

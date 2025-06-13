@@ -1,6 +1,6 @@
-use p_war::models::game::Game;
-use p_war::models::guilds::Guild;
-use p_war::models::payments::{GamePayments, PlayerPayment, TreasuryInfo};
+use pwar::models::game::Game;
+use pwar::models::guilds::Guild;
+use pwar::models::payments::{GamePayments, PlayerPayment, TreasuryInfo};
 use starknet::{ContractAddress, get_caller_address};
 
 #[starknet::interface]
@@ -11,8 +11,8 @@ pub trait IPayments<T> {
     fn set_treasury_address(ref self: T, treasury_address: ContractAddress);
 }
 
-#[dojo::contract(namespace: "pixelaw", nomapping: true)]
-mod payments {
+#[dojo::contract]
+pub mod payments {
     // use super::*;
 
     use dojo::event::EventStorage;
@@ -25,33 +25,33 @@ mod payments {
     #[derive(Drop, starknet::Event)]
     enum Event {
         ParticipationFeePaid: ParticipationFeePaid,
-        WinningGuildPaidOut: WinningGuildPaidOut
+        WinningGuildPaidOut: WinningGuildPaidOut,
     }
 
     #[derive(Drop, starknet::Event)]
     struct ParticipationFeePaid {
         game_id: u32,
         player: ContractAddress,
-        amount: u256
+        amount: u256,
     }
 
     #[derive(Drop, starknet::Event)]
     struct WinningGuildPaidOut {
         game_id: u32,
         guild_id: u32,
-        total_amount: u256
+        total_amount: u256,
     }
 
     #[abi(embed_v0)]
     impl PaymentsImpl of IPayments<ContractState> {
         fn initialize_game_payments(
-            ref self: ContractState, game_id: u32, participation_fee: u256
+            ref self: ContractState, game_id: u32, participation_fee: u256,
         ) {
             let game_payments = GamePayments {
                 game_id: game_id,
                 participation_fee: participation_fee,
                 prize_pool: 0,
-                treasury_balance: 0
+                treasury_balance: 0,
             };
             set!(world, (game_payments));
         }
@@ -71,7 +71,7 @@ mod payments {
             game_payments.treasury_balance += treasury_amount;
 
             let player_payment = PlayerPayment {
-                game_id: game_id, player: caller, amount_paid: fee
+                game_id: game_id, player: caller, amount_paid: fee,
             };
 
             set!(world, (game_payments, player_payment));
@@ -109,8 +109,8 @@ mod payments {
             emit!(
                 world,
                 WinningGuildPaidOut {
-                    game_id: game_id, guild_id: winning_guild_id, total_amount: total_payout
-                }
+                    game_id: game_id, guild_id: winning_guild_id, total_amount: total_payout,
+                },
             );
         }
 

@@ -10,7 +10,6 @@ use starknet::ContractAddress;
 // #[derive(PartialEq, Copy, Introspect, Drop, Serde, Print)]
 // enum ProposalType {
 //     Unknown,
-//     ToggleAllowedApp,
 //     AddNewColor,
 //     ExtendGameEndTime,
 //     ChangePixelRecovery,
@@ -26,9 +25,9 @@ use starknet::ContractAddress;
 // #[derive(Model, Copy, Drop, Serde, Print)]
 // struct Proposal {
 //     #[key]
-//     game_id: usize,
+//     game_id: u32,
 //     #[key]
-//     index: usize,
+//     index: u32,
 //     author: ContractAddress,
 //     proposal_type: ProposalType,
 //     args: Args,
@@ -38,50 +37,49 @@ use starknet::ContractAddress;
 //     no_px: u32
 // }
 
-#[derive(Copy, Drop, Serde)]
-#[dojo::model(namespace: "pixelaw", nomapping: true)]
-struct Proposal {
+#[derive(Serde, Copy, Drop)]
+#[dojo::model]
+pub struct Proposal {
     #[key]
-    game_id: usize,
+    pub game_id: u32,
     #[key]
-    index: usize,
-    author: ContractAddress,
-    proposal_type: u8, // change it from ProposalType is not working...
-    target_args_1: u32,
-    target_args_2: u32,
-    start: u64,
-    end: u64,
-    yes_voting_power: u32,
-    no_voting_power: u32,
-    is_activated: bool, // added: check if the proposal is activated
+    pub index: u32,
+    pub author: ContractAddress,
+    pub proposal_type: u8,
+    pub target_args_1: u32,
+    pub target_args_2: u32,
+    pub start: u64,
+    pub end: u64,
+    pub yes_voting_power: u32,
+    pub no_voting_power: u32,
+    pub is_activated: bool,
 }
 
 
-#[derive(Serde, Copy, Drop, PartialEq)]
-#[dojo::model(namespace: "pixelaw", nomapping: true)]
-struct PlayerVote {
+#[derive(Serde, Copy, Drop)]
+#[dojo::model]
+pub struct PlayerVote {
     #[key]
-    player: ContractAddress,
+    pub player: ContractAddress,
     #[key]
-    game_id: usize,
+    pub game_id: u32,
     #[key]
-    index: usize,
-    is_in_favor: bool,
-    voting_power: u32
+    pub index: u32,
+    pub is_in_favor: bool,
+    pub voting_power: u32,
 }
 
-#[derive(Copy, Drop, Serde)]
-#[dojo::model(namespace: "pixelaw", nomapping: true)]
-struct PixelRecoveryRate {
+#[derive(Copy, Drop, Serde, PartialEq)]
+#[dojo::model]
+pub struct PixelRecoveryRate {
     #[key]
-    game_id: usize,
-    rate: u64
+    pub game_id: u32,
+    pub rate: u64,
 }
 // impl ProposalTypeFelt252 of Into<ProposalType, felt252> {
 //     fn into(self: ProposalType) -> felt252 {
 //         match self {
 //             ProposalType::Unknown => 0,
-//             ProposalType::ToggleAllowedApp => 1,
 //             ProposalType::AddNewColor => 2,
 //             ProposalType::ExtendGameEndTime => 3,
 //             ProposalType::ChangePixelRecovery => 4,

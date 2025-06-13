@@ -16,9 +16,11 @@ type ImportMetaEnv = {
   PROD: boolean
   // @user-defined-start
   /*
-   *  You can use this section to explicitly extend the type definition of `import.meta.env`
-   *  This is useful if you're using Vite plugins that define specific `import.meta.env` properties.
-   *  If you're not using such plugins, this section should remain as is.
+   * Here you can define your own special variables
+   * that would be available on `import.meta.env` but
+   * that vite-envs does not know about.
+   * This section will be preserved thanks to the special comments.
+   * Example:
    */
   SSR: boolean;
   // @user-defined-end

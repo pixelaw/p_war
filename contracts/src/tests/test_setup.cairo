@@ -1,9 +1,15 @@
-use dojo::world::WorldStorage;
-use p_war::tests::utils::{deploy_p_war};
-use pixelaw_test_helpers::{setup_core_initialized};
+#[cfg(test)]
+mod tests {
+    use pixelaw_testing::helpers::{setup_core};
+    use pwar::tests::utils::{deploy_pwar};
 
-#[test]
-fn test_setup() {
-    let (mut world, _core_actions, _player_1, _player_2) = setup_core_initialized();
-    let (_world, _p_war_actions, _propose, _voting, _guild, _allowed_app) = deploy_p_war(ref world);
+    #[test]
+    #[available_gas(300000000)]
+    fn test_setup() {
+        //compare scarb.toml and all the other tomls with app template.
+        let (mut world, _core_actions, _player_1, _player_2) = setup_core();
+        println!("core setup done!");
+        let (_pwar_actions, _propose, _voting, _guild) = deploy_pwar(ref world);
+    }
 }
+

@@ -1,9 +1,0 @@
-{
-  "recommendations": [
-    "streetsidesoftware.code-spell-checker",
-    "esbenp.prettier-vscode",
-    "bradlc.vscode-tailwindcss",
-    "raczzalan.webgl-glsl-editor",
-    "YoavBls.pretty-ts-errors"
-  ]
-}

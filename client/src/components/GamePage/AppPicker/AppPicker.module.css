@@ -1,0 +1,15 @@
+.inner {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 20px;
+  z-index: 1000;
+  width: 100vw; /* Full viewport width */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+.selected {
+  background-color: lightblue;
+}

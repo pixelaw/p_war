@@ -1,28 +1,26 @@
 mod constants;
-mod systems {
-    mod actions;
-    mod app;
-    mod guilds;
-    mod propose;
-    mod utils;
-    mod voting;
+pub mod systems {
+    pub mod actions;
+    pub mod guilds;
+    pub mod propose;
+    pub mod utils;
+    pub mod voting;
 }
 
-mod models {
-    mod allowed_app;
-    mod allowed_color;
-    mod board;
-    mod game;
-    mod guilds;
-    mod player;
-    mod proposal;
+pub mod models {
+    pub mod allowed_color;
+    pub mod board;
+    pub mod game;
+    pub mod guilds;
+    pub mod player;
+    pub mod proposal;
 }
 
 #[cfg(test)]
-mod tests {
+pub mod tests {
     mod test_games;
     mod test_guilds;
     mod test_proposals;
     mod test_setup;
-    mod utils;
+    pub mod utils;
 }

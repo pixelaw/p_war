@@ -2,14 +2,33 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link href="favicon.ico" rel="icon" type="image/x-icon" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#0f172a" />
-    <title>p/war</title>
+    <link href="/favicon.ico" rel="icon" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>PixelAW</title>
   </head>
-
   <body>
-    <main id="root"></main>
-    <script type="module" src="/src/main.tsx"></script>
+    <div id="root"></div>
+    <script>
+      // globalThis.import_meta_env = JSON.parse('"import_meta_env_placeholder"');
+
+      // FIX: https://stackoverflow.com/questions/61855027/prevent-text-selection-on-tap-and-hold-on-ios-13-mobile-safari
+      const touchHandler = (ev) => {
+        console.log("handling", ev.type);
+        ev.preventDefault(); // Prevent text selection
+      };
+      // document.addEventListener('touchstart', touchHandler, {passive:false})
+      // document.addEventListener('touchmove', touchHandler, {passive:false})
+      // document.addEventListener('touchend', touchHandler, {passive:false})
+      // document.addEventListener('touchcancel', touchHandler, {passive:false})
+    </script>
+    <script src="/src/lib/remotelog.js" type="module"></script>
+
+    <script src="/src/index.tsx" type="module"></script>
   </body>
 </html>
