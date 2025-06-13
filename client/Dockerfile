@@ -13,7 +13,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 RUN pnpm run build
 
 
-FROM ghcr.io/pixelaw/core:0.7.0 AS core
+FROM ghcr.io/pixelaw/core:0.6.31 AS core
 
 COPY --from=prod-deps /app/node_modules /pixelaw/web/node_modules
 COPY --from=build /app/dist /pixelaw/web

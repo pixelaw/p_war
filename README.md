@@ -109,7 +109,7 @@ sozo build --typescript
 sozo migrate
 ```
 
-Copy the generated typescript files in `contracts/bindings/typescipts` (i.e. `contracts.gen.ts` and `models.gen.ts`)into `client/src/config`.
+Copy the generated typescript files in `contracts/bindings/typescript` (i.e. `contracts.gen.ts` and `models.gen.ts` into `client/src/config`.  
 
 Lastly you will also have to copy the contract section inside `contracts/manifest_dev.json` into `client/src/config/manifest.contracts.ts` (be sure to only replace the contracts array).
 

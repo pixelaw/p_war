@@ -18,9 +18,9 @@ pub mod models {
 
 #[cfg(test)]
 pub mod tests {
-    // mod test_games;
-    // mod test_guilds;
-    // mod test_proposals;
-    pub mod test_setup;
+    mod test_games;
+    mod test_guilds;
+    mod test_proposals;
+    mod test_setup;
     pub mod utils;
 }
